@@ -1,7 +1,7 @@
 <div align="center">
 
 <!-- Animated Header -->
-<img src="https://capsule-render.vercel.app/api?type=venom&height=200&color=0:0f0c29,50:302b63,100:24243e&text=Ayush%20Yadav&section=header&fontColor=ffffff&fontSize=70&animation=fadeIn&fontAlignY=45&desc=Full-Stack%20Developer%20|%20AI%20%26%20ML%20Engineer%20|%20Data%20Enthusiast&descAlignY=70&descSize=18" width="100%"/>
+<img src="https://capsule-render.vercel.app/api?type=venom&height=200&color=0:0f0c29,50:302b63,100:24243e&text=Ayush%20Yadav&section=header&fontColor=ffffff&fontSize=70&animation=fadeIn&fontAlignY=45&desc=Full-Stack%20Developer%20%7C%20AI%20and%20ML%20Engineer%20%7C%20Data%20Enthusiast&descAlignY=70&descSize=18" width="100%"/>
 
 <!-- Typing Animation -->
 <a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&duration=3000&pause=1000&color=667EEA&center=true&vCenter=true&repeat=true&width=600&height=50&lines=Building+impactful+software+solutions+%F0%9F%9A%80;From+iOS+apps+to+Neural+Networks+%F0%9F%A7%A0;Passionate+about+accessibility+%E2%99%BF" alt="Typing SVG" /></a>
