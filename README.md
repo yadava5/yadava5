@@ -90,7 +90,7 @@
 <br><b>Vercel</b>
 </td>
 <td align="center" width="110">
-<img src="https://upload.wikimedia.org/wikipedia/commons/4/4d/OpenAI_Logo.svg" width="48" height="48" alt="OpenAI" />
+<img src="https://www.svgrepo.com/show/306500/openai.svg" width="48" height="48" alt="OpenAI" />
 <br><b>OpenAI</b>
 </td>
 <td align="center" width="110">
