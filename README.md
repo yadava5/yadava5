@@ -1,108 +1,61 @@
 <div align="center">
 
-<!-- Animated Header -->
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:667eea,100:764ba2&height=120&section=header&text=Ayush%20Yadav&fontSize=60&fontAlignY=35&animation=twinkling&fontColor=ffffff" width="100%" alt="Header" />
+<!-- ============================================ -->
+<!-- 🎨 HEADER OPTIONS - PICK YOUR FAVORITE! 🎨 -->
+<!-- ============================================ -->
 
-<!-- Typing Animation -->
-<a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=24&duration=3000&pause=1000&color=667EEA&center=true&vCenter=true&multiline=true&repeat=true&width=600&height=100&lines=Building+impactful+software+solutions+%F0%9F%9A%80;From+iOS+apps+to+Neural+Networks+%F0%9F%A7%A0;Passionate+about+accessibility+%E2%99%BF" alt="Typing SVG" /></a>
-
-<br/>
-
-<!-- Profile Views & Social Badges -->
-<p>
-  <img src="https://komarev.com/ghpvc/?username=yadava5&label=Profile%20Views&color=667eea&style=for-the-badge" alt="Profile Views" />
-  <a href="https://linkedin.com/in/yadava5"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" /></a>
-  <a href="mailto:yadava5@miamioh.edu"><img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Email" /></a>
-  <a href="https://github.com/yadava5"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" /></a>
-</p>
+### 1️⃣ CYLINDER (3D Effect)
+<img src="https://capsule-render.vercel.app/api?type=cylinder&color=0:667eea,100:764ba2&height=150&section=header&text=Ayush%20Yadav&fontSize=60&fontAlignY=45&animation=scaleIn&fontColor=ffffff" width="100%" />
 
 ---
 
-### 🛠️ Tech Stack
+### 2️⃣ VENOM (Drip Effect)
+<img src="https://capsule-render.vercel.app/api?type=venom&color=0:667eea,100:764ba2&height=150&section=header&text=Ayush%20Yadav&fontSize=60&fontAlignY=45&animation=fadeIn&fontColor=ffffff" width="100%" />
 
-<table>
-<tr>
-<td align="center" width="110">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/swift/swift-original.svg" width="48" height="48" alt="Swift" />
-<br><b>Swift</b>
-</td>
-<td align="center" width="110">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" width="48" height="48" alt="C++" />
-<br><b>C++</b>
-</td>
-<td align="center" width="110">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" width="48" height="48" alt="TypeScript" />
-<br><b>TypeScript</b>
-</td>
-<td align="center" width="110">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" width="48" height="48" alt="Python" />
-<br><b>Python</b>
-</td>
-<td align="center" width="110">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" width="48" height="48" alt="JavaScript" />
-<br><b>JavaScript</b>
-</td>
-<td align="center" width="110">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rust/rust-original.svg" width="48" height="48" alt="Rust" />
-<br><b>Rust</b>
-</td>
-</tr>
-<tr>
-<td align="center" width="110">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" width="48" height="48" alt="React" />
-<br><b>React</b>
-</td>
-<td align="center" width="110">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextjs/nextjs-original.svg" width="48" height="48" alt="Next.js" />
-<br><b>Next.js</b>
-</td>
-<td align="center" width="110">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg" width="48" height="48" alt="Node.js" />
-<br><b>Node.js</b>
-</td>
-<td align="center" width="110">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nestjs/nestjs-original.svg" width="48" height="48" alt="NestJS" />
-<br><b>NestJS</b>
-</td>
-<td align="center" width="110">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" width="48" height="48" alt="PostgreSQL" />
-<br><b>PostgreSQL</b>
-</td>
-<td align="center" width="110">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg" width="48" height="48" alt="Docker" />
-<br><b>Docker</b>
-</td>
-</tr>
-<tr>
-<td align="center" width="110">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/xcode/xcode-original.svg" width="48" height="48" alt="Xcode" />
-<br><b>Xcode</b>
-</td>
-<td align="center" width="110">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cmake/cmake-original.svg" width="48" height="48" alt="CMake" />
-<br><b>CMake</b>
-</td>
-<td align="center" width="110">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" width="48" height="48" alt="Git" />
-<br><b>Git</b>
-</td>
-<td align="center" width="110">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vercel/vercel-original.svg" width="48" height="48" alt="Vercel" />
-<br><b>Vercel</b>
-</td>
-<td align="center" width="110">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/openai/openai-original.svg" width="48" height="48" alt="OpenAI" />
-<br><b>OpenAI</b>
-</td>
-<td align="center" width="110">
-<img src="https://img.icons8.com/color/48/tableau-software.png" width="48" height="48" alt="Tableau" />
-<br><b>Tableau</b>
-</td>
-</tr>
-</table>
+---
 
-<br/>
+### 3️⃣ SHARK (Fin Style)
+<img src="https://capsule-render.vercel.app/api?type=shark&color=0:667eea,100:764ba2&height=150&section=header&text=Ayush%20Yadav&fontSize=60&fontAlignY=40&animation=fadeIn&fontColor=ffffff" width="100%" />
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:667eea,100:764ba2&height=100&section=footer" width="100%" alt="Footer" />
+---
+
+### 4️⃣ SLICE (Diagonal)
+<img src="https://capsule-render.vercel.app/api?type=slice&color=0:667eea,100:764ba2&height=150&section=header&text=Ayush%20Yadav&fontSize=50&fontAlignY=45&animation=fadeIn&fontColor=ffffff&rotate=13&fontAlign=70" width="100%" />
+
+---
+
+### 5️⃣ SOFT (Curved Bottom)
+<img src="https://capsule-render.vercel.app/api?type=soft&color=0:667eea,100:764ba2&height=150&section=header&text=Ayush%20Yadav&fontSize=60&fontAlignY=50&animation=fadeIn&fontColor=ffffff" width="100%" />
+
+---
+
+### 6️⃣ EGG (Oval Shape)
+<img src="https://capsule-render.vercel.app/api?type=egg&color=0:667eea,100:764ba2&height=180&section=header&text=Ayush%20Yadav&fontSize=50&fontAlignY=50&animation=fadeIn&fontColor=ffffff" width="100%" />
+
+---
+
+### 7️⃣ RECT (Rectangle)
+<img src="https://capsule-render.vercel.app/api?type=rect&color=0:667eea,100:764ba2&height=120&section=header&text=Ayush%20Yadav&fontSize=60&fontAlignY=50&animation=scaleIn&fontColor=ffffff" width="100%" />
+
+---
+
+### 8️⃣ ROUNDED (Rounded Corners)
+<img src="https://capsule-render.vercel.app/api?type=rounded&color=0:667eea,100:764ba2&height=150&section=header&text=Ayush%20Yadav&fontSize=60&fontAlignY=50&animation=fadeIn&fontColor=ffffff" width="100%" />
+
+---
+
+### 9️⃣ TRANSPARENT (Floating Glow)
+<img src="https://capsule-render.vercel.app/api?type=transparent&color=667eea&height=120&section=header&text=Ayush%20Yadav&fontSize=70&fontAlignY=50&animation=fadeIn&fontColor=667eea&desc=Full-Stack%20Developer&descAlignY=80&descSize=20" width="100%" />
+
+---
+
+### 🔟 WAVE (Static Wave)
+<img src="https://capsule-render.vercel.app/api?type=wave&color=0:667eea,100:764ba2&height=150&section=header&text=Ayush%20Yadav&fontSize=60&fontAlignY=40&animation=fadeIn&fontColor=ffffff" width="100%" />
+
+---
+
+<!-- ============================================ -->
+<!-- 👆 TELL ME WHICH NUMBER YOU LIKE! 👆        -->
+<!-- ============================================ -->
 
 </div>
