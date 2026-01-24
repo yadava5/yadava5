@@ -100,8 +100,4 @@
 </tr>
 </table>
 
-<br/>
-
-<img src="https://capsule-render.vercel.app/api?type=venom&height=150&color=0:0f0c29,50:302b63,100:24243e&section=footer&reversal=true" width="100%"/>
-
 </div>
