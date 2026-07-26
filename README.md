@@ -1,103 +1,65 @@
 <div align="center">
 
-<!-- Animated Header -->
-<img src="https://capsule-render.vercel.app/api?type=venom&height=200&color=0:0f0c29,50:302b63,100:24243e&text=Ayush%20Yadav&section=header&fontColor=ffffff&fontSize=70&animation=fadeIn&fontAlignY=45&desc=Full-Stack%20Developer%20%7C%20AI%20and%20ML%20Engineer%20%7C%20Data%20Enthusiast&descAlignY=70&descSize=18" width="100%"/>
+<img src="./assets/signature.svg" width="100%" alt="Ayush Yadav — six shipped systems: Glyph, Applied, Cadence, jetpack, LifeQuest and Agentic AutoML, each drawn by its own signature visual." />
 
-<!-- Typing Animation -->
-<a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&duration=3000&pause=1000&color=667EEA&center=true&vCenter=true&repeat=true&width=600&height=50&lines=Building+impactful+software+solutions+%F0%9F%9A%80;From+iOS+apps+to+Neural+Networks+%F0%9F%A7%A0;Passionate+about+accessibility+%E2%99%BF" alt="Typing SVG" /></a>
+### I build systems that prove themselves.
 
-<br/>
+<sub>
 
-<!-- Social Badges -->
-<p>
-  <a href="https://www.linkedin.com/in/ayush-yadav-developer"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" /></a>
-  <a href="mailto:aesh_1055@icloud.com"><img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Email" /></a>
-  <a href="https://github.com/yadava5"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" /></a>
-</p>
+Full-stack engineer · CS @ Miami University ’26 · from hand-written SIMD kernels to multi-tenant Postgres
+
+</sub>
+
+<a href="https://www.linkedin.com/in/ayush-yadav-developer">LinkedIn</a> &nbsp;·&nbsp;
+<a href="mailto:aesh.03.23@gmail.com">Email</a> &nbsp;·&nbsp;
+<a href="https://github.com/yadava5?tab=repositories">Repositories</a>
+
+</div>
 
 ---
 
-### 🛠️ Tech Stack
+## Six systems, live
 
-<table>
-<tr>
-<td align="center" width="110">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/swift/swift-original.svg" width="48" height="48" alt="Swift" />
-<br><b>Swift</b>
-</td>
-<td align="center" width="110">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" width="48" height="48" alt="C++" />
-<br><b>C++</b>
-</td>
-<td align="center" width="110">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" width="48" height="48" alt="TypeScript" />
-<br><b>TypeScript</b>
-</td>
-<td align="center" width="110">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" width="48" height="48" alt="Python" />
-<br><b>Python</b>
-</td>
-<td align="center" width="110">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" width="48" height="48" alt="JavaScript" />
-<br><b>JavaScript</b>
-</td>
-<td align="center" width="110">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rust/rust-original.svg" width="48" height="48" alt="Rust" />
-<br><b>Rust</b>
-</td>
-</tr>
-<tr>
-<td align="center" width="110">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" width="48" height="48" alt="React" />
-<br><b>React</b>
-</td>
-<td align="center" width="110">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextjs/nextjs-original.svg" width="48" height="48" alt="Next.js" />
-<br><b>Next.js</b>
-</td>
-<td align="center" width="110">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg" width="48" height="48" alt="Node.js" />
-<br><b>Node.js</b>
-</td>
-<td align="center" width="110">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nestjs/nestjs-original.svg" width="48" height="48" alt="NestJS" />
-<br><b>NestJS</b>
-</td>
-<td align="center" width="110">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" width="48" height="48" alt="PostgreSQL" />
-<br><b>PostgreSQL</b>
-</td>
-<td align="center" width="110">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg" width="48" height="48" alt="Docker" />
-<br><b>Docker</b>
-</td>
-</tr>
-<tr>
-<td align="center" width="110">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/xcode/xcode-original.svg" width="48" height="48" alt="Xcode" />
-<br><b>Xcode</b>
-</td>
-<td align="center" width="110">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cmake/cmake-original.svg" width="48" height="48" alt="CMake" />
-<br><b>CMake</b>
-</td>
-<td align="center" width="110">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" width="48" height="48" alt="Git" />
-<br><b>Git</b>
-</td>
-<td align="center" width="110">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vercel/vercel-original.svg" width="48" height="48" alt="Vercel" />
-<br><b>Vercel</b>
-</td>
-<td align="center" width="110">
-<img src="https://www.svgrepo.com/show/306500/openai.svg" width="48" height="48" alt="OpenAI" />
-<br><b>OpenAI</b>
-</td>
-<td align="center" width="110">
-<img src="https://img.icons8.com/color/48/tableau-software.png" width="48" height="48" alt="Tableau" />
-<br><b>Tableau</b>
-</td>
-</tr>
-</table>
+Every one is deployed, publicly reachable, and ships a **System Card** — a printed-quality walkthrough of the architecture and the evidence behind its numbers.
+
+| | What it does | The interesting part | |
+|---|---|---|---|
+| **[Glyph](https://github.com/yadava5/glyph)** | Recognises handwritten digits in your browser | A neural network written **from scratch in C++**, with hand-written SIMD kernels for AVX-512 / AVX2 / NEON / wasm128, compiled to WebAssembly. **97.01%** on the held-out set. | [live](https://getglyph.vercel.app) · [system card](https://getglyph.vercel.app/system-card) |
+| **[Applied](https://github.com/yadava5/applied)** | Reads your inbox and tracks your job search for you | A three-layer classifier — 201 regex rules → e5 embeddings → a fine-tuned SetFit head — behind a 0.85 confidence gate. **0.979 macro-F1**, CI-gated at 0.95. The trained model runs **in the browser** as int8 ONNX. | [live](https://getapplied.vercel.app) · [system card](https://getapplied.vercel.app/system-card) |
+| **[Cadence](https://github.com/yadava5/cadence)** | Turns a plain sentence into a calendar entry | A four-stage NLP parser that shows its work, and **34 API handlers bundled into one serverless function** to live inside Vercel's 12-function cap. | [live](https://usecadenceapp.vercel.app) · [system card](https://usecadenceapp.vercel.app/system-card) |
+| **[jetpack](https://github.com/yadava5/jetpack-compress)** | Compresses files in parallel, still gzip-valid | **JDK 25** virtual threads with a bounded in-flight window (peak memory independent of file size), a hand-vectorised **SIMD Adler-32** bit-identical to `java.util.zip`, and FFM memory-mapped I/O. **~6.5×** throughput. | [live](https://jetpack-compress.vercel.app) · [system card](https://jetpack-compress.vercel.app/system-card) |
+| **[LifeQuest](https://github.com/yadava5/lifequest)** | Turns real-world routines into missions | Built for people rebuilding structure after a layoff — Tauri + React client, NestJS + Prisma API. | [live](https://getlifequest.vercel.app) · [system card](https://getlifequest.vercel.app/system-card) |
+| **[Agentic AutoML](https://github.com/yadava5/ai-augmented-auto-ml-toolchain)** | Dataset in, deployed model out | LLM-orchestrated pipelines on LangGraph with an MCP tool registry, Docker-sandboxed Python execution, and a human approval gate at every phase. Senior Design, Miami University. | [live](https://agentic-automl-platform.vercel.app) · [system card](https://agentic-automl-platform.vercel.app/system-card) |
+
+---
+
+## What I actually work on
+
+**Multi-tenant data isolation.** Defence in depth across two production apps: application-level scoping *plus* PostgreSQL Row-Level Security, `FORCE`d on every tenant table, with the app connecting as a dedicated non-`BYPASSRLS` role and the per-request identity carried as a transaction-local GUC. Proven by a real-Postgres suite where a raw, unfiltered `SELECT` as user B returns only B's rows — the database refusing, not the code remembering to filter.
+
+**Finding my own bugs before someone else does.** I audited Cadence and found seven endpoints where any authenticated user could read or delete another user's records by id. Fixed with ownership scoping and 404-on-miss, plus tests asserting the exact scoped SQL. The same pass caught a middleware bug that orphaned a thrown auth error and hung every request with an expired token for ~45 seconds.
+
+**Performance you can measure.** Hand-written SIMD across four instruction sets in Glyph; virtual threads and a hand-vectorised checksum in jetpack. Every number in the System Cards traces to a committed benchmark run — including the rows where the optimisation *loses*.
+
+<div align="center">
+<sub>
+
+`C++ · SIMD · WebAssembly` — `TypeScript · React · Next.js` — `Python · FastAPI` — `Java` — `Swift` — `PostgreSQL · Supabase` — `Docker · Vercel`
+
+</sub>
+</div>
+
+---
+
+<div align="center">
+
+<img src="https://raw.githubusercontent.com/yadava5/yadava5/output/github-snake-dark.svg#gh-dark-mode-only" width="100%" alt="A snake winding through my contribution graph" />
+<img src="https://raw.githubusercontent.com/yadava5/yadava5/output/github-snake.svg#gh-light-mode-only" width="100%" alt="A snake winding through my contribution graph" />
+
+<sub>
+
+Open to summer 2026 internships and collaborations — **[aesh.03.23@gmail.com](mailto:aesh.03.23@gmail.com)**
+
+</sub>
 
 </div>
