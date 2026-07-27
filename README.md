@@ -1,5 +1,5 @@
 <div align="center">
-<img src="./assets/plate-0-thesis.svg" width="100%" alt="The thesis plate: Ayush Yadav, and the sentence 'Every number on this page is followed by the thing that would catch it.'">
+<img src="./assets/plate-0-thesis.svg" width="100%" alt="The thesis plate: Ayush Yadav, and the sentence 'Every number on this page is followed by the thing that would catch it.' Below it, the six colours the document uses, one per system: Glyph, jetpack, Cadence, Applied, LifeQuest, AutoML.">
 </div>
 
 I build systems that prove themselves. Six of them are live, publicly reachable, and each ships a **system card** — a printed-quality walkthrough of the architecture and the evidence behind its numbers.
@@ -12,12 +12,12 @@ What follows is five system plates (LifeQuest and AutoML share the last), plus o
 
 <picture>
   <source media="(max-width: 500px)" srcset="./assets/m-1-glyph.svg">
-  <img src="./assets/plate-1-glyph.svg" width="100%" alt="A handwritten seven draws itself. Three hand-written SIMD kernels (AVX-512, AVX2, NEON) and an autovectorised WebAssembly build each carry the same dot product. the model scores 97.01 percent on the 10,000-image test set, which means 299 wrong. Every one of those 299 errors is drawn below, each mark the true label of an image the model missed; 79 of them were made with over 0.9 confidence.">
+  <img src="./assets/plate-1-glyph.svg" width="100%" alt="Glyph: a neural network written from scratch in C++ with hand-written AVX-512, AVX2 and NEON kernels, plus an autovectorised WebAssembly build. It scores 97.01 percent on the 10,000-image MNIST test set, which means 299 wrong — every one of them drawn as a grid of the labels it missed. 79 of those errors were made with over 0.9 confidence.">
 </picture>
 
-A neural network written **from scratch in C++** — no framework — with hand-written SIMD kernels for AVX-512, AVX2 and NEON. The WebAssembly build carries no intrinsics of its own: under Emscripten every ISA predicate misses and the scalar path is autovectorised by `-msimd128` (`CMakeLists.txt:279`). The branches are `#if`/`#elif`, so one binary compiles one path and nothing cross-checks them.
+A neural network written **from scratch in C++** — no framework — with hand-written SIMD kernels for AVX-512, AVX2 and NEON. On `main`, the WebAssembly build carries no intrinsics of its own: under Emscripten every ISA predicate misses and the scalar path is autovectorised by `-msimd128` (`CMakeLists.txt:279`). The branches are `#if`/`#elif`, so one binary compiles one path and nothing cross-checks them.
 
-And the deployment currently serves the JavaScript path only — no `.wasm` is fetched. Treat the WASM build as reproducible from the repo, not as what the live page runs.
+The live page and the repo diverge here, so be exact about which you're looking at. `getglyph.vercel.app` **does** fetch and instantiate WebAssembly — `/wasm/fast_mnist.wasm`, 46,960 bytes, `application/wasm`, and the binary carries ~290 SIMD opcodes — but that build came off a branch with real `wasm_simd128` intrinsics. What you can reproduce from `main` is the autovectorised one, which is not quite what the link serves. (An earlier revision of this page claimed the opposite — that no `.wasm` was fetched at all. That was wrong, and one `curl` disproves it; the correction is the point of the exercise.)
 
 **97.01%** on the 10,000-image MNIST test set — 9,701 right, so **299 wrong**.
 
@@ -31,7 +31,7 @@ That same test set also selected the checkpoint and triggered early stopping (`a
 
 <picture>
   <source media="(max-width: 500px)" srcset="./assets/m-2-jetpack.svg">
-  <img src="./assets/plate-2-jetpack.svg" width="100%" alt="Blocks flow through a bounded in-flight window and leave compressed. A hand-vectorised Adler-32 checksum is compared digit by digit against java.util.zip and matches exactly. The measured table lists the JDK's native intrinsic at 14.06 gigabytes per second, marked not beaten.">
+  <img src="./assets/plate-2-jetpack.svg" width="100%" alt="jetpack: parallel gzip on JDK 25 reaches 422 megabytes per second against 66.2 single-threaded, a 6.4 times speedup, with blocks held in a bounded in-flight window. Its hand-vectorised Adler-32 checksum runs at 4.26 gigabytes per second and is verified bit-identical against java.util.zip — whose own native intrinsic is faster still, at 14.06, and is printed here as the reference it loses to.">
 </picture>
 
 Parallel, gzip-compatible compression on **JDK 25**: one virtual thread per block, a bounded in-flight window so peak memory is independent of file size, and memory-mapped input via the Foreign Function & Memory API.
@@ -50,7 +50,7 @@ And the row that stays in the table because it's true: the hand-vectorised Adler
 
 <picture>
   <source media="(max-width: 500px)" srcset="./assets/m-3-cadence.svg">
-  <img src="./assets/plate-3-cadence.svg" width="100%" alt="The sentence 'lunch with sam friday 1pm' is annotated in place by four parser stages labelling title, attendee, date and time, then filed into a calendar.">
+  <img src="./assets/plate-3-cadence.svg" width="100%" alt="Cadence: the sentence 'lunch with sam friday 1pm' is labelled in place by four parser stages — title, attendee, date and time — and filed into the Friday 1pm slot of a calendar. Its 36 API handlers are bundled into a single serverless function, because the hosting plan allows 12.">
 </picture>
 
 A sentence typed the way you would say it becomes a calendar entry. The parser runs four stages — chrono, hashtag, priority, language — and **every extracted span records the parser that produced it** — `source` is a required field on every tag, and conflict resolution depends on it, so a wrong answer is always traceable to the stage that caused it.
@@ -65,12 +65,16 @@ A sentence typed the way you would say it becomes a calendar entry. The parser r
 
 <picture>
   <source media="(max-width: 500px)" srcset="./assets/m-4-applied.svg">
-  <img src="./assets/plate-4-applied.svg" width="100%" alt="Email falls through three classifier layers; messages that fail to clear the 0.85 confidence gate divert sideways to a human. Inference runs inside the browser.">
+  <img src="./assets/plate-4-applied.svg" width="100%" alt="Applied: a three-layer email classifier — 201 regex rules, then e5 embeddings, then a fine-tuned SetFit head, cheapest first. It scores 0.979 macro-F1 on a 96-message evaluation set, measured with the rules layer alone; anything that fails to clear the 0.85 confidence gate is referred to a human rather than guessed at. Inference runs inside your browser.">
 </picture>
 
 Your inbox already holds the verdict on most applications you've sent. A three-layer cascade reads it: **201 regex rules → e5 embeddings → a fine-tuned SetFit head**, cheapest first.
 
-\1 Worth being exact: that baseline is generated with the `deterministic` profile, which switches the SetFit head off and empties the embedding store — so it measures the regex layer alone, and the rules-only baseline reproduces it to the last digit. The full three-layer cascade scored 0.9583 on the same 96-message set. Anything under the **0.85 confidence gate** is not guessed at — it goes to a human. The model is allowed to say it doesn't know.
+**0.979 macro-F1** on a 96-message, 8-class evaluation set, and CI fails the build below 0.95 with a real non-zero exit.
+
+Worth being exact, because the number and the picture don't quite match: that score is generated with the `deterministic` profile, which switches the SetFit head off and empties the embedding store — so it measures **the regex layer alone**, and the rules-only baseline reproduces it to the last digit. The full three-layer cascade's own score, 0.9583, survives in exactly one line of prose (`docs/ML_EXECUTION_TRACKER.md:378`) because the run that produced it was overwritten by the deterministic re-run. I can hand you an artifact for 0.979 and not for 0.9583, so 0.979 is what the plate draws, labelled for what it actually measures.
+
+Anything under the **0.85 confidence gate** is not guessed at — it goes to a human. The model is allowed to say it doesn't know.
 
 The fine-tuned head exports to int8 ONNX (90.4 MB → 22.8 MB) and runs **in your browser**: the server ships the weights once, then classification happens in your tab and nothing you paste leaves it. `allowRemoteModels = false` keeps the model local. That in-browser build is the [Hugging Face Space](https://huggingface.co/spaces/yadava5/jobtracker-classifier); the `[live]` link below runs the rules layer only.
 
@@ -82,7 +86,7 @@ The fine-tuned head exports to int8 ONNX (90.4 MB → 22.8 MB) and runs **in you
 
 <picture>
   <source media="(max-width: 500px)" srcset="./assets/m-5-refusal.svg">
-  <img src="./assets/plate-5-refusal.svg" width="100%" alt="A query from tenant A travels toward tenant B's rows, reaches the isolation boundary, and stops. Only tenant B's own rows come back.">
+  <img src="./assets/plate-5-refusal.svg" width="100%" alt="A query from one tenant travels toward another tenant's rows, reaches the PostgreSQL row-level-security boundary, and stops. Only the querying tenant's own rows come back — because the database refused, not because the application remembered to filter.">
 </picture>
 
 Application code that filters by user is code that has to *remember* to filter. So the database enforces it instead: **PostgreSQL Row-Level Security**, `FORCE`d on every tenant table, with the app connecting as a dedicated non-`BYPASSRLS` role and the request identity carried as a transaction-local GUC.
@@ -99,7 +103,7 @@ Auditing my own work, I found **seven IDOR vulnerabilities** in Cadence — endp
 
 <picture>
   <source media="(max-width: 500px)" srcset="./assets/m-6-release.svg">
-  <img src="./assets/plate-6-release.svg" width="100%" alt="Three seeded quests appear on a path; and a dataset moves through a hardened Docker sandbox that waits for human approval before it trains a model.">
+  <img src="./assets/plate-6-release.svg" width="100%" alt="LifeQuest turns real-world routines into tracked quests, for people rebuilding structure after a layoff or in retirement. Agentic AutoML moves a dataset through a hardened Docker sandbox and stops at 2 human approval gates — one before a preprocessing step is committed, one before a model is trained.">
 </picture>
 
 **LifeQuest** turns real-world routines into tracked quests with tiered progression — built for people rebuilding structure, whether after a layoff or in retirement. Tauri + React client, NestJS + Prisma API.
@@ -110,7 +114,7 @@ Auditing my own work, I found **seven IDOR vulnerabilities** in Cadence — endp
 
 ---
 
-<img src="./assets/plate-7-colophon.svg" width="100%" alt="Six systems, six system cards; rendered as animated SVG with no JavaScript and no server.">
+<img src="./assets/plate-7-colophon.svg" width="100%" alt="Six systems, six system cards. Every number here is traceable to the repository it came from, and the page itself is animated SVG with no JavaScript and no server.">
 
 <div align="center">
 <sub>
