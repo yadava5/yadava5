@@ -141,7 +141,7 @@ def plate_refusal() -> str:
     a = "#34D399"   # Cadence emerald — this is a Cadence story
     s = [head(H, "The refusal — the database declines to return another tenant's rows",
               "A query from tenant A travels toward tenant B's rows, reaches the isolation boundary, "
-              "and stops. Zero rows are returned.", LOOP, key="plate-5-refusal.svg")]
+              "and stops. Only tenant B's own rows come back.", LOOP, key="plate-5-refusal.svg")]
     s.append(f""".q{{animation:seek {LOOP}s cubic-bezier(.16,1,.3,1) infinite;animation-delay:{-SET}s}}
 @keyframes seek{{0%{{opacity:0;transform:translateX(0)}}6%{{opacity:1;transform:translateX(0)}}
   /* it decelerates into the boundary and simply stops — no bounce, no alarm */
@@ -162,9 +162,9 @@ def plate_refusal() -> str:
     s.append(f'<text x="470" y="210" class="lbl">ROW-LEVEL SECURITY</text>')
 
     s.append(f'<circle class="q" cx="340" cy="88" r="5" fill="{a}"/>')
-    s.append(f'<text x="150" y="216" class="key">SELECT * FROM tasks;</text>')
+    s.append(f'<text x="150" y="216" class="key">SELECT … WHERE id = &lt;B&gt;</text>')
 
-    s.append(f'<g class="zero"><text x="336" y="150" class="big40">0 rows</text></g>')
+    s.append(f'<g class="zero"><text x="336" y="150" class="big40">B only</text></g>')
     s.append(f'<path d="M150 240H730" stroke="{RULE}"/>')
     s.append(f'<text x="150" y="266" class="say">The app didn\u2019t remember to filter.</text>')
     s.append(f'<text x="150" y="292" class="say">The database refused.</text>')
@@ -366,7 +366,7 @@ def plate_release() -> str:
     m, ind = "#F472B6", "#818CF8"
     s = [head(H, "LifeQuest and Agentic AutoML",
               "Three seeded quests appear on a path; and a dataset moves through a hardened Docker "
-              "sandbox that waits for human approval before deploying.", LOOP, key="plate-6-release.svg")]
+              "sandbox that waits for human approval before it trains a model.", LOOP, key="plate-6-release.svg")]
     s.append(f""".nd{{animation:nd {LOOP}s linear infinite}}
 @keyframes nd{{0%,6%{{opacity:0}}14%,100%{{opacity:1}}}}
 .tk2{{animation:tk2 {LOOP}s cubic-bezier(.16,1,.3,1) infinite}}
@@ -392,7 +392,7 @@ def plate_release() -> str:
     s.append(f'<text x="150" y="274" class="lbl">AGENTIC AUTOML</text>')
     s.append(f'<rect x="300" y="292" width="222" height="56" rx="3" fill="none" stroke="{ind}" opacity=".7"/>')
     s.append(f'<text x="312" y="314" class="lbl" fill="{ind}">DOCKER · SANDBOXED</text>')
-    s.append(f'<text x="300" y="364" class="fine">non-root · read-only · no network</text>')
+    s.append(f'<text x="300" y="364" class="fine">non-root · read-only · internal net</text>')
     s.append(f'<path d="M560 292V348" stroke="{INK3}"/>')
     s.append(f'<text x="574" y="310" class="lbl">HUMAN</text>')
     s.append(f'<text x="574" y="334" class="lbl">APPROVAL</text>')
@@ -534,8 +534,8 @@ MOBILE = {
    "Cadence bundles its 36 API handlers into a single serverless function, because Vercel's plan allows only 12 functions."),
  "m-4-applied.svg": ("APPLIED", CYAN, "0.979", "", "macro-F1 on 96 messages.", "Below 0.85 it asks a human.",
    "Applied scores 0.979 macro-F1 on a 96-message evaluation set; anything below the 0.85 confidence gate is referred to a human."),
- "m-5-refusal.svg": ("THE REFUSAL", "#34D399", "0", " rows", "The app didn't remember", "to filter. The database refused.",
-   "A query for another tenant's rows returns zero rows: the database refused it, rather than the application remembering to filter."),
+ "m-5-refusal.svg": ("THE REFUSAL", "#34D399", "B", " only", "The app didn't remember", "to filter. The database refused.",
+   "A cross-tenant query is refused at the row-level-security boundary: the database declines it, rather than the application remembering to filter."),
  "m-6-release.svg": ("LIFEQUEST · AUTOML", "#F472B6", "2", "", "Routines become quests.", "Datasets become models.",
    "LifeQuest turns routines into quests; Agentic AutoML turns a dataset into a deployed model behind human approval gates."),
 }

@@ -4,7 +4,7 @@
   "plate-2-jetpack.svg": "Blocks flow through a bounded in-flight window and leave compressed. A hand-vectorised Adler-32 checksum is compared digit by digit against java.util.zip and matches exactly. The measured table lists the JDK's native intrinsic at 14.06 gigabytes per second, marked not beaten.",
   "plate-3-cadence.svg": "The sentence 'lunch with sam friday 1pm' is annotated in place by four parser stages labelling title, attendee, date and time, then filed into a calendar.",
   "plate-4-applied.svg": "Email falls through three classifier layers; messages that fail to clear the 0.85 confidence gate divert sideways to a human. Inference runs inside the browser.",
-  "plate-5-refusal.svg": "A query from tenant A travels toward tenant B's rows, reaches the isolation boundary, and stops. Zero rows are returned.",
-  "plate-6-release.svg": "Three seeded quests appear on a path; and a dataset moves through a hardened Docker sandbox that waits for human approval before deploying.",
+  "plate-5-refusal.svg": "A query from tenant A travels toward tenant B's rows, reaches the isolation boundary, and stops. Only tenant B's own rows come back.",
+  "plate-6-release.svg": "Three seeded quests appear on a path; and a dataset moves through a hardened Docker sandbox that waits for human approval before it trains a model.",
   "plate-7-colophon.svg": "Six systems, six system cards; rendered as animated SVG with no JavaScript and no server."
 }
