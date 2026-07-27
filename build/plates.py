@@ -88,7 +88,7 @@ def plate_glyph() -> str:
     a = AMBER
     s = [head(H, "Glyph — 97.01%, and the 299 it gets wrong",
               "A handwritten seven draws itself; four instruction sets each return the same answer; "
-              "the model scores 97.01 percent on the 10,000-image test set, which means 299 wrong; the grid is a count of those 299, not the digits themselves.", LOOP, key="plate-1-glyph.svg")]
+              "the model scores 97.01 percent on the 10,000-image test set, which means 299 wrong. Every one of those 299 errors is drawn below, each mark the true label of an image the model missed; 79 of them were made with over 0.9 confidence.", LOOP, key="plate-1-glyph.svg")]
     s.append(f""".ink{{fill:none;stroke:{a};stroke-width:7;stroke-linecap:round;stroke-linejoin:round;
   stroke-dasharray:1;stroke-dashoffset:0;animation:draw {LOOP}s linear infinite;animation-delay:{-SET}s}}
 @keyframes draw{{0%{{stroke-dashoffset:1}}17%{{stroke-dashoffset:0}}100%{{stroke-dashoffset:0}}}}
@@ -118,17 +118,20 @@ def plate_glyph() -> str:
     s.append(f'<path d="M150 296H730" stroke="{EDGE}"/>')
     s.append(f'<text x="150" y="{296+56}" class="big">97.01<tspan class="unit">%</tspan></text>')
     s.append(f'<text x="470" y="{296+56}" class="key">MNIST TEST · n=10,000</text>')
-    s.append(f'<text x="150" y="{296+106}" class="say">299 wrong. The repo does not commit which ones.</text>')
+    s.append(f'<text x="150" y="{296+106}" class="say">299 wrong. Every one is drawn below.</text>')
+    s.append(f'<text x="150" y="{296+130}" class="say">79 of them with over 0.9 confidence.</text>')
 
-    # THE MOVE — one mark per error, 299 of them
-    rnd = random.Random(7)
+    # THE MOVE — the REAL errors. Each mark is the true label of one image the
+    # model got wrong, read from benchmarks/mnist_misclassified.csv in the Glyph
+    # repo. Previously these were random glyphs; now the picture is the evidence.
+    errs = json.loads((ROOT / "errors.json").read_text())["true"]
     gx, gy, cols = 150, 424, 46
     for i in range(299):
         c, r = i % cols, i // cols
         x, y = gx + c * 12.4, gy + r * 14.0
         s.append(f'<g class="wrong" transform="translate({x:.1f},{y:.1f}) scale(0.072)" '
                  f'style="animation-delay:{round(-SET + (i%46)*0.004,3)}s">'
-                 f'<path d="{DIGITS[rnd.randrange(10)]}" fill="none" stroke="{a}" stroke-width="15" '
+                 f'<path d="{DIGITS[errs[i]]}" fill="none" stroke="{a}" stroke-width="15" '
                  f'stroke-linecap="round"/></g>')
     return "".join(s) + "</svg>"
 
