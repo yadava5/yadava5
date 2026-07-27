@@ -137,6 +137,7 @@ def plate_glyph() -> str:
 # ────────────────────────────────────────────────────────────── PLATE V
 def plate_refusal() -> str:
     H, LOOP, SET = 348, 6.7, 4.4
+    a = "#34D399"   # Cadence emerald — this is a Cadence story
     s = [head(H, "The refusal — the database declines to return another tenant's rows",
               "A query from tenant A travels toward tenant B's rows, reaches the isolation boundary, "
               "and stops. Zero rows are returned.", LOOP, key="plate-5-refusal.svg")]
@@ -146,7 +147,7 @@ def plate_refusal() -> str:
   30%{{opacity:1;transform:translateX(110px)}}36%,100%{{opacity:1;transform:translateX(116px)}}}}
 .zero{{animation:land {LOOP}s linear infinite;animation-delay:{-SET}s}}
 @keyframes land{{0%,34%{{opacity:0}}42%,100%{{opacity:1}}}}
-</style>{slab(H)}{rail(H, CYAN)}""")
+</style>{slab(H)}{rail(H, a)}""")
 
     s.append(f'<text x="150" y="52" class="lbl">TENANT A</text>')
     s.append(f'<text x="596" y="52" class="lbl">TENANT B</text>')
@@ -159,7 +160,7 @@ def plate_refusal() -> str:
     s.append(f'<path d="M462 62V196" stroke="{INK3}" stroke-width="1" opacity=".55"/>')
     s.append(f'<text x="470" y="210" class="lbl">ROW-LEVEL SECURITY</text>')
 
-    s.append(f'<circle class="q" cx="340" cy="88" r="5" fill="{CYAN}"/>')
+    s.append(f'<circle class="q" cx="340" cy="88" r="5" fill="{a}"/>')
     s.append(f'<text x="150" y="216" class="key">SELECT * FROM tasks;</text>')
 
     s.append(f'<g class="zero"><text x="336" y="150" class="big40">0 rows</text></g>')
@@ -177,7 +178,7 @@ def plate_thesis() -> str:
     s = [head(H, "Ayush Yadav — every number is followed by the thing that would catch it",
               "The thesis plate: Ayush Yadav, and the sentence 'Every number on this page is "
               "followed by the thing that would catch it.'", 0, key="plate-0-thesis.svg")]
-    s.append(f""".rule{{stroke-dasharray:1;stroke-dashoffset:0;animation:sweep 5s cubic-bezier(.16,1,.3,1) 1 both}}
+    s.append(f""".rule{{stroke-dasharray:1;stroke-dashoffset:0;animation:sweep 5s cubic-bezier(.16,1,.3,1) 1}}
 @keyframes sweep{{0%{{stroke-dashoffset:1}}22%,100%{{stroke-dashoffset:0}}}}
 .tick{{opacity:1}}
 @keyframes tk{{0%{{opacity:0}}56%,100%{{opacity:1}}}}
@@ -263,7 +264,7 @@ def plate_jetpack() -> str:
 
 # ────────────────────────────────────────────────────────────── PLATE III
 def plate_cadence() -> str:
-    H, LOOP, SET, a = 360, 7.9, 5.6, "#34D399"
+    H, LOOP, SET, a = 384, 7.9, 5.6, "#34D399"
     SENT, FS, CW = "lunch with sam friday 1pm", 26, 15.62
     s = [head(H, "Cadence — a parser that shows its work",
               "The sentence 'lunch with sam friday 1pm' is annotated in place by four parser stages "
@@ -297,7 +298,9 @@ def plate_cadence() -> str:
     s.append(f'<g class="fil" style="animation-delay:{-SET}s">'
              f'<rect x="604" y="272" width="120" height="30" rx="3" fill="#0E2A22" stroke="{a}"/>'
              f'<text x="614" y="292" class="lbl" fill="{a}">1pm · sam</text></g>')
-    s.append(f'<text x="150" y="340" class="lbl">36 HANDLERS · ONE FUNCTION · VERCEL CAP 12</text>')
+    s.append(f'<text x="150" y="344" class="big40">36</text>')
+    s.append(f'<text x="212" y="336" class="lbl">HANDLERS IN ONE FUNCTION</text>')
+    s.append(f'<text x="212" y="356" class="lbl">VERCEL ALLOWS 12</text>')
     return "".join(s) + "</svg>"
 
 
@@ -531,7 +534,7 @@ MOBILE = {
    "Cadence bundles its 36 API handlers into a single serverless function, because Vercel's plan allows only 12 functions."),
  "m-4-applied.svg": ("APPLIED", CYAN, "0.979", "", "macro-F1 on 96 messages.", "Below 0.85 it asks a human.",
    "Applied scores 0.979 macro-F1 on a 96-message evaluation set; anything below the 0.85 confidence gate is referred to a human."),
- "m-5-refusal.svg": ("THE REFUSAL", CYAN, "0", " rows", "The app didn't remember", "to filter. The database refused.",
+ "m-5-refusal.svg": ("THE REFUSAL", "#34D399", "0", " rows", "The app didn't remember", "to filter. The database refused.",
    "A query for another tenant's rows returns zero rows: the database refused it, rather than the application remembering to filter."),
  "m-6-release.svg": ("LIFEQUEST · AUTOML", "#F472B6", "2", "", "Routines become quests.", "Datasets become models.",
    "LifeQuest turns routines into quests; Agentic AutoML turns a dataset into a deployed model behind human approval gates."),
