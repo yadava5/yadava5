@@ -7,10 +7,16 @@ Every claim is followed by the mechanism that would catch it if it were a lie.
 Design rules encoded here (each one is a finding, not a preference):
   * viewBox 880 wide, type column 150→730 — symmetric, 36% more legible at
     mobile than 1200
-  * ONE type scale: 64 / 32 / 20 / 16 / 13. Four hero sizes was not a scale,
-    it was four accidents.
-  * one 8u baseline grid: first baseline 56, bottom margin 32, everything
-    between on a multiple of 4
+  * type scale 64 / 32 / 20 / 16 / 13, plus three named exceptions: the 34px
+    serif on the thesis plate (the only serif, and the only voice that is not
+    the machine's), the 26px .unit suffix that hangs off a hero, and plate
+    III's 26px sentence specimen, which is set at the size a user would type.
+    Ten sizes shipped while this comment claimed five; the mobile set is now
+    on the same scale rather than 15/22/54.
+  * everything sits on a 4u grid. NOT a uniform first baseline or bottom
+    margin — an earlier version of this comment claimed 56 and 32 and the
+    measured values were 19..56 and 27..36. Two 64px heroes set their own top
+    margin, because a 84u-tall glyph box cannot start where a 21u label does.
   * opaque slab on every plate — refuses the light/dark problem entirely
   * a 4u accent bar at x=0, the same device the mobile plates already used;
     the old "rail" was two 26u stubs outside the type column, absent from two
@@ -23,8 +29,9 @@ Design rules encoded here (each one is a finding, not a preference):
     rather than hoped for.
   * long travels use cubic-bezier(.4,0,.2,1). The old expo-out covered 221u in
     a single 0.33s step — it read as a teleport, not as motion.
-  * a moving element fades out before its position resets, so the loop wrap is
-    never visible as a snap-back
+  * an element that MOVES fades out before its position resets, so the loop
+    wrap is never a visible snap-back. Elements that only fade still reset in
+    one frame; that is a blink, not a jump, and it is the cheaper trade.
   * no animated filters — one animated blur costs more than 4000 animated rects
 """
 from __future__ import annotations
@@ -122,7 +129,7 @@ def plate_thesis() -> str:
 .sw{{animation:sw {LOOP}s linear infinite}}
 @keyframes sw{{0%,4%{{opacity:.45}}12%,100%{{opacity:1}}}}
 .ser{{font-family:ui-serif,Georgia,'Times New Roman',serif;font-size:34px;fill:{INK}}}
-</style>{slab(H)}""")
+</style>{slab(H, AMBER)}""")
     s.append(f'<text x="150" y="56" class="key" letter-spacing="5">AYUSH YADAV</text>')
     s.append(f'<text x="{W-150}" y="56" class="lbl" text-anchor="end">CS ’26 · MIAMI UNIVERSITY</text>')
     s.append(f'<path class="rule" d="M150 88H{W-150}" pathLength="1" stroke="{WIRE}"/>')
@@ -319,7 +326,7 @@ def plate_cadence() -> str:
 
 # ────────────────────────────────────────────────────────────── PLATE IV
 def plate_applied() -> str:
-    H, LOOP, SET, a = 520, 11.7, 8.4, CYAN
+    H, LOOP, SET, a = 536, 11.7, 8.4, CYAN
     s = [head(H, "Applied — a classifier allowed to say it doesn't know",
               "Applied: a three-layer email classifier — 201 regex rules, then e5 embeddings, "
               "then a fine-tuned SetFit head, cheapest first. It scores 0.979 macro-F1 on a "
@@ -331,8 +338,8 @@ def plate_applied() -> str:
   46%,96%{{opacity:1;transform:translateY(184px)}}100%{{opacity:0;transform:translateY(184px)}}}}
 .div{{animation:dv {LOOP}s {EASE} infinite}}
 @keyframes dv{{0%{{opacity:0;transform:translate(0,0)}}5%{{opacity:1;transform:translate(0,0)}}
-  30%{{opacity:1;transform:translate(0,132px)}}
-  48%,96%{{opacity:1;transform:translate(146px,172px)}}100%{{opacity:0;transform:translate(146px,172px)}}}}
+  34%{{opacity:1;transform:translate(0,212px)}}
+  52%,96%{{opacity:1;transform:translate(146px,212px)}}100%{{opacity:0;transform:translate(146px,212px)}}}}
 </style>{slab(H, a)}""")
     # 0.979 is the number with artifacts behind it: five committed files carry
     # it. 0.9583 — the full cascade — survives in exactly one line of prose,
@@ -354,25 +361,27 @@ def plate_applied() -> str:
     s.append(f'<text x="150" y="316" class="fine">CI fails the build below 0.95</text>')
 
     for i in range(5):
+        if i == 2:
+            continue          # slot 2 belongs to the .div below — five messages, not six
         s.append(f'<rect class="env" x="{416 + i*44}" y="128" width="30" height="20" rx="2" fill="none" '
                  f'stroke="{a}" stroke-width="1.6" style="animation-delay:{round(-SET + i*0.4,3)}s"/>')
     # the one that does not clear the gate leaves the stack and goes sideways
     s.append(f'<rect class="div" x="504" y="128" width="30" height="20" rx="2" fill="none" '
              f'stroke="{AMBER}" stroke-width="1.6" style="animation-delay:{round(-SET + 0.2,3)}s"/>')
-    s.append(f'<circle cx="700" cy="310" r="11" fill="none" stroke="{AMBER}" stroke-width="1.4"/>')
-    s.append(f'<text x="634" y="344" class="lbl" fill="{AMBER}">A HUMAN</text>')
-    s.append(f'<text x="150" y="376" class="say">It is allowed to say it doesn’t know.</text>')
+    s.append(f'<circle cx="700" cy="350" r="11" fill="none" stroke="{AMBER}" stroke-width="1.4"/>')
+    s.append(f'<text x="634" y="384" class="lbl" fill="{AMBER}">A HUMAN</text>')
+    s.append(f'<text x="150" y="400" class="say">It is allowed to say it doesn’t know.</text>')
 
-    s.append(f'<path d="M150 408H730" stroke="{RULE}"/>')
-    s.append(f'<rect x="150" y="420" width="580" height="68" rx="3" fill="none" stroke="{WIRE}"/>')
-    s.append(f'<text x="166" y="444" class="lbl">YOUR BROWSER</text>')
-    s.append(f'<text x="166" y="468" class="fine">int8 ONNX · 90.4 MB → 22.8 MB · nothing you paste leaves the tab</text>')
+    s.append(f'<path d="M150 424H730" stroke="{RULE}"/>')
+    s.append(f'<rect x="150" y="436" width="580" height="68" rx="3" fill="none" stroke="{WIRE}"/>')
+    s.append(f'<text x="166" y="460" class="lbl">YOUR BROWSER</text>')
+    s.append(f'<text x="166" y="484" class="fine">int8 ONNX · 90.4 MB → 22.8 MB · nothing you paste leaves the tab</text>')
     return "".join(s) + "</svg>"
 
 
 # ────────────────────────────────────────────────────────────── PLATE V
 def plate_refusal() -> str:
-    H, LOOP, SET, a = 412, 6.7, 4.7, EMERALD
+    H, LOOP, SET, a = 428, 6.7, 4.7, EMERALD
     s = [head(H, "The refusal — the database declines to return another tenant's rows",
               "A query from one tenant travels toward another tenant's rows, reaches the "
               "PostgreSQL row-level-security boundary, and stops. Only the querying tenant's own "
@@ -386,8 +395,8 @@ def plate_refusal() -> str:
 @keyframes land{{0%,14%{{opacity:0}}22%,100%{{opacity:1}}}}
 </style>{slab(H, a)}""")
 
-    s.append(f'<text x="150" y="56" class="lbl">TENANT A</text>')
-    s.append(f'<text x="560" y="56" class="lbl">TENANT B</text>')
+    s.append(f'<text x="150" y="56" class="lbl">TENANT B — THE CALLER</text>')
+    s.append(f'<text x="560" y="56" class="lbl">TENANT A</text>')
     for i in range(4):
         y = 80 + i * 28
         # a #12171B fill sat at 1.08:1 — eight rows nobody could see
@@ -398,15 +407,16 @@ def plate_refusal() -> str:
     s.append(f'<path d="M420 68V200" stroke="{WIRE}" stroke-width="1"/>')
     s.append(f'<circle class="q" cx="330" cy="89" r="5" fill="{a}"/>')
 
-    s.append(f'<text x="150" y="216" class="key">SELECT … WHERE id = &lt;B&gt;</text>')
-    s.append(f'<text class="zero sub" x="560" y="216">B only</text>')
-    s.append(f'<text x="420" y="248" class="lbl">ROW-LEVEL SECURITY</text>')
+    # unfiltered on purpose: a predicate that names B and returns B proves nothing
+    s.append(f'<text x="150" y="216" class="key">SELECT * FROM tasks</text>')
+    s.append(f'<text class="zero sub" x="150" y="256">B only</text>')
+    s.append(f'<text x="440" y="248" class="lbl">ROW-LEVEL SECURITY</text>')
 
-    s.append(f'<path d="M150 280H730" stroke="{RULE}"/>')
-    s.append(f'<text x="150" y="312" class="say">The app didn’t remember to filter.</text>')
-    s.append(f'<text x="150" y="340" class="say">The database refused.</text>')
-    s.append(f'<text x="150" y="380" class="lbl">IDOR: 7 FOUND, 7 FIXED</text>')
-    s.append(f'<text x="470" y="380" class="lbl">BY THE AUTHOR</text>')
+    s.append(f'<path d="M150 296H730" stroke="{RULE}"/>')
+    s.append(f'<text x="150" y="328" class="say">The app didn’t remember to filter.</text>')
+    s.append(f'<text x="150" y="356" class="say">The database refused.</text>')
+    s.append(f'<text x="150" y="396" class="lbl">IDOR: 8 FOUND, 8 FIXED</text>')
+    s.append(f'<text x="470" y="396" class="lbl">BY THE AUTHOR</text>')
     return "".join(s) + "</svg>"
 
 
@@ -423,9 +433,10 @@ def plate_release() -> str:
 @keyframes nd{{0%,4%{{opacity:0}}10%,100%{{opacity:1}}}}
 .tk2{{animation:tk2 {LOOP}s {EASE} infinite}}
 @keyframes tk2{{0%{{opacity:0;transform:translateX(0)}}3%{{opacity:1;transform:translateX(0)}}
-  11%,22%{{opacity:1;transform:translateX(244px)}}
-  /* the longest dead hold in the document: it is waiting for a human */
-  28%,96%{{opacity:1;transform:translateX(424px)}}100%{{opacity:0;transform:translateX(424px)}}}}
+  18%,26%{{opacity:1;transform:translateX(348px)}}
+  /* the longest dead hold in the document: it is waiting for a human, and it
+     now waits AT the gate at x=530 rather than 110u short of it, inside a wall */
+  32%,96%{{opacity:1;transform:translateX(424px)}}100%{{opacity:0;transform:translateX(424px)}}}}
 .ok{{animation:ok {LOOP}s linear infinite}}
 @keyframes ok{{0%,26%{{opacity:0}}30%,100%{{opacity:1}}}}
 /* travel slow enough that a 0.33s sample never covers more than ~130u */
@@ -473,7 +484,7 @@ def plate_colophon() -> str:
     LOOP, SET = 12.7, 10.0
     s.append(f""".rule{{stroke-dasharray:1;animation:sweep {LOOP}s {EASE} infinite;animation-delay:{-SET}s}}
 @keyframes sweep{{0%{{stroke-dashoffset:1}}20%,100%{{stroke-dashoffset:0}}}}
-</style>{slab(H)}""")
+</style>{slab(H, INDIGO)}""")
     s.append(f'<path class="rule" d="M150 56H{W-150}" pathLength="1" stroke="{RULE}"/>')
     s.append(f'<text x="150" y="96" class="say">Six systems. Six system cards.</text>')
     s.append(f'<text x="150" y="124" class="say">Every number is traceable to its repo.</text>')
@@ -523,24 +534,24 @@ MW = 440
 
 def plate_mobile(accent: str, kicker: str, hero: str, unit: str,
                  line1: str, line2: str, desc: str) -> str:
-    h = 208
+    h = 224   # a 64px hero's glyph box is 84u tall; 208 could not hold it
     return "".join([
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {MW} {h}" width="{MW}" height="{h}" '
         f'role="img" aria-label="{desc}"><title>{kicker}</title><desc>{desc}</desc><style>'
         f"@font-face{{font-family:'M';src:url(data:font/woff2;base64,{FONT}) format('woff2')}}"
         f"text{{font-family:'M',ui-monospace,SFMono-Regular,Menlo,monospace}}"
-        f".k{{font-size:15px;letter-spacing:1.8px;fill:{INK2}}}"
-        f".n{{font-size:54px;letter-spacing:-1px;fill:{INK};font-weight:600}}"
-        f".u{{font-size:22px;fill:{INK2}}}"
-        f".t{{font-size:15px;fill:{INK2}}}"
+        f".k{{font-size:16px;letter-spacing:1.8px;fill:{INK2}}}"
+        f".n{{font-size:64px;letter-spacing:-1.5px;fill:{INK};font-weight:600}}"
+        f".u{{font-size:26px;fill:{INK2}}}"
+        f".t{{font-size:16px;fill:{INK2}}}"
         f"</style>"
         f'<rect width="{MW}" height="{h}" rx="2" fill="{SLAB}"/>'
         f'<rect x="0.5" y="0.5" width="{MW-1}" height="{h-1}" rx="2" fill="none" stroke="{EDGE}"/>'
         f'<rect x="0" y="0" width="4" height="{h}" fill="{accent}"/>',
-        f'<text x="34" y="44" class="k">{kicker}</text>',
-        f'<text x="34" y="112" class="n">{hero}<tspan class="u">{unit}</tspan></text>',
-        f'<text x="34" y="152" class="t">{line1}</text>',
-        f'<text x="34" y="178" class="t">{line2}</text>',
+        f'<text x="34" y="40" class="k">{kicker}</text>',
+        f'<text x="34" y="124" class="n">{hero}<tspan class="u">{unit}</tspan></text>',
+        f'<text x="34" y="168" class="t">{line1}</text>',
+        f'<text x="34" y="194" class="t">{line2}</text>',
         "</svg>"])
 
 

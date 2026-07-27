@@ -15,9 +15,10 @@ text{font-family:'M',ui-monospace,SFMono-Regular,Menlo,monospace}
 @keyframes nd{0%,4%{opacity:0}10%,100%{opacity:1}}
 .tk2{animation:tk2 13.1s cubic-bezier(.4,0,.2,1) infinite}
 @keyframes tk2{0%{opacity:0;transform:translateX(0)}3%{opacity:1;transform:translateX(0)}
-  11%,22%{opacity:1;transform:translateX(244px)}
-  /* the longest dead hold in the document: it is waiting for a human */
-  28%,96%{opacity:1;transform:translateX(424px)}100%{opacity:0;transform:translateX(424px)}}
+  18%,26%{opacity:1;transform:translateX(348px)}
+  /* the longest dead hold in the document: it is waiting for a human, and it
+     now waits AT the gate at x=530 rather than 110u short of it, inside a wall */
+  32%,96%{opacity:1;transform:translateX(424px)}100%{opacity:0;transform:translateX(424px)}}
 .ok{animation:ok 13.1s linear infinite}
 @keyframes ok{0%,26%{opacity:0}30%,100%{opacity:1}}
 /* travel slow enough that a 0.33s sample never covers more than ~130u */
