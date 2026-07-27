@@ -29,6 +29,7 @@ FONT = base64.b64encode((ROOT / "mono-subset.woff2").read_bytes()).decode()
 
 W = 880
 SLAB, EDGE = "#0B0C0E", "rgba(255,255,255,0.07)"
+RULE = "#2E3238"   # visible structure; EDGE stays for the slab border only
 INK, INK2, INK3 = "#F7F8F8", "#8A8F98", "#62666D"
 AMBER, CYAN = "#F5A524", "#22D3EE"
 RAIL_X = 120
@@ -115,7 +116,7 @@ def plate_glyph() -> str:
     s.append(f'<text x="330" y="{60+200}" class="lbl">MECHANISM — 3 HAND-WRITTEN, 1 AUTO</text>')
 
     # VERDICT
-    s.append(f'<path d="M150 296H730" stroke="{EDGE}"/>')
+    s.append(f'<path d="M150 296H730" stroke="{RULE}"/>')
     s.append(f'<text x="150" y="{296+56}" class="big">97.01<tspan class="unit">%</tspan></text>')
     s.append(f'<text x="470" y="{296+56}" class="key">MNIST TEST · n=10,000</text>')
     s.append(f'<text x="150" y="{296+106}" class="say">299 wrong, all drawn below. 79 above 0.9 conf.</text>')
@@ -164,7 +165,7 @@ def plate_refusal() -> str:
     s.append(f'<text x="150" y="216" class="key">SELECT * FROM tasks;</text>')
 
     s.append(f'<g class="zero"><text x="336" y="150" class="big40">0 rows</text></g>')
-    s.append(f'<path d="M150 240H730" stroke="{EDGE}"/>')
+    s.append(f'<path d="M150 240H730" stroke="{RULE}"/>')
     s.append(f'<text x="150" y="266" class="say">The app didn\u2019t remember to filter.</text>')
     s.append(f'<text x="150" y="292" class="say">The database refused.</text>')
     s.append(f'<text x="150" y="322" class="lbl">IDOR: 7 FOUND, 7 FIXED</text>')
@@ -178,10 +179,9 @@ def plate_thesis() -> str:
     s = [head(H, "Ayush Yadav — every number is followed by the thing that would catch it",
               "The thesis plate: Ayush Yadav, and the sentence 'Every number on this page is "
               "followed by the thing that would catch it.'", 0, key="plate-0-thesis.svg")]
-    s.append(f""".rule{{stroke-dasharray:1;stroke-dashoffset:0;animation:sweep 5s cubic-bezier(.16,1,.3,1) 1}}
+    s.append(f""".rule{{stroke-dasharray:1;stroke-dashoffset:0;animation:sweep 5s cubic-bezier(.16,1,.3,1) -5s 1 both}}
 @keyframes sweep{{0%{{stroke-dashoffset:1}}22%,100%{{stroke-dashoffset:0}}}}
 .tick{{opacity:1}}
-@keyframes tk{{0%{{opacity:0}}56%,100%{{opacity:1}}}}
 .ser{{font-family:ui-serif,Georgia,'Times New Roman',serif;font-size:31px;fill:{INK}}}
 </style>{slab(H)}""")
     s.append(f'<text x="150" y="56" class="key" letter-spacing="5">AYUSH YADAV</text>')
@@ -193,7 +193,7 @@ def plate_thesis() -> str:
     accents = [AMBER, "#B8E62E", "#34D399", CYAN, "#818CF8", "#F472B6"]
     for i, c in enumerate(accents):   # the ONLY polychrome frame in the document
         s.append(f'<rect class="tick" x="{150+i*26}" y="238" width="14" height="4" rx="1" fill="{c}" '
-                 f'style="animation-delay:{0.09*i:.2f}s"/>')
+                 f'/>')
     s.append(f'<text x="{W-150}" y="246" class="lbl" text-anchor="end">SIX SYSTEMS</text>')
     return "".join(s) + "</svg>"
 
@@ -206,9 +206,9 @@ def plate_jetpack() -> str:
               "Adler-32 checksum is compared digit by digit against java.util.zip and matches exactly. "
               "The measured table lists the JDK's native intrinsic at 14.06 gigabytes per second, "
               "marked not beaten.", LOOP, key="plate-2-jetpack.svg")]
-    s.append(f""".blk{{animation:sq {LOOP}s linear infinite;transform-box:fill-box;transform-origin:left center}}
-@keyframes sq{{0%,14%{{transform:translateX(0) scaleX(1)}}44%{{transform:translateX(214px) scaleX(.42)}}
-  60%,100%{{transform:translateX(214px) scaleX(.42)}}}}
+    s.append(f""".blk{{animation:sq {LOOP}s cubic-bezier(.16,1,.3,1) infinite;transform-box:fill-box;transform-origin:left center}}
+@keyframes sq{{0%,14%{{transform:translateX(0) scaleX(1)}}44%{{transform:translateX(230px) scaleX(.55)}}
+  60%,100%{{transform:translateX(230px) scaleX(.55)}}}}
 .mt{{animation:mt {LOOP}s linear infinite}}
 @keyframes mt{{0%,18%{{opacity:0}}28%,100%{{opacity:1}}}}
 .row{{animation:rw {LOOP}s linear infinite}}
@@ -243,7 +243,7 @@ def plate_jetpack() -> str:
     s.append(f'<text x="556" y="312" class="say" fill="{a}">identical</text>')
 
     # the verdict — the measured table, including the reference he does NOT beat
-    s.append(f'<path d="M150 344H730" stroke="{EDGE}"/>')
+    s.append(f'<path d="M150 344H730" stroke="{RULE}"/>')
     rows = [
         ("Adler-32 scalar (pure Java)", "1.52 GB/s", ""),
         ("Adler-32 hand-vectorised", "4.26 GB/s", "2.8× scalar"),
@@ -257,19 +257,19 @@ def plate_jetpack() -> str:
         s.append(f'<text class="row lbl" x="150" y="{y}" style="animation-delay:{dl}s">{name}</text>')
         s.append(f'<text class="row lbl" x="470" y="{y}" fill="{INK}" style="animation-delay:{dl}s">{score}</text>')
         if note:
-            s.append(f'<text class="row lbl" x="604" y="{y}" fill="{a if "×" in note else INK2}" '
+            s.append(f'<text class="row lbl" x="604" y="{y}" fill="{INK if note == "not beaten" else (a if "×" in note else INK2)}" '
                      f'style="animation-delay:{dl}s">{note}</text>')
     return "".join(s) + "</svg>"
 
 
 # ────────────────────────────────────────────────────────────── PLATE III
 def plate_cadence() -> str:
-    H, LOOP, SET, a = 384, 7.9, 5.6, "#34D399"
+    H, LOOP, SET, a = 400, 7.9, 5.6, "#34D399"
     SENT, FS, CW = "lunch with sam friday 1pm", 26, 15.62
     s = [head(H, "Cadence — a parser that shows its work",
               "The sentence 'lunch with sam friday 1pm' is annotated in place by four parser stages "
               "labelling title, attendee, date and time, then filed into a calendar.", LOOP, key="plate-3-cadence.svg")]
-    s.append(f""".ul{{animation:ul {LOOP}s linear infinite;transform-box:fill-box;transform-origin:left center}}
+    s.append(f""".ul{{animation:ul {LOOP}s cubic-bezier(.16,1,.3,1) infinite;transform-box:fill-box;transform-origin:left center}}
 @keyframes ul{{0%,10%{{transform:scaleX(0);opacity:0}}14%{{opacity:1}}22%,100%{{transform:scaleX(1);opacity:1}}}}
 .an{{animation:an {LOOP}s linear infinite}}
 @keyframes an{{0%,12%{{opacity:0}}22%,100%{{opacity:1}}}}
@@ -290,17 +290,17 @@ def plate_cadence() -> str:
     s.append(f'<text x="150" y="196" class="lbl">MECHANISM — four stages, each one legible</text>')
 
     # filed
-    s.append(f'<path d="M150 220H730" stroke="{EDGE}"/>')
+    s.append(f'<path d="M150 220H730" stroke="{RULE}"/>')
     for d, day in enumerate(["MON", "TUE", "WED", "THU", "FRI"]):
         x = 150 + d * 116
         s.append(f'<text x="{x}" y="248" class="lbl">{day}</text>')
-        s.append(f'<rect x="{x}" y="258" width="100" height="56" rx="3" fill="none" stroke="{EDGE}"/>')
+        s.append(f'<rect x="{x}" y="258" width="100" height="56" rx="3" fill="none" stroke="{RULE}"/>')
     s.append(f'<g class="fil" style="animation-delay:{-SET}s">'
-             f'<rect x="604" y="272" width="120" height="30" rx="3" fill="#0E2A22" stroke="{a}"/>'
-             f'<text x="614" y="292" class="lbl" fill="{a}">1pm · sam</text></g>')
-    s.append(f'<text x="150" y="344" class="big40">36</text>')
-    s.append(f'<text x="212" y="336" class="lbl">HANDLERS IN ONE FUNCTION</text>')
-    s.append(f'<text x="212" y="356" class="lbl">VERCEL ALLOWS 12</text>')
+             f'<rect x="616" y="272" width="96" height="30" rx="3" fill="#0E2A22" stroke="{a}"/>'
+             f'<text x="624" y="292" class="fine" fill="{a}">1pm · sam</text></g>')
+    s.append(f'<text x="150" y="368" class="big40">36</text>')
+    s.append(f'<text x="212" y="360" class="lbl">HANDLERS IN ONE FUNCTION</text>')
+    s.append(f'<text x="212" y="380" class="lbl">VERCEL ALLOWS 12</text>')
     return "".join(s) + "</svg>"
 
 
@@ -310,14 +310,14 @@ def plate_applied() -> str:
     s = [head(H, "Applied — a classifier allowed to say it doesn't know",
               "Email falls through three classifier layers; messages that fail to clear the 0.85 "
               "confidence gate divert sideways to a human. Inference runs inside the browser.", LOOP, key="plate-4-applied.svg")]
-    s.append(f""".env{{animation:fall {LOOP}s linear infinite}}
+    s.append(f""".env{{animation:fall {LOOP}s cubic-bezier(.16,1,.3,1) infinite}}
 @keyframes fall{{0%{{opacity:0;transform:translateY(-30px)}}4%{{opacity:1}}
   44%{{opacity:1;transform:translateY(150px)}}47%{{opacity:0}}50%{{opacity:0;transform:translateY(-30px)}}
   54%{{opacity:1}}94%{{opacity:1;transform:translateY(150px)}}97%,100%{{opacity:0}}}}
-.div{{animation:dv {LOOP}s linear infinite}}
+.div{{animation:dv {LOOP}s cubic-bezier(.16,1,.3,1) infinite}}
 @keyframes dv{{0%{{opacity:0;transform:translate(0,-30px)}}4%{{opacity:1}}
-  30%{{opacity:1;transform:translate(0,96px)}}44%{{opacity:1;transform:translate(150px,96px)}}
-  90%,100%{{opacity:1;transform:translate(150px,96px)}}}}
+  30%{{opacity:1;transform:translate(0,96px)}}44%{{opacity:1;transform:translate(150px,140px)}}
+  90%,100%{{opacity:1;transform:translate(150px,140px)}}}}
 .cm{{animation:cm {LOOP}s linear infinite}}
 @keyframes cm{{0%,20%{{opacity:0}}30%,100%{{opacity:1}}}}
 </style>{slab(H)}{rail(H, a)}""")
@@ -341,18 +341,18 @@ def plate_applied() -> str:
         x = 400 + i * 68
         s.append(f'<rect class="div" x="{x}" y="100" width="30" height="20" rx="2" fill="none" '
                  f'stroke="{AMBER}" stroke-width="1.6" style="animation-delay:{round(-SET + 0.3 + i*0.5,3)}s"/>')
-    s.append(f'<circle cx="656" cy="212" r="11" fill="none" stroke="{AMBER}" stroke-width="1.4"/>')
-    s.append(f'<text x="628" y="240" class="lbl" fill="{AMBER}">A HUMAN</text>')
+    s.append(f'<circle cx="656" cy="256" r="11" fill="none" stroke="{AMBER}" stroke-width="1.4"/>')
+    s.append(f'<text x="628" y="286" class="lbl" fill="{AMBER}">A HUMAN</text>')
     s.append(f'<text x="150" y="300" class="say">It is allowed to say it doesn’t know.</text>')
 
-    s.append(f'<path d="M150 326H730" stroke="{EDGE}"/>')
+    s.append(f'<path d="M150 326H730" stroke="{RULE}"/>')
     # the eval set's real shape, not a decorative matrix pretending to be data
     s.append(f'<text x="150" y="352" class="lbl">MEASURED ON</text>')
     for i, (k, v) in enumerate([("96", "authored messages"), ("8", "classes"), ("0.95", "CI floor")]):
         y = 376 + i * 22
         s.append(f'<text class="cm key" x="150" y="{y}" fill="{INK}" '
                  f'style="animation-delay:{round(-SET + i*0.06,3)}s">{k}</text>')
-        s.append(f'<text class="cm lbl" x="200" y="{y}" '
+        s.append(f'<text class="cm lbl" x="216" y="{y}" '
                  f'style="animation-delay:{round(-SET + i*0.06,3)}s">{v}</text>')
     s.append(f'<rect x="430" y="356" width="272" height="52" rx="3" fill="none" stroke="{INK3}" opacity=".6"/>')
     s.append(f'<text x="446" y="378" class="lbl">YOUR BROWSER</text>')
@@ -369,11 +369,11 @@ def plate_release() -> str:
               "sandbox that waits for human approval before deploying.", LOOP, key="plate-6-release.svg")]
     s.append(f""".nd{{animation:nd {LOOP}s linear infinite}}
 @keyframes nd{{0%,6%{{opacity:0}}14%,100%{{opacity:1}}}}
-.tk2{{animation:tk2 {LOOP}s linear infinite}}
+.tk2{{animation:tk2 {LOOP}s cubic-bezier(.16,1,.3,1) infinite}}
 @keyframes tk2{{0%,30%{{opacity:0;transform:translateX(0)}}36%{{opacity:1;transform:translateX(0)}}
-  50%{{opacity:1;transform:translateX(150px)}}
+  50%{{opacity:1;transform:translateX(340px)}}
   /* the longest dead hold in the document: it waits for a human */
-  70%{{opacity:1;transform:translateX(150px)}}80%,100%{{opacity:1;transform:translateX(320px)}}}}
+  70%{{opacity:1;transform:translateX(340px)}}80%,100%{{opacity:1;transform:translateX(470px)}}}}
 .ok{{animation:ok {LOOP}s linear infinite}}
 @keyframes ok{{0%,30%{{opacity:0}}38%,100%{{opacity:1}}}}
 </style>{slab(H)}{rail(H, m)}""")
@@ -388,7 +388,7 @@ def plate_release() -> str:
     s.append(f'<text x="150" y="196" class="say">For people rebuilding structure —</text>')
     s.append(f'<text x="150" y="220" class="say">after a layoff, or in retirement.</text>')
 
-    s.append(f'<path d="M150 246H730" stroke="{EDGE}"/>')
+    s.append(f'<path d="M150 246H730" stroke="{RULE}"/>')
     s.append(f'<text x="150" y="274" class="lbl">AGENTIC AUTOML</text>')
     s.append(f'<rect x="300" y="292" width="222" height="56" rx="3" fill="none" stroke="{ind}" opacity=".7"/>')
     s.append(f'<text x="312" y="314" class="lbl" fill="{ind}">DOCKER · SANDBOXED</text>')
@@ -397,7 +397,7 @@ def plate_release() -> str:
     s.append(f'<text x="574" y="310" class="lbl">HUMAN</text>')
     s.append(f'<text x="574" y="334" class="lbl">APPROVAL</text>')
     s.append(f'<circle class="tk2" cx="180" cy="320" r="6" fill="{ind}" style="animation-delay:{-SET}s"/>')
-    s.append(f'<text class="ok lbl" x="640" y="288" fill="{ind}" style="animation-delay:{-SET}s">DEPLOYED</text>')
+    s.append(f'<text class="ok lbl" x="640" y="360" fill="{ind}" style="animation-delay:{-SET}s">DEPLOYED</text>')
     s.append(f'<text x="150" y="394" class="lbl">SENIOR DESIGN · MIAMI UNIVERSITY</text>')
     return "".join(s) + "</svg>"
 
@@ -408,7 +408,7 @@ def plate_colophon() -> str:
     s = [head(H, "Colophon", "Six systems, six system cards; rendered as animated SVG with no "
                              "JavaScript and no server.", 0, key="plate-7-colophon.svg")]
     s.append("</style>" + slab(H))
-    s.append(f'<path d="M150 40H{W-150}" stroke="{EDGE}"/>')
+    s.append(f'<path d="M150 40H{W-150}" stroke="{RULE}"/>')
     lines = ["Six systems. Six system cards. Every number here is",
              "traceable to the repo it came from.",
              "Rendered as animated SVG. No JavaScript.",
@@ -435,7 +435,7 @@ PLATES = {
 #   3. Frame zero — anything invisible at t=0 fails the file's own stated rule.
 import re as _re, sys as _sys, xml.dom.minidom as _xml
 
-SIZES = {"lbl": (16, 1.6), "key": (17, 1.4), "say": (19, 0), "fine": (14, 0.6),
+SIZES = {"lbl": (16, 1.6), "key": (17, 1.4), "say": (17, 0), "fine": (14, 0.6),
          "big": (72, -1), "big60": (60, -1), "big52": (52, -1), "big40": (40, -0.5),
          "ser": (31, 0)}
 LEFT, RIGHT = 150, 730
