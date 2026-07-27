@@ -19,7 +19,7 @@ A neural network written **from scratch in C++** — no framework — with hand-
 
 **97.01%** on the 10,000-image MNIST test set — 9,701 right, so **299 wrong**.
 
-That same test set also selected the checkpoint and triggered early stopping (`apps/train_model.cpp:219-243`), so treat it as a training-time number, not a clean held-out one. The run wasn't seeded either. The weights are committed; the error list isn't, so the grid above is a count of the 299 — not the digits.
+That same test set also selected the checkpoint and triggered early stopping (`apps/train_model.cpp:219-243`), so treat it as a training-time number, not a clean held-out one. The run wasn't seeded either. The grid above draws all 299 — each mark the true label of an image the model missed.
 
 [live](https://getglyph.vercel.app) · [system card](https://getglyph.vercel.app/system-card) · [repo](https://github.com/yadava5/glyph)
 
