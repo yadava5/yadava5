@@ -70,7 +70,9 @@ def rail(h: int, accent: str) -> str:
 
 # ────────────────────────────────────────────────────────────── PLATE I
 def plate_glyph() -> str:
-    H, LOOP, SET = 460, 9.1, 6.2
+    # H fits 7 rows of the 299-grid; SET parks the frozen frame after the grid
+    # has fully faded up, so the still shows the whole argument.
+    H, LOOP, SET = 524, 9.1, 7.6
     a = AMBER
     s = [head(H, "Glyph — 97.01%, and the 299 it gets wrong",
               "A handwritten seven draws itself; four instruction sets each return the same answer; "
@@ -104,20 +106,19 @@ def plate_glyph() -> str:
     # VERDICT
     s.append(f'<path d="M150 296H730" stroke="{EDGE}"/>')
     s.append(f'<text x="150" y="{296+56}" class="big">97.01<tspan class="unit">%</tspan></text>')
-    s.append(f'<text x="330" y="{296+56}" class="key">MNIST TEST · n=10,000</text>')
+    s.append(f'<text x="470" y="{296+56}" class="key">MNIST TEST · n=10,000</text>')
+    s.append(f'<text x="150" y="{296+92}" class="say">These are the 299 it gets wrong.</text>')
 
     # THE MOVE — every single digit it gets wrong
     rnd = random.Random(7)
-    gx, gy, cols = 150, 372, 46
+    gx, gy, cols = 150, 412, 46
     for i in range(299):
         c, r = i % cols, i // cols
-        x, y = gx + c * 12.2, gy + r * 13.5
-        s.append(f'<g class="wrong" transform="translate({x:.1f},{y:.1f}) scale(0.058)" '
+        x, y = gx + c * 12.4, gy + r * 14.0
+        s.append(f'<g class="wrong" transform="translate({x:.1f},{y:.1f}) scale(0.072)" '
                  f'style="animation-delay:{round(-SET + (i%46)*0.004,3)}s">'
-                 f'<path d="{DIGITS[rnd.randrange(10)]}" fill="none" stroke="{a}" stroke-width="12" '
+                 f'<path d="{DIGITS[rnd.randrange(10)]}" fill="none" stroke="{a}" stroke-width="15" '
                  f'stroke-linecap="round"/></g>')
-    s.append(f'<text x="716" y="{gy+22}" class="say">These are the</text>')
-    s.append(f'<text x="716" y="{gy+44}" class="say">299 it gets wrong.</text>')
     return "".join(s) + "</svg>"
 
 
