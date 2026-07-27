@@ -53,8 +53,11 @@ Every one is deployed, publicly reachable, and ships a **System Card** — a pri
 
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/yadava5/yadava5/output/github-snake-dark.svg#gh-dark-mode-only" width="100%" alt="A snake winding through my contribution graph" />
-<img src="https://raw.githubusercontent.com/yadava5/yadava5/output/github-snake.svg#gh-light-mode-only" width="100%" alt="A snake winding through my contribution graph" />
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/yadava5/yadava5/output/github-snake-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/yadava5/yadava5/output/github-snake.svg">
+  <img src="https://raw.githubusercontent.com/yadava5/yadava5/output/github-snake.svg" width="100%" alt="A snake winding through my contribution graph">
+</picture>
 
 <sub>
 
