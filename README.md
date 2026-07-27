@@ -15,7 +15,9 @@ What follows is five system plates (LifeQuest and AutoML share the last), plus o
   <img src="./assets/plate-1-glyph.svg" width="100%" alt="A handwritten seven draws itself. Three hand-written SIMD kernels (AVX-512, AVX2, NEON) and an autovectorised WebAssembly build each carry the same dot product. the model scores 97.01 percent on the 10,000-image test set, which means 299 wrong. Every one of those 299 errors is drawn below, each mark the true label of an image the model missed; 79 of them were made with over 0.9 confidence.">
 </picture>
 
-A neural network written **from scratch in C++** — no framework — with hand-written SIMD kernels for AVX-512, AVX2, NEON and wasm128, compiled to WebAssembly — and the live demo runs it: `vercel.json` builds with `VITE_ENABLE_WASM=true` and the site serves a 46,960-byte `.wasm`. A labelled JS matcher ships as the fallback path, and the app marks it "never used for accuracy or timing claims".
+A neural network written **from scratch in C++** — no framework — with hand-written SIMD kernels for AVX-512, AVX2 and NEON. The WebAssembly build carries no intrinsics of its own: under Emscripten every ISA predicate misses and the scalar path is autovectorised by `-msimd128` (`CMakeLists.txt:279`). The branches are `#if`/`#elif`, so one binary compiles one path and nothing cross-checks them.
+
+And the deployment currently serves the JavaScript path only — no `.wasm` is fetched. Treat the WASM build as reproducible from the repo, not as what the live page runs.
 
 **97.01%** on the 10,000-image MNIST test set — 9,701 right, so **299 wrong**.
 
@@ -36,9 +38,9 @@ Parallel, gzip-compatible compression on **JDK 25**: one virtual thread per bloc
 
 The checksum is hand-vectorised — so it is checked **bit-identical against `java.util.zip.Adler32`** across every input the test suite throws at it. The output is a byte-valid single gzip member any tool can decompress.
 
-**422 MB/s parallel vs 66.2 MB/s single-threaded — 6.4×** on an M1 Pro (10 cores). That is a 3-fork JMH run with a 99.9% confidence interval of ±5%, committed at [`benchmarks/jmh-results-rigorous.json`](https://github.com/yadava5/jetpack-compress/blob/main/benchmarks/jmh-results-rigorous.json) with the machine spec beside it, so you can re-run it and check.
+**422 MB/s parallel vs 66.2 MB/s single-threaded — 6.4×** on an M1 Pro (10 cores). That is a 3-fork JMH run with 99.9% confidence intervals spanning ±0.7% (single-threaded) to ±6.9% (the vectorised checksum), committed at [`benchmarks/jmh-results-rigorous.json`](https://github.com/yadava5/jetpack-compress/blob/main/benchmarks/jmh-results-rigorous.json) with the machine spec beside it, so you can re-run it and check.
 
-And the row that stays in the table because it's true: the hand-vectorised Adler-32 reaches **4.26 GB/s**, while the JDK's own native intrinsic does **14.06 GB/s**. I don't beat it. The SIMD result is honest against the *scalar* baseline (2.80×, reproduced to three significant figures across two independent runs), and the intrinsic is printed next to it as the reference it loses to.
+And the row that stays in the table because it's true: the hand-vectorised Adler-32 reaches **4.26 GB/s**, while the JDK's own native intrinsic does **14.06 GB/s**. I don't beat it. The SIMD result is honest against the *scalar* baseline (2.80× on the 3-fork run, 2.92× on the quick one — they disagree at the second figure, and that spread is the uncertainty), and the intrinsic is printed next to it as the reference it loses to.
 
 [live](https://jetpack-compress.vercel.app) · [system card](https://jetpack-compress.vercel.app/system-card) · [repo](https://github.com/yadava5/jetpack-compress)
 
@@ -68,7 +70,7 @@ A sentence typed the way you would say it becomes a calendar entry. The parser r
 
 Your inbox already holds the verdict on most applications you've sent. A three-layer cascade reads it: **201 regex rules → e5 embeddings → a fine-tuned SetFit head**, cheapest first.
 
-**0.979 macro-F1**, and CI fails the build below 0.95. Anything under the **0.85 confidence gate** is not guessed at — it goes to a human. The model is allowed to say it doesn't know.
+\1 Worth being exact: that baseline is generated with the `deterministic` profile, which switches the SetFit head off and empties the embedding store — so it measures the regex layer alone, and the rules-only baseline reproduces it to the last digit. The full three-layer cascade scored 0.9583 on the same 96-message set. Anything under the **0.85 confidence gate** is not guessed at — it goes to a human. The model is allowed to say it doesn't know.
 
 The fine-tuned head exports to int8 ONNX (90.4 MB → 22.8 MB) and runs **in your browser**: the server ships the weights once, then classification happens in your tab and nothing you paste leaves it. `allowRemoteModels = false` keeps the model local. That in-browser build is the [Hugging Face Space](https://huggingface.co/spaces/yadava5/jobtracker-classifier); the `[live]` link below runs the rules layer only.
 
@@ -80,12 +82,12 @@ The fine-tuned head exports to int8 ONNX (90.4 MB → 22.8 MB) and runs **in you
 
 <picture>
   <source media="(max-width: 500px)" srcset="./assets/m-5-refusal.svg">
-  <img src="./assets/plate-5-refusal.svg" width="100%" alt="A query from tenant A travels toward tenant B's rows, reaches the isolation boundary, and stops. Zero rows are returned.">
+  <img src="./assets/plate-5-refusal.svg" width="100%" alt="A query from tenant A travels toward tenant B's rows, reaches the isolation boundary, and stops. Only tenant B's own rows come back.">
 </picture>
 
 Application code that filters by user is code that has to *remember* to filter. So the database enforces it instead: **PostgreSQL Row-Level Security**, `FORCE`d on every tenant table, with the app connecting as a dedicated non-`BYPASSRLS` role and the request identity carried as a transaction-local GUC.
 
-The test that matters runs a raw, unfiltered `SELECT` as user B. It returns **user B's rows only** — because the database refused, not because the query remembered.
+The test that matters runs a raw, unfiltered `SELECT` as user B. It returns **user B's rows only** — because the database refused, not because the query remembered. Being exact: the migrations are hand-run, and production still connects as the owner role, so today this is proven in CI against ephemeral Postgres rather than enforced in the deployed database.
 
 Auditing my own work, I found **seven IDOR vulnerabilities** in Cadence — endpoints where any authenticated user could read or delete another user's records by id. All seven are fixed; six carry a regression test asserting the scoped SQL, and the task-lists one does not yet.
 
@@ -97,12 +99,12 @@ Auditing my own work, I found **seven IDOR vulnerabilities** in Cadence — endp
 
 <picture>
   <source media="(max-width: 500px)" srcset="./assets/m-6-release.svg">
-  <img src="./assets/plate-6-release.svg" width="100%" alt="Three seeded quests appear on a path; and a dataset moves through a hardened Docker sandbox that waits for human approval before deploying.">
+  <img src="./assets/plate-6-release.svg" width="100%" alt="Three seeded quests appear on a path; and a dataset moves through a hardened Docker sandbox that waits for human approval before it trains a model.">
 </picture>
 
 **LifeQuest** turns real-world routines into tracked quests with tiered progression — built for people rebuilding structure, whether after a layoff or in retirement. Tauri + React client, NestJS + Prisma API.
 
-**Agentic AutoML** takes a dataset and returns a deployed model: LangGraph orchestration over an MCP tool registry, Python executed in a hardened Docker sandbox — non-root, read-only rootfs, no network, capped memory and CPU — and human approval gates before a preprocessing step is committed and before a model is trained. Worth being exact: preprocessing runs the code *before* it asks, so the gate protects what gets persisted rather than what gets spent — and whether a step needs approval is itself proposed by the model, with a keyword fallback. Senior design at Miami University, co-built with Shree Chaturvedi.
+**Agentic AutoML** takes a dataset and returns a deployed model: LangGraph orchestration over an MCP tool registry, Python executed in a hardened Docker sandbox — non-root, read-only rootfs, an `--internal` Docker network with no outbound route (the beta deploy defaults to `bridge`), capped memory and CPU — and human approval gates before a preprocessing step is committed and before a model is trained. Worth being exact: preprocessing runs the code *before* it asks, so the gate protects what gets persisted rather than what gets spent — and whether a step needs approval is itself proposed by the model, with a keyword fallback. Senior design at Miami University, co-built with Shree Chaturvedi.
 
 [LifeQuest](https://getlifequest.vercel.app) · [system card](https://getlifequest.vercel.app/system-card) — [AutoML](https://agentic-automl-platform.vercel.app) · [system card](https://agentic-automl-platform.vercel.app/system-card)
 
