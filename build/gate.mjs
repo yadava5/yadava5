@@ -134,7 +134,7 @@ for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)
                       && Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y) > TOL;
 
     const steps = dur ? STEPS : 1;
-    const seenVisible = new Map();      // class -> count of samples where visible
+    const seenVis = [];                 // per-element count of samples visible
     const peak = [];                    // per-element max opacity over the loop
     let zero = [], prev = null;
 
@@ -187,14 +187,25 @@ for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)
               continue;
             }
             out.push(`${G.nm} sits on top of ${T.nm}${at}`);
+            continue;
           }
+          // Graphic on graphic. Proven blind: an opaque rect laid across three
+          // tenant rows and the RLS boundary drew ZERO findings from this gate.
+          // A frame legitimately contains its children; a hairline legitimately
+          // passes under; everything else that overlaps is a collision.
+          if (A.hair || B.hair) continue;
+          const [F, C] = A.frame ? [A, B] : [B, A];
+          if (F.frame && C.x >= F.x - TOL && C.x + C.w <= F.x + F.w + TOL
+                      && C.y >= F.y - TOL && C.y + C.h <= F.y + F.h + TOL) continue;
+          out.push(`${A.nm} overlaps ${B.nm}${at}`);
         }
       }
 
-      for (const e of s) if (e.cls) {
-        const k = e.cls;
-        seenVisible.set(k, (seenVisible.get(k) || 0) + (e.o >= 0.5 ? 1 : 0));
-      }
+      // Per ELEMENT, not per class. Summing a 16-element class and dividing by
+      // `steps` produced 16.0 against a 0.70 floor — a class of n elements could
+      // only trip it if the average element were visible under 70/n percent.
+      // The floor was live on 12 of 44 groups and unreachable on the rest.
+      s.forEach((e, k) => { seenVis[k] = (seenVis[k] || 0) + (e.o >= 0.5 ? 1 : 0); });
 
       // 6 — frame zero must be the finished frame. An element authored faint on
       //     purpose (a 0.45 hairline) is not a defect; an element ANIMATED to
@@ -233,8 +244,10 @@ for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)
     //     scrolling past sees a different quarter of the argument missing every
     //     second, because the loops are deliberately near-coprime and never
     //     align. A reveal is allowed; a long absence is not.
-    if (dur) for (const [k, v] of seenVisible)
-      if (v / steps < 0.7) out.push(`.${k} is visible only ${Math.round(v / steps * 100)}% of the loop`);
+    if (dur) meta.forEach((m, k) => {
+      const f = (seenVis[k] || 0) / steps;
+      if (f < 0.7) out.push(`${m.nm} is visible only ${Math.round(f * 100)}% of the loop`);
+    });
 
     // 10 — contrast. WCAG 1.4.11 wants 3:1 for non-text that carries meaning,
     //      1.4.3 wants 4.5:1 for body text. Every structural line on this
