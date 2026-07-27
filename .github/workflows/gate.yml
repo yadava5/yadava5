@@ -1,0 +1,36 @@
+# Nothing ran either gate until round 7. That is precisely how three "fixed"
+# claims survived two rounds unwritten, and how a retracted figure stayed
+# rendered on a plate for a third: the prose was edited, the SVG was not, and
+# no machine ever compared them.
+#
+# `git diff --exit-code assets/` is the important line. It proves the committed
+# SVGs are what plates.py actually generates — so editing prose without
+# rebuilding, or hand-editing an asset, fails here instead of shipping.
+name: gate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+
+      - name: Plates match their generator, and alts match their plates
+        run: |
+          python3 build/plates.py
+          git diff --exit-code assets/ \
+            || { echo "::error::assets/ is stale — run python3 build/plates.py and commit"; exit 1; }
+
+      - name: Measure every plate in motion
+        run: |
+          npm ci --no-audit --no-fund || npm install --no-audit --no-fund
+          npx playwright install --with-deps chromium
+          node build/gate.mjs

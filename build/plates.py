@@ -5,21 +5,38 @@ FALSIFIABLE — plate builder.
 Every claim is followed by the mechanism that would catch it if it were a lie.
 
 Design rules encoded here (each one is a finding, not a preference):
-  * viewBox 880 wide — 36% more legible at mobile than 1200
-  * nothing below 16 viewBox units; body copy belongs in markdown, not in art
+  * viewBox 880 wide, type column 150→730 — symmetric, 36% more legible at
+    mobile than 1200
+  * ONE type scale: 64 / 32 / 20 / 16 / 13. Four hero sizes was not a scale,
+    it was four accidents.
+  * one 8u baseline grid: first baseline 56, bottom margin 32, everything
+    between on a multiple of 4
   * opaque slab on every plate — refuses the light/dark problem entirely
+  * a 4u accent bar at x=0, the same device the mobile plates already used;
+    the old "rail" was two 26u stubs outside the type column, absent from two
+    of eight plates, and legible on none
   * near-coprime loop lengths so plates never beat into a synchronised pulse
   * the finished frame is authored; animation supplies the START, never the end
     (share cards and static renderers capture frame zero)
+  * nothing comes to rest on top of a label. The gate now samples 40 points
+    across every loop and measures getBoundingClientRect, so this is enforced
+    rather than hoped for.
+  * long travels use cubic-bezier(.4,0,.2,1). The old expo-out covered 221u in
+    a single 0.33s step — it read as a teleport, not as motion.
+  * a moving element fades out before its position resets, so the loop wrap is
+    never visible as a snap-back
   * no animated filters — one animated blur costs more than 4000 animated rects
-  * the rail exits every plate at x=120 and enters the next at x=120
 """
 from __future__ import annotations
-import base64, json, pathlib, random
+import base64, json, pathlib
 
 # every plate's description is authored ONCE here and flows to three places:
 # the SVG <desc>, the SVG aria-label, and the README's <img alt>. They diverged
 # once already; the gate below now fails the build if the README drifts.
+#
+# Since <picture> allows exactly ONE alt for both the desktop and the mobile
+# source, these strings describe the CLAIM rather than the picture — so the same
+# sentence is true whichever image the browser actually chose.
 ALT: dict[str, str] = {}
 
 ROOT = pathlib.Path(__file__).resolve().parent
@@ -29,10 +46,21 @@ FONT = base64.b64encode((ROOT / "mono-subset.woff2").read_bytes()).decode()
 
 W = 880
 SLAB, EDGE = "#0B0C0E", "rgba(255,255,255,0.07)"
-RULE = "#2E3238"   # visible structure; EDGE stays for the slab border only
+# Every structural line used to sit between 1.08:1 and 1.94:1 on the slab —
+# WCAG 1.4.11 wants 3:1 for anything non-text that carries meaning. So the
+# document was drawing its numbers at AAA and the mechanism behind them at
+# roughly half the legibility floor, which is the exact inversion of its thesis.
+RULE = "#5A606A"   # 3.06:1 — section rules
+WIRE = "#6E737C"   # 4.05:1 — connectors, boundaries, brackets, box frames.
+                   # Used at FULL opacity: a .45 alpha put it back under 2:1.
+ROW = "#3A424B"    # tenant row fills, paired with a WIRE stroke
 INK, INK2, INK3 = "#F7F8F8", "#8A8F98", "#62666D"
-AMBER, CYAN = "#F5A524", "#22D3EE"
-RAIL_X = 120
+AMBER, LIME, EMERALD = "#F5A524", "#B8E62E", "#34D399"
+CYAN, PINK, INDIGO = "#22D3EE", "#F472B6", "#818CF8"
+
+# one colour per system, in the order the README presents them
+LEGEND = [("GLYPH", AMBER), ("JETPACK", LIME), ("CADENCE", EMERALD),
+          ("APPLIED", CYAN), ("LIFEQUEST", PINK), ("AUTOML", INDIGO)]
 
 # single-stroke digits in a 120x160 box — the same pen Glyph's landing uses
 DIGITS = [
@@ -47,8 +75,10 @@ DIGITS = [
     "M88 74C86 40 54 26 40 50C26 74 44 100 66 96C80 94 88 82 88 74C88 118 78 146 44 150",
 ]
 
+EASE = "cubic-bezier(.4,0,.2,1)"
 
-def head(h: int, title: str, desc: str, loop: float, key: str = "") -> str:
+
+def head(h: int, title: str, desc: str, key: str = "") -> str:
     if key:
         ALT[key] = desc
     return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {h}" width="{W}" height="{h}" role="img" aria-label="{desc}">
@@ -56,366 +86,400 @@ def head(h: int, title: str, desc: str, loop: float, key: str = "") -> str:
 <style>
 @font-face{{font-family:'M';src:url(data:font/woff2;base64,{FONT}) format('woff2')}}
 text{{font-family:'M',ui-monospace,SFMono-Regular,Menlo,monospace}}
+.hero{{font-size:64px;letter-spacing:-1.5px;fill:{INK};font-weight:600}}
+.sub{{font-size:32px;letter-spacing:-0.5px;fill:{INK};font-weight:600}}
+.unit{{font-size:26px;fill:{INK2}}}
+.say{{font-size:20px;fill:{INK2}}}
 .lbl{{font-size:16px;letter-spacing:1.6px;fill:{INK2}}}
-.key{{font-size:17px;letter-spacing:1.4px;fill:{INK2}}}
-.big{{font-size:72px;letter-spacing:-1px;fill:{INK};font-weight:600}}
-.big60{{font-size:60px;letter-spacing:-1px;fill:{INK};font-weight:600}}
-.big52{{font-size:52px;letter-spacing:-1px;fill:{INK};font-weight:600}}
-.big40{{font-size:40px;letter-spacing:-0.5px;fill:{INK};font-weight:600}}
-.fine{{font-size:14px;letter-spacing:0.6px;fill:{INK2}}}
-.unit{{font-size:29px;fill:{INK2}}}
-.say{{font-size:17px;fill:{INK2}}}
+.key{{font-size:16px;letter-spacing:1.6px;fill:{INK}}}
+.fine{{font-size:13px;letter-spacing:0.6px;fill:{INK2}}}
 @media (prefers-reduced-motion: reduce){{*{{animation:none!important}}}}
 """
 
 
-def slab(h: int) -> str:
-    return (f'<rect width="{W}" height="{h}" rx="2" fill="{SLAB}"/>'
-            f'<rect x="0.5" y="0.5" width="{W-1}" height="{h-1}" rx="2" fill="none" stroke="{EDGE}"/>')
+def slab(h: int, accent: str | None = None) -> str:
+    s = (f'<rect width="{W}" height="{h}" rx="2" fill="{SLAB}"/>'
+         f'<rect x="0.5" y="0.5" width="{W-1}" height="{h-1}" rx="2" fill="none" stroke="{EDGE}"/>')
+    if accent:
+        s += f'<rect x="0" y="0" width="4" height="{h}" fill="{accent}"/>'
+    return s
 
 
-def rail(h: int, accent: str) -> str:
-    """the continuity device — same x on every plate, so the eye stitches
-    across the markdown gap between images"""
-    return (f'<path d="M{RAIL_X} 0V26" stroke="{accent}" stroke-width="1" opacity=".5"/>'
-            f'<path d="M{RAIL_X} {h-26}V{h}" stroke="{accent}" stroke-width="1" opacity=".5"/>')
+# ────────────────────────────────────────────────────────────── PLATE 0
+def plate_thesis() -> str:
+    H = 304
+    s = [head(H, "Ayush Yadav — every number is followed by the thing that would catch it",
+              "The thesis plate: Ayush Yadav, and the sentence 'Every number on this page is "
+              "followed by the thing that would catch it.' Below it, the six colours the "
+              "document uses, one per system: Glyph, jetpack, Cadence, Applied, LifeQuest, AutoML.",
+              key="plate-0-thesis.svg")]
+    # A one-shot with a negative delay equal to its duration starts finished and
+    # never moves again — plate 0 was a static image wearing an animation. The
+    # legend now carries a real loop, and frame zero still lands on full strength.
+    LOOP, SET = 11.3, 9.0
+    s.append(f""".rule{{stroke-dasharray:1;animation:sweep {LOOP}s {EASE} infinite;animation-delay:{-SET}s}}
+@keyframes sweep{{0%{{stroke-dashoffset:1}}18%,100%{{stroke-dashoffset:0}}}}
+.sw{{animation:sw {LOOP}s linear infinite}}
+@keyframes sw{{0%,4%{{opacity:.45}}12%,100%{{opacity:1}}}}
+.ser{{font-family:ui-serif,Georgia,'Times New Roman',serif;font-size:34px;fill:{INK}}}
+</style>{slab(H)}""")
+    s.append(f'<text x="150" y="56" class="key" letter-spacing="5">AYUSH YADAV</text>')
+    s.append(f'<text x="{W-150}" y="56" class="lbl" text-anchor="end">CS ’26 · MIAMI UNIVERSITY</text>')
+    s.append(f'<path class="rule" d="M150 88H{W-150}" pathLength="1" stroke="{WIRE}"/>')
+    for i, ln in enumerate(["Every number on this page is", "followed by the thing",
+                            "that would catch it."]):
+        s.append(f'<text x="150" y="{136 + i*40}" class="ser">{ln}</text>')
+    # the ONLY polychrome frame in the document — and now it says what it means
+    for i, (nm, c) in enumerate(LEGEND):
+        x = 150 + i * 96
+        s.append(f'<rect class="sw" x="{x}" y="248" width="14" height="4" rx="1" fill="{c}" '
+                 f'style="animation-delay:{round(-SET + i*0.12,3)}s"/>')
+        s.append(f'<text x="{x}" y="272" class="fine">{nm}</text>')
+    return "".join(s) + "</svg>"
 
 
 # ────────────────────────────────────────────────────────────── PLATE I
 def plate_glyph() -> str:
-    # H fits 7 rows of the 299-grid; SET parks the frozen frame after the grid
-    # has fully faded up, so the still shows the whole argument.
-    H, LOOP, SET = 540, 9.1, 7.6
-    a = AMBER
+    H, LOOP, SET, a = 560, 9.1, 7.6, AMBER
     s = [head(H, "Glyph — 97.01%, and the 299 it gets wrong",
-              "A handwritten seven draws itself. Three hand-written SIMD kernels (AVX-512, AVX2, NEON) and an autovectorised WebAssembly build each carry the same dot product. "
-              "the model scores 97.01 percent on the 10,000-image test set, which means 299 wrong. Every one of those 299 errors is drawn below, each mark the true label of an image the model missed; 79 of them were made with over 0.9 confidence.", LOOP, key="plate-1-glyph.svg")]
+              "Glyph: a neural network written from scratch in C++ with hand-written AVX-512, "
+              "AVX2 and NEON kernels, plus an autovectorised WebAssembly build. It scores 97.01 "
+              "percent on the 10,000-image MNIST test set, which means 299 wrong — every one of "
+              "them drawn as a grid of the labels it missed. 79 of those errors were made with "
+              "over 0.9 confidence.", key="plate-1-glyph.svg")]
     s.append(f""".ink{{fill:none;stroke:{a};stroke-width:7;stroke-linecap:round;stroke-linejoin:round;
   stroke-dasharray:1;stroke-dashoffset:0;animation:draw {LOOP}s linear infinite;animation-delay:{-SET}s}}
 @keyframes draw{{0%{{stroke-dashoffset:1}}17%{{stroke-dashoffset:0}}100%{{stroke-dashoffset:0}}}}
-.tok{{animation:run {LOOP}s linear infinite}}
-@keyframes run{{0%,20%{{opacity:0;transform:translateX(0)}}24%{{opacity:1}}
-  40%,100%{{opacity:1;transform:translateX(214px)}}}}
-.wrong{{opacity:.62}}
-</style>{slab(H)}{rail(H, a)}""")
+.tok{{animation:run {LOOP}s {EASE} infinite}}
+@keyframes run{{0%{{opacity:0;transform:translateX(0)}}5%{{opacity:1;transform:translateX(0)}}
+  34%,96%{{opacity:1;transform:translateX(190px)}}100%{{opacity:0;transform:translateX(190px)}}}}
+.wrong{{opacity:.78}}
+</style>{slab(H, a)}""")
 
     # CLAIM — the seven, drawn by hand
-    s.append(f'<g transform="translate(150,60) scale(1.15)"><path class="ink" d="{DIGITS[7]}" pathLength="1"/></g>')
-    s.append(f'<text x="150" y="{60+200}" class="lbl">CLAIM</text>')
+    s.append(f'<text x="150" y="56" class="lbl">CLAIM</text>')
+    s.append(f'<text x="330" y="56" class="lbl">MECHANISM — 3 BY HAND, 1 AUTO</text>')
+    s.append(f'<g transform="translate(150,80) scale(1.15)"><path class="ink" d="{DIGITS[7]}" pathLength="1"/></g>')
 
     # MECHANISM — four instruction sets, one answer
-    isas = ["AVX-512", "AVX2", "NEON", "wasm (auto)"]
-    for i, name in enumerate(isas):
-        y = 78 + i * 34
+    for i, name in enumerate(["AVX-512", "AVX2", "NEON", "wasm (auto)"]):
+        y = 96 + i * 34
         s.append(f'<text x="330" y="{y+5}" class="key">{name}</text>')
-        s.append(f'<path d="M446 {y}H660" stroke="{INK3}" stroke-width="1" opacity=".45"/>')
-        s.append(f'<circle class="tok" cx="446" cy="{y}" r="4" fill="{a}" '
+        s.append(f'<path d="M470 {y}H660" stroke="{WIRE}" stroke-width="1"/>')
+        s.append(f'<circle class="tok" cx="470" cy="{y}" r="4" fill="{a}" '
                  f'style="animation-delay:{round(-SET + i*0.06,3)}s"/>')
-    s.append(f'<path d="M660 74V186" stroke="{INK3}" stroke-width="1" opacity=".45"/>')
-    s.append(f'<text x="540" y="206" class="key" fill="{INK2}">one kernel each</text>')
-    s.append(f'<text x="330" y="{60+200}" class="lbl">MECHANISM — 3 HAND-WRITTEN, 1 AUTO</text>')
+    s.append(f'<path d="M660 92V202" stroke="{WIRE}" stroke-width="1"/>')
+    s.append(f'<text x="470" y="232" class="lbl">4 BUILDS · 1 ANSWER</text>')
 
-    # VERDICT
-    s.append(f'<path d="M150 296H730" stroke="{RULE}"/>')
-    s.append(f'<text x="150" y="{296+56}" class="big">97.01<tspan class="unit">%</tspan></text>')
-    s.append(f'<text x="470" y="{296+56}" class="key">MNIST TEST · n=10,000</text>')
-    s.append(f'<text x="150" y="{296+106}" class="say">299 wrong, all drawn below. 79 above 0.9 conf.</text>')
+    # VERDICT — the hero clears the rule by 16u; at 64px its box runs from
+    # baseline-64 to baseline+19, which is 84u tall, not the 60 I first assumed.
+    s.append(f'<path d="M150 288H730" stroke="{RULE}"/>')
+    s.append(f'<text x="150" y="368" class="hero">97.01<tspan class="unit">%</tspan></text>')
+    s.append(f'<text x="470" y="368" class="lbl">MNIST TEST · n=10,000</text>')
+    s.append(f'<text x="150" y="412" class="say">299 wrong, drawn below. 79 above 0.9 conf.</text>')
 
     # THE MOVE — the REAL errors. Each mark is the true label of one image the
     # model got wrong, read from benchmarks/mnist_misclassified.csv in the Glyph
     # repo. Previously these were random glyphs; now the picture is the evidence.
+    # 50 per row leaves 49 in the last of six rows. 46 per row left exactly half
+    # a row hanging, which reads as a mistake rather than as the end of a list.
     errs = json.loads((ROOT / "errors.json").read_text())["true"]
-    gx, gy, cols = 150, 424, 46
+    gx, gy, cols = 150, 444, 50
     for i in range(299):
         c, r = i % cols, i // cols
-        x, y = gx + c * 12.4, gy + r * 14.0
-        s.append(f'<g class="wrong" transform="translate({x:.1f},{y:.1f}) scale(0.072)">'
+        x, y = gx + c * 11.4, gy + r * 14.0
+        s.append(f'<g class="wrong" transform="translate({x:.1f},{y:.1f}) scale(0.068)">'
                  f'<path d="{DIGITS[errs[i]]}" fill="none" stroke="{a}" stroke-width="15" '
                  f'stroke-linecap="round"/></g>')
     return "".join(s) + "</svg>"
 
 
-# ────────────────────────────────────────────────────────────── PLATE V
-def plate_refusal() -> str:
-    H, LOOP, SET = 348, 6.7, 4.4
-    a = "#34D399"   # Cadence emerald — this is a Cadence story
-    s = [head(H, "The refusal — the database declines to return another tenant's rows",
-              "A query from tenant A travels toward tenant B's rows, reaches the isolation boundary, "
-              "and stops. Only tenant B's own rows come back.", LOOP, key="plate-5-refusal.svg")]
-    s.append(f""".q{{animation:seek {LOOP}s cubic-bezier(.16,1,.3,1) infinite;animation-delay:{-SET}s}}
-@keyframes seek{{0%{{opacity:0;transform:translateX(0)}}6%{{opacity:1;transform:translateX(0)}}
-  /* it decelerates into the boundary and simply stops — no bounce, no alarm */
-  30%{{opacity:1;transform:translateX(110px)}}36%,100%{{opacity:1;transform:translateX(116px)}}}}
-.zero{{animation:land {LOOP}s linear infinite;animation-delay:{-SET}s}}
-@keyframes land{{0%,34%{{opacity:0}}42%,100%{{opacity:1}}}}
-</style>{slab(H)}{rail(H, a)}""")
-
-    s.append(f'<text x="150" y="52" class="lbl">TENANT A</text>')
-    s.append(f'<text x="596" y="52" class="lbl">TENANT B</text>')
-    for i in range(4):
-        y = 74 + i * 28
-        s.append(f'<rect x="150" y="{y}" width="180" height="18" rx="2" fill="#12171B"/>')
-        s.append(f'<rect x="596" y="{y}" width="180" height="18" rx="2" fill="#12171B"/>')
-
-    # the boundary: a plain hairline that never reacts
-    s.append(f'<path d="M462 62V196" stroke="{INK3}" stroke-width="1" opacity=".55"/>')
-    s.append(f'<text x="470" y="210" class="lbl">ROW-LEVEL SECURITY</text>')
-
-    s.append(f'<circle class="q" cx="340" cy="88" r="5" fill="{a}"/>')
-    s.append(f'<text x="150" y="216" class="key">SELECT … WHERE id = &lt;B&gt;</text>')
-
-    s.append(f'<g class="zero"><text x="336" y="150" class="big40">B only</text></g>')
-    s.append(f'<path d="M150 240H730" stroke="{RULE}"/>')
-    s.append(f'<text x="150" y="266" class="say">The app didn\u2019t remember to filter.</text>')
-    s.append(f'<text x="150" y="292" class="say">The database refused.</text>')
-    s.append(f'<text x="150" y="322" class="lbl">IDOR: 7 FOUND, 7 FIXED</text>')
-    s.append(f'<text x="470" y="322" class="lbl">BY THE AUTHOR</text>')
-    return "".join(s) + "</svg>"
-
-
-# ────────────────────────────────────────────────────────────── PLATE 00
-def plate_thesis() -> str:
-    H = 286
-    s = [head(H, "Ayush Yadav — every number is followed by the thing that would catch it",
-              "The thesis plate: Ayush Yadav, and the sentence 'Every number on this page is "
-              "followed by the thing that would catch it.'", 0, key="plate-0-thesis.svg")]
-    s.append(f""".rule{{stroke-dasharray:1;stroke-dashoffset:0;animation:sweep 5s cubic-bezier(.16,1,.3,1) -5s 1 both}}
-@keyframes sweep{{0%{{stroke-dashoffset:1}}22%,100%{{stroke-dashoffset:0}}}}
-.tick{{opacity:1}}
-.ser{{font-family:ui-serif,Georgia,'Times New Roman',serif;font-size:31px;fill:{INK}}}
-</style>{slab(H)}""")
-    s.append(f'<text x="150" y="56" class="key" letter-spacing="5">AYUSH YADAV</text>')
-    s.append(f'<text x="{W-150}" y="56" class="lbl" text-anchor="end">CS ’26 · MIAMI UNIVERSITY</text>')
-    s.append(f'<path class="rule" d="M150 84H{W-150}" pathLength="1" stroke="{INK3}"/>')
-    s.append(f'<text x="150" y="128" class="ser">Every number on this page is</text>')
-    s.append(f'<text x="150" y="166" class="ser">followed by the thing</text>')
-    s.append(f'<text x="150" y="204" class="ser">that would catch it.</text>')
-    accents = [AMBER, "#B8E62E", "#34D399", CYAN, "#818CF8", "#F472B6"]
-    for i, c in enumerate(accents):   # the ONLY polychrome frame in the document
-        s.append(f'<rect class="tick" x="{150+i*26}" y="238" width="14" height="4" rx="1" fill="{c}" '
-                 f'/>')
-    s.append(f'<text x="{W-150}" y="246" class="lbl" text-anchor="end">SIX SYSTEMS</text>')
-    return "".join(s) + "</svg>"
-
-
 # ────────────────────────────────────────────────────────────── PLATE II
 def plate_jetpack() -> str:
-    H, LOOP, SET, a = 480, 10.3, 7.2, "#B8E62E"
+    H, LOOP, SET, a = 512, 10.3, 7.2, LIME
     s = [head(H, "jetpack — 6.4x parallel, and the intrinsic it does not beat",
-              "Blocks flow through a bounded in-flight window and leave compressed. A hand-vectorised "
-              "Adler-32 checksum is compared digit by digit against java.util.zip and matches exactly. "
-              "The measured table lists the JDK's native intrinsic at 14.06 gigabytes per second, "
-              "marked not beaten.", LOOP, key="plate-2-jetpack.svg")]
-    s.append(f""".blk{{animation:sq {LOOP}s cubic-bezier(.16,1,.3,1) infinite;transform-box:fill-box;transform-origin:left center}}
-@keyframes sq{{0%,14%{{transform:translateX(0) scaleX(1)}}44%{{transform:translateX(230px) scaleX(.55)}}
-  60%,100%{{transform:translateX(230px) scaleX(.55)}}}}
+              "jetpack: parallel gzip on JDK 25 reaches 422 megabytes per second against 66.2 "
+              "single-threaded, a 6.4 times speedup, with blocks held in a bounded in-flight "
+              "window. Its hand-vectorised Adler-32 checksum runs at 4.26 gigabytes per second "
+              "and is verified bit-identical against java.util.zip — whose own native intrinsic "
+              "is faster still, at 14.06, and is printed here as the reference it loses to.",
+              key="plate-2-jetpack.svg")]
+    s.append(f""".blk{{animation:sq {LOOP}s {EASE} infinite;transform-box:fill-box;transform-origin:left center}}
+@keyframes sq{{0%{{opacity:0;transform:translateX(0) scaleX(1)}}
+  5%,14%{{opacity:1;transform:translateX(0) scaleX(1)}}
+  38%,96%{{opacity:1;transform:translateX(230px) scaleX(.55)}}
+  100%{{opacity:0;transform:translateX(230px) scaleX(.55)}}}}
 .mt{{animation:mt {LOOP}s linear infinite}}
-@keyframes mt{{0%,18%{{opacity:0}}28%,100%{{opacity:1}}}}
+@keyframes mt{{0%,6%{{opacity:0}}14%,100%{{opacity:1}}}}
 .row{{animation:rw {LOOP}s linear infinite}}
-@keyframes rw{{0%,22%{{opacity:0}}32%,100%{{opacity:1}}}}
-</style>{slab(H)}{rail(H, a)}""")
-    s.append(f'<text x="150" y="86" class="big60">6.4<tspan class="unit">×</tspan></text>')
-    s.append(f'<text x="330" y="56" class="key">PARALLEL vs SINGLE-THREAD GZIP</text>')
-    s.append(f'<text x="330" y="78" class="lbl">JDK 25 · M1 PRO · 3 FORKS · CI ±5%</text>')
-    s.append(f'<text x="150" y="124" class="lbl">CLAIM</text>')
+@keyframes rw{{0%,8%{{opacity:0}}16%,100%{{opacity:1}}}}
+</style>{slab(H, a)}""")
+    s.append(f'<text x="330" y="56" class="lbl">PARALLEL vs SINGLE-THREAD GZIP</text>')
+    # NOT "CI ±5%": the 3-fork run's 99.9% intervals span ±0.7% to ±6.9%, so a
+    # single figure would be a claim the committed JSON contradicts.
+    s.append(f'<text x="330" y="80" class="lbl">JDK 25 · M1 PRO · 3 JMH FORKS</text>')
+    s.append(f'<text x="150" y="84" class="hero">6.4<tspan class="unit">×</tspan></text>')
+    s.append(f'<text x="150" y="128" class="lbl">CLAIM</text>')
 
-    # the bounded in-flight window — the bracket never overflows; that IS the point
-    s.append(f'<path d="M400 120V236M400 120H420M400 236H420" stroke="{INK3}" stroke-width="1"/>')
-    s.append(f'<path d="M636 120V236M636 120H616M636 236H616" stroke="{INK3}" stroke-width="1"/>')
+    # The bounded in-flight window. The bracket used to span 400→636 while the
+    # compressed blocks came to rest at 410→518, leaving half the window
+    # permanently void — it drew a window twice the size of the thing it bounds.
     s.append(f'<text x="400" y="112" class="lbl">BOUNDED IN-FLIGHT WINDOW</text>')
+    s.append(f'<path d="M400 128V244M400 128H420M400 244H420" stroke="{WIRE}" stroke-width="1"/>')
+    s.append(f'<path d="M540 128V244M540 128H520M540 244H520" stroke="{WIRE}" stroke-width="1"/>')
     for i in range(4):
-        y = 138 + i * 26
+        y = 144 + i * 26
         s.append(f'<rect class="blk" x="180" y="{y}" width="196" height="16" rx="2" fill="{a}" opacity=".85" '
                  f'style="animation-delay:{round(-SET + i*0.22,3)}s"/>')
-    s.append(f'<text x="150" y="256" class="lbl">MECHANISM — peak memory independent of file size</text>')
+    for j, ln in enumerate(["peak memory", "tracks the window,", "not the file"]):
+        s.append(f'<text x="560" y="{170 + j*20}" class="fine">{ln}</text>')
+    s.append(f'<text x="150" y="264" class="lbl">MECHANISM — one virtual thread per block</text>')
 
     # checksum audit: the fast path checked against the reference
-    s.append(f'<text x="150" y="298" class="lbl">SIMD ADLER-32</text>')
-    s.append(f'<text x="150" y="322" class="lbl">java.util.zip</text>')
+    s.append(f'<text x="150" y="304" class="lbl">SIMD ADLER-32</text>')
+    s.append(f'<text x="150" y="328" class="lbl">java.util.zip</text>')
     # the known-answer vector the repo commits: Adler32Test.java:36-37
-    hexd = "11E60398"
-    for i, ch in enumerate(hexd):
+    for i, ch in enumerate("11E60398"):
         x = 330 + i * 26
-        s.append(f'<text x="{x}" y="298" class="key" fill="{INK}">{ch}</text>')
-        s.append(f'<text x="{x}" y="322" class="key" fill="{INK}">{ch}</text>')
-        s.append(f'<rect class="mt" x="{x-3}" y="304" width="20" height="2" fill="{a}" '
+        s.append(f'<text x="{x}" y="304" class="key">{ch}</text>')
+        s.append(f'<text x="{x}" y="328" class="key">{ch}</text>')
+        s.append(f'<rect class="mt" x="{x-3}" y="310" width="20" height="2" fill="{a}" '
                  f'style="animation-delay:{round(-SET + i*0.05,3)}s"/>')
-    s.append(f'<text x="556" y="312" class="say" fill="{a}">identical</text>')
+    s.append(f'<text x="556" y="320" class="lbl" fill="{a}">identical</text>')
 
     # the verdict — the measured table, including the reference he does NOT beat
-    s.append(f'<path d="M150 344H730" stroke="{RULE}"/>')
+    s.append(f'<path d="M150 352H730" stroke="{RULE}"/>')
     rows = [
         ("Adler-32 scalar (pure Java)", "1.52 GB/s", ""),
-        ("Adler-32 hand-vectorised", "4.26 GB/s", "2.8× scalar"),
+        ("Adler-32 hand-vectorised", "4.26 GB/s", "2.80×"),
         ("java.util.zip intrinsic", "14.06 GB/s", "not beaten"),
         ("gzip, one thread", "66.2 MB/s", ""),
         ("parallel virtual threads", "422 MB/s", "6.4×"),
     ]
     for i, (name, score, note) in enumerate(rows):
-        y = 368 + i * 21
+        y = 384 + i * 24
         dl = round(-SET + i * 0.16, 3)
         s.append(f'<text class="row lbl" x="150" y="{y}" style="animation-delay:{dl}s">{name}</text>')
-        s.append(f'<text class="row lbl" x="470" y="{y}" fill="{INK}" style="animation-delay:{dl}s">{score}</text>')
+        s.append(f'<text class="row key" x="470" y="{y}" style="animation-delay:{dl}s">{score}</text>')
         if note:
-            s.append(f'<text class="row lbl" x="604" y="{y}" fill="{INK if note == "not beaten" else (a if "×" in note else INK2)}" '
+            fill = INK if note == "not beaten" else a
+            s.append(f'<text class="row lbl" x="604" y="{y}" fill="{fill}" '
                      f'style="animation-delay:{dl}s">{note}</text>')
     return "".join(s) + "</svg>"
 
 
 # ────────────────────────────────────────────────────────────── PLATE III
 def plate_cadence() -> str:
-    H, LOOP, SET, a = 400, 7.9, 5.6, "#34D399"
+    H, LOOP, SET, a = 464, 7.9, 5.6, EMERALD
     SENT, FS, CW = "lunch with sam friday 1pm", 26, 15.62
     s = [head(H, "Cadence — a parser that shows its work",
-              "The sentence 'lunch with sam friday 1pm' is annotated in place by four parser stages "
-              "labelling title, attendee, date and time, then filed into a calendar.", LOOP, key="plate-3-cadence.svg")]
-    s.append(f""".ul{{animation:ul {LOOP}s cubic-bezier(.16,1,.3,1) infinite;transform-box:fill-box;transform-origin:left center}}
-@keyframes ul{{0%,10%{{transform:scaleX(0);opacity:0}}14%{{opacity:1}}22%,100%{{transform:scaleX(1);opacity:1}}}}
+              "Cadence: the sentence 'lunch with sam friday 1pm' is labelled in place by four "
+              "parser stages — title, attendee, date and time — and filed into the Friday 1pm "
+              "slot of a calendar. Its 36 API handlers are bundled into a single serverless "
+              "function, because the hosting plan allows 12.", key="plate-3-cadence.svg")]
+    s.append(f""".ul{{animation:ul {LOOP}s {EASE} infinite;transform-box:fill-box;transform-origin:left center}}
+@keyframes ul{{0%,4%{{transform:scaleX(0);opacity:0}}8%{{opacity:1}}18%,100%{{transform:scaleX(1);opacity:1}}}}
 .an{{animation:an {LOOP}s linear infinite}}
-@keyframes an{{0%,12%{{opacity:0}}22%,100%{{opacity:1}}}}
+@keyframes an{{0%,6%{{opacity:0}}12%,100%{{opacity:1}}}}
 .fil{{animation:fil {LOOP}s linear infinite}}
-@keyframes fil{{0%,26%{{opacity:0}}36%,100%{{opacity:1}}}}
-</style>{slab(H)}{rail(H, a)}""")
-    s.append(f'<text x="150" y="52" class="lbl">CLAIM — plain English in, calendar out</text>')
-    s.append(f'<text x="150" y="100" font-size="{FS}" fill="{INK}" letter-spacing="0">{SENT}</text>')
-    # four passes annotating the SAME sentence in place — a linguist's gloss
-    toks = [(0, 5, "TITLE"), (11, 3, "ATTENDEE"), (15, 6, "DATE"), (22, 3, "TIME")]
+@keyframes fil{{0%,10%{{opacity:0}}16%,100%{{opacity:1}}}}
+</style>{slab(H, a)}""")
+    s.append(f'<text x="150" y="56" class="lbl">CLAIM — plain English in, calendar out</text>')
+    s.append(f'<text x="150" y="104" font-size="{FS}" fill="{INK}" letter-spacing="0">{SENT}</text>')
+    # Four passes annotating the SAME sentence in place — a linguist's gloss.
+    # The labels used to stagger onto two rows to dodge a collision, which made
+    # a reader scan them TITLE→DATE→ATTENDEE→TIME. Short labels fit one row, so
+    # the reading order is the sentence order again.
+    toks = [(0, 5, "TITLE"), (11, 3, "WHO"), (15, 6, "DAY"), (22, 3, "TIME")]
     for i, (start, ln, label) in enumerate(toks):
         x, w = 150 + start * CW, ln * CW
         dl = round(-SET + i * 0.5, 3)
-        s.append(f'<rect class="ul" x="{x:.0f}" y="110" width="{w:.0f}" height="2" fill="{a}" '
+        s.append(f'<rect class="ul" x="{x:.0f}" y="114" width="{w:.0f}" height="2" fill="{a}" '
                  f'style="animation-delay:{dl}s"/>')
-        s.append(f'<text class="an lbl" x="{x:.0f}" y="{132+ (i%2)*20}" fill="{a}" '
+        s.append(f'<text class="an lbl" x="{x:.0f}" y="140" fill="{a}" '
                  f'style="animation-delay:{dl}s">{label}</text>')
-    s.append(f'<text x="150" y="196" class="lbl">MECHANISM — four stages, each one legible</text>')
+    s.append(f'<text x="150" y="200" class="lbl">MECHANISM — four stages, each one legible</text>')
 
-    # filed
-    s.append(f'<path d="M150 220H730" stroke="{RULE}"/>')
+    # filed — a week grid with real hour rows, so it reads as a calendar
+    s.append(f'<path d="M150 224H730" stroke="{RULE}"/>')
     for d, day in enumerate(["MON", "TUE", "WED", "THU", "FRI"]):
         x = 150 + d * 116
-        s.append(f'<text x="{x}" y="248" class="lbl">{day}</text>')
-        s.append(f'<rect x="{x}" y="258" width="100" height="56" rx="3" fill="none" stroke="{RULE}"/>')
+        s.append(f'<text x="{x}" y="252" class="lbl">{day}</text>')
+        s.append(f'<rect x="{x}" y="262" width="100" height="72" rx="3" fill="none" stroke="{WIRE}"/>')
+        for hr in (286, 310):
+            s.append(f'<path d="M{x} {hr}H{x+100}" stroke="{RULE}" stroke-width="1"/>')
     s.append(f'<g class="fil" style="animation-delay:{-SET}s">'
-             f'<rect x="616" y="272" width="96" height="30" rx="3" fill="#0E2A22" stroke="{a}"/>'
-             f'<text x="624" y="292" class="fine" fill="{a}">1pm · sam</text></g>')
-    s.append(f'<text x="150" y="368" class="big40">36</text>')
-    s.append(f'<text x="212" y="360" class="lbl">HANDLERS IN ONE FUNCTION</text>')
-    s.append(f'<text x="212" y="380" class="lbl">VERCEL ALLOWS 12</text>')
+             f'<rect x="616" y="288" width="96" height="20" rx="3" fill="#0E2A22" stroke="{a}"/>'
+             f'<text x="624" y="302" class="fine" fill="{a}">1pm · sam</text></g>')
+    s.append(f'<text x="150" y="410" class="hero">36</text>')
+    s.append(f'<text x="232" y="394" class="lbl">HANDLERS IN ONE FUNCTION</text>')
+    s.append(f'<text x="232" y="418" class="lbl">THE PLAN ALLOWS 12</text>')
     return "".join(s) + "</svg>"
 
 
 # ────────────────────────────────────────────────────────────── PLATE IV
 def plate_applied() -> str:
-    H, LOOP, SET, a = 430, 11.7, 8.4, CYAN
+    H, LOOP, SET, a = 520, 11.7, 8.4, CYAN
     s = [head(H, "Applied — a classifier allowed to say it doesn't know",
-              "Email falls through three classifier layers; messages that fail to clear the 0.85 "
-              "confidence gate divert sideways to a human. Inference runs inside the browser.", LOOP, key="plate-4-applied.svg")]
-    s.append(f""".env{{animation:fall {LOOP}s cubic-bezier(.16,1,.3,1) infinite}}
-@keyframes fall{{0%{{opacity:0;transform:translateY(-30px)}}4%{{opacity:1}}
-  44%{{opacity:1;transform:translateY(150px)}}47%{{opacity:0}}50%{{opacity:0;transform:translateY(-30px)}}
-  54%{{opacity:1}}94%{{opacity:1;transform:translateY(150px)}}97%,100%{{opacity:0}}}}
-.div{{animation:dv {LOOP}s cubic-bezier(.16,1,.3,1) infinite}}
-@keyframes dv{{0%{{opacity:0;transform:translate(0,-30px)}}4%{{opacity:1}}
-  30%{{opacity:1;transform:translate(0,96px)}}44%{{opacity:1;transform:translate(150px,140px)}}
-  90%,100%{{opacity:1;transform:translate(150px,140px)}}}}
-.cm{{animation:cm {LOOP}s linear infinite}}
-@keyframes cm{{0%,20%{{opacity:0}}30%,100%{{opacity:1}}}}
-</style>{slab(H)}{rail(H, a)}""")
-    s.append(f'<text x="150" y="84" class="big52">0.979</text>')
-    s.append(f'<text x="330" y="56" class="key">MACRO-F1 · 96-MSG EVAL SET</text>')
-    s.append(f'<text x="330" y="78" class="lbl">CI FAILS THE BUILD BELOW 0.95</text>')
-    s.append(f'<text x="150" y="118" class="lbl">CLAIM</text>')
+              "Applied: a three-layer email classifier — 201 regex rules, then e5 embeddings, "
+              "then a fine-tuned SetFit head, cheapest first. It scores 0.979 macro-F1 on a "
+              "96-message evaluation set, measured with the rules layer alone; anything that "
+              "fails to clear the 0.85 confidence gate is referred to a human rather than "
+              "guessed at. Inference runs inside your browser.", key="plate-4-applied.svg")]
+    s.append(f""".env{{animation:fall {LOOP}s {EASE} infinite}}
+@keyframes fall{{0%{{opacity:0;transform:translateY(0)}}5%{{opacity:1;transform:translateY(0)}}
+  46%,96%{{opacity:1;transform:translateY(184px)}}100%{{opacity:0;transform:translateY(184px)}}}}
+.div{{animation:dv {LOOP}s {EASE} infinite}}
+@keyframes dv{{0%{{opacity:0;transform:translate(0,0)}}5%{{opacity:1;transform:translate(0,0)}}
+  30%{{opacity:1;transform:translate(0,132px)}}
+  48%,96%{{opacity:1;transform:translate(146px,172px)}}100%{{opacity:0;transform:translate(146px,172px)}}}}
+</style>{slab(H, a)}""")
+    # 0.979 is the number with artifacts behind it: five committed files carry
+    # it. 0.9583 — the full cascade — survives in exactly one line of prose,
+    # because the run that produced it was overwritten by the deterministic
+    # re-run. So the hero is the number I can hand you, labelled for what it
+    # actually measures, and the gap is stated rather than papered over.
+    s.append(f'<text x="150" y="88" class="hero">0.979</text>')
+    s.append(f'<text x="400" y="56" class="lbl">MACRO-F1 · 96-MSG EVAL SET</text>')
+    s.append(f'<text x="400" y="80" class="lbl" fill="{AMBER}">RULES LAYER ONLY</text>')
+    s.append(f'<text x="400" y="104" class="fine">SetFit off, embeddings emptied</text>')
+    s.append(f'<text x="150" y="128" class="lbl">CLAIM</text>')
 
-    gates = [("201 REGEX RULES", 138), ("e5 EMBEDDINGS", 178), ("SETFIT", 218)]
-    for label, y in gates:
-        s.append(f'<path d="M180 {y}H496" stroke="{INK3}" stroke-width="1" opacity=".5" stroke-dasharray="4 5"/>')
-        s.append(f'<text x="512" y="{y+5}" class="lbl">{label}</text>')
+    for label, y in [("201 REGEX RULES", 160), ("e5 EMBEDDINGS", 200), ("SETFIT HEAD", 240)]:
+        s.append(f'<text x="150" y="{y+5}" class="lbl">{label}</text>')
+        s.append(f'<path d="M400 {y}H640" stroke="{WIRE}" stroke-width="1" stroke-dasharray="4 5"/>')
     # the gate that is allowed to decline
-    s.append(f'<path d="M180 262H496" stroke="{a}" stroke-width="1"/>')
-    s.append(f'<text x="512" y="267" class="lbl" fill="{a}">0.85 GATE</text>')
-    for i in range(5):
-        x = 196 + i * 68
-        s.append(f'<rect class="env" x="{x}" y="100" width="30" height="20" rx="2" fill="none" '
-                 f'stroke="{a}" stroke-width="1.6" style="animation-delay:{round(-SET + i*0.5,3)}s"/>')
-    for i in range(2):
-        x = 400 + i * 68
-        s.append(f'<rect class="div" x="{x}" y="100" width="30" height="20" rx="2" fill="none" '
-                 f'stroke="{AMBER}" stroke-width="1.6" style="animation-delay:{round(-SET + 0.3 + i*0.5,3)}s"/>')
-    s.append(f'<circle cx="656" cy="256" r="11" fill="none" stroke="{AMBER}" stroke-width="1.4"/>')
-    s.append(f'<text x="628" y="286" class="lbl" fill="{AMBER}">A HUMAN</text>')
-    s.append(f'<text x="150" y="300" class="say">It is allowed to say it doesn’t know.</text>')
+    s.append(f'<text x="150" y="293" class="lbl" fill="{a}">0.85 CONFIDENCE GATE</text>')
+    s.append(f'<path d="M400 288H640" stroke="{a}" stroke-width="1"/>')
+    s.append(f'<text x="150" y="316" class="fine">CI fails the build below 0.95</text>')
 
-    s.append(f'<path d="M150 326H730" stroke="{RULE}"/>')
-    # the eval set's real shape, not a decorative matrix pretending to be data
-    s.append(f'<text x="150" y="352" class="lbl">MEASURED ON</text>')
-    for i, (k, v) in enumerate([("96", "authored messages"), ("8", "classes"), ("0.95", "CI floor")]):
-        y = 376 + i * 22
-        s.append(f'<text class="cm key" x="150" y="{y}" fill="{INK}" '
-                 f'style="animation-delay:{round(-SET + i*0.06,3)}s">{k}</text>')
-        s.append(f'<text class="cm lbl" x="216" y="{y}" '
-                 f'style="animation-delay:{round(-SET + i*0.06,3)}s">{v}</text>')
-    s.append(f'<rect x="430" y="356" width="272" height="52" rx="3" fill="none" stroke="{INK3}" opacity=".6"/>')
-    s.append(f'<text x="446" y="378" class="lbl">YOUR BROWSER</text>')
-    s.append(f'<text x="446" y="398" class="fine">int8 ONNX · no remote models</text>')
+    for i in range(5):
+        s.append(f'<rect class="env" x="{416 + i*44}" y="128" width="30" height="20" rx="2" fill="none" '
+                 f'stroke="{a}" stroke-width="1.6" style="animation-delay:{round(-SET + i*0.4,3)}s"/>')
+    # the one that does not clear the gate leaves the stack and goes sideways
+    s.append(f'<rect class="div" x="504" y="128" width="30" height="20" rx="2" fill="none" '
+             f'stroke="{AMBER}" stroke-width="1.6" style="animation-delay:{round(-SET + 0.2,3)}s"/>')
+    s.append(f'<circle cx="700" cy="310" r="11" fill="none" stroke="{AMBER}" stroke-width="1.4"/>')
+    s.append(f'<text x="634" y="344" class="lbl" fill="{AMBER}">A HUMAN</text>')
+    s.append(f'<text x="150" y="376" class="say">It is allowed to say it doesn’t know.</text>')
+
+    s.append(f'<path d="M150 408H730" stroke="{RULE}"/>')
+    s.append(f'<rect x="150" y="420" width="580" height="68" rx="3" fill="none" stroke="{WIRE}"/>')
+    s.append(f'<text x="166" y="444" class="lbl">YOUR BROWSER</text>')
+    s.append(f'<text x="166" y="468" class="fine">int8 ONNX · 90.4 MB → 22.8 MB · nothing you paste leaves the tab</text>')
+    return "".join(s) + "</svg>"
+
+
+# ────────────────────────────────────────────────────────────── PLATE V
+def plate_refusal() -> str:
+    H, LOOP, SET, a = 412, 6.7, 4.7, EMERALD
+    s = [head(H, "The refusal — the database declines to return another tenant's rows",
+              "A query from one tenant travels toward another tenant's rows, reaches the "
+              "PostgreSQL row-level-security boundary, and stops. Only the querying tenant's own "
+              "rows come back — because the database refused, not because the application "
+              "remembered to filter.", key="plate-5-refusal.svg")]
+    s.append(f""".q{{animation:seek {LOOP}s {EASE} infinite;animation-delay:{-SET}s}}
+@keyframes seek{{0%{{opacity:0;transform:translateX(0)}}5%{{opacity:1;transform:translateX(0)}}
+  /* it decelerates into the boundary and simply stops — no bounce, no alarm */
+  30%,96%{{opacity:1;transform:translateX(80px)}}100%{{opacity:0;transform:translateX(80px)}}}}
+.zero{{animation:land {LOOP}s linear infinite;animation-delay:{-SET}s}}
+@keyframes land{{0%,14%{{opacity:0}}22%,100%{{opacity:1}}}}
+</style>{slab(H, a)}""")
+
+    s.append(f'<text x="150" y="56" class="lbl">TENANT A</text>')
+    s.append(f'<text x="560" y="56" class="lbl">TENANT B</text>')
+    for i in range(4):
+        y = 80 + i * 28
+        # a #12171B fill sat at 1.08:1 — eight rows nobody could see
+        s.append(f'<rect x="150" y="{y}" width="160" height="18" rx="2" fill="{ROW}" stroke="{WIRE}"/>')
+        s.append(f'<rect x="560" y="{y}" width="170" height="18" rx="2" fill="{ROW}" stroke="{WIRE}"/>')
+
+    # the boundary: a plain hairline that never reacts
+    s.append(f'<path d="M420 68V200" stroke="{WIRE}" stroke-width="1"/>')
+    s.append(f'<circle class="q" cx="330" cy="89" r="5" fill="{a}"/>')
+
+    s.append(f'<text x="150" y="216" class="key">SELECT … WHERE id = &lt;B&gt;</text>')
+    s.append(f'<text class="zero sub" x="560" y="216">B only</text>')
+    s.append(f'<text x="420" y="248" class="lbl">ROW-LEVEL SECURITY</text>')
+
+    s.append(f'<path d="M150 280H730" stroke="{RULE}"/>')
+    s.append(f'<text x="150" y="312" class="say">The app didn’t remember to filter.</text>')
+    s.append(f'<text x="150" y="340" class="say">The database refused.</text>')
+    s.append(f'<text x="150" y="380" class="lbl">IDOR: 7 FOUND, 7 FIXED</text>')
+    s.append(f'<text x="470" y="380" class="lbl">BY THE AUTHOR</text>')
     return "".join(s) + "</svg>"
 
 
 # ────────────────────────────────────────────────────────────── PLATE VI
 def plate_release() -> str:
-    H, LOOP, SET = 424, 13.1, 9.0
-    m, ind = "#F472B6", "#818CF8"
+    H, LOOP, SET = 548, 13.1, 9.8
     s = [head(H, "LifeQuest and Agentic AutoML",
-              "Three seeded quests appear on a path; and a dataset moves through a hardened Docker "
-              "sandbox that waits for human approval before it trains a model.", LOOP, key="plate-6-release.svg")]
+              "LifeQuest turns real-world routines into tracked quests, for people rebuilding "
+              "structure after a layoff or in retirement. Agentic AutoML moves a dataset through "
+              "a hardened Docker sandbox and stops at 2 human approval gates — one before a "
+              "preprocessing step is committed, one before a model is trained.",
+              key="plate-6-release.svg")]
     s.append(f""".nd{{animation:nd {LOOP}s linear infinite}}
-@keyframes nd{{0%,6%{{opacity:0}}14%,100%{{opacity:1}}}}
-.tk2{{animation:tk2 {LOOP}s cubic-bezier(.16,1,.3,1) infinite}}
-@keyframes tk2{{0%,30%{{opacity:0;transform:translateX(0)}}36%{{opacity:1;transform:translateX(0)}}
-  50%{{opacity:1;transform:translateX(340px)}}
-  /* the longest dead hold in the document: it waits for a human */
-  70%{{opacity:1;transform:translateX(340px)}}80%,100%{{opacity:1;transform:translateX(470px)}}}}
+@keyframes nd{{0%,4%{{opacity:0}}10%,100%{{opacity:1}}}}
+.tk2{{animation:tk2 {LOOP}s {EASE} infinite}}
+@keyframes tk2{{0%{{opacity:0;transform:translateX(0)}}3%{{opacity:1;transform:translateX(0)}}
+  11%,22%{{opacity:1;transform:translateX(244px)}}
+  /* the longest dead hold in the document: it is waiting for a human */
+  28%,96%{{opacity:1;transform:translateX(424px)}}100%{{opacity:0;transform:translateX(424px)}}}}
 .ok{{animation:ok {LOOP}s linear infinite}}
-@keyframes ok{{0%,30%{{opacity:0}}38%,100%{{opacity:1}}}}
-</style>{slab(H)}{rail(H, m)}""")
-    s.append(f'<text x="150" y="52" class="lbl">LIFEQUEST</text>')
+@keyframes ok{{0%,26%{{opacity:0}}30%,100%{{opacity:1}}}}
+/* travel slow enough that a 0.33s sample never covers more than ~130u */
+</style>{slab(H, PINK)}""")
+    s.append(f'<text x="150" y="56" class="lbl">LIFEQUEST</text>')
     for i, txt in enumerate(["Reconnect with a mentor", "Document a new routine", "Share a win"]):
-        x = 150
-        s.append(f'<circle class="nd" cx="{x+8}" cy="{86+i*30}" r="7" fill="none" stroke="{m}" stroke-width="1.6" '
+        s.append(f'<circle class="nd" cx="158" cy="{83+i*30}" r="7" fill="none" stroke="{PINK}" stroke-width="1.6" '
                  f'style="animation-delay:{round(-SET + i*0.3,3)}s"/>')
         if i < 2:
-            s.append(f'<path d="M{x+8} {94+i*30}V{112+i*30}" stroke="{m}" stroke-width="1" opacity=".45"/>')
-        s.append(f'<text x="{x+28}" y="{91+i*30}" class="lbl">{txt}</text>')
+            s.append(f'<path d="M158 {91+i*30}V{106+i*30}" stroke="{WIRE}" stroke-width="1"/>')
+        s.append(f'<text x="178" y="{88+i*30}" class="lbl">{txt}</text>')
     s.append(f'<text x="150" y="196" class="say">For people rebuilding structure —</text>')
-    s.append(f'<text x="150" y="220" class="say">after a layoff, or in retirement.</text>')
+    s.append(f'<text x="150" y="224" class="say">after a layoff, or in retirement.</text>')
 
-    s.append(f'<path d="M150 246H730" stroke="{RULE}"/>')
-    s.append(f'<text x="150" y="274" class="lbl">AGENTIC AUTOML</text>')
-    s.append(f'<rect x="300" y="292" width="222" height="56" rx="3" fill="none" stroke="{ind}" opacity=".7"/>')
-    s.append(f'<text x="312" y="314" class="lbl" fill="{ind}">DOCKER · SANDBOXED</text>')
-    s.append(f'<text x="300" y="364" class="fine">non-root · read-only · internal net</text>')
-    s.append(f'<path d="M560 292V348" stroke="{INK3}"/>')
-    s.append(f'<text x="574" y="310" class="lbl">HUMAN</text>')
-    s.append(f'<text x="574" y="334" class="lbl">APPROVAL</text>')
-    s.append(f'<circle class="tk2" cx="180" cy="320" r="6" fill="{ind}" style="animation-delay:{-SET}s"/>')
-    s.append(f'<text class="ok lbl" x="640" y="360" fill="{ind}" style="animation-delay:{-SET}s">DEPLOYED</text>')
-    s.append(f'<text x="150" y="394" class="lbl">SENIOR DESIGN · MIAMI UNIVERSITY</text>')
+    s.append(f'<path d="M150 256H730" stroke="{RULE}"/>')
+    s.append(f'<text x="150" y="288" class="lbl">AGENTIC AUTOML</text>')
+    s.append(f'<text x="{W-150}" y="288" class="lbl" text-anchor="end">SENIOR DESIGN · MIAMI UNIVERSITY</text>')
+
+    # the lane, y 320→400. Nothing crosses this band but lane furniture, so the
+    # token cannot come to rest on a label — it did, on "APPROVAL", for 28% of
+    # the loop, until the gate learned to measure position instead of opacity.
+    s.append(f'<text x="546" y="312" class="lbl">HUMAN APPROVAL</text>')
+    s.append(f'<rect x="150" y="320" width="300" height="80" rx="3" fill="none" stroke="{INDIGO}"/>')
+    s.append(f'<text x="166" y="340" class="lbl">DOCKER · SANDBOXED</text>')
+    # "internal net (dev)": the beta deploy defaults EXECUTION_NETWORK to bridge
+
+    s.append(f'<path d="M530 320V400" stroke="{WIRE}"/>')
+    s.append(f'<circle class="tk2" cx="176" cy="372" r="6" fill="{INDIGO}" style="animation-delay:{-SET}s"/>')
+    s.append(f'<text x="150" y="418" class="fine">non-root · read-only rootfs · internal net (dev)</text>')
+    s.append(f'<text class="ok lbl" x="618" y="418" fill="{INDIGO}" style="animation-delay:{-SET}s">DEPLOYED</text>')
+
+    s.append(f'<text x="150" y="496" class="hero">2</text>')
+    s.append(f'<text x="210" y="480" class="lbl">APPROVAL GATES BEFORE</text>')
+    s.append(f'<text x="210" y="504" class="fine">a step is committed, and before a model trains</text>')
     return "".join(s) + "</svg>"
 
 
 # ────────────────────────────────────────────────────────────── PLATE VII
 def plate_colophon() -> str:
-    H = 196
-    s = [head(H, "Colophon", "Six systems, six system cards; rendered as animated SVG with no "
-                             "JavaScript and no server.", 0, key="plate-7-colophon.svg")]
-    s.append("</style>" + slab(H))
-    s.append(f'<path d="M150 40H{W-150}" stroke="{RULE}"/>')
-    lines = ["Six systems. Six system cards. Every number here is",
-             "traceable to the repo it came from.",
-             "Rendered as animated SVG. No JavaScript.",
-             "No server drew this frame.",
-             "CS ’26 · Miami University · aesh.03.23@gmail.com"]
-    for i, ln in enumerate(lines):
-        s.append(f'<text x="150" y="{74 + i*28}" class="lbl">{ln}</text>')
+    H = 224
+    s = [head(H, "Colophon", "Six systems, six system cards. Every number here is traceable to "
+                             "the repository it came from, and the page itself is animated SVG "
+                             "with no JavaScript and no server.", key="plate-7-colophon.svg")]
+    # This plate asserts "ANIMATED SVG" and used to be the only one that wasn't.
+    LOOP, SET = 12.7, 10.0
+    s.append(f""".rule{{stroke-dasharray:1;animation:sweep {LOOP}s {EASE} infinite;animation-delay:{-SET}s}}
+@keyframes sweep{{0%{{stroke-dashoffset:1}}20%,100%{{stroke-dashoffset:0}}}}
+</style>{slab(H)}""")
+    s.append(f'<path class="rule" d="M150 56H{W-150}" pathLength="1" stroke="{RULE}"/>')
+    s.append(f'<text x="150" y="96" class="say">Six systems. Six system cards.</text>')
+    s.append(f'<text x="150" y="124" class="say">Every number is traceable to its repo.</text>')
+    s.append(f'<text x="150" y="160" class="lbl">ANIMATED SVG · NO JAVASCRIPT · NO SERVER</text>')
+    s.append(f'<text x="150" y="192" class="lbl">CS ’26 · MIAMI UNIVERSITY</text>')
+    s.append(f'<text x="{W-150}" y="192" class="lbl" text-anchor="end">aesh.03.23@gmail.com</text>')
     return "".join(s) + "</svg>"
 
 
@@ -425,58 +489,78 @@ PLATES = {
     "plate-4-applied.svg": plate_applied, "plate-5-refusal.svg": plate_refusal,
     "plate-6-release.svg": plate_release, "plate-7-colophon.svg": plate_colophon,
 }
-# ────────────────────────────────────────────────── the gate
-# A build that can ship an unrenderable plate is not a build. Three checks,
-# each one earned by a defect that actually shipped:
-#   1. XML well-formedness — duplicate class attributes silently killed four
-#      plates; SVG served as image/svg+xml is parsed strictly and simply aborts.
-#   2. Layout — text that leaves the canvas or the 150/730 type column.
-#      Monospace makes the advance width computable: 0.6em + letter-spacing.
-#   3. Frame zero — anything invisible at t=0 fails the file's own stated rule.
+
+# ────────────────────────────────────────────────── the build-time gate
+# Cheap structural checks only. The REAL layout gate is build/gate.mjs, which
+# renders every plate in Chromium and measures 40 samples across each loop —
+# arithmetic here cannot see a transform, and pretending otherwise is how nine
+# collisions once shipped under a PASS.
 import re as _re, sys as _sys, xml.dom.minidom as _xml
 
-SIZES = {"lbl": (16, 1.6), "key": (17, 1.4), "say": (17, 0), "fine": (14, 0.6),
-         "big": (72, -1), "big60": (60, -1), "big52": (52, -1), "big40": (40, -0.5),
-         "ser": (31, 0)}
-LEFT, RIGHT = 150, 730
 _fail = []
-
 for fn, gen in PLATES.items():
     path = OUT / fn
     path.write_text(gen())
-    svg = path.read_text()
-
     try:
-        _xml.parseString(svg)
+        _xml.parseString(path.read_text())
     except Exception as e:
         _fail.append(f"{fn}: MALFORMED XML — {e}")
-        print(f"{fn}: !! MALFORMED XML — {e}")
-        continue
-
-    h = int(_re.search(r'viewBox="0 0 \d+ (\d+)"', svg).group(1))
-    for m in _re.finditer(r'<text([^>]*)>([^<]*)</text>', svg):
-        attrs, body = m.group(1), m.group(2)
-        if not body.strip():
-            continue
-        cls = _re.search(r'class="([^"]+)"', attrs)
-        names = cls.group(1).split() if cls else []
-        size, track = next((SIZES[n] for n in names if n in SIZES), (16, 1.6))
-        x = float(_re.search(r'\bx="([-\d.]+)"', attrs).group(1))
-        y = float(_re.search(r'\by="([-\d.]+)"', attrs).group(1))
-        w = len(body) * (size * 0.6 + track)
-        anchor = 'text-anchor="end"' in attrs
-        x0, x1 = (x - w, x) if anchor else (x, x + w)
-        if x1 > RIGHT + 2:
-            _fail.append(f"{fn}: overflows the type column — {body[:38]!r} ends at {x1:.0f} (max {RIGHT})")
-        if y - size * 0.72 < 0 or y > h:
-            _fail.append(f"{fn}: outside the canvas — {body[:38]!r} at y={y} (h={h})")
-
     print(f"{fn}: {path.stat().st_size:,} bytes")
 
-# 4. alt/desc/README agreement. Every description is authored once in ALT and
-#    must reach the README verbatim — three surfaces drifted apart once and
-#    left a retracted claim alive in the accessible text.
-(ROOT.parent / "assets" / "alt.json").write_text(json.dumps(ALT, indent=2, sort_keys=True))
+# ────────────────────────────────────────────────── mobile set
+# At GitHub's real 324px column a 16-unit label on an 880 canvas renders at
+# 5.9px — unreadable. So the phone gets its own plates: a 440 canvas at the SAME
+# absolute type sizes (≈11.8px rendered), carrying the hero and one line. The
+# argument itself is already in the markdown, which is selectable, searchable
+# and theme-native. Served via <picture media="(max-width:500px)">.
+#
+# The <desc> here is the SAME string as the desktop plate's, because <picture>
+# permits one alt for both sources — so the alt has to be true of whichever
+# image the browser picked. gate.mjs enforces the direction that matters: every
+# number the mobile plate DRAWS must appear in that shared description.
+MW = 440
+
+
+def plate_mobile(accent: str, kicker: str, hero: str, unit: str,
+                 line1: str, line2: str, desc: str) -> str:
+    h = 208
+    return "".join([
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {MW} {h}" width="{MW}" height="{h}" '
+        f'role="img" aria-label="{desc}"><title>{kicker}</title><desc>{desc}</desc><style>'
+        f"@font-face{{font-family:'M';src:url(data:font/woff2;base64,{FONT}) format('woff2')}}"
+        f"text{{font-family:'M',ui-monospace,SFMono-Regular,Menlo,monospace}}"
+        f".k{{font-size:15px;letter-spacing:1.8px;fill:{INK2}}}"
+        f".n{{font-size:54px;letter-spacing:-1px;fill:{INK};font-weight:600}}"
+        f".u{{font-size:22px;fill:{INK2}}}"
+        f".t{{font-size:15px;fill:{INK2}}}"
+        f"</style>"
+        f'<rect width="{MW}" height="{h}" rx="2" fill="{SLAB}"/>'
+        f'<rect x="0.5" y="0.5" width="{MW-1}" height="{h-1}" rx="2" fill="none" stroke="{EDGE}"/>'
+        f'<rect x="0" y="0" width="4" height="{h}" fill="{accent}"/>',
+        f'<text x="34" y="44" class="k">{kicker}</text>',
+        f'<text x="34" y="112" class="n">{hero}<tspan class="u">{unit}</tspan></text>',
+        f'<text x="34" y="152" class="t">{line1}</text>',
+        f'<text x="34" y="178" class="t">{line2}</text>',
+        "</svg>"])
+
+
+MOBILE = {
+ "m-1-glyph.svg": ("GLYPH", AMBER, "97.01", "%", "A neural net written from", "scratch in C++. 299 wrong.", "plate-1-glyph.svg"),
+ "m-2-jetpack.svg": ("JETPACK", LIME, "6.4", "×", "Parallel gzip on JDK 25.", "The JDK intrinsic still wins.", "plate-2-jetpack.svg"),
+ "m-3-cadence.svg": ("CADENCE", EMERALD, "36", "", "handlers bundled into one", "function. The plan allows 12.", "plate-3-cadence.svg"),
+ "m-4-applied.svg": ("APPLIED", CYAN, "0.979", "", "macro-F1, rules layer only.", "Below 0.85 it asks a human.", "plate-4-applied.svg"),
+ "m-5-refusal.svg": ("THE REFUSAL", EMERALD, "B", " only", "The app didn't remember", "to filter. The database refused.", "plate-5-refusal.svg"),
+ "m-6-release.svg": ("LIFEQUEST · AUTOML", PINK, "2", "", "Routines become quests.", "Approval gates before training.", "plate-6-release.svg"),
+}
+for _fn, (_k, _a, _n, _u, _l1, _l2, _src) in MOBILE.items():
+    (OUT / _fn).write_text(plate_mobile(_a, _k, _n, _u, _l1, _l2, ALT[_src]))
+print(f"mobile set: {len(MOBILE)} plates at {MW}w")
+
+# ────────────────────────────────────────────────── alt/desc/README agreement
+# Every description is authored once in ALT and must reach the README verbatim —
+# three surfaces drifted apart once and left a retracted claim alive in the
+# accessible text.
+(OUT / "alt.json").write_text(json.dumps(ALT, indent=2, sort_keys=True))
 _readme = ROOT.parent / "README.md"
 if _readme.exists():
     _md = _readme.read_text()
@@ -492,53 +576,4 @@ if _fail:
     for f in _fail:
         print(f"  · {f}")
     _sys.exit(1)
-print("\nGATE PASSED — all plates parse, all type inside the column.")
-
-
-# ────────────────────────────────────────────────── mobile set
-# At GitHub's real 324px column a 16-unit label on an 880 canvas renders at
-# 5.9px — unreadable. So the phone gets its own plates: a 440 canvas at the SAME
-# absolute type sizes (≈11.8px rendered), carrying the hero and one line. The
-# argument itself is already in the markdown, which is selectable, searchable
-# and theme-native. Served via <picture media="(max-width:500px)">.
-MW = 440
-
-def plate_mobile(key: str, accent: str, kicker: str, hero: str, unit: str,
-                 line1: str, line2: str, desc: str) -> str:
-    h = 208
-    out = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {MW} {h}" width="{MW}" height="{h}" '
-           f'role="img" aria-label="{desc}"><title>{kicker}</title><desc>{desc}</desc><style>'
-           f"@font-face{{font-family:'M';src:url(data:font/woff2;base64,{FONT}) format('woff2')}}"
-           f"text{{font-family:'M',ui-monospace,SFMono-Regular,Menlo,monospace}}"
-           f".k{{font-size:15px;letter-spacing:1.8px;fill:{INK2}}}"
-           f".n{{font-size:54px;letter-spacing:-1px;fill:{INK};font-weight:600}}"
-           f".u{{font-size:22px;fill:{INK2}}}"
-           f".t{{font-size:15px;fill:{INK2}}}"
-           f"</style>"
-           f'<rect width="{MW}" height="{h}" rx="2" fill="{SLAB}"/>'
-           f'<rect x="0.5" y="0.5" width="{MW-1}" height="{h-1}" rx="2" fill="none" stroke="{EDGE}"/>'
-           f'<rect x="0" y="0" width="4" height="{h}" fill="{accent}"/>']
-    out.append(f'<text x="34" y="44" class="k">{kicker}</text>')
-    out.append(f'<text x="34" y="112" class="n">{hero}<tspan class="u">{unit}</tspan></text>')
-    out.append(f'<text x="34" y="152" class="t">{line1}</text>')
-    out.append(f'<text x="34" y="178" class="t">{line2}</text>')
-    return "".join(out) + "</svg>"
-
-
-MOBILE = {
- "m-1-glyph.svg": ("GLYPH", AMBER, "97.01", "%", "A neural net written from", "scratch in C++. 299 wrong.",
-   "Glyph scores 97.01 percent on the MNIST test set — a neural network written from scratch in C++ — which means 299 wrong."),
- "m-2-jetpack.svg": ("JETPACK", "#B8E62E", "6.4", "×", "Parallel gzip on JDK 25.", "The JDK intrinsic still wins.",
-   "jetpack compresses roughly 6.4 times faster in parallel on JDK 25; the JDK's own native checksum intrinsic is still faster than the hand-vectorised one."),
- "m-3-cadence.svg": ("CADENCE", "#34D399", "36", "", "handlers bundled into one", "function. Vercel allows 12.",
-   "Cadence bundles its 36 API handlers into a single serverless function, because Vercel's plan allows only 12 functions."),
- "m-4-applied.svg": ("APPLIED", CYAN, "0.979", "", "macro-F1 on 96 messages.", "Below 0.85 it asks a human.",
-   "Applied scores 0.979 macro-F1 on a 96-message evaluation set; anything below the 0.85 confidence gate is referred to a human."),
- "m-5-refusal.svg": ("THE REFUSAL", "#34D399", "B", " only", "The app didn't remember", "to filter. The database refused.",
-   "A cross-tenant query is refused at the row-level-security boundary: the database declines it, rather than the application remembering to filter."),
- "m-6-release.svg": ("LIFEQUEST · AUTOML", "#F472B6", "2", "", "Routines become quests.", "Datasets become models.",
-   "LifeQuest turns routines into quests; Agentic AutoML turns a dataset into a deployed model behind human approval gates."),
-}
-for _fn, (_k, _a, _n, _u, _l1, _l2, _d) in MOBILE.items():
-    (OUT / _fn).write_text(plate_mobile(_fn, _a, _k, _n, _u, _l1, _l2, _d))
-print(f"mobile set: {len(MOBILE)} plates at {MW}w")
+print("\nBUILD OK — all plates parse, alts agree. Run `node build/gate.mjs` to measure them.")
