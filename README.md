@@ -10,7 +10,10 @@ What follows is five system plates (LifeQuest and AutoML share the last), plus o
 
 ## I · Glyph — *I don't trust the library*
 
-<img src="./assets/plate-1-glyph.svg" width="100%" alt="A handwritten seven draws itself; four instruction sets each return the same answer; the model scores 97.01 percent on the 10,000-image test set, which means 299 wrong; the grid is a count of those 299, not the digits themselves.">
+<picture>
+  <source media="(max-width: 500px)" srcset="./assets/m-1-glyph.svg">
+  <img src="./assets/plate-1-glyph.svg" width="100%" alt="A handwritten seven draws itself; four instruction sets each return the same answer; the model scores 97.01 percent on the 10,000-image test set, which means 299 wrong; the grid is a count of those 299, not the digits themselves.">
+</picture>
 
 A neural network written **from scratch in C++** — no framework — with hand-written SIMD kernels for AVX-512, AVX2, NEON and wasm128, compiled to WebAssembly — and the live demo runs it: `vercel.json` builds with `VITE_ENABLE_WASM=true` and the site serves a 46,960-byte `.wasm`. A labelled JS matcher ships as the fallback path, and the app marks it "never used for accuracy or timing claims".
 
@@ -24,7 +27,10 @@ That same test set also selected the checkpoint and triggered early stopping (`a
 
 ## II · jetpack — *I don't trust my own optimisation*
 
-<img src="./assets/plate-2-jetpack.svg" width="100%" alt="Blocks flow through a bounded in-flight window and leave compressed. A hand-vectorised Adler-32 checksum is compared digit by digit against java.util.zip and matches exactly. The measured table lists the JDK's native intrinsic at 14.1 gigabytes per second, marked not beaten.">
+<picture>
+  <source media="(max-width: 500px)" srcset="./assets/m-2-jetpack.svg">
+  <img src="./assets/plate-2-jetpack.svg" width="100%" alt="Blocks flow through a bounded in-flight window and leave compressed. A hand-vectorised Adler-32 checksum is compared digit by digit against java.util.zip and matches exactly. The measured table lists the JDK's native intrinsic at 14.1 gigabytes per second, marked not beaten.">
+</picture>
 
 Parallel, gzip-compatible compression on **JDK 25**: one virtual thread per block, a bounded in-flight window so peak memory is independent of file size, and memory-mapped input via the Foreign Function & Memory API.
 
@@ -40,7 +46,10 @@ And the row that stays in the table because it's true: the hand-vectorised Adler
 
 ## III · Cadence — *I don't trust the black box*
 
-<img src="./assets/plate-3-cadence.svg" width="100%" alt="The sentence 'lunch with sam friday 1pm' is annotated in place by four parser stages labelling title, attendee, date and time, then filed into a calendar.">
+<picture>
+  <source media="(max-width: 500px)" srcset="./assets/m-3-cadence.svg">
+  <img src="./assets/plate-3-cadence.svg" width="100%" alt="The sentence 'lunch with sam friday 1pm' is annotated in place by four parser stages labelling title, attendee, date and time, then filed into a calendar.">
+</picture>
 
 A sentence typed the way you would say it becomes a calendar entry. The parser runs four stages — chrono, hashtag, priority, language — and **every extracted span records the parser that produced it** — `source` is a required field on every tag, and conflict resolution depends on it, so a wrong answer is always traceable to the stage that caused it.
 
@@ -52,7 +61,10 @@ A sentence typed the way you would say it becomes a calendar entry. The parser r
 
 ## IV · Applied — *I don't trust the model*
 
-<img src="./assets/plate-4-applied.svg" width="100%" alt="Email falls through three classifier layers; messages that fail to clear the 0.85 confidence gate divert sideways to a human. Inference runs inside the browser.">
+<picture>
+  <source media="(max-width: 500px)" srcset="./assets/m-4-applied.svg">
+  <img src="./assets/plate-4-applied.svg" width="100%" alt="Email falls through three classifier layers; messages that fail to clear the 0.85 confidence gate divert sideways to a human. Inference runs inside the browser.">
+</picture>
 
 Your inbox already holds the verdict on most applications you've sent. A three-layer cascade reads it: **201 regex rules → e5 embeddings → a fine-tuned SetFit head**, cheapest first.
 
@@ -66,7 +78,10 @@ The fine-tuned head exports to int8 ONNX (90.4 MB → 22.8 MB) and runs **in you
 
 ## V · The refusal — *I don't trust myself*
 
-<img src="./assets/plate-5-refusal.svg" width="100%" alt="A query from tenant A travels toward tenant B's rows, reaches the isolation boundary, and stops. Zero rows are returned.">
+<picture>
+  <source media="(max-width: 500px)" srcset="./assets/m-5-refusal.svg">
+  <img src="./assets/plate-5-refusal.svg" width="100%" alt="A query from tenant A travels toward tenant B's rows, reaches the isolation boundary, and stops. Zero rows are returned.">
+</picture>
 
 Application code that filters by user is code that has to *remember* to filter. So the database enforces it instead: **PostgreSQL Row-Level Security**, `FORCE`d on every tenant table, with the app connecting as a dedicated non-`BYPASSRLS` role and the request identity carried as a transaction-local GUC.
 
@@ -80,7 +95,10 @@ Auditing my own work, I found **seven IDOR vulnerabilities** in Cadence — endp
 
 ## VI · LifeQuest & Agentic AutoML
 
-<img src="./assets/plate-6-release.svg" width="100%" alt="Three seeded quests appear on a path; and a dataset moves through a hardened Docker sandbox that waits for human approval before deploying.">
+<picture>
+  <source media="(max-width: 500px)" srcset="./assets/m-6-release.svg">
+  <img src="./assets/plate-6-release.svg" width="100%" alt="Three seeded quests appear on a path; and a dataset moves through a hardened Docker sandbox that waits for human approval before deploying.">
+</picture>
 
 **LifeQuest** turns real-world routines into tracked quests with tiered progression — built for people rebuilding structure, whether after a layoff or in retirement. Tauri + React client, NestJS + Prisma API.
 

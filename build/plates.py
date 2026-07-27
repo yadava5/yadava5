@@ -489,3 +489,52 @@ if _fail:
         print(f"  · {f}")
     _sys.exit(1)
 print("\nGATE PASSED — all plates parse, all type inside the column.")
+
+
+# ────────────────────────────────────────────────── mobile set
+# At GitHub's real 324px column a 16-unit label on an 880 canvas renders at
+# 5.9px — unreadable. So the phone gets its own plates: a 440 canvas at the SAME
+# absolute type sizes (≈11.8px rendered), carrying the hero and one line. The
+# argument itself is already in the markdown, which is selectable, searchable
+# and theme-native. Served via <picture media="(max-width:500px)">.
+MW = 440
+
+def plate_mobile(key: str, accent: str, kicker: str, hero: str, unit: str,
+                 line1: str, line2: str, desc: str) -> str:
+    h = 208
+    out = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {MW} {h}" width="{MW}" height="{h}" '
+           f'role="img" aria-label="{desc}"><title>{kicker}</title><desc>{desc}</desc><style>'
+           f"@font-face{{font-family:'M';src:url(data:font/woff2;base64,{FONT}) format('woff2')}}"
+           f"text{{font-family:'M',ui-monospace,SFMono-Regular,Menlo,monospace}}"
+           f".k{{font-size:15px;letter-spacing:1.8px;fill:{INK2}}}"
+           f".n{{font-size:54px;letter-spacing:-1px;fill:{INK};font-weight:600}}"
+           f".u{{font-size:22px;fill:{INK2}}}"
+           f".t{{font-size:15px;fill:{INK2}}}"
+           f"</style>"
+           f'<rect width="{MW}" height="{h}" rx="2" fill="{SLAB}"/>'
+           f'<rect x="0.5" y="0.5" width="{MW-1}" height="{h-1}" rx="2" fill="none" stroke="{EDGE}"/>'
+           f'<rect x="0" y="0" width="4" height="{h}" fill="{accent}"/>']
+    out.append(f'<text x="34" y="44" class="k">{kicker}</text>')
+    out.append(f'<text x="34" y="112" class="n">{hero}<tspan class="u">{unit}</tspan></text>')
+    out.append(f'<text x="34" y="152" class="t">{line1}</text>')
+    out.append(f'<text x="34" y="178" class="t">{line2}</text>')
+    return "".join(out) + "</svg>"
+
+
+MOBILE = {
+ "m-1-glyph.svg": ("GLYPH", AMBER, "97.01", "%", "A neural net written from", "scratch in C++. 299 wrong.",
+   "Glyph scores 97.01 percent on the 10,000-image MNIST test set — a neural network written from scratch in C++ — which means 299 wrong."),
+ "m-2-jetpack.svg": ("JETPACK", "#B8E62E", "6.5", "×", "Parallel gzip on JDK 25.", "The JDK intrinsic still wins.",
+   "jetpack compresses roughly 6.5 times faster in parallel on JDK 25; the JDK's own native checksum intrinsic is still faster than the hand-vectorised one."),
+ "m-3-cadence.svg": ("CADENCE", "#34D399", "36", "", "handlers in one function,", "under Vercel's cap of 12.",
+   "Cadence bundles 36 API handlers into a single serverless function to stay inside Vercel's 12-function cap."),
+ "m-4-applied.svg": ("APPLIED", CYAN, "0.979", "", "macro-F1 on 96 messages.", "Below 0.85 it asks a human.",
+   "Applied scores 0.979 macro-F1 on a 96-message evaluation set; anything below the 0.85 confidence gate is referred to a human."),
+ "m-5-refusal.svg": ("THE REFUSAL", CYAN, "0", " rows", "The app didn't remember", "to filter. The database refused.",
+   "A query for another tenant's rows returns zero rows: the database refused it, rather than the application remembering to filter."),
+ "m-6-release.svg": ("LIFEQUEST · AUTOML", "#F472B6", "2", "", "Routines become quests.", "Datasets become models.",
+   "LifeQuest turns routines into quests; Agentic AutoML turns a dataset into a deployed model behind human approval gates."),
+}
+for _fn, (_k, _a, _n, _u, _l1, _l2, _d) in MOBILE.items():
+    (OUT / _fn).write_text(plate_mobile(_fn, _a, _k, _n, _u, _l1, _l2, _d))
+print(f"mobile set: {len(MOBILE)} plates at {MW}w")
