@@ -1,0 +1,23 @@
+{
+  "name": "yadava5-profile",
+  "version": "1.0.0",
+  "description": "<div align=\"center\"> <img src=\"./assets/plate-0-thesis.svg\" width=\"100%\" alt=\"The thesis plate: Ayush Yadav, and the sentence 'Every number on this page is followed by the thing that would catch it.'\"> </div>",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yadava5/yadava5.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yadava5/yadava5/issues"
+  },
+  "homepage": "https://github.com/yadava5/yadava5#readme",
+  "devDependencies": {
+    "playwright": "^1.62.0"
+  }
+}
