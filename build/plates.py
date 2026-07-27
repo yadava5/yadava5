@@ -185,11 +185,12 @@ def plate_thesis() -> str:
 
 # ────────────────────────────────────────────────────────────── PLATE II
 def plate_jetpack() -> str:
-    H, LOOP, SET, a = 430, 10.3, 7.2, "#B8E62E"
-    s = [head(H, "jetpack — 6.5x, verified bit-identical against java.util.zip",
-              "Blocks flow through a bounded in-flight window and leave compressed; a SIMD Adler-32 "
-              "checksum is compared digit by digit against java.util.zip and matches; a table of "
-              "speedups includes a row where the optimisation loses.", LOOP)]
+    H, LOOP, SET, a = 480, 10.3, 7.2, "#B8E62E"
+    s = [head(H, "jetpack — 6.5x parallel, and the intrinsic it does not beat",
+              "Blocks flow through a bounded in-flight window and leave compressed. A hand-vectorised "
+              "Adler-32 checksum is compared digit by digit against java.util.zip and matches exactly. "
+              "The measured table lists the JDK's native intrinsic at 14.1 gigabytes per second, "
+              "marked not beaten.", LOOP)]
     s.append(f""".blk{{animation:sq {LOOP}s linear infinite;transform-box:fill-box;transform-origin:left center}}
 @keyframes sq{{0%,14%{{transform:translateX(0) scaleX(1)}}44%{{transform:translateX(214px) scaleX(.42)}}
   60%,100%{{transform:translateX(214px) scaleX(.42)}}}}
@@ -199,8 +200,8 @@ def plate_jetpack() -> str:
 @keyframes rw{{0%,60%{{opacity:0}}70%,100%{{opacity:1}}}}
 </style>{slab(H)}{rail(H, a)}""")
     s.append(f'<text x="150" y="66" class="big" font-size="60">6.5<tspan class="unit">×</tspan></text>')
-    s.append(f'<text x="330" y="60" class="key">THROUGHPUT vs java.util.zip</text>')
-    s.append(f'<text x="330" y="82" class="lbl">JDK 25 · VIRTUAL THREADS</text>')
+    s.append(f'<text x="330" y="56" class="key">PARALLEL vs SINGLE-THREAD GZIP</text>')
+    s.append(f'<text x="330" y="78" class="lbl">JDK 25 · 10 CORES · ±50% ON A QUICK RUN</text>')
     s.append(f'<text x="150" y="{66+28}" class="lbl">CLAIM</text>')
 
     # the bounded in-flight window — the bracket never overflows; that IS the point
@@ -216,23 +217,33 @@ def plate_jetpack() -> str:
     # checksum audit: the fast path checked against the reference
     s.append(f'<text x="150" y="298" class="lbl">SIMD ADLER-32</text>')
     s.append(f'<text x="150" y="322" class="lbl">java.util.zip</text>')
-    hexd = "1F3A9C4E"
+    # a REAL Adler-32: zlib.adler32(b"jetpack-compress") == 0x3662067C
+    hexd = "3662067C"
     for i, ch in enumerate(hexd):
         x = 330 + i * 26
         s.append(f'<text x="{x}" y="298" class="key" fill="{INK}">{ch}</text>')
         s.append(f'<text x="{x}" y="322" class="key" fill="{INK}">{ch}</text>')
         s.append(f'<rect class="mt" x="{x-3}" y="304" width="20" height="2" fill="{a}" '
                  f'style="animation-delay:{round(-SET + i*0.05,3)}s"/>')
-    s.append(f'<text x="560" y="312" class="say" fill="{a}">bit-identical</text>')
+    s.append(f'<text x="556" y="312" class="say" fill="{a}">identical</text>')
 
-    # the verdict table — and the row where it loses, set in the same ink
-    s.append(f'<path d="M150 346H730" stroke="{EDGE}"/>')
-    rows = [("64 KiB", "1.9×"), ("256 KiB", "3.4×"), ("1 MiB", "6.5×"), ("4 MiB", "6.1×"), ("4 KiB", "0.94×")]
-    for i, (blk, sp) in enumerate(rows):
-        x = 150 + i * 118
-        s.append(f'<text class="row" x="{x}" y="372" class="lbl" style="animation-delay:{round(-SET + i*0.18,3)}s">{blk}</text>')
-        s.append(f'<text class="row" x="{x}" y="398" class="key" fill="{INK}" style="animation-delay:{round(-SET + i*0.18,3)}s">{sp}</text>')
-    s.append(f'<text x="{W-150}" y="398" class="lbl" text-anchor="end">gzip -t → OK</text>')
+    # the verdict — the measured table, including the reference he does NOT beat
+    s.append(f'<path d="M150 344H730" stroke="{EDGE}"/>')
+    rows = [
+        ("Adler-32 scalar (pure Java)", "1.54 GB/s", ""),
+        ("Adler-32 hand-vectorised", "4.34 GB/s", "2.8× over scalar"),
+        ("java.util.zip intrinsic", "14.1 GB/s", "not beaten"),
+        ("gzip, one thread", "66.8 MB/s", ""),
+        ("parallel virtual threads", "434.6 MB/s", "6.5×"),
+    ]
+    for i, (name, score, note) in enumerate(rows):
+        y = 368 + i * 21
+        dl = round(-SET + i * 0.16, 3)
+        s.append(f'<text class="row" x="150" y="{y}" class="lbl" style="animation-delay:{dl}s">{name}</text>')
+        s.append(f'<text class="row" x="470" y="{y}" class="lbl" fill="{INK}" style="animation-delay:{dl}s">{score}</text>')
+        if note:
+            s.append(f'<text class="row" x="600" y="{y}" class="lbl" fill="{a if "×" in note else INK2}" '
+                     f'style="animation-delay:{dl}s">{note}</text>')
     return "".join(s) + "</svg>"
 
 

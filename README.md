@@ -26,9 +26,11 @@ A neural network written **from scratch in C++** — no framework — with hand-
 
 Parallel, gzip-compatible compression on **JDK 25**: one virtual thread per block, a bounded in-flight window so peak memory is independent of file size, and memory-mapped input via the Foreign Function & Memory API.
 
-The checksum is hand-vectorised — so it is checked **bit-identical against `java.util.zip.Adler32`**. The output is a byte-valid single gzip member any tool can decompress.
+The checksum is hand-vectorised — so it is checked **bit-identical against `java.util.zip.Adler32`** across every input the test suite throws at it. The output is a byte-valid single gzip member any tool can decompress.
 
-**~6.5× throughput.** And at 4 KiB blocks it runs **0.94×** — slower than the baseline. That row is in the table because it's true.
+**434.6 MB/s parallel vs 66.8 MB/s single-threaded — ~6.5×** (10 cores; ±50% on a quick run).
+
+And the row that stays in the table because it's true: the hand-vectorised Adler-32 reaches **4.34 GB/s**, while the JDK's own native intrinsic does **14.1 GB/s**. I don't beat it. The SIMD result is honest against the *scalar* baseline (2.8×), and the intrinsic is printed next to it as the reference it loses to.
 
 [live](https://jetpack-compress.vercel.app) · [system card](https://jetpack-compress.vercel.app/system-card) · [repo](https://github.com/yadava5/jetpack-compress)
 
