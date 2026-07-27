@@ -15,7 +15,12 @@ Design rules encoded here (each one is a finding, not a preference):
   * the rail exits every plate at x=120 and enters the next at x=120
 """
 from __future__ import annotations
-import base64, pathlib, random
+import base64, json, pathlib, random
+
+# every plate's description is authored ONCE here and flows to three places:
+# the SVG <desc>, the SVG aria-label, and the README's <img alt>. They diverged
+# once already; the gate below now fails the build if the README drifts.
+ALT: dict[str, str] = {}
 
 ROOT = pathlib.Path(__file__).resolve().parent
 OUT = ROOT.parent / "assets"
@@ -42,7 +47,9 @@ DIGITS = [
 ]
 
 
-def head(h: int, title: str, desc: str, loop: float) -> str:
+def head(h: int, title: str, desc: str, loop: float, key: str = "") -> str:
+    if key:
+        ALT[key] = desc
     return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {h}" width="{W}" height="{h}" role="img" aria-label="{desc}">
 <title>{title}</title><desc>{desc}</desc>
 <style>
@@ -57,6 +64,7 @@ text{{font-family:'M',ui-monospace,SFMono-Regular,Menlo,monospace}}
 .fine{{font-size:14px;letter-spacing:0.6px;fill:{INK2}}}
 .unit{{font-size:29px;fill:{INK2}}}
 .say{{font-size:19px;fill:{INK2}}}
+@media (prefers-reduced-motion: reduce){{*{{animation:none!important}}}}
 """
 
 
@@ -80,7 +88,7 @@ def plate_glyph() -> str:
     a = AMBER
     s = [head(H, "Glyph — 97.01%, and the 299 it gets wrong",
               "A handwritten seven draws itself; four instruction sets each return the same answer; "
-              "the model scores 97.01 percent on the 10,000-image test set, which means 299 wrong; the grid is a count of those 299, not the digits themselves.", LOOP)]
+              "the model scores 97.01 percent on the 10,000-image test set, which means 299 wrong; the grid is a count of those 299, not the digits themselves.", LOOP, key="plate-1-glyph.svg")]
     s.append(f""".ink{{fill:none;stroke:{a};stroke-width:7;stroke-linecap:round;stroke-linejoin:round;
   stroke-dasharray:1;stroke-dashoffset:0;animation:draw {LOOP}s linear infinite;animation-delay:{-SET}s}}
 @keyframes draw{{0%{{stroke-dashoffset:1}}17%{{stroke-dashoffset:0}}100%{{stroke-dashoffset:0}}}}
@@ -113,7 +121,7 @@ def plate_glyph() -> str:
     s.append(f'<text x="470" y="{296+56}" class="key">MNIST TEST · n=10,000</text>')
     s.append(f'<text x="150" y="{296+92}" class="say">299 wrong. The repo does not commit which ones.</text>')
 
-    # THE MOVE — every single digit it gets wrong
+    # THE MOVE — one mark per error, 299 of them
     rnd = random.Random(7)
     gx, gy, cols = 150, 412, 46
     for i in range(299):
@@ -131,7 +139,7 @@ def plate_refusal() -> str:
     H, LOOP, SET = 300, 6.7, 4.4
     s = [head(H, "The refusal — the database declines to return another tenant's rows",
               "A query from tenant A travels toward tenant B's rows, reaches the isolation boundary, "
-              "and stops. Zero rows are returned.", LOOP)]
+              "and stops. Zero rows are returned.", LOOP, key="plate-5-refusal.svg")]
     s.append(f""".q{{animation:seek {LOOP}s linear infinite;animation-delay:{-SET}s}}
 @keyframes seek{{0%{{opacity:0;transform:translateX(0)}}6%{{opacity:1;transform:translateX(0)}}
   /* it decelerates into the boundary and simply stops — no bounce, no alarm */
@@ -169,7 +177,7 @@ def plate_thesis() -> str:
     H = 286
     s = [head(H, "Ayush Yadav — every number is followed by the thing that would catch it",
               "The thesis plate: Ayush Yadav, and the sentence 'Every number on this page is "
-              "followed by the thing that would catch it.'", 0)]
+              "followed by the thing that would catch it.'", 0, key="plate-0-thesis.svg")]
     s.append(f""".rule{{stroke-dasharray:1;stroke-dashoffset:0;animation:sweep 5s cubic-bezier(.16,1,.3,1) 1 both}}
 @keyframes sweep{{0%{{stroke-dashoffset:1}}22%,100%{{stroke-dashoffset:0}}}}
 .tick{{animation:tk 5s ease-out 1 both}}
@@ -197,7 +205,7 @@ def plate_jetpack() -> str:
               "Blocks flow through a bounded in-flight window and leave compressed. A hand-vectorised "
               "Adler-32 checksum is compared digit by digit against java.util.zip and matches exactly. "
               "The measured table lists the JDK's native intrinsic at 14.1 gigabytes per second, "
-              "marked not beaten.", LOOP)]
+              "marked not beaten.", LOOP, key="plate-2-jetpack.svg")]
     s.append(f""".blk{{animation:sq {LOOP}s linear infinite;transform-box:fill-box;transform-origin:left center}}
 @keyframes sq{{0%,14%{{transform:translateX(0) scaleX(1)}}44%{{transform:translateX(214px) scaleX(.42)}}
   60%,100%{{transform:translateX(214px) scaleX(.42)}}}}
@@ -240,8 +248,8 @@ def plate_jetpack() -> str:
         ("Adler-32 scalar (pure Java)", "1.54 GB/s", ""),
         ("Adler-32 hand-vectorised", "4.34 GB/s", "2.8× over scalar"),
         ("java.util.zip intrinsic", "14.1 GB/s", "not beaten"),
-        ("gzip, one thread", "66.8 MB/s", ""),
-        ("parallel virtual threads", "434.6 MB/s", "6.5×"),
+        ("gzip, one thread", "~67 MB/s", ""),
+        ("parallel virtual threads", "~435 MB/s", "6.5×"),
     ]
     for i, (name, score, note) in enumerate(rows):
         y = 368 + i * 21
@@ -260,7 +268,7 @@ def plate_cadence() -> str:
     SENT, FS, CW = "lunch with sam friday 1pm", 26, 15.62
     s = [head(H, "Cadence — a parser that shows its work",
               "The sentence 'lunch with sam friday 1pm' is annotated in place by four parser stages "
-              "labelling title, attendee, date and time, then filed into a calendar.", LOOP)]
+              "labelling title, attendee, date and time, then filed into a calendar.", LOOP, key="plate-3-cadence.svg")]
     s.append(f""".ul{{animation:ul {LOOP}s linear infinite;transform-box:fill-box;transform-origin:left center}}
 @keyframes ul{{0%,10%{{transform:scaleX(0);opacity:0}}14%{{opacity:1}}22%,100%{{transform:scaleX(1);opacity:1}}}}
 .an{{animation:an {LOOP}s linear infinite}}
@@ -299,7 +307,7 @@ def plate_applied() -> str:
     H, LOOP, SET, a = 430, 11.7, 8.4, CYAN
     s = [head(H, "Applied — a classifier allowed to say it doesn't know",
               "Email falls through three classifier layers; messages that fail to clear the 0.85 "
-              "confidence gate divert sideways to a human. Inference runs inside the browser.", LOOP)]
+              "confidence gate divert sideways to a human. Inference runs inside the browser.", LOOP, key="plate-4-applied.svg")]
     s.append(f""".env{{animation:fall {LOOP}s linear infinite}}
 @keyframes fall{{0%{{opacity:0;transform:translateY(-30px)}}6%{{opacity:1}}
   40%{{opacity:1;transform:translateY(150px)}}48%,100%{{opacity:0;transform:translateY(150px)}}}}
@@ -311,7 +319,7 @@ def plate_applied() -> str:
 @keyframes cm{{0%,54%{{opacity:0}}64%,100%{{opacity:1}}}}
 </style>{slab(H)}{rail(H, a)}""")
     s.append(f'<text x="150" y="84" class="big52">0.979</text>')
-    s.append(f'<text x="330" y="56" class="key">MACRO-F1 · HELD-OUT</text>')
+    s.append(f'<text x="330" y="56" class="key">MACRO-F1 · 96-MSG EVAL SET</text>')
     s.append(f'<text x="330" y="78" class="lbl">CI FAILS THE BUILD BELOW 0.95</text>')
     s.append(f'<text x="150" y="90" class="lbl">CLAIM</text>')
 
@@ -355,7 +363,7 @@ def plate_release() -> str:
     m, ind = "#F472B6", "#818CF8"
     s = [head(H, "LifeQuest and Agentic AutoML",
               "Three seeded quests appear on a path; and a dataset moves through a hardened Docker "
-              "sandbox that waits for human approval before deploying.", LOOP)]
+              "sandbox that waits for human approval before deploying.", LOOP, key="plate-6-release.svg")]
     s.append(f""".nd{{animation:nd {LOOP}s linear infinite}}
 @keyframes nd{{0%,8%{{opacity:0}}18%,100%{{opacity:1}}}}
 .tk2{{animation:tk2 {LOOP}s linear infinite}}
@@ -367,7 +375,7 @@ def plate_release() -> str:
 @keyframes ok{{0%,66%{{opacity:0}}72%,100%{{opacity:1}}}}
 </style>{slab(H)}{rail(H, m)}""")
     s.append(f'<text x="150" y="52" class="lbl">LIFEQUEST</text>')
-    for i, txt in enumerate(["Reconnect with a mentor", "Document a routine", "Share a win"]):
+    for i, txt in enumerate(["Reconnect with a mentor", "Document a new routine", "Share a win"]):
         x = 150 + i * 196
         s.append(f'<circle class="nd" cx="{x+8}" cy="96" r="7" fill="none" stroke="{m}" stroke-width="1.6" '
                  f'style="animation-delay:{round(-SET + i*0.3,3)}s"/>')
@@ -387,7 +395,7 @@ def plate_release() -> str:
     s.append(f'<text x="534" y="276" class="lbl">APPROVAL</text>')
     s.append(f'<circle class="tk2" cx="180" cy="266" r="6" fill="{ind}" style="animation-delay:{-SET}s"/>')
     s.append(f'<text class="ok lbl" x="640" y="270" fill="{ind}" style="animation-delay:{-SET}s">DEPLOYED</text>')
-    s.append(f'<text x="150" y="336" class="lbl">SENIOR DESIGN · MIAMI UNIVERSITY · CO-BUILT</text>')
+    s.append(f'<text x="150" y="336" class="lbl">SENIOR DESIGN · MIAMI UNIVERSITY</text>')
     return "".join(s) + "</svg>"
 
 
@@ -395,7 +403,7 @@ def plate_release() -> str:
 def plate_colophon() -> str:
     H = 196
     s = [head(H, "Colophon", "Six systems, six system cards; rendered as animated SVG with no "
-                             "JavaScript and no server.", 0)]
+                             "JavaScript and no server.", 0, key="plate-7-colophon.svg")]
     s.append("</style>" + slab(H))
     s.append(f'<path d="M150 40H{W-150}" stroke="{EDGE}"/>')
     lines = ["Six systems. Six system cards. Every number here is",
@@ -404,7 +412,7 @@ def plate_colophon() -> str:
              "No server drew this frame.",
              "CS ’26 · Miami University · aesh.03.23@gmail.com"]
     for i, ln in enumerate(lines):
-        s.append(f'<text x="150" y="{74 + i*28}" class="lbl" fill="{INK3}">{ln}</text>')
+        s.append(f'<text x="150" y="{74 + i*28}" class="lbl">{ln}</text>')
     return "".join(s) + "</svg>"
 
 
@@ -461,6 +469,20 @@ for fn, gen in PLATES.items():
             _fail.append(f"{fn}: outside the canvas — {body[:38]!r} at y={y} (h={h})")
 
     print(f"{fn}: {path.stat().st_size:,} bytes")
+
+# 4. alt/desc/README agreement. Every description is authored once in ALT and
+#    must reach the README verbatim — three surfaces drifted apart once and
+#    left a retracted claim alive in the accessible text.
+(ROOT.parent / "assets" / "alt.json").write_text(json.dumps(ALT, indent=2, sort_keys=True))
+_readme = ROOT.parent / "README.md"
+if _readme.exists():
+    _md = _readme.read_text()
+    for _fn, _desc in ALT.items():
+        _m = _re.search(rf'<img src="\./assets/{_re.escape(_fn)}"[^>]*?alt="([^"]*)"', _md)
+        if not _m:
+            _fail.append(f"{_fn}: no <img> with an alt in README.md")
+        elif _m.group(1).strip() != _desc.strip():
+            _fail.append(f"{_fn}: README alt has drifted from the plate's own description")
 
 if _fail:
     print("\nGATE FAILED:")

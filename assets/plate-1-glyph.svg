@@ -12,6 +12,7 @@ text{font-family:'M',ui-monospace,SFMono-Regular,Menlo,monospace}
 .fine{font-size:14px;letter-spacing:0.6px;fill:#8A8F98}
 .unit{font-size:29px;fill:#8A8F98}
 .say{font-size:19px;fill:#8A8F98}
+@media (prefers-reduced-motion: reduce){*{animation:none!important}}
 .ink{fill:none;stroke:#F5A524;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;
   stroke-dasharray:1;stroke-dashoffset:0;animation:draw 9.1s linear infinite;animation-delay:-7.6s}
 @keyframes draw{0%{stroke-dashoffset:1}17%{stroke-dashoffset:0}100%{stroke-dashoffset:0}}

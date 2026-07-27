@@ -12,6 +12,7 @@ text{font-family:'M',ui-monospace,SFMono-Regular,Menlo,monospace}
 .fine{font-size:14px;letter-spacing:0.6px;fill:#8A8F98}
 .unit{font-size:29px;fill:#8A8F98}
 .say{font-size:19px;fill:#8A8F98}
+@media (prefers-reduced-motion: reduce){*{animation:none!important}}
 .ul{animation:ul 7.9s linear infinite;transform-box:fill-box;transform-origin:left center}
 @keyframes ul{0%,10%{transform:scaleX(0);opacity:0}14%{opacity:1}22%,100%{transform:scaleX(1);opacity:1}}
 .an{animation:an 7.9s linear infinite}

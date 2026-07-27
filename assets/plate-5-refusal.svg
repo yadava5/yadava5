@@ -12,6 +12,7 @@ text{font-family:'M',ui-monospace,SFMono-Regular,Menlo,monospace}
 .fine{font-size:14px;letter-spacing:0.6px;fill:#8A8F98}
 .unit{font-size:29px;fill:#8A8F98}
 .say{font-size:19px;fill:#8A8F98}
+@media (prefers-reduced-motion: reduce){*{animation:none!important}}
 .q{animation:seek 6.7s linear infinite;animation-delay:-4.4s}
 @keyframes seek{0%{opacity:0;transform:translateX(0)}6%{opacity:1;transform:translateX(0)}
   /* it decelerates into the boundary and simply stops — no bounce, no alarm */
