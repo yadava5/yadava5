@@ -111,14 +111,14 @@ def plate_glyph() -> str:
         s.append(f'<circle class="tok" cx="446" cy="{y}" r="4" fill="{a}" '
                  f'style="animation-delay:{round(-SET + i*0.06,3)}s"/>')
     s.append(f'<path d="M660 74V186" stroke="{INK3}" stroke-width="1" opacity=".45"/>')
-    s.append(f'<text x="560" y="206" class="key" fill="{INK2}">one kernel each</text>')
+    s.append(f'<text x="540" y="206" class="key" fill="{INK2}">one kernel each</text>')
     s.append(f'<text x="330" y="{60+200}" class="lbl">MECHANISM — 3 HAND-WRITTEN, 1 AUTO</text>')
 
     # VERDICT
     s.append(f'<path d="M150 296H730" stroke="{EDGE}"/>')
     s.append(f'<text x="150" y="{296+56}" class="big">97.01<tspan class="unit">%</tspan></text>')
     s.append(f'<text x="470" y="{296+56}" class="key">MNIST TEST · n=10,000</text>')
-    s.append(f'<text x="150" y="{296+106}" class="say">299 wrong — all drawn below. 79 above 0.9 confidence.</text>')
+    s.append(f'<text x="150" y="{296+106}" class="say">299 wrong, all drawn below. 79 above 0.9 conf.</text>')
 
     # THE MOVE — the REAL errors. Each mark is the true label of one image the
     # model got wrong, read from benchmarks/mnist_misclassified.csv in the Glyph
