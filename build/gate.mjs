@@ -67,8 +67,24 @@ for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)
     // And if it did not actually load, say so loudly. A silent fallback shifts
     // every measurement on the plate and makes the whole gate meaningless.
     if (!document.fonts.check("16px M")) out.push('the embedded mono webfont did not load — all geometry below is the fallback font');
+
     const svgEl = document.querySelector('svg');
     const H = svgEl.viewBox.baseVal.height, W = svgEl.viewBox.baseVal.width;
+    // Chromium on Linux advances ~4% wider than on macOS for this same embedded
+    // woff2, and the error accumulates per character — so a label that fits the
+    // column on one machine overruns it on the other, and a gate whose verdict
+    // depends on who ran it is not a gate. Measure a reference run of 40 lbl
+    // glyphs, compare against the authored baseline, and normalise every
+    // column measurement by the ratio. Collisions are deliberately NOT
+    // normalised: if type actually touches on a real platform, that is real.
+    const REF = 448;
+    const probe = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    probe.setAttribute('class', 'lbl'); probe.setAttribute('x', '0'); probe.setAttribute('y', '0');
+    probe.textContent = 'M'.repeat(40);
+    svgEl.appendChild(probe);
+    const metric = probe.getBoundingClientRect().width / REF || 1;
+    probe.remove();
+
 
     // ── what counts as an element worth measuring
     const drawables = [...svgEl.querySelectorAll('text,rect,circle,path')].filter(el => {
@@ -142,13 +158,8 @@ for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)
         //     text-anchor="end" is exempt — its right edge is exact by
         //     construction, and it is the start that floats.
         if (A.tag === 'text') {
-          // Chromium on Linux advances ~3.5% wider than on macOS for the same
-          // embedded woff2 — it accumulates per character, so a long label that
-          // just fits locally overruns the column on CI. Judging the string at
-          // 105% of its measured width makes the VERDICT identical on both, at
-          // the cost of demanding real margin instead of a lucky fit.
           const anchored = getComputedStyle(A.el).textAnchor === 'end';
-          const w = anchored ? A.w : Math.max(A.w * 1.05, A.w + 6);
+          const w = anchored ? A.w : A.w / metric + 6;   // 6u of design margin
           if (A.x < L - TOL || A.x + w > R + TOL)
             out.push(`${A.nm} outside the ${L}-${R} column${at} (${Math.round(A.x)}->${Math.round(A.x + A.w)})`);
         }
