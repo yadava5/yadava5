@@ -57,8 +57,16 @@ for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)
   const mobile = /^m-/.test(file);
   const L = mobile ? M_LEFT : LEFT, R = mobile ? M_RIGHT : RIGHT;
 
-  const found = await page.evaluate(({ L, R, STEPS, TOL }) => {
+  const found = await page.evaluate(async ({ L, R, STEPS, TOL }) => {
+    // The @font-face is a base64 data: URI, but it is still loaded
+    // ASYNCHRONOUSLY. Measuring before it resolves measures the FALLBACK font —
+    // which is how the same string came out 710u locally and 724u on Linux CI,
+    // and why a platform-dependent gate result looked like a platform bug.
+    await document.fonts.ready;
     const out = [];
+    // And if it did not actually load, say so loudly. A silent fallback shifts
+    // every measurement on the plate and makes the whole gate meaningless.
+    if (!document.fonts.check("16px M")) out.push('the embedded mono webfont did not load — all geometry below is the fallback font');
     const svgEl = document.querySelector('svg');
     const H = svgEl.viewBox.baseVal.height, W = svgEl.viewBox.baseVal.width;
 
