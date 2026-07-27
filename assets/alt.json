@@ -1,7 +1,7 @@
 {
   "plate-0-thesis.svg": "The thesis plate: Ayush Yadav, and the sentence 'Every number on this page is followed by the thing that would catch it.'",
   "plate-1-glyph.svg": "A handwritten seven draws itself. Three hand-written SIMD kernels (AVX-512, AVX2, NEON) and an autovectorised WebAssembly build each carry the same dot product. the model scores 97.01 percent on the 10,000-image test set, which means 299 wrong. Every one of those 299 errors is drawn below, each mark the true label of an image the model missed; 79 of them were made with over 0.9 confidence.",
-  "plate-2-jetpack.svg": "Blocks flow through a bounded in-flight window and leave compressed. A hand-vectorised Adler-32 checksum is compared digit by digit against java.util.zip and matches exactly. The measured table lists the JDK's native intrinsic at 14.1 gigabytes per second, marked not beaten.",
+  "plate-2-jetpack.svg": "Blocks flow through a bounded in-flight window and leave compressed. A hand-vectorised Adler-32 checksum is compared digit by digit against java.util.zip and matches exactly. The measured table lists the JDK's native intrinsic at 14.06 gigabytes per second, marked not beaten.",
   "plate-3-cadence.svg": "The sentence 'lunch with sam friday 1pm' is annotated in place by four parser stages labelling title, attendee, date and time, then filed into a calendar.",
   "plate-4-applied.svg": "Email falls through three classifier layers; messages that fail to clear the 0.85 confidence gate divert sideways to a human. Inference runs inside the browser.",
   "plate-5-refusal.svg": "A query from tenant A travels toward tenant B's rows, reaches the isolation boundary, and stops. Zero rows are returned.",

@@ -29,7 +29,7 @@ That same test set also selected the checkpoint and triggered early stopping (`a
 
 <picture>
   <source media="(max-width: 500px)" srcset="./assets/m-2-jetpack.svg">
-  <img src="./assets/plate-2-jetpack.svg" width="100%" alt="Blocks flow through a bounded in-flight window and leave compressed. A hand-vectorised Adler-32 checksum is compared digit by digit against java.util.zip and matches exactly. The measured table lists the JDK's native intrinsic at 14.1 gigabytes per second, marked not beaten.">
+  <img src="./assets/plate-2-jetpack.svg" width="100%" alt="Blocks flow through a bounded in-flight window and leave compressed. A hand-vectorised Adler-32 checksum is compared digit by digit against java.util.zip and matches exactly. The measured table lists the JDK's native intrinsic at 14.06 gigabytes per second, marked not beaten.">
 </picture>
 
 Parallel, gzip-compatible compression on **JDK 25**: one virtual thread per block, a bounded in-flight window so peak memory is independent of file size, and memory-mapped input via the Foreign Function & Memory API.

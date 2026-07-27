@@ -203,7 +203,7 @@ def plate_jetpack() -> str:
     s = [head(H, "jetpack — 6.4x parallel, and the intrinsic it does not beat",
               "Blocks flow through a bounded in-flight window and leave compressed. A hand-vectorised "
               "Adler-32 checksum is compared digit by digit against java.util.zip and matches exactly. "
-              "The measured table lists the JDK's native intrinsic at 14.1 gigabytes per second, "
+              "The measured table lists the JDK's native intrinsic at 14.06 gigabytes per second, "
               "marked not beaten.", LOOP, key="plate-2-jetpack.svg")]
     s.append(f""".blk{{animation:sq {LOOP}s linear infinite;transform-box:fill-box;transform-origin:left center}}
 @keyframes sq{{0%,14%{{transform:translateX(0) scaleX(1)}}44%{{transform:translateX(214px) scaleX(.42)}}
@@ -524,7 +524,7 @@ def plate_mobile(key: str, accent: str, kicker: str, hero: str, unit: str,
 
 MOBILE = {
  "m-1-glyph.svg": ("GLYPH", AMBER, "97.01", "%", "A neural net written from", "scratch in C++. 299 wrong.",
-   "Glyph scores 97.01 percent on the 10,000-image MNIST test set — a neural network written from scratch in C++ — which means 299 wrong."),
+   "Glyph scores 97.01 percent on the MNIST test set — a neural network written from scratch in C++ — which means 299 wrong."),
  "m-2-jetpack.svg": ("JETPACK", "#B8E62E", "6.4", "×", "Parallel gzip on JDK 25.", "The JDK intrinsic still wins.",
    "jetpack compresses roughly 6.4 times faster in parallel on JDK 25; the JDK's own native checksum intrinsic is still faster than the hand-vectorised one."),
  "m-3-cadence.svg": ("CADENCE", "#34D399", "36", "", "handlers bundled into one", "function. Vercel allows 12.",

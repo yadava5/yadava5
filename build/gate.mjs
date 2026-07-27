@@ -23,12 +23,13 @@ import { dirname, join } from 'node:path';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const ASSETS = join(ROOT, 'assets');
 const LEFT = 150, RIGHT = 730;
+const M_LEFT = 30, M_RIGHT = 412;   // the 440-wide mobile canvas
 const fails = [];
 
 const browser = await chromium.launch();
 const page = await browser.newPage();
 
-for (const file of readdirSync(ASSETS).filter(f => /^plate-.*\.svg$/.test(f)).sort()) {
+for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)).sort()) {
   const svg = readFileSync(join(ASSETS, file), 'utf8');
 
   // 1 — does it render when embedded the way GitHub embeds it?
@@ -43,6 +44,8 @@ for (const file of readdirSync(ASSETS).filter(f => /^plate-.*\.svg$/.test(f)).so
 
   // measure inside the live document
   await page.setContent(`<body style="margin:0">${svg}</body>`);
+  const mobile = /^m-/.test(file);
+  const L = mobile ? M_LEFT : LEFT, R = mobile ? M_RIGHT : RIGHT;
   const r = await page.evaluate(({ LEFT, RIGHT }) => {
     const out = { texts: [], boxes: [], h: 0, faint: [], zero: [] };
     const svgEl = document.querySelector('svg');
@@ -94,8 +97,8 @@ for (const file of readdirSync(ASSETS).filter(f => /^plate-.*\.svg$/.test(f)).so
 
   // 3 — canvas + type column
   for (const t of r.texts) {
-    if (t.x < LEFT - 2 || t.x + t.w > RIGHT + 2)
-      fails.push(`${file}: "${t.s}" outside the 150–730 column (${t.x.toFixed(0)}→${(t.x + t.w).toFixed(0)})`);
+    if (t.x < L - 2 || t.x + t.w > R + 2)
+      fails.push(`${file}: "${t.s}" outside the ${L}–${R} column (${t.x.toFixed(0)}→${(t.x + t.w).toFixed(0)})`);
     if (t.y < 0 || t.y + t.h > r.h)
       fails.push(`${file}: "${t.s}" outside the canvas (y ${t.y.toFixed(0)}→${(t.y + t.h).toFixed(0)}, h=${r.h})`);
   }
@@ -111,6 +114,16 @@ for (const file of readdirSync(ASSETS).filter(f => /^plate-.*\.svg$/.test(f)).so
   // 5 / 6 — frame zero, and evidence that hides for most of the loop
   if (r.zero.length) fails.push(`${file}: invisible at frame zero — ${[...new Set(r.zero)].join(', ')}`);
   if (r.faint.length) fails.push(`${file}: visible <50% of the loop — ${[...new Set(r.faint)].join(', ')}`);
+
+  // strip every tag so tspan-split values ("97.01<tspan>%") read as one string
+  const drawn = svg.replace(/<style[\s\S]*?<\/style>/g, ' ')
+                   .replace(/<(?:title|desc)>[\s\S]*?<\/(?:title|desc)>/g, ' ')
+                   .replace(/<[^>]*>/g, '').replace(/,/g, '');
+  const meta = [...svg.matchAll(/<(?:title|desc)>([^<]*)<\/(?:title|desc)>/g)].map(m => m[1]).join(' ').replace(/,/g, '');
+  const nums = [...new Set((meta.match(/\d+\.\d+|\b\d{2,}\b/g) || []))];
+  for (const n of nums)
+    if (!drawn.includes(n) && !/^(10|20|25|30|32|64|96|100|500|880|440)$/.test(n))
+      fails.push(`${file}: description says "${n}" but the plate never draws it`);
 
   console.log(`  measured ${file}`);
 }
