@@ -142,9 +142,14 @@ for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)
         //     text-anchor="end" is exempt — its right edge is exact by
         //     construction, and it is the start that floats.
         if (A.tag === 'text') {
+          // Chromium on Linux advances ~3.5% wider than on macOS for the same
+          // embedded woff2 — it accumulates per character, so a long label that
+          // just fits locally overruns the column on CI. Judging the string at
+          // 105% of its measured width makes the VERDICT identical on both, at
+          // the cost of demanding real margin instead of a lucky fit.
           const anchored = getComputedStyle(A.el).textAnchor === 'end';
-          const limit = anchored ? R + TOL : R - 6;
-          if (A.x < L - TOL || A.x + A.w > limit)
+          const w = anchored ? A.w : Math.max(A.w * 1.05, A.w + 6);
+          if (A.x < L - TOL || A.x + w > R + TOL)
             out.push(`${A.nm} outside the ${L}-${R} column${at} (${Math.round(A.x)}->${Math.round(A.x + A.w)})`);
         }
 

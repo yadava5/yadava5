@@ -158,7 +158,7 @@ def plate_glyph() -> str:
 
     # CLAIM — the seven, drawn by hand
     s.append(f'<text x="150" y="56" class="lbl">CLAIM</text>')
-    s.append(f'<text x="330" y="56" class="lbl">MECHANISM — 3 HAND-WRITTEN, 1 AUTO</text>')
+    s.append(f'<text x="330" y="56" class="lbl">MECHANISM — 3 BY HAND, 1 AUTO</text>')
     s.append(f'<g transform="translate(150,80) scale(1.15)"><path class="ink" d="{DIGITS[7]}" pathLength="1"/></g>')
 
     # MECHANISM — four instruction sets, one answer
@@ -176,7 +176,7 @@ def plate_glyph() -> str:
     s.append(f'<path d="M150 288H730" stroke="{RULE}"/>')
     s.append(f'<text x="150" y="368" class="hero">97.01<tspan class="unit">%</tspan></text>')
     s.append(f'<text x="470" y="368" class="lbl">MNIST TEST · n=10,000</text>')
-    s.append(f'<text x="150" y="412" class="say">299 wrong, all drawn below. 79 above 0.9 conf.</text>')
+    s.append(f'<text x="150" y="412" class="say">299 wrong, drawn below. 79 above 0.9 conf.</text>')
 
     # THE MOVE — the REAL errors. Each mark is the true label of one image the
     # model got wrong, read from benchmarks/mnist_misclassified.csv in the Glyph
