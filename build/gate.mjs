@@ -128,9 +128,17 @@ for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)
         if (A.x < -TOL || A.y < -TOL || A.x + A.w > W + TOL || A.y + A.h > H + TOL)
           out.push(`${A.nm} leaves the canvas${at} (${Math.round(A.x)},${Math.round(A.y)} ${Math.round(A.w)}x${Math.round(A.h)}, canvas ${W}x${H})`);
 
-        // 5 — the type column
-        if (A.tag === 'text' && (A.x < L - TOL || A.x + A.w > R + TOL))
-          out.push(`${A.nm} outside the ${L}-${R} column${at} (${Math.round(A.x)}->${Math.round(A.x + A.w)})`);
+        // 5 — the type column. Left-anchored text must stop SAFE=6u short of
+        //     the edge: the same string measured 730 on macOS and 733 on Linux
+        //     CI, so anything flush against the column is a platform coin-flip.
+        //     text-anchor="end" is exempt — its right edge is exact by
+        //     construction, and it is the start that floats.
+        if (A.tag === 'text') {
+          const anchored = getComputedStyle(A.el).textAnchor === 'end';
+          const limit = anchored ? R + TOL : R - 6;
+          if (A.x < L - TOL || A.x + A.w > limit)
+            out.push(`${A.nm} outside the ${L}-${R} column${at} (${Math.round(A.x)}->${Math.round(A.x + A.w)})`);
+        }
 
         for (let b = a + 1; b < vis.length; b++) {
           const B = vis[b];

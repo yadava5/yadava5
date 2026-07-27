@@ -360,7 +360,7 @@ def plate_applied() -> str:
     s.append(f'<rect class="div" x="504" y="128" width="30" height="20" rx="2" fill="none" '
              f'stroke="{AMBER}" stroke-width="1.6" style="animation-delay:{round(-SET + 0.2,3)}s"/>')
     s.append(f'<circle cx="700" cy="310" r="11" fill="none" stroke="{AMBER}" stroke-width="1.4"/>')
-    s.append(f'<text x="650" y="344" class="lbl" fill="{AMBER}">A HUMAN</text>')
+    s.append(f'<text x="634" y="344" class="lbl" fill="{AMBER}">A HUMAN</text>')
     s.append(f'<text x="150" y="376" class="say">It is allowed to say it doesn’t know.</text>')
 
     s.append(f'<path d="M150 408H730" stroke="{RULE}"/>')
@@ -455,7 +455,7 @@ def plate_release() -> str:
     s.append(f'<path d="M530 320V400" stroke="{WIRE}"/>')
     s.append(f'<circle class="tk2" cx="176" cy="372" r="6" fill="{INDIGO}" style="animation-delay:{-SET}s"/>')
     s.append(f'<text x="150" y="418" class="fine">non-root · read-only rootfs · internal net (dev)</text>')
-    s.append(f'<text class="ok lbl" x="640" y="418" fill="{INDIGO}" style="animation-delay:{-SET}s">DEPLOYED</text>')
+    s.append(f'<text class="ok lbl" x="618" y="418" fill="{INDIGO}" style="animation-delay:{-SET}s">DEPLOYED</text>')
 
     s.append(f'<text x="150" y="496" class="hero">2</text>')
     s.append(f'<text x="210" y="480" class="lbl">APPROVAL GATES BEFORE</text>')
