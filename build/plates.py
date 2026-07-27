@@ -63,7 +63,7 @@ text{{font-family:'M',ui-monospace,SFMono-Regular,Menlo,monospace}}
 .big40{{font-size:40px;letter-spacing:-0.5px;fill:{INK};font-weight:600}}
 .fine{{font-size:14px;letter-spacing:0.6px;fill:{INK2}}}
 .unit{{font-size:29px;fill:{INK2}}}
-.say{{font-size:19px;fill:{INK2}}}
+.say{{font-size:17px;fill:{INK2}}}
 @media (prefers-reduced-motion: reduce){{*{{animation:none!important}}}}
 """
 
@@ -87,7 +87,7 @@ def plate_glyph() -> str:
     H, LOOP, SET = 540, 9.1, 7.6
     a = AMBER
     s = [head(H, "Glyph — 97.01%, and the 299 it gets wrong",
-              "A handwritten seven draws itself; four instruction sets each return the same answer; "
+              "A handwritten seven draws itself. Three hand-written SIMD kernels (AVX-512, AVX2, NEON) and an autovectorised WebAssembly build each carry the same dot product. "
               "the model scores 97.01 percent on the 10,000-image test set, which means 299 wrong. Every one of those 299 errors is drawn below, each mark the true label of an image the model missed; 79 of them were made with over 0.9 confidence.", LOOP, key="plate-1-glyph.svg")]
     s.append(f""".ink{{fill:none;stroke:{a};stroke-width:7;stroke-linecap:round;stroke-linejoin:round;
   stroke-dasharray:1;stroke-dashoffset:0;animation:draw {LOOP}s linear infinite;animation-delay:{-SET}s}}
@@ -103,7 +103,7 @@ def plate_glyph() -> str:
     s.append(f'<text x="150" y="{60+200}" class="lbl">CLAIM</text>')
 
     # MECHANISM — four instruction sets, one answer
-    isas = ["AVX-512", "AVX2", "NEON", "wasm128"]
+    isas = ["AVX-512", "AVX2", "NEON", "wasm (auto)"]
     for i, name in enumerate(isas):
         y = 78 + i * 34
         s.append(f'<text x="330" y="{y+5}" class="key">{name}</text>')
@@ -111,15 +111,14 @@ def plate_glyph() -> str:
         s.append(f'<circle class="tok" cx="446" cy="{y}" r="4" fill="{a}" '
                  f'style="animation-delay:{round(-SET + i*0.06,3)}s"/>')
     s.append(f'<path d="M660 74V186" stroke="{INK3}" stroke-width="1" opacity=".45"/>')
-    s.append(f'<text x="596" y="206" class="key" fill="{INK2}">same answer</text>')
-    s.append(f'<text x="330" y="{60+200}" class="lbl">MECHANISM — four paths, one result</text>')
+    s.append(f'<text x="560" y="206" class="key" fill="{INK2}">one kernel each</text>')
+    s.append(f'<text x="330" y="{60+200}" class="lbl">MECHANISM — 3 HAND-WRITTEN, 1 AUTO</text>')
 
     # VERDICT
     s.append(f'<path d="M150 296H730" stroke="{EDGE}"/>')
     s.append(f'<text x="150" y="{296+56}" class="big">97.01<tspan class="unit">%</tspan></text>')
     s.append(f'<text x="470" y="{296+56}" class="key">MNIST TEST · n=10,000</text>')
-    s.append(f'<text x="150" y="{296+106}" class="say">299 wrong. Every one is drawn below.</text>')
-    s.append(f'<text x="150" y="{296+130}" class="say">79 of them with over 0.9 confidence.</text>')
+    s.append(f'<text x="150" y="{296+106}" class="say">299 wrong — all drawn below. 79 above 0.9 confidence.</text>')
 
     # THE MOVE — the REAL errors. Each mark is the true label of one image the
     # model got wrong, read from benchmarks/mnist_misclassified.csv in the Glyph
@@ -129,8 +128,7 @@ def plate_glyph() -> str:
     for i in range(299):
         c, r = i % cols, i // cols
         x, y = gx + c * 12.4, gy + r * 14.0
-        s.append(f'<g class="wrong" transform="translate({x:.1f},{y:.1f}) scale(0.072)" '
-                 f'style="animation-delay:{round(-SET + (i%46)*0.004,3)}s">'
+        s.append(f'<g class="wrong" transform="translate({x:.1f},{y:.1f}) scale(0.072)">'
                  f'<path d="{DIGITS[errs[i]]}" fill="none" stroke="{a}" stroke-width="15" '
                  f'stroke-linecap="round"/></g>')
     return "".join(s) + "</svg>"
@@ -142,7 +140,7 @@ def plate_refusal() -> str:
     s = [head(H, "The refusal — the database declines to return another tenant's rows",
               "A query from tenant A travels toward tenant B's rows, reaches the isolation boundary, "
               "and stops. Zero rows are returned.", LOOP, key="plate-5-refusal.svg")]
-    s.append(f""".q{{animation:seek {LOOP}s linear infinite;animation-delay:{-SET}s}}
+    s.append(f""".q{{animation:seek {LOOP}s cubic-bezier(.16,1,.3,1) infinite;animation-delay:{-SET}s}}
 @keyframes seek{{0%{{opacity:0;transform:translateX(0)}}6%{{opacity:1;transform:translateX(0)}}
   /* it decelerates into the boundary and simply stops — no bounce, no alarm */
   30%{{opacity:1;transform:translateX(110px)}}36%,100%{{opacity:1;transform:translateX(116px)}}}}
@@ -202,7 +200,7 @@ def plate_thesis() -> str:
 # ────────────────────────────────────────────────────────────── PLATE II
 def plate_jetpack() -> str:
     H, LOOP, SET, a = 480, 10.3, 7.2, "#B8E62E"
-    s = [head(H, "jetpack — 6.5x parallel, and the intrinsic it does not beat",
+    s = [head(H, "jetpack — 6.4x parallel, and the intrinsic it does not beat",
               "Blocks flow through a bounded in-flight window and leave compressed. A hand-vectorised "
               "Adler-32 checksum is compared digit by digit against java.util.zip and matches exactly. "
               "The measured table lists the JDK's native intrinsic at 14.1 gigabytes per second, "
@@ -527,10 +525,10 @@ def plate_mobile(key: str, accent: str, kicker: str, hero: str, unit: str,
 MOBILE = {
  "m-1-glyph.svg": ("GLYPH", AMBER, "97.01", "%", "A neural net written from", "scratch in C++. 299 wrong.",
    "Glyph scores 97.01 percent on the 10,000-image MNIST test set — a neural network written from scratch in C++ — which means 299 wrong."),
- "m-2-jetpack.svg": ("JETPACK", "#B8E62E", "6.5", "×", "Parallel gzip on JDK 25.", "The JDK intrinsic still wins.",
-   "jetpack compresses roughly 6.5 times faster in parallel on JDK 25; the JDK's own native checksum intrinsic is still faster than the hand-vectorised one."),
- "m-3-cadence.svg": ("CADENCE", "#34D399", "36", "", "handlers in one function,", "under Vercel's cap of 12.",
-   "Cadence bundles 36 API handlers into a single serverless function to stay inside Vercel's 12-function cap."),
+ "m-2-jetpack.svg": ("JETPACK", "#B8E62E", "6.4", "×", "Parallel gzip on JDK 25.", "The JDK intrinsic still wins.",
+   "jetpack compresses roughly 6.4 times faster in parallel on JDK 25; the JDK's own native checksum intrinsic is still faster than the hand-vectorised one."),
+ "m-3-cadence.svg": ("CADENCE", "#34D399", "36", "", "handlers bundled into one", "function. Vercel allows 12.",
+   "Cadence bundles its 36 API handlers into a single serverless function, because Vercel's plan allows only 12 functions."),
  "m-4-applied.svg": ("APPLIED", CYAN, "0.979", "", "macro-F1 on 96 messages.", "Below 0.85 it asks a human.",
    "Applied scores 0.979 macro-F1 on a 96-message evaluation set; anything below the 0.85 confidence gate is referred to a human."),
  "m-5-refusal.svg": ("THE REFUSAL", CYAN, "0", " rows", "The app didn't remember", "to filter. The database refused.",

@@ -12,7 +12,7 @@ What follows is five system plates (LifeQuest and AutoML share the last), plus o
 
 <picture>
   <source media="(max-width: 500px)" srcset="./assets/m-1-glyph.svg">
-  <img src="./assets/plate-1-glyph.svg" width="100%" alt="A handwritten seven draws itself; four instruction sets each return the same answer; the model scores 97.01 percent on the 10,000-image test set, which means 299 wrong. Every one of those 299 errors is drawn below, each mark the true label of an image the model missed; 79 of them were made with over 0.9 confidence.">
+  <img src="./assets/plate-1-glyph.svg" width="100%" alt="A handwritten seven draws itself. Three hand-written SIMD kernels (AVX-512, AVX2, NEON) and an autovectorised WebAssembly build each carry the same dot product. the model scores 97.01 percent on the 10,000-image test set, which means 299 wrong. Every one of those 299 errors is drawn below, each mark the true label of an image the model missed; 79 of them were made with over 0.9 confidence.">
 </picture>
 
 A neural network written **from scratch in C++** — no framework — with hand-written SIMD kernels for AVX-512, AVX2, NEON and wasm128, compiled to WebAssembly — and the live demo runs it: `vercel.json` builds with `VITE_ENABLE_WASM=true` and the site serves a 46,960-byte `.wasm`. A labelled JS matcher ships as the fallback path, and the app marks it "never used for accuracy or timing claims".
