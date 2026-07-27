@@ -215,9 +215,9 @@ def plate_jetpack() -> str:
 .row{{animation:rw {LOOP}s linear infinite}}
 @keyframes rw{{0%,22%{{opacity:0}}32%,100%{{opacity:1}}}}
 </style>{slab(H)}{rail(H, a)}""")
-    s.append(f'<text x="150" y="86" class="big60">6.5<tspan class="unit">×</tspan></text>')
+    s.append(f'<text x="150" y="86" class="big60">6.4<tspan class="unit">×</tspan></text>')
     s.append(f'<text x="330" y="56" class="key">PARALLEL vs SINGLE-THREAD GZIP</text>')
-    s.append(f'<text x="330" y="78" class="lbl">JDK 25 · 10 CORES · ±50% QUICK RUN</text>')
+    s.append(f'<text x="330" y="78" class="lbl">JDK 25 · M1 PRO · 3 FORKS · CI ±5%</text>')
     s.append(f'<text x="150" y="124" class="lbl">CLAIM</text>')
 
     # the bounded in-flight window — the bracket never overflows; that IS the point
@@ -246,11 +246,11 @@ def plate_jetpack() -> str:
     # the verdict — the measured table, including the reference he does NOT beat
     s.append(f'<path d="M150 344H730" stroke="{EDGE}"/>')
     rows = [
-        ("Adler-32 scalar (pure Java)", "1.54 GB/s", ""),
-        ("Adler-32 hand-vectorised", "4.34 GB/s", "2.8× scalar"),
-        ("java.util.zip intrinsic", "14.1 GB/s", "not beaten"),
-        ("gzip, one thread", "~67 MB/s", ""),
-        ("parallel virtual threads", "~435 MB/s", "6.5×"),
+        ("Adler-32 scalar (pure Java)", "1.52 GB/s", ""),
+        ("Adler-32 hand-vectorised", "4.26 GB/s", "2.8× scalar"),
+        ("java.util.zip intrinsic", "14.06 GB/s", "not beaten"),
+        ("gzip, one thread", "66.2 MB/s", ""),
+        ("parallel virtual threads", "422 MB/s", "6.4×"),
     ]
     for i, (name, score, note) in enumerate(rows):
         y = 368 + i * 21

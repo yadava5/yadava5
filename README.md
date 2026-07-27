@@ -36,9 +36,9 @@ Parallel, gzip-compatible compression on **JDK 25**: one virtual thread per bloc
 
 The checksum is hand-vectorised — so it is checked **bit-identical against `java.util.zip.Adler32`** across every input the test suite throws at it. The output is a byte-valid single gzip member any tool can decompress.
 
-**~435 MB/s parallel vs ~67 MB/s single-threaded — roughly 6.5×** on 10 cores. It is a quick JMH run (1 fork, 3+4 iterations), so read the multiple, not the digits.
+**422 MB/s parallel vs 66.2 MB/s single-threaded — 6.4×** on an M1 Pro (10 cores). That is a 3-fork JMH run with a 99.9% confidence interval of ±5%, committed at [`benchmarks/jmh-results-rigorous.json`](https://github.com/yadava5/jetpack-compress/blob/main/benchmarks/jmh-results-rigorous.json) with the machine spec beside it, so you can re-run it and check.
 
-And the row that stays in the table because it's true: the hand-vectorised Adler-32 reaches **4.34 GB/s**, while the JDK's own native intrinsic does **14.1 GB/s**. I don't beat it. The SIMD result is honest against the *scalar* baseline (2.8×), and the intrinsic is printed next to it as the reference it loses to.
+And the row that stays in the table because it's true: the hand-vectorised Adler-32 reaches **4.26 GB/s**, while the JDK's own native intrinsic does **14.06 GB/s**. I don't beat it. The SIMD result is honest against the *scalar* baseline (2.80×, reproduced to three significant figures across two independent runs), and the intrinsic is printed next to it as the reference it loses to.
 
 [live](https://jetpack-compress.vercel.app) · [system card](https://jetpack-compress.vercel.app/system-card) · [repo](https://github.com/yadava5/jetpack-compress)
 
