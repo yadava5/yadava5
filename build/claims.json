@@ -794,6 +794,7 @@
     "README.md:6": "'Six systems' \u2014 a count of this page's own contents, which the page then enumerates one per section; the reader checks it by scrolling",
     "README.md:5": "'Five system cards' \u2014 likewise enumerated on the page, and the sixth is named as an expo booklet",
     "plate-7-colophon.svg:6": "'Six systems' \u2014 the colophon restating the page's own contents",
+    "m-0-thesis.svg:6": "'6 systems' \u2014 the same count of this page's own contents that README.md:6 and plate-7-colophon.svg:6 exempt, drawn as the mobile thesis hero",
     "plate-7-colophon.svg:5": "'Five system cards' \u2014 likewise",
     "README.md:256": "the '256' in `shasum -a 256` \u2014 the name of the hash algorithm in a command the reader is invited to run",
     "plate-0-thesis.svg:03.23": "part of the contact address aesh.03.23@gmail.com",
@@ -829,6 +830,7 @@
       "unit": "M Oracle Analytics query logs",
       "drawn_on": [
         "plate-0b-work.svg",
+        "m-0b-work.svg",
         "README.md"
       ],
       "source": "Ayush Yadav CV, July 2026",
@@ -840,6 +842,7 @@
       "unit": "M-row field-usage table",
       "drawn_on": [
         "plate-0b-work.svg",
+        "m-0b-work.svg",
         "README.md"
       ],
       "source": "Ayush Yadav CV, July 2026",
