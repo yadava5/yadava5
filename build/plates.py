@@ -321,6 +321,7 @@ def plate_glyph() -> str:
 # ────────────────────────────────────────────────────────────── PLATE II
 def plate_jetpack() -> str:
     H, LOOP, SET, a = 537, 10.3, 7.2, LIME
+    LOOP2 = round(LOOP / 2, 2)
     s = [head(H, "jetpack — 6.4x parallel, and the intrinsic it does not beat",
               "jetpack: parallel gzip on JDK 25 reaches 422 megabytes per second against 66.2 "
               "single-threaded, a 6.4 times speedup, with blocks held in a bounded in-flight "
@@ -339,6 +340,8 @@ def plate_jetpack() -> str:
   86%{{opacity:1;transform:translateX(0) scaleX(.97)}}
   94%,96%{{opacity:1;transform:translateX(0) scaleX(1)}}
   100%{{opacity:0;transform:translateX(0) scaleX(1)}}}}
+.wscan{{animation:wscan {LOOP2}s linear infinite}}
+@keyframes wscan{{0%{{transform:translateY(0)}}100%{{transform:translateY(112px)}}}}
 .mt{{transform-box:fill-box;transform-origin:left center;animation:mt {LOOP}s {ARRIVE} infinite}}
 @keyframes mt{{0%,6%{{transform:scaleX(0);opacity:0}}11%{{opacity:1}}24%,100%{{transform:scaleX(1);opacity:1}}}}
 .row{{animation:rw {LOOP}s {EASE} infinite}}
@@ -361,6 +364,7 @@ def plate_jetpack() -> str:
     # 404..524 puts 6u of air on each side of the thing it bounds.
     s.append(f'<path d="M174 152V268M174 152H194M174 268H194" stroke="{WIRE}" stroke-width="1"/>')
     s.append(f'<path d="M294 152V268M294 152H274M294 268H274" stroke="{WIRE}" stroke-width="1"/>')
+    s.append(f'<rect class="wscan" x="176" y="153" width="116" height="2" fill="{a}" opacity=".55"/>')
     for i in range(4):
         y = 168 + i * 26
         s.append(f'<rect class="blk" data-max-x="294" x="180" y="{y}" width="107.8" height="16" rx="2" fill="{a}" '
@@ -416,6 +420,8 @@ def plate_cadence() -> str:
 @keyframes ul{{0%,4%{{transform:scaleX(0);opacity:0}}8%{{opacity:1}}18%,100%{{transform:scaleX(1);opacity:1}}}}
 .an{{animation:an {LOOP}s linear infinite}}
 @keyframes an{{0%,6%{{opacity:0}}12%,100%{{opacity:1}}}}
+.now{{animation:now {LOOP}s linear infinite}}
+@keyframes now{{0%{{transform:translateY(0)}}100%{{transform:translateY(70px)}}}}
 .fil{{transform-box:fill-box;transform-origin:center;animation:fil {LOOP}s {BREATHE} infinite}}
 @keyframes fil{{0%,10%{{opacity:0;transform:scale(.94)}}16%{{opacity:1;transform:scale(1)}}
   40%{{transform:scale(1)}}48%{{transform:scale(1.05)}}58%,100%{{transform:scale(1);opacity:1}}}}
@@ -449,6 +455,7 @@ def plate_cadence() -> str:
         s.append(f'<rect x="{x}" y="262" width="96" height="72" rx="3" fill="none" stroke="{WIRE}"/>')
         for hr in (286, 310):
             s.append(f'<path d="M{x} {hr}H{x+96}" stroke="{RULE}" stroke-width="1"/>')
+    s.append(f'<rect class="now" x="110" y="263" width="528" height="2" fill="{a}" opacity=".62"/>')
     s.append(f'<g class="fil" style="animation-delay:{-SET}s">'
              f'<rect x="632" y="288" width="80" height="20" rx="3" fill="#0E2A22" stroke="{a}"/>'
              f'<text x="640" y="302" class="fine" style="fill:{a}">lunch</text></g>')
@@ -605,6 +612,7 @@ def plate_refusal() -> str:
 # ────────────────────────────────────────────────────────────── PLATE VI
 def plate_release() -> str:
     H, LOOP, SET = 570, 13.1, 9.8
+    LOOP2 = round(LOOP / 2, 2)
     s = [head(H, "LifeQuest and Agentic AutoML",
               "LifeQuest turns real-world routines into tracked quests, for people rebuilding "
               "structure after a layoff or in retirement. Agentic AutoML moves a dataset through "
@@ -625,6 +633,8 @@ def plate_release() -> str:
   /* the longest dead hold in the document: it is waiting for a human, and it
      now waits AT the gate at x=530 rather than 110u short of it, inside a wall */
   88%,96%{{opacity:1;transform:translateX(76px)}}100%{{opacity:0;transform:translateX(76px)}}}}
+.scan{{animation:scan {LOOP2}s linear infinite}}
+@keyframes scan{{0%{{transform:translateY(0)}}100%{{transform:translateY(74px)}}}}
 .gtp{{transform-box:fill-box;transform-origin:center;animation:gtp {LOOP}s {IMPACT} infinite}}
 @keyframes gtp{{0%,22%{{transform:scaleY(1)}}28%{{transform:scaleY(1.09)}}
   38%,100%{{transform:scaleY(1)}}}}
@@ -653,6 +663,7 @@ def plate_release() -> str:
     # as the second line of a right-aligned credit block instead of as a label.
     s.append(f'<text x="530" y="316" class="kick" text-anchor="middle">HUMAN APPROVAL</text>')
     s.append(f'<rect x="150" y="320" width="300" height="80" rx="3" fill="none" stroke="{INDIGO}"/>')
+    s.append(f'<rect class="scan" x="152" y="323" width="296" height="3" fill="{INDIGO}" opacity=".68"/>')
     s.append(f'<text x="166" y="340" class="lbl">DOCKER · SANDBOXED</text>')
     # "internal net (dev)": the beta deploy defaults EXECUTION_NETWORK to bridge
 
