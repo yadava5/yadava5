@@ -35,7 +35,18 @@ Design rules encoded here (each one is a finding, not a preference):
   * no animated filters — one animated blur costs more than 4000 animated rects
 """
 from __future__ import annotations
-import base64, json, pathlib
+import base64, json, pathlib, re
+
+# ── the grid, as constants rather than as eight independent judgement calls.
+# Measured across the desktop set before this existed: first ink at 19, 23, 40
+# and 56; rightmost ink 150, 164, 164.8 and 166 short of the canvas. So the
+# document's right edge visibly wandered as you scrolled it, and its top margin
+# had three values. L/R are the type column; TOP is the first baseline for a
+# label row; HERO_GAP is the space between a 64px numeral and the label that
+# explains it, which had been eyeballed at 8.2 on one plate and 23.1 on another.
+L, R = 150, 730
+TOP = 56
+HERO_GAP = 16
 
 # every plate's description is authored ONCE here and flows to three places:
 # the SVG <desc>, the SVG aria-label, and the README's <img alt>. They diverged
@@ -81,6 +92,44 @@ DIGITS = [
     "M60 84C32 80 34 30 60 30C86 30 88 80 60 84C26 88 24 150 60 150C96 150 94 88 60 84Z",
     "M88 74C86 40 54 26 40 50C26 74 44 100 66 96C80 94 88 82 88 74C88 118 78 146 44 150",
 ]
+
+# ── the pen, normalised.
+# Every DIGITS path is authored inside a nominal 120x160 box, but the INK inside
+# that box is a different width for every glyph: "1" spans x 38..64 and "4"
+# spans 28..100. Drawing them all at translate(x,y) therefore left the 299-error
+# grid with mark widths from 1.77u to 4.90u and gaps from 6.40u to 9.23u in a
+# nominal 11.4u cell — a 44% jitter, which is the visible raggedness — and hung
+# the hero "7" 34.5u to the right of the 150 column it was supposed to sit on.
+#
+# The fix is NOT to equalise widths: stretching "1" to the width of "0" would
+# distort the letterforms. It is to measure each glyph's ink and place it
+# deliberately — flush left for the hero, centred in its cell for the grid.
+# Every command in DIGITS takes coordinate PAIRS (M, L, C, Z), so the even-index
+# numbers are the x values.
+def ink(d: str) -> tuple[float, float]:
+    n = [float(v) for v in re.findall(r'-?\d+\.?\d*', d)]
+    xs = n[0::2]
+    return min(xs), max(xs)
+
+
+def digit(d: str, x: float, y: float, scale: float, *, centre: float | None = None) -> str:
+    """Place a glyph so its INK lands where you asked, not its bounding box."""
+    x0, x1 = ink(d)
+    dx = x - x0 * scale if centre is None else x + (centre - (x1 - x0) * scale) / 2 - x0 * scale
+    return f'transform="translate({dx:.2f},{y:.2f}) scale({scale})"'
+
+
+def rail(numeral: str, name: str) -> str:
+    """The chapter rail: every plate names itself at the same right edge.
+
+    This does two jobs. It pins the rightmost ink to R on all eight plates, and
+    it makes the top-to-bottom sequence read as one numbered document rather
+    than eight cards that happen to share a slab — the plates had no shared
+    marker of where you were in the argument.
+    """
+    return (f'<text x="{R}" y="{TOP}" class="lbl" text-anchor="end">'
+            f'<tspan fill="{INK}">{numeral}</tspan>  {name}</text>')
+
 
 EASE = "cubic-bezier(.4,0,.2,1)"
 # EASE is ease-IN-out: it accelerates first, then settles. That is right for a
@@ -137,7 +186,7 @@ def plate_thesis() -> str:
 .ser{{font-family:ui-serif,Georgia,'Times New Roman',serif;font-size:34px;fill:{INK}}}
 </style>{slab(H, AMBER)}""")
     s.append(f'<text x="150" y="56" class="key" letter-spacing="5">AYUSH YADAV</text>')
-    s.append(f'<text x="{W-150}" y="56" class="lbl" text-anchor="end">CS ’26 · MIAMI UNIVERSITY</text>')
+    s.append(f'<text x="{R}" y="{TOP}" class="lbl" text-anchor="end">CS ’26 · MIAMI UNIVERSITY</text>')
     s.append(f'<path class="rule" d="M150 88H{W-150}" pathLength="1" stroke="{WIRE}"/>')
     for i, ln in enumerate(["Every number on this page is", "followed by the thing",
                             "that would catch it."]):
@@ -153,7 +202,7 @@ def plate_thesis() -> str:
 
 # ────────────────────────────────────────────────────────────── PLATE I
 def plate_glyph() -> str:
-    H, LOOP, SET, a = 560, 9.1, 7.6, AMBER
+    H, LOOP, SET, a = 584, 9.1, 7.6, AMBER
     s = [head(H, "Glyph — 97.01%, and the 299 it gets wrong",
               "Glyph: a neural network written from scratch in C++ with hand-written AVX-512, "
               "AVX2 and NEON kernels, plus an autovectorised WebAssembly build. It scores 97.01 "
@@ -171,12 +220,13 @@ def plate_glyph() -> str:
 
     # CLAIM — the seven, drawn by hand
     s.append(f'<text x="150" y="56" class="lbl">CLAIM</text>')
-    s.append(f'<text x="330" y="56" class="lbl">MECHANISM — 3 BY HAND, 1 AUTO</text>')
-    s.append(f'<g transform="translate(150,80) scale(1.15)"><path class="ink" d="{DIGITS[7]}" pathLength="1"/></g>')
+    s.append(f'<text x="330" y="80" class="lbl">MECHANISM — 3 BY HAND, 1 AUTO</text>')
+    s.append(rail("I", "GLYPH"))
+    s.append(f'<g {digit(DIGITS[7], 150, 104, 1.15)}><path class="ink" d="{DIGITS[7]}" pathLength="1"/></g>')
 
     # MECHANISM — four instruction sets, one answer
     for i, name in enumerate(["AVX-512", "AVX2", "NEON", "wasm (auto)"]):
-        y = 96 + i * 34
+        y = 120 + i * 34
         s.append(f'<text x="330" y="{y+5}" class="key">{name}</text>')
         s.append(f'<path d="M470 {y}H660" stroke="{WIRE}" stroke-width="1"/>')
         s.append(f'<circle class="tok" data-rest="one-answer" data-rest-within="2" '
@@ -184,19 +234,19 @@ def plate_glyph() -> str:
                  f'style="animation-delay:{round(-SET + i*0.06,3)}s"/>')
     # four instruction sets, one answer — so all four tokens must actually
     # arrive at the collector, not merely set off in its direction
-    s.append(f'<path id="one-answer" d="M660 92V202" stroke="{WIRE}" stroke-width="1"/>')
+    s.append(f'<path id="one-answer" d="M660 116V226" stroke="{WIRE}" stroke-width="1"/>')
     # It used to say "1 ANSWER", which asserts the four builds agree — and
     # nothing tests that. There is no cross-ISA equivalence test in the repo;
     # the prose two paragraphs down says so itself ("nothing cross-checks
     # them"). The plate was making the stronger claim the README declines to.
-    s.append(f'<text x="330" y="232" class="lbl">4 BUILDS · 1 PATH COMPILED</text>')
+    s.append(f'<text x="330" y="256" class="lbl">4 BUILDS · 1 PATH COMPILED</text>')
 
     # VERDICT — the hero clears the rule by 16u; at 64px its box runs from
     # baseline-64 to baseline+19, which is 84u tall, not the 60 I first assumed.
-    s.append(f'<path d="M150 288H730" stroke="{RULE}"/>')
-    s.append(f'<text x="150" y="368" class="hero">97.01<tspan class="unit">%</tspan></text>')
-    s.append(f'<text x="470" y="368" class="lbl">MNIST TEST · n=10,000</text>')
-    s.append(f'<text x="150" y="412" class="say">299 wrong, drawn below. 79 above 0.9 conf.</text>')
+    s.append(f'<path d="M150 312H730" stroke="{RULE}"/>')
+    s.append(f'<text x="150" y="392" class="hero">97.01<tspan class="unit">%</tspan></text>')
+    s.append(f'<text x="470" y="392" class="lbl">MNIST TEST · n=10,000</text>')
+    s.append(f'<text x="150" y="436" class="say">299 wrong, drawn below. 79 above 0.9 conf.</text>')
 
     # THE MOVE — the REAL errors. Each mark is the true label of one image the
     # model got wrong, read from benchmarks/mnist_misclassified.csv in the Glyph
@@ -204,11 +254,11 @@ def plate_glyph() -> str:
     # 50 per row leaves 49 in the last of six rows. 46 per row left exactly half
     # a row hanging, which reads as a mistake rather than as the end of a list.
     errs = json.loads((ROOT / "errors.json").read_text())["true"]
-    gx, gy, cols = 150, 444, 50
+    gx, gy, cols = 150, 468, 50
     for i in range(len(errs)):
         c, r = i % cols, i // cols
         x, y = gx + c * 11.4, gy + r * 14.0
-        s.append(f'<g class="wrong" transform="translate({x:.1f},{y:.1f}) scale(0.068)">'
+        s.append(f'<g class="wrong" {digit(DIGITS[errs[i]], x, y, 0.068, centre=10.4)}>'
                  f'<path d="{DIGITS[errs[i]]}" fill="none" stroke="{a}" stroke-width="15" '
                  f'stroke-linecap="round"/></g>')
     return "".join(s) + "</svg>"
@@ -216,7 +266,7 @@ def plate_glyph() -> str:
 
 # ────────────────────────────────────────────────────────────── PLATE II
 def plate_jetpack() -> str:
-    H, LOOP, SET, a = 512, 10.3, 7.2, LIME
+    H, LOOP, SET, a = 536, 10.3, 7.2, LIME
     s = [head(H, "jetpack — 6.4x parallel, and the intrinsic it does not beat",
               "jetpack: parallel gzip on JDK 25 reaches 422 megabytes per second against 66.2 "
               "single-threaded, a 6.4 times speedup, with blocks held in a bounded in-flight "
@@ -229,46 +279,51 @@ def plate_jetpack() -> str:
   5%,14%{{opacity:1;transform:translateX(0) scaleX(1)}}
   38%,96%{{opacity:1;transform:translateX(230px) scaleX(.55)}}
   100%{{opacity:0;transform:translateX(230px) scaleX(.55)}}}}
-.mt{{animation:mt {LOOP}s linear infinite}}
-@keyframes mt{{0%,6%{{opacity:0}}14%,100%{{opacity:1}}}}
-.row{{animation:rw {LOOP}s linear infinite}}
-@keyframes rw{{0%,8%{{opacity:0}}16%,100%{{opacity:1}}}}
+.mt{{transform-box:fill-box;transform-origin:left center;animation:mt {LOOP}s {EASE} infinite}}
+@keyframes mt{{0%,6%{{transform:scaleX(0);opacity:0}}11%{{opacity:1}}24%,100%{{transform:scaleX(1);opacity:1}}}}
+.row{{animation:rw {LOOP}s {EASE} infinite}}
+@keyframes rw{{0%,8%{{opacity:.55}}20%,100%{{opacity:1}}}}
 </style>{slab(H, a)}""")
-    s.append(f'<text x="330" y="56" class="lbl">PARALLEL vs SINGLE-THREAD GZIP</text>')
+    s.append(f'<text x="330" y="80" class="lbl">PARALLEL vs SINGLE-THREAD GZIP</text>')
+    s.append(rail("II", "JETPACK"))
     # NOT "CI ±5%": the 3-fork run's 99.9% intervals span ±0.7% to ±6.9%, so a
     # single figure would be a claim the committed JSON contradicts.
-    s.append(f'<text x="330" y="80" class="lbl">JDK 25 · M1 PRO · 3 JMH FORKS</text>')
-    s.append(f'<text x="150" y="84" class="hero">6.4<tspan class="unit">×</tspan></text>')
-    s.append(f'<text x="150" y="128" class="lbl">CLAIM</text>')
+    s.append(f'<text x="330" y="104" class="lbl">JDK 25 · M1 PRO · 3 JMH FORKS</text>')
+    s.append(f'<text x="150" y="108" class="hero">6.4<tspan class="unit">×</tspan></text>')
+    s.append(f'<text x="150" y="152" class="lbl">CLAIM</text>')
 
     # The bounded in-flight window. The bracket used to span 400→636 while the
     # compressed blocks came to rest at 410→518, leaving half the window
     # permanently void — it drew a window twice the size of the thing it bounds.
-    s.append(f'<text x="400" y="112" class="lbl">BOUNDED IN-FLIGHT WINDOW</text>')
-    s.append(f'<path d="M400 128V244M400 128H420M400 244H420" stroke="{WIRE}" stroke-width="1"/>')
-    s.append(f'<path d="M540 128V244M540 128H520M540 244H520" stroke="{WIRE}" stroke-width="1"/>')
+    s.append(f'<text x="400" y="136" class="lbl">BOUNDED IN-FLIGHT WINDOW</text>')
+    # the window used to span 400..540 while the compressed blocks came to rest
+    # at 410..517.8 — 32.2u of permanent void, split unevenly 10 left / 22 right.
+    # 404..524 puts 6u of air on each side of the thing it bounds.
+    s.append(f'<path d="M404 152V268M404 152H424M404 268H424" stroke="{WIRE}" stroke-width="1"/>')
+    s.append(f'<path d="M524 152V268M524 152H504M524 268H504" stroke="{WIRE}" stroke-width="1"/>')
     for i in range(4):
-        y = 144 + i * 26
+        y = 168 + i * 26
         s.append(f'<rect class="blk" x="180" y="{y}" width="196" height="16" rx="2" fill="{a}" opacity=".85" '
                  f'style="animation-delay:{round(-SET + i*0.22,3)}s"/>')
     for j, ln in enumerate(["peak memory", "tracks the window,", "not the file"]):
-        s.append(f'<text x="560" y="{170 + j*20}" class="fine">{ln}</text>')
-    s.append(f'<text x="150" y="264" class="lbl">MECHANISM — one virtual thread per block</text>')
+        s.append(f'<text x="560" y="{194 + j*20}" class="fine">{ln}</text>')
+    s.append(f'<text x="150" y="288" class="lbl">MECHANISM — one virtual thread per block</text>')
 
     # checksum audit: the fast path checked against the reference
-    s.append(f'<text x="150" y="304" class="lbl">SIMD ADLER-32</text>')
-    s.append(f'<text x="150" y="328" class="lbl">java.util.zip</text>')
+    s.append(f'<text x="150" y="328" class="lbl">SIMD ADLER-32</text>')
+    s.append(f'<text x="150" y="352" class="lbl">java.util.zip</text>')
     # the known-answer vector the repo commits: Adler32Test.java:36-37
-    for i, ch in enumerate("11E60398"):
-        x = 330 + i * 26
-        s.append(f'<text x="{x}" y="304" class="key">{ch}</text>')
-        s.append(f'<text x="{x}" y="328" class="key">{ch}</text>')
-        s.append(f'<rect class="mt" x="{x-3}" y="310" width="20" height="2" fill="{a}" '
-                 f'style="animation-delay:{round(-SET + i*0.05,3)}s"/>')
-    s.append(f'<text x="556" y="320" class="lbl" fill="{a}">identical</text>')
+    # One string per row, not eight <text> elements at a 26u pitch against an
+    # 11.2u advance — 132% tracking, which read as eight loose characters rather
+    # than as a hex value. The match is now drawn as a rule that sweeps the
+    # width of the two rows it is comparing.
+    s.append(f'<text x="330" y="328" class="key">11E60398</text>')
+    s.append(f'<text x="330" y="352" class="key">11E60398</text>')
+    s.append(f'<rect class="mt" x="330" y="334" width="90" height="2" fill="{a}" style="animation-delay:{-SET}s"/>')
+    s.append(f'<text x="556" y="344" class="lbl" fill="{a}">identical</text>')
 
     # the verdict — the measured table, including the reference he does NOT beat
-    s.append(f'<path d="M150 352H730" stroke="{RULE}"/>')
+    s.append(f'<path d="M150 376H730" stroke="{RULE}"/>')
     rows = [
         ("Adler-32 scalar (pure Java)", "1.52 GB/s", ""),
         ("Adler-32 hand-vectorised", "4.26 GB/s", "2.80×"),
@@ -277,7 +332,7 @@ def plate_jetpack() -> str:
         ("parallel virtual threads", "422 MB/s", "6.4×"),
     ]
     for i, (name, score, note) in enumerate(rows):
-        y = 384 + i * 24
+        y = 408 + i * 24
         dl = round(-SET + i * 0.16, 3)
         s.append(f'<text class="row lbl" x="150" y="{y}" style="animation-delay:{dl}s">{name}</text>')
         s.append(f'<text class="row key" x="470" y="{y}" style="animation-delay:{dl}s">{score}</text>')
@@ -305,6 +360,7 @@ def plate_cadence() -> str:
 @keyframes fil{{0%,10%{{opacity:0}}16%,100%{{opacity:1}}}}
 </style>{slab(H, a)}""")
     s.append(f'<text x="150" y="56" class="lbl">CLAIM — plain English in, calendar out</text>')
+    s.append(rail("III", "CADENCE"))
     s.append(f'<text x="150" y="104" font-size="{FS}" fill="{INK}" letter-spacing="0">{SENT}</text>')
     # Four passes annotating the SAME sentence in place — a linguist's gloss.
     # The labels used to stagger onto two rows to dodge a collision, which made
@@ -368,11 +424,11 @@ def plate_applied() -> str:
     # because the run that produced it was overwritten by the deterministic
     # re-run. So the hero is the number I can hand you, labelled for what it
     # actually measures, and the gap is stated rather than papered over.
-    s.append(f'<text x="150" y="88" class="hero">0.979</text>')
-    s.append(f'<text x="400" y="56" class="lbl">MACRO-F1 · 96-MSG EVAL SET</text>')
-    s.append(f'<text x="400" y="80" class="lbl" fill="{AMBER}">RULES LAYER ONLY</text>')
-    s.append(f'<text x="400" y="104" class="fine">SetFit off, embeddings emptied</text>')
-    s.append(f'<text x="150" y="128" class="lbl">CLAIM</text>')
+    s.append(f'<text x="150" y="104" class="hero">0.979</text>')
+    s.append(rail("IV", "APPLIED"))
+    s.append(f'<text x="400" y="80" class="lbl">MACRO-F1 · 96-MSG EVAL SET</text>')
+    s.append(f'<text x="400" y="100" class="lbl" fill="{AMBER}">RULES LAYER ONLY</text>')
+    s.append(f'<text x="400" y="118" class="fine">SetFit off, embeddings emptied</text>')
 
     for label, y in [("201 REGEX RULES", 160), ("e5 EMBEDDINGS", 200), ("SETFIT HEAD", 240)]:
         s.append(f'<text x="150" y="{y+5}" class="lbl">{label}</text>')
@@ -408,7 +464,7 @@ def plate_applied() -> str:
 
 # ────────────────────────────────────────────────────────────── PLATE V
 def plate_refusal() -> str:
-    H, LOOP, SET, a = 428, 6.7, 4.7, EMERALD
+    H, LOOP, SET, a = 452, 6.7, 4.7, EMERALD
     s = [head(H, "The refusal — the database declines to return another tenant's rows",
               "A query from one tenant travels toward another tenant's rows, reaches the "
               "PostgreSQL row-level-security boundary, and stops. Only the querying tenant's own "
@@ -434,10 +490,11 @@ def plate_refusal() -> str:
 @keyframes land{{0%,14%{{opacity:0}}22%,100%{{opacity:1}}}}
 </style>{slab(H, a)}""")
 
-    s.append(f'<text x="150" y="56" class="lbl">TENANT B — THE CALLER</text>')
-    s.append(f'<text x="560" y="56" class="lbl">TENANT A</text>')
+    s.append(rail("V", "THE REFUSAL"))
+    s.append(f'<text x="150" y="80" class="lbl">TENANT B — THE CALLER</text>')
+    s.append(f'<text x="560" y="80" class="lbl">TENANT A</text>')
     for i in range(4):
-        y = 80 + i * 28
+        y = 104 + i * 28
         # Both stacks are 170 wide. They were 160 and 170 — two things that must
         # read as symmetric peers, differing by 10u for no reason.
         # And they are no longer the same grey: B's rows are the ones that come
@@ -448,7 +505,7 @@ def plate_refusal() -> str:
 
     # The boundary now sits on the midpoint between the two stacks (320→560) and
     # is a 2u wall rather than a 1u hairline the reader cannot find.
-    s.append(f'<rect class="wall" id="rls-boundary" x="439" y="68" width="2" height="132" fill="{WIRE}"/>')
+    s.append(f'<rect class="wall" id="rls-boundary" x="439" y="92" width="2" height="132" fill="{WIRE}"/>')
     # data-rest is the caption, made checkable, and 2u means CONTACT. This plate
     # has already shipped inverted once — tenant A asking and B receiving — and
     # every geometric check passed it, because an inverted diagram is still a
@@ -456,18 +513,18 @@ def plate_refusal() -> str:
     # geometry stopped 5u short, so any allowance above 4 would have called the
     # defect this check exists to catch a pass.
     s.append(f'<circle class="q" data-rest="rls-boundary" data-rest-within="2" '
-             f'cx="330" cy="89" r="5" fill="{a}"/>')
+             f'cx="330" cy="113" r="5" fill="{a}"/>')
 
     # unfiltered on purpose: a predicate that names B and returns B proves nothing
-    s.append(f'<text x="150" y="216" class="key">SELECT count(*) FROM tasks</text>')
-    s.append(f'<text class="zero sub" x="150" y="256">B only</text>')
-    s.append(f'<text x="440" y="248" class="lbl">ROW-LEVEL SECURITY</text>')
+    s.append(f'<text x="150" y="240" class="key">SELECT count(*) FROM tasks</text>')
+    s.append(f'<text class="zero sub" x="150" y="280">B only</text>')
+    s.append(f'<text x="440" y="272" class="lbl">ROW-LEVEL SECURITY</text>')
 
-    s.append(f'<path d="M150 296H730" stroke="{RULE}"/>')
-    s.append(f'<text x="150" y="328" class="say">The app didn’t remember to filter.</text>')
-    s.append(f'<text x="150" y="356" class="say">The database refused.</text>')
-    s.append(f'<text x="150" y="396" class="lbl">IDOR: 7 REGRESSION TESTS</text>')
-    s.append(f'<text x="470" y="396" class="lbl">FOUND BY THE AUTHOR</text>')
+    s.append(f'<path d="M150 320H730" stroke="{RULE}"/>')
+    s.append(f'<text x="150" y="352" class="say">The app didn’t remember to filter.</text>')
+    s.append(f'<text x="150" y="380" class="say">The database refused.</text>')
+    s.append(f'<text x="150" y="420" class="lbl">IDOR: 7 REGRESSION TESTS</text>')
+    s.append(f'<text x="470" y="420" class="lbl">FOUND BY THE AUTHOR</text>')
     return "".join(s) + "</svg>"
 
 
@@ -493,6 +550,7 @@ def plate_release() -> str:
 @keyframes ok{{0%,26%{{opacity:0}}30%,100%{{opacity:1}}}}
 /* travel slow enough that a 0.33s sample never covers more than ~130u */
 </style>{slab(H, PINK)}""")
+    s.append(rail("VI", "LIFEQUEST · AUTOML"))
     s.append(f'<text x="150" y="56" class="lbl">LIFEQUEST</text>')
     for i, txt in enumerate(["Reconnect with a mentor", "Document a new routine", "Share a win"]):
         s.append(f'<circle class="nd" cx="158" cy="{83+i*30}" r="7" fill="none" stroke="{PINK}" stroke-width="1.6" '
@@ -544,21 +602,24 @@ def plate_release() -> str:
 
 # ────────────────────────────────────────────────────────────── PLATE VII
 def plate_colophon() -> str:
-    H = 224
-    s = [head(H, "Colophon", "Six systems, six system cards. Every number here is traceable to "
-                             "the repository it came from, and the page itself is animated SVG "
+    H = 264
+    s = [head(H, "Colophon", "Six systems, five system cards and one expo booklet. Every number "
+                             "here is traceable to the repository it came from, except AutoML's, "
+                             "whose repository is private — and the page itself is animated SVG "
                              "with no JavaScript and no server.", key="plate-7-colophon.svg")]
     # This plate asserts "ANIMATED SVG" and used to be the only one that wasn't.
     LOOP, SET = 12.7, 10.0
     s.append(f""".rule{{stroke-dasharray:1;animation:sweep {LOOP}s {EASE} infinite;animation-delay:{-SET}s}}
 @keyframes sweep{{0%{{stroke-dashoffset:1}}20%,100%{{stroke-dashoffset:0}}}}
 </style>{slab(H, INDIGO)}""")
-    s.append(f'<path class="rule" d="M150 56H{W-150}" pathLength="1" stroke="{RULE}"/>')
-    s.append(f'<text x="150" y="96" class="say">Six systems. Six system cards.</text>')
-    s.append(f'<text x="150" y="124" class="say">Every number is traceable to its repo.</text>')
-    s.append(f'<text x="150" y="160" class="lbl">ANIMATED SVG · NO JAVASCRIPT · NO SERVER</text>')
-    s.append(f'<text x="150" y="192" class="lbl">CS ’26 · MIAMI UNIVERSITY</text>')
-    s.append(f'<text x="{W-150}" y="192" class="lbl" text-anchor="end">aesh.03.23@gmail.com</text>')
+    s.append(rail("VII", "COLOPHON"))
+    s.append(f'<path class="rule" d="M150 80H{W-150}" pathLength="1" stroke="{RULE}"/>')
+    s.append(f'<text x="150" y="120" class="say">Six systems. Five system cards, one booklet.</text>')
+    s.append(f'<text x="150" y="148" class="say">Every number traces to its repo.</text>')
+    s.append(f'<text x="150" y="172" class="fine" fill="{INK3}">except AutoML’s — that repository is private, and the plate says so</text>')
+    s.append(f'<text x="150" y="204" class="lbl">ANIMATED SVG · NO JAVASCRIPT · NO SERVER</text>')
+    s.append(f'<text x="150" y="236" class="lbl">CS ’26 · MIAMI UNIVERSITY</text>')
+    s.append(f'<text x="{R}" y="236" class="lbl" text-anchor="end">aesh.03.23@gmail.com</text>')
     return "".join(s) + "</svg>"
 
 
