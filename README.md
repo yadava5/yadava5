@@ -28,7 +28,7 @@ Also from that year: Dean's List in Fall 2023, Spring 2025 and Fall 2025; finali
 
 <picture>
   <source media="(max-width: 500px)" srcset="./assets/m-1-glyph.svg">
-  <img src="./assets/plate-1-glyph.svg" width="100%" alt="Glyph: a neural network written from scratch in C++ with hand-written AVX-512, AVX2 and NEON kernels, plus an autovectorised WebAssembly build. It scores 97.01 percent on the 10,000-image MNIST test set, which means 299 wrong — every one of them drawn as a grid of the labels it missed. 79 of those errors were made with over 0.9 confidence.">
+  <img src="./assets/plate-1-glyph.svg" width="100%" alt="Glyph: a neural network written from scratch in C++ with hand-written AVX-512, AVX2 and NEON kernels, plus an autovectorised WebAssembly build. It scores 97.01 percent on the 10,000-image MNIST test set, which means 299 wrong — every one of them drawn as a grid of the labels it missed. The 79 it was most confident about are drawn in a heavier stroke than the rest.">
 </picture>
 
 A neural network written **from scratch in C++** — no framework — with hand-written SIMD kernels for AVX-512, AVX2 and NEON. On `main`, the WebAssembly build carries no intrinsics of its own: under Emscripten every ISA predicate misses and the scalar path is autovectorised by `-msimd128` (`CMakeLists.txt:279`). The branches are `#if`/`#elif`, so one binary compiles one path and nothing cross-checks them.
@@ -70,7 +70,7 @@ The hand-vectorised Adler-32 reaches **4.26 GB/s**, while the JDK's own native i
 
 <picture>
   <source media="(max-width: 500px)" srcset="./assets/m-3-cadence.svg">
-  <img src="./assets/plate-3-cadence.svg" width="100%" alt="Cadence: the sentence 'lunch with sam friday 1pm' is labelled in place — title, attendee, day and time — and filed into the Friday 1pm slot of a week grid that names its hours. Its 36 API handlers are bundled into a single serverless function, because the hosting plan allows 12.">
+  <img src="./assets/plate-3-cadence.svg" width="100%" alt="Cadence: the sentence 'lunch with sam friday 1pm' is labelled in place with the parser that produced each span — compromise found the person, chrono-node found both the day and the time — while the title is left unmarked because it is what remains once the spans are removed and carries no parser. It is then filed into the Friday 1pm slot of a week grid that names its hours. Its 36 API handlers are bundled into a single serverless function, because the hosting plan allows 12.">
 </picture>
 
 A sentence typed the way you would say it becomes a calendar entry. The parser runs four parsers — chrono, hashtag, priority, language — and **every extracted span records the parser that produced it** — `source` is a required field on every tag, and conflict resolution depends on it, so a wrong tag is traceable to the parser that produced it. (The title is not a parser output: it is what is left of the sentence once the spans are removed, and it carries no `source`.)
