@@ -319,14 +319,14 @@ def plate_jetpack() -> str:
               "is faster still, at 14.06, and is printed here as the reference it loses to.",
               key="plate-2-jetpack.svg")]
     s.append(f""".blk{{animation:sq {LOOP}s {EASE} infinite;transform-box:fill-box;transform-origin:left center}}
-@keyframes sq{{0%{{opacity:0;transform:translateX(-230px) scaleX(1.8182)}}
-  5%,14%{{opacity:1;transform:translateX(-230px) scaleX(1.8182)}}
-  38%,60%{{opacity:1;transform:translateX(0) scaleX(1)}}
+@keyframes sq{{0%{{opacity:0;transform:scaleX(1.8182)}}
+  5%,14%{{opacity:1;transform:scaleX(1.8182)}}
+  38%,60%{{opacity:1;transform:scaleX(1)}}
   /* the window breathes once the blocks are inside it: peak memory tracking
      the window is a continuous property, not a one-off arrival */
-  68%{{opacity:1;transform:translateX(0) scaleX(.94)}}
-  78%,96%{{opacity:1;transform:translateX(0) scaleX(1)}}
-  100%{{opacity:0;transform:translateX(0) scaleX(1)}}}}
+  68%{{opacity:1;transform:scaleX(.94)}}
+  78%,96%{{opacity:1;transform:scaleX(1)}}
+  100%{{opacity:0;transform:scaleX(1)}}}}
 .mt{{transform-box:fill-box;transform-origin:left center;animation:mt {LOOP}s {EASE} infinite}}
 @keyframes mt{{0%,6%{{transform:scaleX(0);opacity:0}}11%{{opacity:1}}24%,100%{{transform:scaleX(1);opacity:1}}}}
 .row{{animation:rw {LOOP}s {EASE} infinite}}
@@ -343,18 +343,18 @@ def plate_jetpack() -> str:
     # The bounded in-flight window. The bracket used to span 400→636 while the
     # compressed blocks came to rest at 410→518, leaving half the window
     # permanently void — it drew a window twice the size of the thing it bounds.
-    s.append(f'<text x="400" y="136" class="kick">BOUNDED IN-FLIGHT WINDOW</text>')
+    s.append(f'<text x="400" y="160" class="kick">BOUNDED IN-FLIGHT WINDOW</text>')
     # the window used to span 400..540 while the compressed blocks came to rest
     # at 410..517.8 — 32.2u of permanent void, split unevenly 10 left / 22 right.
     # 404..524 puts 6u of air on each side of the thing it bounds.
-    s.append(f'<path d="M404 152V268M404 152H424M404 268H424" stroke="{WIRE}" stroke-width="1"/>')
-    s.append(f'<path d="M524 152V268M524 152H504M524 268H504" stroke="{WIRE}" stroke-width="1"/>')
+    s.append(f'<path d="M174 152V268M174 152H194M174 268H194" stroke="{WIRE}" stroke-width="1"/>')
+    s.append(f'<path d="M294 152V268M294 152H274M294 268H274" stroke="{WIRE}" stroke-width="1"/>')
     for i in range(4):
         y = 168 + i * 26
-        s.append(f'<rect class="blk" x="410" y="{y}" width="107.8" height="16" rx="2" fill="{a}" '
+        s.append(f'<rect class="blk" x="180" y="{y}" width="107.8" height="16" rx="2" fill="{a}" '
                  f'style="animation-delay:{round(-SET + i*0.56,3)}s"/>')
     for j, ln in enumerate(["peak memory", "tracks the window,", "not the file"]):
-        s.append(f'<text x="560" y="{194 + j*20}" class="fine">{ln}</text>')
+        s.append(f'<text x="400" y="{194 + j*20}" class="fine">{ln}</text>')
     s.append(f'<text x="150" y="288" class="kick">MECHANISM — one virtual thread per block</text>')
 
     # checksum audit: the fast path checked against the reference
