@@ -179,13 +179,17 @@ def plate_glyph() -> str:
         y = 96 + i * 34
         s.append(f'<text x="330" y="{y+5}" class="key">{name}</text>')
         s.append(f'<path d="M470 {y}H660" stroke="{WIRE}" stroke-width="1"/>')
-        s.append(f'<circle class="tok" data-rest="one-answer" data-rest-within="8" '
+        s.append(f'<circle class="tok" data-rest="one-answer" data-rest-within="2" '
                  f'cx="470" cy="{y}" r="4" fill="{a}" '
                  f'style="animation-delay:{round(-SET + i*0.06,3)}s"/>')
     # four instruction sets, one answer — so all four tokens must actually
     # arrive at the collector, not merely set off in its direction
     s.append(f'<path id="one-answer" d="M660 92V202" stroke="{WIRE}" stroke-width="1"/>')
-    s.append(f'<text x="470" y="232" class="lbl">4 BUILDS · 1 ANSWER</text>')
+    # It used to say "1 ANSWER", which asserts the four builds agree — and
+    # nothing tests that. There is no cross-ISA equivalence test in the repo;
+    # the prose two paragraphs down says so itself ("nothing cross-checks
+    # them"). The plate was making the stronger claim the README declines to.
+    s.append(f'<text x="330" y="232" class="lbl">4 BUILDS · 1 PATH COMPILED</text>')
 
     # VERDICT — the hero clears the rule by 16u; at 64px its box runs from
     # baseline-64 to baseline+19, which is 84u tall, not the 60 I first assumed.
@@ -201,7 +205,7 @@ def plate_glyph() -> str:
     # a row hanging, which reads as a mistake rather than as the end of a list.
     errs = json.loads((ROOT / "errors.json").read_text())["true"]
     gx, gy, cols = 150, 444, 50
-    for i in range(299):
+    for i in range(len(errs)):
         c, r = i % cols, i // cols
         x, y = gx + c * 11.4, gy + r * 14.0
         s.append(f'<g class="wrong" transform="translate({x:.1f},{y:.1f}) scale(0.068)">'
@@ -289,10 +293,10 @@ def plate_cadence() -> str:
     H, LOOP, SET, a = 464, 7.9, 5.6, EMERALD
     SENT, FS, CW = "lunch with sam friday 1pm", 26, 15.62
     s = [head(H, "Cadence — a parser that shows its work",
-              "Cadence: the sentence 'lunch with sam friday 1pm' is labelled in place by four "
-              "parser stages — title, attendee, date and time — and filed into the Friday 1pm "
-              "slot of a calendar. Its 36 API handlers are bundled into a single serverless "
-              "function, because the hosting plan allows 12.", key="plate-3-cadence.svg")]
+              "Cadence: the sentence 'lunch with sam friday 1pm' is labelled in place — title, "
+              "attendee, day and time — and filed into a Friday cell of the week grid. Its 36 "
+              "API handlers are bundled into a single serverless function, because the hosting "
+              "plan allows 12.", key="plate-3-cadence.svg")]
     s.append(f""".ul{{animation:ul {LOOP}s {EASE} infinite;transform-box:fill-box;transform-origin:left center}}
 @keyframes ul{{0%,4%{{transform:scaleX(0);opacity:0}}8%{{opacity:1}}18%,100%{{transform:scaleX(1);opacity:1}}}}
 .an{{animation:an {LOOP}s linear infinite}}
@@ -455,26 +459,27 @@ def plate_refusal() -> str:
              f'cx="330" cy="89" r="5" fill="{a}"/>')
 
     # unfiltered on purpose: a predicate that names B and returns B proves nothing
-    s.append(f'<text x="150" y="216" class="key">SELECT * FROM tasks</text>')
+    s.append(f'<text x="150" y="216" class="key">SELECT count(*) FROM tasks</text>')
     s.append(f'<text class="zero sub" x="150" y="256">B only</text>')
     s.append(f'<text x="440" y="248" class="lbl">ROW-LEVEL SECURITY</text>')
 
     s.append(f'<path d="M150 296H730" stroke="{RULE}"/>')
     s.append(f'<text x="150" y="328" class="say">The app didn’t remember to filter.</text>')
     s.append(f'<text x="150" y="356" class="say">The database refused.</text>')
-    s.append(f'<text x="150" y="396" class="lbl">IDOR: 8 FOUND, 8 FIXED</text>')
-    s.append(f'<text x="470" y="396" class="lbl">BY THE AUTHOR</text>')
+    s.append(f'<text x="150" y="396" class="lbl">IDOR: 7 REGRESSION TESTS</text>')
+    s.append(f'<text x="470" y="396" class="lbl">FOUND BY THE AUTHOR</text>')
     return "".join(s) + "</svg>"
 
 
 # ────────────────────────────────────────────────────────────── PLATE VI
 def plate_release() -> str:
-    H, LOOP, SET = 548, 13.1, 9.8
+    H, LOOP, SET = 568, 13.1, 9.8
     s = [head(H, "LifeQuest and Agentic AutoML",
               "LifeQuest turns real-world routines into tracked quests, for people rebuilding "
               "structure after a layoff or in retirement. Agentic AutoML moves a dataset through "
-              "a hardened Docker sandbox and stops at 2 human approval gates — one before a "
-              "preprocessing step is committed, one before a model is trained.",
+              "a hardened Docker sandbox and holds it for a human before a preprocessing step is "
+              "committed and before a model is trained. This is the one section on the page a "
+              "reader cannot check: the repository is private.",
               key="plate-6-release.svg")]
     s.append(f""".nd{{animation:nd {LOOP}s linear infinite}}
 @keyframes nd{{0%,4%{{opacity:0}}10%,100%{{opacity:1}}}}
@@ -505,7 +510,10 @@ def plate_release() -> str:
     # the lane, y 320→400. Nothing crosses this band but lane furniture, so the
     # token cannot come to rest on a label — it did, on "APPROVAL", for 28% of
     # the loop, until the gate learned to measure position instead of opacity.
-    s.append(f'<text x="546" y="312" class="lbl">HUMAN APPROVAL</text>')
+    # centred over the gate it names. It used to start at x=546 — 16u to the
+    # right of the line at 530 and 3px below the university credit, so it read
+    # as the second line of a right-aligned credit block instead of as a label.
+    s.append(f'<text x="530" y="316" class="lbl" text-anchor="middle">HUMAN APPROVAL</text>')
     s.append(f'<rect x="150" y="320" width="300" height="80" rx="3" fill="none" stroke="{INDIGO}"/>')
     s.append(f'<text x="166" y="340" class="lbl">DOCKER · SANDBOXED</text>')
     # "internal net (dev)": the beta deploy defaults EXECUTION_NETWORK to bridge
@@ -514,14 +522,23 @@ def plate_release() -> str:
     # It ends the loop past the gate and beside DEPLOYED, which is the point:
     # the gate is passed by a human saying yes, not by the pipeline waiting it
     # out. The rest check anchors the final pose to the label that explains it.
-    s.append(f'<circle class="tk2" data-rest="deployed" data-rest-within="34" '
+    s.append(f'<circle class="tk2" data-rest="deployed" data-rest-within="14" '
              f'cx="176" cy="372" r="6" fill="{INDIGO}" style="animation-delay:{-SET}s"/>')
     s.append(f'<text x="150" y="418" class="fine">non-root · read-only rootfs · internal net (dev)</text>')
-    s.append(f'<text id="deployed" class="ok lbl" x="618" y="418" fill="{INDIGO}" style="animation-delay:{-SET}s">DEPLOYED</text>')
+    # DEPLOYED now sits on the token's own row, so the rest check anchors to a
+    # label beside it rather than one 28u down and to the right.
+    s.append(f'<text id="deployed" class="ok lbl" x="618" y="378" fill="{INDIGO}" style="animation-delay:{-SET}s">DEPLOYED</text>')
 
-    s.append(f'<text x="150" y="496" class="hero">2</text>')
-    s.append(f'<text x="210" y="480" class="lbl">APPROVAL GATES BEFORE</text>')
-    s.append(f'<text x="210" y="504" class="fine">a step is committed, and before a model trains</text>')
+    # This used to be a 64px "2". The number was wrong — the reproducible count
+    # of human-gate stages is four (preprocessing await_approval, feature
+    # engineering await_review, training propose_model and await_review) — and
+    # it was also the only hero on the page that no reader could check, because
+    # this repository is private. A hero nobody can verify, carrying a figure
+    # that is not even right, is the exact thing the rest of this page refuses.
+    # So the count is gone and the mechanism stays.
+    s.append(f'<text x="150" y="486" class="sub">HUMAN IN THE LOOP</text>')
+    s.append(f'<text x="150" y="514" class="fine">approval before a step commits, and before a model trains</text>')
+    s.append(f'<text x="150" y="538" class="fine" fill="{INK3}">the only section here you cannot check — this repository is private</text>')
     return "".join(s) + "</svg>"
 
 
@@ -612,7 +629,7 @@ MOBILE = {
  "m-3-cadence.svg": ("CADENCE", EMERALD, "36", "", "handlers bundled into one", "function. The plan allows 12.", "plate-3-cadence.svg"),
  "m-4-applied.svg": ("APPLIED", CYAN, "0.979", "", "macro-F1, rules layer only.", "Below 0.85 it asks a human.", "plate-4-applied.svg"),
  "m-5-refusal.svg": ("THE REFUSAL", EMERALD, "B", " only", "The app didn't remember", "to filter. The database refused.", "plate-5-refusal.svg"),
- "m-6-release.svg": ("LIFEQUEST · AUTOML", PINK, "2", "", "Routines become quests.", "Approval gates before training.", "plate-6-release.svg"),
+ "m-6-release.svg": ("LIFEQUEST · AUTOML", PINK, "HUMAN", "", "in the loop before a step commits", "or a model trains. Not public.", "plate-6-release.svg"),
 }
 for _fn, (_k, _a, _n, _u, _l1, _l2, _src) in MOBILE.items():
     (OUT / _fn).write_text(plate_mobile(_a, _k, _n, _u, _l1, _l2, ALT[_src]))
