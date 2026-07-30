@@ -100,6 +100,33 @@
     },
 
     {
+      "id": "glyph.deployed_wasm_bytes",
+      "value": "46960",
+      "unit": "bytes",
+      "drawn_on": ["README.md"],
+      "live": "https://getglyph.vercel.app/wasm/fast_mnist.wasm",
+      "header": "content-length",
+      "extractor": "echo \"$HEADER\"",
+      "note": "A claim about the DEPLOYED artifact, not a committed one — so it is checked against the deployment, with curl, exactly as the sentence describes. It is deliberately not cached and will break if the live build changes, which is the point: the README says the live page and the repo diverge here, and this is what keeps that sentence honest."
+    },
+    {
+      "id": "glyph.deployed_wasm_type",
+      "value": "application/wasm",
+      "drawn_on": ["README.md"],
+      "live": "https://getglyph.vercel.app/wasm/fast_mnist.wasm",
+      "header": "content-type",
+      "extractor": "echo \"$HEADER\""
+    },
+    {
+      "id": "glyph.msimd128_line",
+      "value": "279",
+      "drawn_on": ["README.md"],
+      "repo": "glyph",
+      "path": "CMakeLists.txt",
+      "extractor": "grep -n -- '-msimd128' \"$BLOB\" | head -1 | cut -d: -f1",
+      "note": "The README cites CMakeLists.txt:279 by line. Line citations drift silently as a file grows; this one now fails the build instead."
+    },
+    {
       "id": "jetpack.parallel_mbs",
       "value": "422",
       "unit": "MB/s",
@@ -166,6 +193,87 @@
     },
 
     {
+      "id": "jetpack.ci_low",
+      "value": "0.7",
+      "unit": "%",
+      "drawn_on": ["README.md"],
+      "repo": "jetpack",
+      "path": "benchmarks/jmh-results-rigorous.json",
+      "extractor": "jq -r '[.[]|.primaryMetric.scoreError/.primaryMetric.score*100]|min*10|round/10' \"$BLOB\""
+    },
+    {
+      "id": "jetpack.ci_high",
+      "value": "6.9",
+      "unit": "%",
+      "drawn_on": ["README.md"],
+      "repo": "jetpack",
+      "path": "benchmarks/jmh-results-rigorous.json",
+      "extractor": "jq -r '[.[]|.primaryMetric.scoreError/.primaryMetric.score*100]|max*10|round/10' \"$BLOB\""
+    },
+    {
+      "id": "jetpack.forks",
+      "value": "3",
+      "drawn_on": ["plate-2-jetpack.svg", "README.md"],
+      "repo": "jetpack",
+      "path": "benchmarks/jmh-results-rigorous.json",
+      "extractor": "jq -r '.[0].forks' \"$BLOB\""
+    },
+    {
+      "id": "jetpack.jdk",
+      "value": "25",
+      "drawn_on": ["plate-2-jetpack.svg", "m-2-jetpack.svg", "README.md"],
+      "repo": "jetpack",
+      "path": "benchmarks/jmh-results-rigorous.json",
+      "extractor": "jq -r '.[0].jdkVersion' \"$BLOB\" | cut -d. -f1",
+      "note": "Read from the run that produced the scores, so the JDK on the plate is the JDK that was measured."
+    },
+    {
+      "id": "jetpack.cores",
+      "value": "10",
+      "drawn_on": ["README.md"],
+      "repo": "jetpack",
+      "path": "benchmarks/ENVIRONMENT.md",
+      "extractor": "grep -oE '[0-9]+ logical' \"$BLOB\" | grep -oE '[0-9]+' | head -1"
+    },
+    {
+      "id": "jetpack.confidence_level",
+      "value": "99.9",
+      "unit": "%",
+      "drawn_on": ["README.md"],
+      "repo": "jetpack",
+      "path": "benchmarks/ENVIRONMENT.md",
+      "extractor": "grep -oE '99\\.9' \"$BLOB\" | head -1"
+    },
+    {
+      "id": "jetpack.parallel_speedup_quick",
+      "value": "6.89",
+      "unit": "x",
+      "drawn_on": ["README.md"],
+      "repo": "jetpack",
+      "path": "benchmarks/jmh-results.json",
+      "extractor": "jq -r '([.[]|select(.benchmark|endswith(\"parallelVirtualThreads\")).primaryMetric.score][0]/[.[]|select(.benchmark|endswith(\"singleThreadedJdk\")).primaryMetric.score][0]*100|round)/100' \"$BLOB\"",
+      "note": "The number the page was suppressing. The parallel ratio moved 6.89x -> 6.38x between the quick and the rigorous run — an 8% spread, WIDER than the 4% spread on the SIMD ratio that the page already discloses. jetpack's own ENVIRONMENT.md warns about it. Publishing the smaller disagreement and hiding the larger one is the only place this page let the flattering number win, so the README now states it."
+    },
+    {
+      "id": "jetpack.parallel_speedup_rigorous_2dp",
+      "value": "6.38",
+      "unit": "x",
+      "drawn_on": ["README.md"],
+      "repo": "jetpack",
+      "path": "benchmarks/jmh-results-rigorous.json",
+      "extractor": "jq -r '([.[]|select(.benchmark|endswith(\"parallelVirtualThreads\")).primaryMetric.score][0]/[.[]|select(.benchmark|endswith(\"singleThreadedJdk\")).primaryMetric.score][0]*100|round)/100' \"$BLOB\"",
+      "note": "The same ratio as jetpack.speedup, at two decimals, so the 6.89 -> 6.38 spread the README now discloses is stated in numbers that both derive."
+    },
+    {
+      "id": "jetpack.adler_vector_speedup_quick",
+      "value": "2.92",
+      "unit": "x",
+      "drawn_on": ["README.md"],
+      "repo": "jetpack",
+      "path": "benchmarks/jmh-results.json",
+      "extractor": "jq -r '([.[]|select(.benchmark|endswith(\"Adler32Benchmark.vector\")).primaryMetric.score][0]/[.[]|select(.benchmark|endswith(\"Adler32Benchmark.scalar\")).primaryMetric.score][0]*100|round)/100' \"$BLOB\""
+    },
+    {
       "id": "cadence.handlers",
       "value": "36",
       "drawn_on": ["plate-3-cadence.svg", "m-3-cadence.svg", "README.md"],
@@ -174,16 +282,6 @@
       "extractor": "awk '/^const ROUTES/,/^\\];/' \"$BLOB\" | grep -cE '^\\s*\\[\\['",
       "note": "The dispatch table itself, not the import list — the import list agrees at 36, but routes are what the function actually serves."
     },
-    {
-      "id": "cadence.function_cap",
-      "value": "12",
-      "drawn_on": ["plate-3-cadence.svg", "m-3-cadence.svg", "README.md"],
-      "repo": "cadence",
-      "path": "api/index.ts",
-      "extractor": "grep -oE 'caps deployments at [0-9]+' \"$BLOB\" | grep -oE '[0-9]+'",
-      "note": "Vercel's Hobby-tier limit is a platform fact, not a repo fact. What the repo can prove is that this limit is the reason the dispatcher exists, which is what the page claims."
-    },
-
     {
       "id": "applied.macro_f1",
       "value": "0.979",
@@ -199,6 +297,14 @@
       "repo": "applied",
       "path": "backend/data/evaluation/baseline_rules_v3.json",
       "extractor": "jq -r '.meta.sample_count' \"$BLOB\""
+    },
+    {
+      "id": "applied.eval_classes",
+      "value": "8",
+      "drawn_on": ["README.md"],
+      "repo": "applied",
+      "path": "backend/data/evaluation/baseline_rules_v3.json",
+      "extractor": "jq -r '.label_distribution|keys|length' \"$BLOB\""
     },
     {
       "id": "applied.eval_mode_is_rules_only",
@@ -258,20 +364,47 @@
     },
 
     {
-      "id": "refusal.idor_count",
-      "value": "8",
+      "id": "applied.hybrid_f1_prose",
+      "value": "0.9583",
+      "drawn_on": ["README.md"],
+      "repo": "applied",
+      "path": "docs/ML_EXECUTION_TRACKER.md",
+      "extractor": "sed -n '378p' \"$BLOB\" | grep -oE 'macro_f1=0\\.[0-9]+' | cut -d= -f2",
+      "note": "The full three-layer cascade's score, which survives in exactly one line of prose because the run that produced it was overwritten. The page says so, and now proves the line still says it."
+    },
+    {
+      "id": "applied.hybrid_f1_line",
+      "value": "378",
+      "drawn_on": ["README.md"],
+      "repo": "applied",
+      "path": "docs/ML_EXECUTION_TRACKER.md",
+      "extractor": "grep -n 'macro_f1=0.9583' \"$BLOB\" | head -1 | cut -d: -f1",
+      "note": "Pins the citation itself. If the tracker grows a line above 378, this fails and the README's reference is corrected rather than silently pointing at the wrong row."
+    },
+    {
+      "id": "refusal.idor_regression_tests",
+      "value": "7",
       "drawn_on": ["plate-5-refusal.svg", "README.md"],
       "repo": "cadence",
       "paths": [
-        "lib/services/AttachmentService.ts",
-        "lib/services/CalendarService.ts",
-        "lib/services/EventService.ts",
-        "lib/services/TagService.ts",
-        "lib/services/TaskListService.ts",
-        "lib/services/TaskService.ts"
+        "lib/services/__tests__/AttachmentService.test.ts",
+        "lib/services/__tests__/CalendarService.test.ts",
+        "lib/services/__tests__/EventService.test.ts",
+        "lib/services/__tests__/TagService.test.ts",
+        "lib/services/__tests__/TaskListService.test.ts",
+        "lib/services/__tests__/TaskService.test.ts"
       ],
-      "extractor": "grep -hoi idor $BLOBS | grep -c .",
-      "note": "One annotation per fixed vulnerability, in the docstring of the method that carried it: attachments 1, calendars 1, events 2 (read + delete), tags 1, task-lists 1, tasks 2 (read + delete). The commit log agrees by a second method — six `fix(security): scope …` commits, four of which name two methods."
+      "extractor": "cat $BLOBS | grep -ciE 'cross-tenant IDOR|IDOR regression'",
+      "note": "The plate used to draw '8 FOUND, 8 FIXED'. Eight is true and eight is documented, but it is an AUDIT FINDING, not a property of any file — the previous extractor here reached 8 by counting the word 'IDOR' in comments, which is the page counting its own prose. It happened to be right and would have broken silently on the next comment edit. Seven regression tests IS a file property, and it is the more honest number besides: TaskListService.test.ts contributes 0, which is exactly the gap the README admits. The eighth vulnerability keeps its story in prose, where testimony belongs."
+    },
+    {
+      "id": "cadence.tenant_tables",
+      "value": "7",
+      "drawn_on": ["README.md"],
+      "repo": "cadence",
+      "path": "lib/config/migrations/0002_enable_rls.sql",
+      "extractor": "grep -cE '^ALTER TABLE .* FORCE ROW LEVEL SECURITY' \"$BLOB\"",
+      "note": "Anchored to ^ALTER TABLE on purpose. A bare `grep -c 'FORCE ROW LEVEL SECURITY'` returns 8, because the file's own header comment explains what FORCE does — the same prose-counting mistake as the row above, in a file where it would have inflated the claim. user_profiles is deliberately excluded from RLS (0002_enable_rls.sql:21-22), so 'every tenant table' is seven, and the README now says seven."
     },
     {
       "id": "jetpack.adler_known_answer",
@@ -285,13 +418,32 @@
     }
   ],
 
-  "unpinnable": [
+  "$unpinnable_note": [
+    "This list held exactly one row — AutoML's '2 approval gates' — filed under",
+    "the reason 'the repo is private'. That diagnosis was wrong, and the way it",
+    "was wrong matters more than the number.",
+    "",
+    "The count was not merely unverifiable. It was FALSE: the reproducible count",
+    "of human-gate stages is four (preprocessing await_approval, feature",
+    "engineering await_review, training propose_model and await_review). By",
+    "filing it as 'private, therefore unpinnable' this file certified a wrong",
+    "number as an acceptable one, and printed a friendly note where it should",
+    "have failed. A category that excuses a claim from being checked will,",
+    "sooner or later, be where a false claim goes to live.",
+    "",
+    "So there is no such category any more. Plate VI no longer draws a count at",
+    "all; it draws the mechanism and says on its face that this is the one",
+    "section a reader cannot check. Anything drawn must derive or be exempt."
+  ],
+  "unpinnable": [],
+
+  "external": [
     {
-      "id": "automl.approval_gates",
-      "value": "2",
-      "drawn_on": ["plate-6-release.svg", "m-6-release.svg", "README.md"],
-      "why": "github.com/yadava5/ai-augmented-auto-ml-toolchain is PRIVATE, so raw.githubusercontent.com serves nothing to an anonymous reader and no extractor here can be run by anyone but its owner. It is drawn as a 64px hero — the largest unverifiable number on the page.",
-      "options": "make the repo public, replace the hero with a claim the reader can check, or state on the plate that this one is not publicly derivable."
+      "id": "cadence.function_cap",
+      "value": "12",
+      "drawn_on": ["plate-3-cadence.svg", "m-3-cadence.svg", "README.md"],
+      "source": "https://vercel.com/docs/functions/limitations",
+      "why": "Vercel's Hobby-tier cap of 12 Serverless Functions per deployment is a platform fact, not a measurement of this repository. The previous extractor grepped `caps deployments at 12` out of api/index.ts — the author's own comment — so the page was citing itself and calling it derivation. What the repo genuinely proves is the consequence: one function serving 36 routes, which cadence.handlers derives."
     }
   ],
 
@@ -321,6 +473,13 @@
     "plate-2-jetpack.svg:9": "a glyph of the hex constant 11E60398",
     "plate-2-jetpack.svg:8": "a glyph of the hex constant 11E60398",
 
+    "README.md:512": "AVX-512 — an instruction-set name",
+    "README.md:32": "the name of the Adler-32 algorithm",
+    "README.md:1": "the placeholder in the SQL literal `WHERE id = $1`",
+    "README.md:4": "'the 4% spread' — the SIMD ratio's run-to-run disagreement, rounded from the 2.92 and 2.80 rows that both derive above",
+    "README.md:219": "the first line of the early-stopping block cited as apps/train_model.cpp:219-243. A line RANGE has no single extractor; the citation is verified by reading it, and glyph.msimd128_line pins the one line citation that a machine can check.",
+    "README.md:243": "the last line of that same cited range",
+    "README.md:03.23": "part of the contact address aesh.03.23@gmail.com",
     "plate-7-colophon.svg:03.23": "part of the contact address aesh.03.23@gmail.com",
     "plate-0-thesis.svg:26": "'CS ’26' — a graduation year",
     "plate-7-colophon.svg:26": "'CS ’26' — a graduation year"

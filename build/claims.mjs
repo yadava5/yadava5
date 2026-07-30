@@ -77,6 +77,16 @@ function bytes(repoKey, path) {
   return size;
 }
 
+// ── some claims are about the DEPLOYED artifact, not a committed one. "the
+//    live page fetches /wasm/fast_mnist.wasm, 46,960 bytes" is checkable by
+//    anyone with curl, and it SHOULD break if the deployment changes — that is
+//    the claim. Not cached: a stale cache would defeat the point.
+function live(url, header) {
+  const out = execFileSync('curl', ['-fsSI', '--max-time', '60', url], { encoding: 'utf8' });
+  const m = out.match(new RegExp(`^${header}:\\s*(.+)$`, 'im'));
+  return m ? m[1].trim() : '';
+}
+
 // ── 1. every registered claim must re-derive from its pinned blob
 let derived = 0;
 for (const c of spec.claims) {
@@ -86,7 +96,8 @@ for (const c of spec.claims) {
     // A row names one path, several paths (a count that lives across files), or
     // asks for a byte length. $BLOB / $BLOBS / $BYTES, whichever it declared.
     const env = { ...process.env };
-    if (c.bytes) env.BYTES = bytes(c.repo, c.path);
+    if (c.live) env.HEADER = live(c.live, c.header);
+    else if (c.bytes) env.BYTES = bytes(c.repo, c.path);
     else if (c.paths) env.BLOBS = c.paths.map(p => blob(c.repo, p)).join(' ');
     else env.BLOB = blob(c.repo, c.path);
     out = execFileSync('bash', ['-c', c.extractor], {
@@ -97,6 +108,7 @@ for (const c of spec.claims) {
     continue;
   }
   if (out !== String(c.value)) {
+    if (c.live) { fails.push(`${c.id}: the page says "${c.value}", ${c.live} serves "${out}"`); continue; }
     const r = repo(c.repo), where = c.path || (c.paths || []).join(',');
     fails.push(`${c.id}: the page says "${c.value}", ${r.github}@${r.ref.slice(0, 7)}/${where} says "${out}"`);
     continue;
@@ -123,7 +135,7 @@ const textOf = (f) => {
   fileText.set(f, t);
   return t;
 };
-for (const c of [...spec.claims, ...spec.unpinnable]) {
+for (const c of [...spec.claims, ...spec.unpinnable, ...spec.external]) {
   for (const f of c.drawn_on || []) {
     // Case-insensitive: a row whose value is a word ("rules") is drawn on the
     // plate in the document's uppercase label voice ("RULES LAYER ONLY").
@@ -134,14 +146,30 @@ for (const c of [...spec.claims, ...spec.unpinnable]) {
 
 // ── 3. coverage — the half that makes this a gate. Every number a plate draws
 //       must be a registered claim or a named exemption.
-const known = new Set([...spec.claims, ...spec.unpinnable].map(c => String(c.value)));
+const known = new Set([...spec.claims, ...spec.unpinnable, ...spec.external].map(c => String(c.value)));
 // An exemption is either global ("880": the viewBox) or scoped to one plate
 // ("plate-2-jetpack.svg:6"). Scoped is strongly preferred: exempting a bare "6"
 // everywhere would let a future unsourced 6 onto any plate in the document.
 const exempt = new Set(Object.keys(spec.exempt).filter(k => k !== '$comment'));
-for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)).sort()) {
-  const drawn = textOf(file);
-  for (const n of new Set(drawn.match(/\d+\.\d+|\b\d+\b/g) || [])) {
+// README.md is swept alongside the plates. It was not, for a whole round: the
+// coverage check read assets/ only, so roughly a dozen numbers that appear ONLY
+// in the prose — a byte count, cited line numbers, a confidence interval — were
+// never audited by the gate whose entire purpose is that no number goes
+// unaudited. Link targets are stripped first; a URL is an address, not a claim.
+const SWEPT = [...readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)).sort(), 'README.md'];
+const numsOf = (f) => {
+  // In README.md, three things are addresses rather than assertions: HTML
+  // attributes (plate-0-thesis.svg, width="100%", the srcset), markdown link
+  // targets, and bare URLs. Sweeping them demanded evidence for the "0" in a
+  // filename. Alt text is not lost by stripping the tags — every alt is the
+  // plate's own <desc>, and the plates are swept in the same pass.
+  const t = f === 'README.md'
+    ? textOf(f).replace(/<[^>]*>/g, ' ').replace(/\]\([^)]*\)/g, ' ').replace(/https?:\/\/\S+/g, ' ')
+    : textOf(f);
+  return new Set(t.match(/\d+\.\d+|\b\d+\b/g) || []);
+};
+for (const file of SWEPT) {
+  for (const n of numsOf(file)) {
     if (known.has(n) || exempt.has(n) || exempt.has(`${file}:${n}`)) continue;
     fails.push(`${file}: draws "${n}", which claims.json neither derives nor exempts`);
   }
@@ -149,8 +177,8 @@ for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)
 // An exemption nobody uses is a stale excuse. Fail on it, the same way an
 // unreachable gate branch is a defect rather than a nicety.
 const usedExempt = new Set();
-for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f))) {
-  for (const n of new Set(textOf(file).match(/\d+\.\d+|\b\d+\b/g) || [])) {
+for (const file of SWEPT) {
+  for (const n of numsOf(file)) {
     if (exempt.has(`${file}:${n}`)) usedExempt.add(`${file}:${n}`);
     else if (exempt.has(n) && !known.has(n)) usedExempt.add(n);
   }
@@ -160,8 +188,14 @@ for (const k of exempt)
 
 // ── report
 for (const n of notes) console.log(`  note  ${n}`);
+for (const e of spec.external)
+  console.log(`  external  ${e.id} = "${e.value}" — platform fact, cited to ${e.source}`);
+// A row here would be a number the page draws and nobody can check. There are
+// none, and the empty list is load-bearing: the one entry this list ever held
+// turned out to be a FALSE number wearing an "unverifiable" excuse, so the
+// gate fails rather than printing a note about it.
 for (const u of spec.unpinnable)
-  console.log(`  NOT PUBLICLY DERIVABLE  ${u.id} = "${u.value}" — ${u.why.split('.')[0]}.`);
+  fails.push(`${u.id} = "${u.value}" is drawn but cannot be derived — remove it from the page or make its source public`);
 
 if (fails.length) {
   console.log(`\nCLAIMS GATE FAILED — ${fails.length} defects:`);

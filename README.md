@@ -2,7 +2,7 @@
 <img src="./assets/plate-0-thesis.svg" width="100%" alt="The thesis plate: Ayush Yadav, and the sentence 'Every number on this page is followed by the thing that would catch it.' Below it, the six colours the document uses, one per system: Glyph, jetpack, Cadence, Applied, LifeQuest, AutoML.">
 </div>
 
-I build systems that prove themselves. Six of them are live, publicly reachable, and each ships a **system card** — a printed-quality walkthrough of the architecture and the evidence behind its numbers.
+I build systems that prove themselves. Six of them are live, publicly reachable, and five of the six ship a **system card** — a print-format walkthrough of the architecture and the evidence behind its numbers. AutoML's equivalent is an expo booklet.
 
 What follows is five system plates (LifeQuest and AutoML share the last), plus one for the habit that runs underneath all of them, between an opening and a colophon. Each shows the claim, then the mechanism that would catch the claim if it were a lie.
 
@@ -40,6 +40,8 @@ The checksum is hand-vectorised — so it is checked **bit-identical against `ja
 
 **422 MB/s parallel vs 66.2 MB/s single-threaded — 6.4×** on an M1 Pro (10 cores). That is a 3-fork JMH run with 99.9% confidence intervals spanning ±0.7% (single-threaded) to ±6.9% (the vectorised checksum), committed at [`benchmarks/jmh-results-rigorous.json`](https://github.com/yadava5/jetpack-compress/blob/main/benchmarks/jmh-results-rigorous.json) with the machine spec beside it, so you can re-run it and check.
 
+The ratio itself is the least stable number here: it moved **6.89× → 6.38×** between the quick run and the rigorous one — an 8% spread, *wider* than either run's own interval, and wider than the 4% spread I disclose on the SIMD result below. `benchmarks/ENVIRONMENT.md` says so too. I quote the rigorous run because it is the more careful one, not because it is the kinder one.
+
 And the row that stays in the table because it's true: the hand-vectorised Adler-32 reaches **4.26 GB/s**, while the JDK's own native intrinsic does **14.06 GB/s**. I don't beat it. The SIMD result is honest against the *scalar* baseline (2.80× on the 3-fork run, 2.92× on the quick one — they disagree at the second figure, and that spread is the uncertainty), and the intrinsic is printed next to it as the reference it loses to.
 
 [live](https://jetpack-compress.vercel.app) · [system card](https://jetpack-compress.vercel.app/system-card) · [repo](https://github.com/yadava5/jetpack-compress)
@@ -50,10 +52,10 @@ And the row that stays in the table because it's true: the hand-vectorised Adler
 
 <picture>
   <source media="(max-width: 500px)" srcset="./assets/m-3-cadence.svg">
-  <img src="./assets/plate-3-cadence.svg" width="100%" alt="Cadence: the sentence 'lunch with sam friday 1pm' is labelled in place by four parser stages — title, attendee, date and time — and filed into the Friday 1pm slot of a calendar. Its 36 API handlers are bundled into a single serverless function, because the hosting plan allows 12.">
+  <img src="./assets/plate-3-cadence.svg" width="100%" alt="Cadence: the sentence 'lunch with sam friday 1pm' is labelled in place — title, attendee, day and time — and filed into a Friday cell of the week grid. Its 36 API handlers are bundled into a single serverless function, because the hosting plan allows 12.">
 </picture>
 
-A sentence typed the way you would say it becomes a calendar entry. The parser runs four stages — chrono, hashtag, priority, language — and **every extracted span records the parser that produced it** — `source` is a required field on every tag, and conflict resolution depends on it, so a wrong answer is always traceable to the stage that caused it.
+A sentence typed the way you would say it becomes a calendar entry. The parser runs four parsers — chrono, hashtag, priority, language — and **every extracted span records the parser that produced it** — `source` is a required field on every tag, and conflict resolution depends on it, so a wrong tag is traceable to the parser that produced it. (The title is not a parser output: it is what is left of the sentence once the spans are removed, and it carries no `source`.)
 
 **36 API handlers bundled into a single serverless function**, to live inside Vercel's 12-function cap without giving up routes.
 
@@ -76,7 +78,7 @@ Worth being exact, because the number and the picture don't quite match: that sc
 
 Anything under the **0.85 confidence gate** is not guessed at — it goes to a human. The model is allowed to say it doesn't know.
 
-The fine-tuned head exports to int8 ONNX (90.4 MB → 22.8 MB) and runs **in your browser**: the server ships the weights once, then classification happens in your tab and nothing you paste leaves it. `allowRemoteModels = false` keeps the model local. That in-browser build is the [Hugging Face Space](https://huggingface.co/spaces/yadava5/jobtracker-classifier); the `[live]` link below runs the rules layer only.
+The fine-tuned head exports to int8 ONNX (90.4 MB → 22.8 MB) and runs **in your browser**: the server ships the weights once, then classification happens in your tab and nothing you paste leaves it. `allowRemoteModels = false` keeps the model local. Be exact about where that lives: the ONNX weights and the browser build are on the **unmerged branch [`integration/web-migration`](https://github.com/yadava5/applied/tree/integration/web-migration/ml/browser)**, not on `main` — `grep -i onnx` on `main` returns nothing. Both byte counts above are re-derived from that branch's commit. That in-browser build is the [Hugging Face Space](https://huggingface.co/spaces/yadava5/jobtracker-classifier); the `[live]` link below runs the rules layer only.
 
 [live](https://getapplied.vercel.app) · [system card](https://getapplied.vercel.app/system-card) · [repo](https://github.com/yadava5/applied)
 
@@ -89,11 +91,11 @@ The fine-tuned head exports to int8 ONNX (90.4 MB → 22.8 MB) and runs **in you
   <img src="./assets/plate-5-refusal.svg" width="100%" alt="A query from one tenant travels toward another tenant's rows, reaches the PostgreSQL row-level-security boundary, and stops. Only the querying tenant's own rows come back — because the database refused, not because the application remembered to filter.">
 </picture>
 
-Application code that filters by user is code that has to *remember* to filter. So the database enforces it instead: **PostgreSQL Row-Level Security**, `FORCE`d on every tenant table, with the app connecting as a dedicated non-`BYPASSRLS` role and the request identity carried as a transaction-local GUC.
+Application code that filters by user is code that has to *remember* to filter. So the database enforces it instead: **PostgreSQL Row-Level Security**, `FORCE`d on all **seven** tenant tables (`user_profiles` is deliberately excluded), with the app connecting as a dedicated non-`BYPASSRLS` role and the request identity carried as a transaction-local GUC.
 
-The test that matters runs a raw, unfiltered `SELECT * FROM tasks` as user B. It returns **user B's rows only** — because the database refused, not because the query remembered. Being exact: the migrations are hand-run, and production still connects as the owner role, so today this is proven in CI against ephemeral Postgres rather than enforced in the deployed database.
+The test that matters runs a raw, unfiltered `SELECT count(*) FROM tasks` as user B. It returns **user B's rows only** — because the database refused, not because the query remembered. Being exact: the migrations are hand-run, and production still connects as the owner role, so today this is proven in CI against ephemeral Postgres rather than enforced in the deployed database.
 
-Auditing my own work, I found **seven IDOR vulnerabilities** in Cadence — endpoints where any authenticated user could read or delete another user's records by id. A later audit found an **eighth** of the same shape that the first sweep missed: `TagService` inherited the base class's unscoped `WHERE id = $1`, so any user could read or delete any other user's tag. All eight are fixed. Seven carry a regression test asserting the scoped SQL; the task-lists one does not yet. The tag one is worth naming, because its existing test asserted the *vulnerable* query and would have reported green forever.
+Auditing my own work, I found **seven IDOR vulnerabilities** in Cadence — endpoints where any authenticated user could read or delete another user's records by id. A later audit found an **eighth** of the same shape that the first sweep missed: `TagService` inherited the base class's unscoped `WHERE id = $1`, so any user could read or delete any other user's tag. All eight are fixed. **Seven carry a regression test** asserting the scoped SQL — that seven is what the plate draws, because it is the part a machine can count; the task-lists one has no test yet, so the count admits it. The tag one is worth naming, because its existing test asserted the *vulnerable* query and would have reported green forever.
 
 [the migration](https://github.com/yadava5/cadence/blob/main/lib/config/migrations/0002_enable_rls.sql) · [the app role](https://github.com/yadava5/cadence/blob/main/lib/config/migrations/0003_create_cadence_app_role.sql) · [the isolation suite](https://github.com/yadava5/cadence/blob/main/lib/__tests__/rls.postgres.test.ts)
 
@@ -103,14 +105,16 @@ Auditing my own work, I found **seven IDOR vulnerabilities** in Cadence — endp
 
 <picture>
   <source media="(max-width: 500px)" srcset="./assets/m-6-release.svg">
-  <img src="./assets/plate-6-release.svg" width="100%" alt="LifeQuest turns real-world routines into tracked quests, for people rebuilding structure after a layoff or in retirement. Agentic AutoML moves a dataset through a hardened Docker sandbox and stops at 2 human approval gates — one before a preprocessing step is committed, one before a model is trained.">
+  <img src="./assets/plate-6-release.svg" width="100%" alt="LifeQuest turns real-world routines into tracked quests, for people rebuilding structure after a layoff or in retirement. Agentic AutoML moves a dataset through a hardened Docker sandbox and holds it for a human before a preprocessing step is committed and before a model is trained. This is the one section on the page a reader cannot check: the repository is private.">
 </picture>
 
 **LifeQuest** turns real-world routines into tracked quests with tiered progression — built for people rebuilding structure, whether after a layoff or in retirement. Tauri + React client, NestJS + Prisma API.
 
-**Agentic AutoML** takes a dataset and returns a deployed model: LangGraph orchestration over an MCP tool registry, Python executed in a hardened Docker sandbox — non-root, read-only rootfs, an `--internal` Docker network with no outbound route (the beta deploy defaults to `bridge`), capped memory and CPU — and human approval gates before a preprocessing step is committed and before a model is trained. Worth being exact: preprocessing runs the code *before* it asks, so the gate protects what gets persisted rather than what gets spent — and whether a step needs approval is itself proposed by the model, with a keyword fallback. Senior design at Miami University, co-built with Shree Chaturvedi.
+**Agentic AutoML** takes a dataset and returns a deployed model: LangGraph orchestration over an MCP tool registry, Python executed in a hardened Docker sandbox — non-root, read-only rootfs, an `--internal` Docker network with no outbound route (the beta deploy defaults to `bridge`), capped memory and CPU — and human approval gates before a preprocessing step is committed and before a model is trained. Worth being exact: preprocessing runs the code *before* it asks, so the gate protects what gets persisted rather than what gets spent — and whether a step needs approval is itself proposed by the model, defaulting to *no* approval when the model does not ask for one. Senior design at Miami University, co-built with Shree Chaturvedi.
 
-[LifeQuest](https://getlifequest.vercel.app) · [system card](https://getlifequest.vercel.app/system-card) — [AutoML](https://agentic-automl-platform.vercel.app) · [system card](https://agentic-automl-platform.vercel.app/system-card)
+[LifeQuest](https://getlifequest.vercel.app) · [system card](https://getlifequest.vercel.app/system-card) · [repo](https://github.com/yadava5/lifequest) — [AutoML](https://agentic-automl-platform.vercel.app) · [system card](https://agentic-automl-platform.vercel.app/system-card) · repo private
+
+This is the one section on the page you cannot check. AutoML's repository is private, so nothing above is re-derivable by a reader, and the plate says so on its face rather than borrowing the credibility of the five sections that are.
 
 ---
 
@@ -119,7 +123,7 @@ Auditing my own work, I found **seven IDOR vulnerabilities** in Cadence — endp
 <div align="center">
 <sub>
 
-Open to summer 2026 internships and collaborations — **[aesh.03.23@gmail.com](mailto:aesh.03.23@gmail.com)** · [LinkedIn](https://www.linkedin.com/in/ayush-yadav-developer)
+Open to full-time software engineering roles and collaborations — **[aesh.03.23@gmail.com](mailto:aesh.03.23@gmail.com)** · [LinkedIn](https://www.linkedin.com/in/ayush-yadav-developer)
 
 </sub>
 </div>
