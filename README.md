@@ -1,5 +1,10 @@
 <div align="center">
-<img src="./assets/plate-0-thesis.svg" width="100%" alt="Ayush Yadav, a computer science graduate in Cincinnati, Ohio, open to full-time engineering roles. Languages C++, TypeScript, Python, Java, Swift, Rust and SQL; systems work in SIMD, the Java Vector API, WebAssembly and OpenMP; machine learning with LangGraph, MCP, in-browser ONNX and SetFit; web and backend in React, Next.js, Tauri, SwiftUI, FastAPI and NestJS; infrastructure on GitHub Actions, Docker, Postgres, CodeQL and fuzzing. Below, the six systems this page documents: Glyph, jetpack, Cadence, Applied, LifeQuest and Agentic AutoML.">
+<picture>
+  <source media="(prefers-color-scheme: light) and (max-width: 500px)" srcset="./assets/light/m-0-thesis.svg">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/light/plate-0-thesis.svg">
+  <source media="(max-width: 500px)" srcset="./assets/m-0-thesis.svg">
+  <img src="./assets/plate-0-thesis.svg" width="100%" alt="Ayush Yadav, a computer science graduate in Cincinnati, Ohio, open to full-time engineering roles. Languages C++, TypeScript, Python, Java, Swift, Rust and SQL; systems work in SIMD, the Java Vector API, WebAssembly and OpenMP; machine learning with LangGraph, MCP, in-browser ONNX and SetFit; web and backend in React, Next.js, Tauri, SwiftUI, FastAPI and NestJS; infrastructure on GitHub Actions, Docker, Postgres, CodeQL and fuzzing. Below, the six systems this page documents: Glyph, jetpack, Cadence, Applied, LifeQuest and Agentic AutoML.">
+</picture>
 </div>
 
 **C++ · TypeScript · Python · Java · Swift · Rust** — B.S. Computer Science, Miami University (May 2026). Based in Cincinnati, OH; open to full-time software engineering roles: **[aesh.03.23@gmail.com](mailto:aesh.03.23@gmail.com)** · [LinkedIn](https://www.linkedin.com/in/ayush-yadav-developer)
@@ -12,7 +17,12 @@ Each section shows the claim, then the mechanism that would catch the claim if i
 
 ## I · Work — *a year of it, and it isn't in a repo*
 
-<img src="./assets/plate-0b-work.svg" width="100%" alt="Experience. As ITSM Data Integration Intern at Miami University from June 2025 to May 2026: a Python pipeline turning 1.6 million Oracle Analytics query logs into a 57.8 million-row field-usage table; code compliance lifted from 0 to 96.72 percent across a 61-project portfolio; and a 10,453-row master asset inventory consolidated from Tableau and Workday. At DataFest 2026, team lead of three: 90-day care utilisation modelled for 349 thousand patients at 0.90 holdout AUC, over 7.7 million encounters processed with DuckDB and Polars, preserving 99.6 percent of social-determinant linkage against 32 percent under a naive join. These figures are attested by the author rather than derived from a public repository.">
+<picture>
+  <source media="(prefers-color-scheme: light) and (max-width: 500px)" srcset="./assets/light/m-0b-work.svg">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/light/plate-0b-work.svg">
+  <source media="(max-width: 500px)" srcset="./assets/m-0b-work.svg">
+  <img src="./assets/plate-0b-work.svg" width="100%" alt="Experience. As ITSM Data Integration Intern at Miami University from June 2025 to May 2026: a Python pipeline turning 1.6 million Oracle Analytics query logs into a 57.8 million-row field-usage table; code compliance lifted from 0 to 96.72 percent across a 61-project portfolio; and a 10,453-row master asset inventory consolidated from Tableau and Workday. At DataFest 2026, team lead of three: 90-day care utilisation modelled for 349 thousand patients at 0.90 holdout AUC, over 7.7 million encounters processed with DuckDB and Polars, preserving 99.6 percent of social-determinant linkage against 32 percent under a naive join. These figures are attested by the author rather than derived from a public repository.">
+</picture>
 
 For a year I was **ITSM Data Integration Intern at Miami University**. A Python pipeline ingested **1.6M Oracle Analytics query logs** — five years, 1,153 users, 66 dashboards — into a **57.8M-row** field-usage table, flagging which fields were actually in use for an OAS-to-Tableau migration. A second pass consolidated asset data siloed across Tableau and Workday into one **10,453-row, 35-field** master inventory with hash-based dedup, backed by ruff + pytest in CI. And a legacy Laravel compliance reporter became a clean ETL feed powering a 37-month dashboard that lifted code compliance **from 0% to 96.72%** across a **61-project** portfolio.
 
@@ -27,6 +37,8 @@ Also from that year: Dean's List in Fall 2023, Spring 2025 and Fall 2025; finali
 ## II · Glyph — *I don't trust the library*
 
 <picture>
+  <source media="(prefers-color-scheme: light) and (max-width: 500px)" srcset="./assets/light/m-1-glyph.svg">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/light/plate-1-glyph.svg">
   <source media="(max-width: 500px)" srcset="./assets/m-1-glyph.svg">
   <img src="./assets/plate-1-glyph.svg" width="100%" alt="Glyph: a neural network written from scratch in C++ with hand-written AVX-512, AVX2 and NEON kernels, plus an autovectorised WebAssembly build. It scores 97.01 percent on the 10,000-image MNIST test set, which means 299 wrong — every one of them drawn as a grid of the labels it missed. The 79 it was most confident about are drawn in a heavier stroke than the rest.">
 </picture>
@@ -48,6 +60,8 @@ That same test set also selected the checkpoint and triggered early stopping (`a
 ## III · jetpack — *I don't trust my own optimisation*
 
 <picture>
+  <source media="(prefers-color-scheme: light) and (max-width: 500px)" srcset="./assets/light/m-2-jetpack.svg">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/light/plate-2-jetpack.svg">
   <source media="(max-width: 500px)" srcset="./assets/m-2-jetpack.svg">
   <img src="./assets/plate-2-jetpack.svg" width="100%" alt="jetpack: parallel gzip on JDK 25 reaches 422 megabytes per second against 66.2 single-threaded, a 6.4 times speedup, with blocks held in a bounded in-flight window. Its hand-vectorised Adler-32 checksum runs at 4.26 gigabytes per second and is verified bit-identical against java.util.zip — whose own native intrinsic is faster still, at 14.06, and is printed here as the reference it loses to.">
 </picture>
@@ -69,6 +83,8 @@ The hand-vectorised Adler-32 reaches **4.26 GB/s**, while the JDK's own native i
 ## IV · Cadence — *I don't trust the black box*
 
 <picture>
+  <source media="(prefers-color-scheme: light) and (max-width: 500px)" srcset="./assets/light/m-3-cadence.svg">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/light/plate-3-cadence.svg">
   <source media="(max-width: 500px)" srcset="./assets/m-3-cadence.svg">
   <img src="./assets/plate-3-cadence.svg" width="100%" alt="Cadence: the sentence 'lunch with sam friday 1pm' is labelled in place with the parser that produced each span — compromise found the person, chrono-node found both the day and the time — while the title is left unmarked because it is what remains once the spans are removed and carries no parser. It is then filed into the Friday 1pm slot of a week grid that names its hours. Its 36 API handlers are bundled into a single serverless function, because the hosting plan allows 12.">
 </picture>
@@ -84,6 +100,8 @@ A sentence typed the way you would say it becomes a calendar entry. The parser r
 ## V · Applied — *I don't trust the model*
 
 <picture>
+  <source media="(prefers-color-scheme: light) and (max-width: 500px)" srcset="./assets/light/m-4-applied.svg">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/light/plate-4-applied.svg">
   <source media="(max-width: 500px)" srcset="./assets/m-4-applied.svg">
   <img src="./assets/plate-4-applied.svg" width="100%" alt="Applied: a three-layer email classifier — 201 regex rules, then e5 embeddings, then a fine-tuned SetFit head, cheapest first. It scores 0.979 macro-F1 on a 96-message evaluation set, measured with the rules layer alone; anything that fails to clear the 0.85 confidence gate is referred to a human rather than guessed at. Inference runs inside your browser.">
 </picture>
@@ -107,6 +125,8 @@ The fine-tuned head exports to int8 ONNX (90.4 MB → 22.8 MB) and runs **in you
 ## VI · The refusal — *I don't trust myself*
 
 <picture>
+  <source media="(prefers-color-scheme: light) and (max-width: 500px)" srcset="./assets/light/m-5-refusal.svg">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/light/plate-5-refusal.svg">
   <source media="(max-width: 500px)" srcset="./assets/m-5-refusal.svg">
   <img src="./assets/plate-5-refusal.svg" width="100%" alt="The IDOR found auditing Cadence, drawn service by service: in six services — attachments, calendars, events, task-lists, tasks and tags — any authenticated user could read or delete another user's records by id. Each service now carries the owner guard in its read and delete queries, so tenant A's rows are struck out of a read run as tenant B and only B's return. Two caveats stay on the plate: the tags test asserted the vulnerable query, and task-lists still has no regression test. Below, the layer that does not depend on remembering: an unfiltered SELECT count(*) FROM tasks, run as B, comes back B only, because PostgreSQL row-level security refused the rest.">
 </picture>
@@ -126,6 +146,8 @@ Tags was missed by the first sweep entirely, and is the one worth naming: its ex
 ## VII · LifeQuest
 
 <picture>
+  <source media="(prefers-color-scheme: light) and (max-width: 500px)" srcset="./assets/light/m-6-release.svg">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/light/plate-6-release.svg">
   <source media="(max-width: 500px)" srcset="./assets/m-6-release.svg">
   <img src="./assets/plate-6-release.svg" width="100%" alt="LifeQuest turns real-world routines into tracked quests, for people rebuilding structure after a layoff or in retirement. One source tree in apps/desktop is built twice — as a Tauri 2 native binary and as a web app — with a shared Zod schema package holding both of them to the same contract as the API. Behind it: 10 Prisma models and 14 REST endpoints across 6 NestJS controllers. When it generates a quest it asks OpenAI, falls back to Hugging Face, and if neither is configured it returns nothing rather than inventing one.">
 </picture>
@@ -143,6 +165,8 @@ Quest generation asks OpenAI, falls back to Hugging Face, and returns `null` if 
 ## VIII · Agentic AutoML
 
 <picture>
+  <source media="(prefers-color-scheme: light) and (max-width: 500px)" srcset="./assets/light/m-6b-automl.svg">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/light/plate-6b-automl.svg">
   <source media="(max-width: 500px)" srcset="./assets/m-6b-automl.svg">
   <img src="./assets/plate-6b-automl.svg" width="100%" alt="Agentic AutoML takes a dataset and a sentence and returns a trained model. Its tool registry holds 44 definitions, but the model never carries all of them: 15 travel with it in every phase and the remaining 29 arrive with the phase that needs them, routed by seven named tool sets — onboarding, preprocessing, feature proposal, feature continue, feature engineering, feature lifecycle and training lifecycle. The Python it writes executes in a container with no network, a read-only root filesystem, a non-root user and the dataset mounted read-only, leaving 5 tmpfs mounts as the only writable surface. Behind it sits a 29-table Postgres schema with pgvector. Written with Shree Chaturvedi; the repository is public and licensed GPL-3.0.">
 </picture>
@@ -161,7 +185,12 @@ Licensed **GPL-3.0** at the commit this page pins. A relicence to PolyForm Nonco
 
 ---
 
-<img src="./assets/plate-7-colophon.svg" width="100%" alt="Six systems, five system cards and one expo booklet. Every number here is traceable to the repository it came from, and the page itself is animated SVG with no JavaScript and no server.">
+<picture>
+  <source media="(prefers-color-scheme: light) and (max-width: 500px)" srcset="./assets/light/m-7-colophon.svg">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/light/plate-7-colophon.svg">
+  <source media="(max-width: 500px)" srcset="./assets/m-7-colophon.svg">
+  <img src="./assets/plate-7-colophon.svg" width="100%" alt="Six systems, five system cards and one expo booklet. Every number here is traceable to the repository it came from, and the page itself is animated SVG with no JavaScript and no server.">
+</picture>
 
 <div align="center">
 <sub>
