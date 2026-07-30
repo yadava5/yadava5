@@ -29,7 +29,10 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const ASSETS = join(ROOT, 'assets');
+// Overridable so build/mutations.mjs can point the whole gate at a directory
+// of deliberately-broken plates. A check nobody has tried to break is a check
+// nobody knows is connected.
+const ASSETS = process.env.GATE_ASSETS || join(ROOT, 'assets');
 const LEFT = 150, RIGHT = 730;
 const M_LEFT = 30, M_RIGHT = 412;   // the 440-wide mobile canvas
 const STEPS = 40;                   // samples across one loop
