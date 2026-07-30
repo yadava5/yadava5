@@ -427,6 +427,8 @@ def plate_applied() -> str:
    message that is supposed to be refused crossed the gate first and turned
    underneath it. Nothing on the plate was ever stopped by anything. 140px puts
    its bottom edge exactly on y=288, where it is held before being referred. */
+.ly{{stroke-dasharray:18 222;animation:ly {LOOP}s linear infinite}}
+@keyframes ly{{0%{{stroke-dashoffset:240}}100%{{stroke-dashoffset:0}}}}
 .div{{animation:dv {LOOP}s {ARREST} infinite}}
 @keyframes dv{{0%{{opacity:0;transform:translate(0,0)}}5%{{opacity:1;transform:translate(0,0)}}
   /* stopped ON the gate, and visibly held there — that pause is the refusal */
@@ -448,9 +450,12 @@ def plate_applied() -> str:
     s.append(f'<text x="400" y="100" class="lbl" fill="{AMBER}">RULES LAYER ONLY</text>')
     s.append(f'<text x="400" y="118" class="fine">SetFit off, embeddings emptied</text>')
 
-    for label, y in [("201 REGEX RULES", 160), ("e5 EMBEDDINGS", 200), ("SETFIT HEAD", 240)]:
+    for i, (label, y) in enumerate([("201 REGEX RULES", 160), ("e5 EMBEDDINGS", 200), ("SETFIT HEAD", 240)]):
         s.append(f'<text x="150" y="{y+5}" class="lbl">{label}</text>')
         s.append(f'<path d="M400 {y}H640" stroke="{WIRE}" stroke-width="1" stroke-dasharray="4 5"/>')
+        # the lit layer, drawn over the dashed one as the messages arrive
+        s.append(f'<path class="ly" d="M400 {y}H640" stroke="{a}" stroke-width="1.4" '
+                 f'style="animation-delay:{round(-SET + i*0.9,3)}s"/>')
     # the gate that is allowed to decline
     s.append(f'<text x="150" y="293" class="lbl" fill="{a}">0.85 CONFIDENCE GATE</text>')
     s.append(f'<path d="M400 288H640" stroke="{a}" stroke-width="1"/>')
