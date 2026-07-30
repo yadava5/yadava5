@@ -2,6 +2,8 @@
 <img src="./assets/plate-0-thesis.svg" width="100%" alt="The thesis plate: Ayush Yadav, and the sentence 'Every number on this page is followed by the thing that would catch it.' Below it, the six colours the document uses, one per system: Glyph, jetpack, Cadence, Applied, LifeQuest, AutoML.">
 </div>
 
+**C++ · TypeScript · Python · Java · Rust** — CS '26, Miami University. Open to full-time software engineering roles: **[aesh.03.23@gmail.com](mailto:aesh.03.23@gmail.com)** · [LinkedIn](https://www.linkedin.com/in/ayush-yadav-developer)
+
 I build systems that prove themselves. Six of them are live, publicly reachable, and five of the six ship a **system card** — a print-format walkthrough of the architecture and the evidence behind its numbers. AutoML's equivalent is an expo booklet.
 
 What follows is five system plates (LifeQuest and AutoML share the last), plus one for the habit that runs underneath all of them, between an opening and a colophon. Each shows the claim, then the mechanism that would catch the claim if it were a lie.
@@ -17,7 +19,9 @@ What follows is five system plates (LifeQuest and AutoML share the last), plus o
 
 A neural network written **from scratch in C++** — no framework — with hand-written SIMD kernels for AVX-512, AVX2 and NEON. On `main`, the WebAssembly build carries no intrinsics of its own: under Emscripten every ISA predicate misses and the scalar path is autovectorised by `-msimd128` (`CMakeLists.txt:279`). The branches are `#if`/`#elif`, so one binary compiles one path and nothing cross-checks them.
 
-The live page and the repo diverge here, so be exact about which you're looking at. `getglyph.vercel.app` **does** fetch and instantiate WebAssembly — `/wasm/fast_mnist.wasm`, 46,960 bytes, `application/wasm`, and it is a SIMD build — but it came off [`yadava5/fix-hero-media-validation`](https://github.com/yadava5/glyph/tree/yadava5/fix-hero-media-validation), which carries real `wasm_simd128` intrinsics. You do not have to take that on trust: the binary that URL serves is **byte-identical** to that branch's blob — `curl -s https://getglyph.vercel.app/wasm/fast_mnist.wasm | shasum -a 256` gives `396dc0f4848ddc0b9c35420cdad5e5cc0af53f4a408024ba10f7364470d9807e`, and so does the file in the tree. What you can reproduce from `main` is the autovectorised one, which is not quite what the link serves. (An earlier revision claimed the opposite — that no `.wasm` was fetched at all — and a later one put a SIMD-instruction count here. The first was wrong; the second I could not reproduce twice with the same method, so it is gone rather than rounded.)
+The live page and `main` diverge, so be exact about which you're reading. `getglyph.vercel.app` **does** fetch and instantiate WebAssembly — `/wasm/fast_mnist.wasm`, 46,960 bytes, `application/wasm` — and it is a SIMD build, off [`yadava5/fix-hero-media-validation`](https://github.com/yadava5/glyph/tree/yadava5/fix-hero-media-validation), which carries real `wasm_simd128` intrinsics.
+
+Don't take that on trust. `curl -s https://getglyph.vercel.app/wasm/fast_mnist.wasm | shasum -a 256` gives `396dc0f4848ddc0b9c35420cdad5e5cc0af53f4a408024ba10f7364470d9807e` — byte-identical to that branch's blob. What `main` builds is the autovectorised one, which is not what the link serves.
 
 **97.01%** on the 10,000-image MNIST test set — 9,701 right, so **299 wrong**.
 
@@ -125,7 +129,7 @@ This is the one section on the page you cannot check. AutoML's repository is pri
 <div align="center">
 <sub>
 
-Open to full-time software engineering roles and collaborations — **[aesh.03.23@gmail.com](mailto:aesh.03.23@gmail.com)** · [LinkedIn](https://www.linkedin.com/in/ayush-yadav-developer)
+**[aesh.03.23@gmail.com](mailto:aesh.03.23@gmail.com)** · [LinkedIn](https://www.linkedin.com/in/ayush-yadav-developer) · [github.com/yadava5](https://github.com/yadava5)
 
 </sub>
 </div>

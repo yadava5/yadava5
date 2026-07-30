@@ -599,6 +599,7 @@
     "README.md:5": "'Five system cards' \u2014 likewise enumerated on the page, and the sixth is named as an expo booklet",
     "plate-7-colophon.svg:6": "'Six systems' \u2014 the colophon restating the page's own contents",
     "plate-7-colophon.svg:5": "'Five system cards' \u2014 likewise",
-    "README.md:256": "the '256' in `shasum -a 256` \u2014 the name of the hash algorithm in a command the reader is invited to run"
+    "README.md:256": "the '256' in `shasum -a 256` \u2014 the name of the hash algorithm in a command the reader is invited to run",
+    "README.md:26": "'CS '26' \u2014 a graduation year, the same exemption the plates already carry"
   }
 }
