@@ -157,6 +157,15 @@ EASE = "cubic-bezier(.4,0,.2,1)"
 # in the last fifth of the travel.
 ARREST = "cubic-bezier(.05,.75,.1,1)"
 
+# One curve did every job. A census of the 21 animation classes found
+# cubic-bezier(.4,0,.2,1) on 16 of them — arrivals, impacts and ambient pulses
+# all on the same symmetric ease-in-out — which is why the document had one
+# gesture performed eight times. Motion carries meaning here or it is
+# decoration, and three verbs need three curves.
+ARRIVE  = "cubic-bezier(.16,1,.3,1)"      # expo-out: fast away, long settle
+IMPACT  = "cubic-bezier(.34,1.56,.64,1)"  # overshoots slightly, then sets
+BREATHE = "cubic-bezier(.37,0,.63,1)"     # symmetric sine, for ambient loops
+
 
 def head(h: int, title: str, desc: str, key: str = "") -> str:
     if key:
@@ -202,10 +211,11 @@ def plate_thesis() -> str:
     LOOP, SET = 11.3, 9.0
     s.append(f""".rule{{stroke-dasharray:1;animation:sweep {LOOP}s {EASE} infinite;animation-delay:{-SET}s}}
 @keyframes sweep{{0%{{stroke-dashoffset:1}}18%,100%{{stroke-dashoffset:0}}}}
-.sw{{transform-box:fill-box;transform-origin:center;animation:sw {LOOP}s {EASE} infinite}}
+.sw{{transform-box:fill-box;transform-origin:center;animation:sw {LOOP}s {BREATHE} infinite}}
 @keyframes sw{{0%,4%{{opacity:.45;transform:translateY(0)}}12%{{opacity:1;transform:translateY(0)}}
-  26%{{transform:translateY(0)}}34%{{transform:translateY(-7px)}}
-  44%,100%{{transform:translateY(0);opacity:1}}}}
+  26%{{transform:translateY(0)}}34%{{transform:translateY(-7px)}}44%{{transform:translateY(0)}}
+  64%{{transform:translateY(0)}}72%{{transform:translateY(-7px)}}
+  84%,100%{{transform:translateY(0);opacity:1}}}}
 .ser{{font-family:ui-serif,Georgia,'Times New Roman',serif;font-size:34px;fill:{INK}}}
 </style>{slab(H, AMBER)}""")
     s.append(f'<text x="150" y="56" class="key" style="letter-spacing:5px">AYUSH YADAV</text>')
@@ -221,7 +231,7 @@ def plate_thesis() -> str:
     for i, (nm, c) in enumerate(LEGEND):
         x = L + sum(wid[:i]) + gut * i
         s.append(f'<rect class="sw" x="{x:.1f}" y="248" width="14" height="4" rx="1" fill="{c}" '
-                 f'style="animation-delay:{round(-SET + i*0.6,3)}s"/>')
+                 f'style="animation-delay:{round(-SET + i*0.12,3)}s"/>')
         s.append(f'<text x="{x:.1f}" y="272" class="fine">{nm}</text>')
     return "".join(s) + "</svg>"
 
@@ -238,11 +248,11 @@ def plate_glyph() -> str:
     s.append(f""".ink{{fill:none;stroke:{a};stroke-width:7;stroke-linecap:round;stroke-linejoin:round;
   stroke-dasharray:1;stroke-dashoffset:0;animation:draw {LOOP}s linear infinite;animation-delay:{-SET}s}}
 @keyframes draw{{0%{{stroke-dashoffset:1}}17%{{stroke-dashoffset:0}}100%{{stroke-dashoffset:0}}}}
-.tok{{animation:run {LOOP}s {EASE} infinite}}
+.tok{{animation:run {LOOP}s {ARRIVE} infinite}}
 @keyframes run{{0%{{opacity:0;transform:translateX(-190px)}}5%{{opacity:1;transform:translateX(-190px)}}
   34%,96%{{opacity:1;transform:translateX(0)}}100%{{opacity:0;transform:translateX(0)}}}}
 .wrong{{opacity:.78}}
-.gr{{transform-box:fill-box;transform-origin:left center;animation:gr {LOOP}s {EASE} infinite}}
+.gr{{transform-box:fill-box;transform-origin:left center;animation:gr {LOOP}s {BREATHE} infinite}}
 @keyframes gr{{0%,30%{{transform:translateY(0)}}38%{{transform:translateY(-5px)}}
   50%,100%{{transform:translateY(0)}}}}
 </style>{slab(H, a)}""")
@@ -257,7 +267,7 @@ def plate_glyph() -> str:
     for j, d in enumerate([DIGITS[2], DIGITS[9], DIGITS[9]]):
         s.append(f'<g {digit(d, hx, 104, 0.68)}>'
                  f'<path class="ink" d="{d}" pathLength="1" '
-                 f'style="animation-delay:{round(-SET + j*0.55,3)}s"/></g>')
+                 f'style="animation-delay:{round(-SET + j*0.15,3)}s"/></g>')
         x0, x1 = ink(d)
         hx += (x1 - x0) * 0.68 + 12
 
@@ -273,7 +283,7 @@ def plate_glyph() -> str:
         s.append(f'<circle class="tok" data-rest="one-answer" data-rest-within="2" '
                  f'cx="660" cy="{y}" r="4" '
                  + (f'fill="{a}" ' if hand else f'fill="none" stroke="{a}" stroke-width="1.8" ')
-                 + f'style="animation-delay:{round(-SET + i*0.5,3)}s"/>')
+                 + f'style="animation-delay:{round(-SET + i*0.12,3)}s"/>')
     # four instruction sets, one answer — so all four tokens must actually
     # arrive at the collector, not merely set off in its direction
     s.append(f'<path id="one-answer" d="M660 116V226" stroke="{WIRE}" stroke-width="1"/>')
@@ -298,7 +308,7 @@ def plate_glyph() -> str:
     errs = json.loads((ROOT / "errors.json").read_text())["true"]
     gx, gy, cols = 150, 468, 50
     for r in range((len(errs) + cols - 1) // cols):
-        s.append(f'<g class="gr" style="animation-delay:{round(-SET + r*0.5,3)}s">')
+        s.append(f'<g class="gr" style="animation-delay:{round(-SET + r*0.12,3)}s">')
         for i in range(r * cols, min((r + 1) * cols, len(errs))):
             x, y = gx + (i % cols) * 11.4, gy + r * 14.0
             s.append(f'<g class="wrong" {digit(DIGITS[errs[i]], x, y, 0.068, centre=10.4)}>'
@@ -318,16 +328,18 @@ def plate_jetpack() -> str:
               "and is verified bit-identical against java.util.zip — whose own native intrinsic "
               "is faster still, at 14.06, and is printed here as the reference it loses to.",
               key="plate-2-jetpack.svg")]
-    s.append(f""".blk{{animation:sq {LOOP}s {EASE} infinite;transform-box:fill-box;transform-origin:left center}}
+    s.append(f""".blk{{animation:sq {LOOP}s {ARRIVE} infinite;transform-box:fill-box;transform-origin:left center}}
 @keyframes sq{{0%{{opacity:0;transform:translateX(-88px) scaleX(1)}}
   5%,14%{{opacity:1;transform:translateX(-88px) scaleX(1)}}
   38%,60%{{opacity:1;transform:translateX(0) scaleX(1)}}
   /* the window breathes once the blocks are inside it: peak memory tracking
      the window is a continuous property, not a one-off arrival */
-  68%{{opacity:1;transform:translateX(0) scaleX(.94)}}
-  78%,96%{{opacity:1;transform:translateX(0) scaleX(1)}}
+  52%{{opacity:1;transform:translateX(0) scaleX(.94)}}
+  66%,78%{{opacity:1;transform:translateX(0) scaleX(1)}}
+  86%{{opacity:1;transform:translateX(0) scaleX(.97)}}
+  94%,96%{{opacity:1;transform:translateX(0) scaleX(1)}}
   100%{{opacity:0;transform:translateX(0) scaleX(1)}}}}
-.mt{{transform-box:fill-box;transform-origin:left center;animation:mt {LOOP}s {EASE} infinite}}
+.mt{{transform-box:fill-box;transform-origin:left center;animation:mt {LOOP}s {ARRIVE} infinite}}
 @keyframes mt{{0%,6%{{transform:scaleX(0);opacity:0}}11%{{opacity:1}}24%,100%{{transform:scaleX(1);opacity:1}}}}
 .row{{animation:rw {LOOP}s {EASE} infinite}}
 @keyframes rw{{0%,8%{{opacity:.86}}20%,100%{{opacity:1}}}}
@@ -352,7 +364,7 @@ def plate_jetpack() -> str:
     for i in range(4):
         y = 168 + i * 26
         s.append(f'<rect class="blk" data-max-x="294" x="180" y="{y}" width="107.8" height="16" rx="2" fill="{a}" '
-                 f'style="animation-delay:{round(-SET + i*0.56,3)}s"/>')
+                 f'style="animation-delay:{round(-SET + i*0.12,3)}s"/>')
     for j, ln in enumerate(["peak memory", "tracks the window,", "not the file"]):
         s.append(f'<text x="400" y="{194 + j*20}" class="fine">{ln}</text>')
     s.append(f'<text x="150" y="288" class="kick">MECHANISM — one virtual thread per block</text>')
@@ -381,7 +393,7 @@ def plate_jetpack() -> str:
     ]
     for i, (name, score, note) in enumerate(rows):
         y = 408 + i * 24
-        dl = round(-SET + i * 0.6, 3)
+        dl = round(-SET + i * 0.12, 3)
         s.append(f'<text class="row lbl" x="150" y="{y}" style="animation-delay:{dl}s">{name}</text>')
         s.append(f'<text class="row key" x="470" y="{y}" style="animation-delay:{dl}s">{score}</text>')
         if note:
@@ -404,7 +416,7 @@ def plate_cadence() -> str:
 @keyframes ul{{0%,4%{{transform:scaleX(0);opacity:0}}8%{{opacity:1}}18%,100%{{transform:scaleX(1);opacity:1}}}}
 .an{{animation:an {LOOP}s linear infinite}}
 @keyframes an{{0%,6%{{opacity:0}}12%,100%{{opacity:1}}}}
-.fil{{transform-box:fill-box;transform-origin:center;animation:fil {LOOP}s {EASE} infinite}}
+.fil{{transform-box:fill-box;transform-origin:center;animation:fil {LOOP}s {BREATHE} infinite}}
 @keyframes fil{{0%,10%{{opacity:0;transform:scale(.94)}}16%{{opacity:1;transform:scale(1)}}
   40%{{transform:scale(1)}}48%{{transform:scale(1.05)}}58%,100%{{transform:scale(1);opacity:1}}}}
 </style>{slab(H, a)}""")
@@ -419,7 +431,7 @@ def plate_cadence() -> str:
     toks = [(0, 5, "TITLE"), (11, 3, "WHO"), (15, 6, "DAY"), (22, 3, "TIME")]
     for i, (start, ln, label) in enumerate(toks):
         x, w = 150 + start * CW, ln * CW
-        dl = round(-SET + i * 0.5, 3)
+        dl = round(-SET + i * 0.12, 3)
         s.append(f'<rect class="ul" x="{x:.0f}" y="126" width="{w:.0f}" height="2" fill="{a}" '
                  f'style="animation-delay:{dl}s"/>')
         s.append(f'<text class="an lbl" x="{x:.0f}" y="152" '
@@ -455,7 +467,7 @@ def plate_applied() -> str:
               "96-message evaluation set, measured with the rules layer alone; anything that "
               "fails to clear the 0.85 confidence gate is referred to a human rather than "
               "guessed at. Inference runs inside your browser.", key="plate-4-applied.svg")]
-    s.append(f""".env{{animation:fall {LOOP}s {EASE} infinite}}
+    s.append(f""".env{{animation:fall {LOOP}s {ARRIVE} infinite}}
 @keyframes fall{{0%{{opacity:0;transform:translateY(-184px)}}5%{{opacity:1;transform:translateY(-184px)}}
   46%,96%{{opacity:1;transform:translateY(0)}}100%{{opacity:0;transform:translateY(0)}}}}
 /* The corner used to be at translateY(212px) — 52u BELOW the gate, so the one
@@ -464,7 +476,7 @@ def plate_applied() -> str:
    its bottom edge exactly on y=288, where it is held before being referred. */
 .ly{{stroke-dasharray:18 222;animation:ly {LOOP}s linear infinite}}
 @keyframes ly{{0%{{stroke-dashoffset:240}}100%{{stroke-dashoffset:0}}}}
-.div{{animation:dv {LOOP}s {ARREST} infinite}}
+.div{{animation:dv {LOOP}s {ARRIVE} infinite}}
 @keyframes dv{{0%{{opacity:0;transform:translate(-146px,-212px)}}5%{{opacity:1;transform:translate(-146px,-212px)}}
   /* stopped ON the gate, and visibly held there — that pause is the refusal */
   30%,44%{{opacity:1;transform:translate(-146px,-72px)}}
@@ -490,7 +502,7 @@ def plate_applied() -> str:
         s.append(f'<path d="M400 {y}H640" stroke="{WIRE}" stroke-width="1" stroke-dasharray="4 5"/>')
         # the lit layer, drawn over the dashed one as the messages arrive
         s.append(f'<path class="ly" d="M400 {y}H640" stroke="{a}" stroke-width="1.4" '
-                 f'style="animation-delay:{round(-SET + i*0.9,3)}s"/>')
+                 f'style="animation-delay:{round(-SET + i*0.18,3)}s"/>')
     # the gate that is allowed to decline
     s.append(f'<text x="150" y="293" class="lbl" style="fill:{a}">0.85 CONFIDENCE GATE</text>')
     s.append(f'<path d="M400 288H640" stroke="{a}" stroke-width="1"/>')
@@ -500,7 +512,7 @@ def plate_applied() -> str:
         if i == 2:
             continue          # slot 2 belongs to the .div below — five messages, not six
         s.append(f'<rect class="env" x="{416 + i*44}" y="312" width="30" height="20" rx="2" fill="none" '
-                 f'stroke="{a}" stroke-width="1.6" style="animation-delay:{round(-SET + i*0.7,3)}s"/>')
+                 f'stroke="{a}" stroke-width="1.6" style="animation-delay:{round(-SET + i*0.14,3)}s"/>')
     # the one that does not clear the gate leaves the stack and goes sideways
     # the whole claim of this plate is that the one that fails the gate reaches
     # a PERSON. If it merely leaves the stack, the plate says nothing.
@@ -532,7 +544,7 @@ def plate_refusal() -> str:
     # units short of a boundary it is supposed to be stopped BY, for 66% of the
     # loop and at frame zero. A refusal that never touches the wall is a diagram
     # of a query losing interest. 104px lands the edge exactly on 439.
-    s.append(f""".q{{animation:seek {LOOP}s {ARREST} infinite;animation-delay:{-SET}s}}
+    s.append(f""".q{{animation:seek {LOOP}s {IMPACT} infinite;animation-delay:{-SET}s}}
 @keyframes seek{{0%{{opacity:0;transform:translateX(-104px)}}5%{{opacity:1;transform:translateX(-104px)}}
   /* contact at 28%, a 3u recoil, then it stays stopped. The recoil is the
      difference between "arrived here" and "was refused here". */
@@ -542,7 +554,7 @@ def plate_refusal() -> str:
    element that flashes is either dimmed at frame zero or below the 70% duty
    floor, and both are gate failures. So it flexes instead — always fully
    visible, at rest in the finished frame. */
-.wall{{transform-box:fill-box;transform-origin:center;animation:wall {LOOP}s {EASE} infinite;animation-delay:{-SET}s}}
+.wall{{transform-box:fill-box;transform-origin:center;animation:wall {LOOP}s {IMPACT} infinite;animation-delay:{-SET}s}}
 @keyframes wall{{0%,27%{{transform:scaleY(1)}}31%{{transform:scaleY(1.06)}}42%,100%{{transform:scaleY(1)}}}}
 .zero{{animation:land {LOOP}s linear infinite;animation-delay:{-SET}s}}
 @keyframes land{{0%,14%{{opacity:0}}22%,100%{{opacity:1}}}}
@@ -562,7 +574,7 @@ def plate_refusal() -> str:
         # back, so they carry the accent. The plate said "B only" in 32px type
         # and drew eight identical rectangles.
         s.append(f'<rect class="ret" x="150" y="{y}" width="170" height="18" rx="2" fill="{ROW}" '
-                 f'stroke="{a}" style="animation-delay:{round(-SET + i*0.3,3)}s"/>')
+                 f'stroke="{a}" style="animation-delay:{round(-SET + i*0.18,3)}s"/>')
         s.append(f'<rect x="560" y="{y}" width="170" height="18" rx="2" fill="{ROW}" stroke="{WIRE}"/>')
 
     # The boundary now sits on the midpoint between the two stacks (320→560) and
@@ -600,7 +612,7 @@ def plate_release() -> str:
               "committed and before a model is trained. This is the one section on the page a "
               "reader cannot check: the repository is private.",
               key="plate-6-release.svg")]
-    s.append(f""".nd{{transform-box:fill-box;transform-origin:center;animation:nd {LOOP}s {EASE} infinite}}
+    s.append(f""".nd{{transform-box:fill-box;transform-origin:center;animation:nd {LOOP}s {BREATHE} infinite}}
 @keyframes nd{{0%,4%{{opacity:0;transform:scale(.9)}}10%{{opacity:1;transform:scale(1)}}
   40%{{transform:scale(1)}}48%{{transform:scale(1.22)}}
   58%{{transform:scale(1)}}
@@ -613,7 +625,7 @@ def plate_release() -> str:
   /* the longest dead hold in the document: it is waiting for a human, and it
      now waits AT the gate at x=530 rather than 110u short of it, inside a wall */
   88%,96%{{opacity:1;transform:translateX(76px)}}100%{{opacity:0;transform:translateX(76px)}}}}
-.gtp{{transform-box:fill-box;transform-origin:center;animation:gtp {LOOP}s {EASE} infinite}}
+.gtp{{transform-box:fill-box;transform-origin:center;animation:gtp {LOOP}s {IMPACT} infinite}}
 @keyframes gtp{{0%,22%{{transform:scaleY(1)}}28%{{transform:scaleY(1.09)}}
   38%,100%{{transform:scaleY(1)}}}}
 /* travel slow enough that a 0.33s sample never covers more than ~130u */
@@ -622,7 +634,7 @@ def plate_release() -> str:
     s.append(f'<text x="150" y="56" class="lbl">LIFEQUEST</text>')
     for i, txt in enumerate(["Reconnect with a mentor", "Document a new routine", "Share a win"]):
         s.append(f'<circle class="nd" cx="158" cy="{83+i*30}" r="7" fill="none" stroke="{PINK}" stroke-width="1.6" '
-                 f'style="animation-delay:{round(-SET + i*0.7,3)}s"/>')
+                 f'style="animation-delay:{round(-SET + i*0.14,3)}s"/>')
         if i < 2:
             s.append(f'<path d="M158 {91+i*30}V{106+i*30}" stroke="{WIRE}" stroke-width="1"/>')
         s.append(f'<text x="178" y="{88+i*30}" class="lbl">{txt}</text>')
@@ -681,7 +693,7 @@ def plate_colophon() -> str:
     LOOP, SET = 12.7, 10.0
     s.append(f""".rule{{stroke-dasharray:1;animation:sweep {LOOP}s {EASE} infinite;animation-delay:{-SET}s}}
 @keyframes sweep{{0%{{stroke-dashoffset:1}}20%,100%{{stroke-dashoffset:0}}}}
-.ln{{animation:ln {LOOP}s {EASE} infinite}}
+.ln,.ln2{{animation:ln {LOOP}s {BREATHE} infinite}}
 @keyframes ln{{0%,24%{{transform:translateX(0)}}32%{{transform:translateX(6px)}}
   46%{{transform:translateX(0)}}
   68%{{transform:translateX(0)}}76%{{transform:translateX(3px)}}
@@ -692,9 +704,9 @@ def plate_colophon() -> str:
     for i, ln in enumerate(["Six systems. Five system cards, one booklet.",
                             "Every number traces to its repo."]):
         s.append(f'<text class="ln say" x="150" y="{120 + i*28}" '
-                 f'style="animation-delay:{round(-SET + i*0.8,3)}s">{ln}</text>')
+                 f'style="animation-delay:{round(-SET + i*0.15,3)}s">{ln}</text>')
     s.append(f'<text x="150" y="172" class="fine" style="fill:{INK3}">except AutoML’s — that repository is private, and the plate says so</text>')
-    s.append(f'<text class="ln lbl" x="150" y="204" '
+    s.append(f'<text class="ln2 lbl" x="150" y="204" '
              f'style="animation-delay:{round(-SET + 1.9,3)}s">ANIMATED SVG · NO JAVASCRIPT · NO SERVER</text>')
     s.append(f'<text x="150" y="236" class="lbl">CS ’26 · MIAMI UNIVERSITY</text>')
     s.append(f'<text x="{R}" y="236" class="lbl" text-anchor="end">aesh.03.23@gmail.com</text>')
