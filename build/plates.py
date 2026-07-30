@@ -1138,7 +1138,15 @@ MOBILE = {
  "m-3-cadence.svg": ("CADENCE", EMERALD, "36", "", "handlers bundled into one", "function. The plan allows 12.", "plate-3-cadence.svg"),
  "m-4-applied.svg": ("APPLIED", CYAN, "0.979", "", "macro-F1, rules layer only.", "Below 0.85 it asks a human.", "plate-4-applied.svg"),
  "m-5-refusal.svg": ("THE REFUSAL", EMERALD, "B", " only", "The app didn't remember", "to filter. The database refused.", "plate-5-refusal.svg"),
- "m-6-release.svg": ("LIFEQUEST · AUTOML", PINK, "HUMAN", "", "in the loop before a step commits", "or a model trains. Not public.", "plate-6-release.svg"),
+ # Was ("LIFEQUEST · AUTOML", "HUMAN", "in the loop before a step commits",
+ # "or a model trains. Not public.") — describing a plate that no longer exists,
+ # and ending on a statement that stopped being true when the repository went
+ # public. It survived because the mobile check only enforces that numbers a
+ # mobile plate DRAWS appear in the shared description; stale prose carrying no
+ # digits passes silently. Mobile is parked, but parked is not a licence to
+ # serve a false sentence.
+ "m-6-release.svg": ("LIFEQUEST", PINK, "10", "", "Prisma models, 14 endpoints.", "One tree, built desktop and web.", "plate-6-release.svg"),
+ "m-6b-automl.svg": ("AGENTIC AUTOML", INDIGO, "44", "", "tools in the registry. The model", "only ever holds its phase's set.", "plate-6b-automl.svg"),
 }
 for _fn, (_k, _a, _n, _u, _l1, _l2, _src) in MOBILE.items():
     (OUT / _fn).write_text(plate_mobile(_a, _k, _n, _u, _l1, _l2, ALT[_src]))

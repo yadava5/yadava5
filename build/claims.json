@@ -576,6 +576,7 @@
       "value": "10",
       "drawn_on": [
         "plate-6-release.svg",
+        "m-6-release.svg",
         "README.md"
       ],
       "repo": "lifequest",
@@ -588,6 +589,7 @@
       "value": "14",
       "drawn_on": [
         "plate-6-release.svg",
+        "m-6-release.svg",
         "README.md"
       ],
       "repo": "lifequest",
@@ -625,6 +627,7 @@
       "value": "44",
       "drawn_on": [
         "plate-6b-automl.svg",
+        "m-6b-automl.svg",
         "README.md"
       ],
       "repo": "automl",

@@ -142,7 +142,10 @@ Quest generation asks OpenAI, falls back to Hugging Face, and returns `null` if 
 
 ## VIII · Agentic AutoML
 
-<img src="./assets/plate-6b-automl.svg" width="100%" alt="Agentic AutoML takes a dataset and a sentence and returns a trained model. Its tool registry holds 44 definitions, but the model never carries all of them: 15 travel with it in every phase and the remaining 29 arrive with the phase that needs them, routed by seven named tool sets — onboarding, preprocessing, feature proposal, feature continue, feature engineering, feature lifecycle and training lifecycle. The Python it writes executes in a container with no network, a read-only root filesystem, a non-root user and the dataset mounted read-only, leaving 5 tmpfs mounts as the only writable surface. Behind it sits a 29-table Postgres schema with pgvector. Written with Shree Chaturvedi; the repository is public and noncommercially licensed.">
+<picture>
+  <source media="(max-width: 500px)" srcset="./assets/m-6b-automl.svg">
+  <img src="./assets/plate-6b-automl.svg" width="100%" alt="Agentic AutoML takes a dataset and a sentence and returns a trained model. Its tool registry holds 44 definitions, but the model never carries all of them: 15 travel with it in every phase and the remaining 29 arrive with the phase that needs them, routed by seven named tool sets — onboarding, preprocessing, feature proposal, feature continue, feature engineering, feature lifecycle and training lifecycle. The Python it writes executes in a container with no network, a read-only root filesystem, a non-root user and the dataset mounted read-only, leaving 5 tmpfs mounts as the only writable surface. Behind it sits a 29-table Postgres schema with pgvector. Written with Shree Chaturvedi; the repository is public and noncommercially licensed.">
+</picture>
 
 **Agentic AutoML** takes a dataset and a sentence and gives back a trained model. A LangGraph state machine drives it; an MCP server exposes the tools.
 
