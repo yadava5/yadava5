@@ -359,6 +359,38 @@ for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)
       }
     }
 
+    // 19 — A THING MUST NOT SPILL PAST THE EDGE THAT IS SUPPOSED TO HOLD IT.
+    //
+    // The gate could say where a token comes to REST (check 11) and nothing
+    // about how far it strays in between. So plate II's blocks could sit 196u
+    // wide inside a 120u bracket labelled BOUNDED IN-FLIGHT WINDOW, crossing
+    // its far line by 82u for 45% of every loop — a window visibly failing to
+    // bound, on the plate whose claim is that it bounds. Every other check
+    // passed it, because overrunning a hairline is not a collision.
+    //
+    // Deliberately ONE-SIDED. My first version asserted containment on both
+    // edges and fired on the fix as loudly as on the defect: a block that
+    // travels INTO the window is legitimately outside it beforehand, and that
+    // reads as arriving, not as spilling. The meaningful bound is the far one.
+    // Authored in the plate's own coordinates and converted here, so the number
+    // in plates.py is the number in the bracket's path.
+    for (const m of meta) {
+      const decl = m.el.getAttribute('data-max-x');
+      if (!decl) continue;
+      const hi = Number(decl) - svgEl.viewBox.baseVal.x;
+      const k = meta.indexOf(m);
+      let worst = 0, at = 0;
+      frames.forEach((f, i) => {
+        const e = f[k];
+        if (e.o < 0.5) return;
+        const over = (e.x + e.w) - hi;
+        if (over > worst) { worst = over; at = i; }
+      });
+      if (worst > TOL)
+        out.push(`${m.nm} spills ${Math.round(worst)}u past data-max-x="${decl}"`
+               + `${dur ? ` at t=${(dur * at / steps / 1000).toFixed(2)}s` : ''}`);
+    }
+
     // 13 — DOES IT MOVE, AND HOW OFTEN.
     //
     // Nothing here ever asked whether a plate animates at all, or whether it
