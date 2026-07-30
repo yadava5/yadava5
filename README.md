@@ -1,8 +1,8 @@
 <div align="center">
-<img src="./assets/plate-0-thesis.svg" width="100%" alt="Ayush Yadav, CS ’26 at Miami University, open to full-time software engineering roles. Languages C++, TypeScript, Python, Java, Swift, Rust and SQL; systems work in SIMD, the Java Vector API, WebAssembly and OpenMP; machine learning with LangGraph, MCP, in-browser ONNX and SetFit; web and backend in React, Next.js, Tauri, SwiftUI, FastAPI and NestJS; infrastructure on GitHub Actions, Docker, Postgres, CodeQL and fuzzing. Below, the six systems this page documents: Glyph, jetpack, Cadence, Applied, LifeQuest and Agentic AutoML.">
+<img src="./assets/plate-0-thesis.svg" width="100%" alt="Ayush Yadav, a computer science graduate in Cincinnati, Ohio, open to full-time engineering roles. Languages C++, TypeScript, Python, Java, Swift, Rust and SQL; systems work in SIMD, the Java Vector API, WebAssembly and OpenMP; machine learning with LangGraph, MCP, in-browser ONNX and SetFit; web and backend in React, Next.js, Tauri, SwiftUI, FastAPI and NestJS; infrastructure on GitHub Actions, Docker, Postgres, CodeQL and fuzzing. Below, the six systems this page documents: Glyph, jetpack, Cadence, Applied, LifeQuest and Agentic AutoML.">
 </div>
 
-**C++ · TypeScript · Python · Java · Rust** — CS '26, Miami University. Open to full-time software engineering roles: **[aesh.03.23@gmail.com](mailto:aesh.03.23@gmail.com)** · [LinkedIn](https://www.linkedin.com/in/ayush-yadav-developer)
+**C++ · TypeScript · Python · Java · Swift · Rust** — B.S. Computer Science, Miami University (May 2026). Based in Cincinnati, OH; open to full-time software engineering roles: **[aesh.03.23@gmail.com](mailto:aesh.03.23@gmail.com)** · [LinkedIn](https://www.linkedin.com/in/ayush-yadav-developer)
 
 I build systems that prove themselves. Six of them are live, publicly reachable, and five of the six ship a **system card** — a print-format walkthrough of the architecture and the evidence behind its numbers. AutoML's equivalent is an expo booklet.
 

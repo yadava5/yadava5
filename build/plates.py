@@ -210,8 +210,8 @@ def plate_thesis() -> str:
     below is optional depth.
     """
     H, LOOP, SET = 558, 11.3, 9.0
-    s = [head(H, "Ayush Yadav — CS '26, Miami University",
-              "Ayush Yadav, CS ’26 at Miami University, open to full-time software "
+    s = [head(H, "Ayush Yadav — computer science graduate, Cincinnati OH",
+              "Ayush Yadav, a computer science graduate in Cincinnati, Ohio, open to full-time "
               "engineering roles. Languages C++, TypeScript, Python, Java, Swift, Rust and "
               "SQL; systems work in SIMD, the Java Vector API, WebAssembly and OpenMP; "
               "machine learning with LangGraph, MCP, in-browser ONNX and SetFit; web and "
@@ -229,7 +229,7 @@ def plate_thesis() -> str:
 </style>{slab(H, INK2)}""")
 
     s.append(f'<text x="{L}" y="{TOP}" class="key" style="letter-spacing:5px">AYUSH YADAV</text>')
-    s.append(f'<text x="{R}" y="{TOP}" class="lbl" text-anchor="end">CS ’26 · MIAMI UNIVERSITY</text>')
+    s.append(f'<text x="{R}" y="{TOP}" class="lbl" text-anchor="end">CS GRADUATE · CINCINNATI, OH</text>')
     s.append(f'<path class="rule" d="M{L} 88H{R}" pathLength="1" stroke="{WIRE}"/>')
 
     # the one serif voice in the document, saying what the work IS
@@ -755,7 +755,7 @@ def plate_colophon() -> str:
     s.append(f'<text x="150" y="172" class="fine" style="fill:{INK3}">except AutoML’s — that repository is private, and the plate says so</text>')
     s.append(f'<text class="ln2 lbl" x="150" y="204" '
              f'style="animation-delay:{round(-SET + 1.9,3)}s">ANIMATED SVG · NO JAVASCRIPT · NO SERVER</text>')
-    s.append(f'<text x="150" y="236" class="lbl">CS ’26 · MIAMI UNIVERSITY</text>')
+    s.append(f'<text x="150" y="236" class="lbl">B.S. CS · MIAMI UNIVERSITY ’26</text>')
     s.append(f'<text x="{R}" y="236" class="lbl" text-anchor="end">aesh.03.23@gmail.com</text>')
     return "".join(s) + "</svg>"
 
