@@ -128,7 +128,9 @@ for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)
     const opacityOf = el => { let o = 1, n = el; while (n && n !== svgEl) { o *= parseFloat(getComputedStyle(n).opacity); n = n.parentElement; } return o; };
     const snap = () => meta.map(m => {
       const r = m.el.getBoundingClientRect();
-      return { ...m, x: r.x, y: r.y, w: r.width, h: r.height, o: opacityOf(m.el) };
+      const dof = parseFloat(getComputedStyle(m.el).strokeDashoffset);
+      return { ...m, x: r.x, y: r.y, w: r.width, h: r.height, o: opacityOf(m.el),
+               d: Number.isFinite(dof) ? dof : 0 };
     });
 
     const hit = (a, b) => Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x) > TOL
@@ -144,7 +146,7 @@ for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)
       const t = dur ? dur * i / steps : 0;
       seek(t);
       const s = snap();
-      frames.push(s.map(e => ({ x: e.x, y: e.y, w: e.w, h: e.h, o: e.o })));
+      frames.push(s.map(e => ({ x: e.x, y: e.y, w: e.w, h: e.h, o: e.o, d: e.d })));
       const at = dur ? ` at t=${(t / 1000).toFixed(2)}s` : '';
       const vis = s.filter(e => e.o >= 0.5);
 
@@ -299,6 +301,63 @@ for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)
         out.push(`${m.nm} should come to rest at #${want} but stops ${Math.round(gap)}u away `
                + `(allowed ${within}u), and holds there for ${held}% of the loop`);
     });
+
+    // 13 — DOES IT MOVE, AND HOW OFTEN.
+    //
+    // Nothing here ever asked whether a plate animates at all, or whether it
+    // animates for more than a moment. Measured across the desktop set: every
+    // plate was reveal-then-hold, and 55.8% of all loop-seconds showed nothing
+    // moving — plate 0 was 77% frozen and plate VII 69%, on the plate that
+    // asserts ANIMATED SVG. Both passed every check, because a frozen plate has
+    // no collisions.
+    //
+    // Motion is measured between consecutive samples, on the frames already
+    // collected: an interval counts as alive if any element's box or opacity
+    // moved. That is cheaper than a pixel diff and it cannot be fooled by a
+    // change too small to see, because sub-unit drift is excluded.
+    if (dur) {
+      let alive = 0;
+      for (let i = 1; i < frames.length; i++) {
+        const moved = frames[i].some((c, k) => {
+          const p = frames[i - 1][k];
+          return Math.abs(c.x - p.x) > 0.5 || Math.abs(c.y - p.y) > 0.5
+              || Math.abs(c.w - p.w) > 0.5 || Math.abs(c.o - p.o) > 0.02
+              || Math.abs(c.d - p.d) > 0.002;
+        });
+        if (moved) alive++;
+      }
+      const frac = alive / (frames.length - 1);
+      if (frac < 0.35)
+        out.push(`only ${Math.round(frac * 100)}% of this loop shows anything moving `
+               + `(floor 35%) — it reveals once and then holds for the rest`);
+    }
+
+    // 14 — A STAGGER TOO SMALL TO SEE IS NOT A STAGGER.
+    //
+    // Plate I's four kernel tokens were 0.06s apart on a 9.1s loop — 0.66% —
+    // and all four measured at the identical x at every sample. The plate's
+    // whole point is three hand-written kernels and one autovectorised build,
+    // and the distinction was carried by a string and by nothing visual.
+    const byClass = new Map();
+    for (const a of anims) {
+      const el = a.effect?.target;
+      if (!el || !el.getAttribute) continue;
+      const c = el.getAttribute('class');
+      if (!c) continue;
+      const d = Math.abs(a.effect.getComputedTiming().delay || 0);
+      for (const k of c.split(/\s+/)) {
+        if (!byClass.has(k)) byClass.set(k, new Set());
+        byClass.get(k).add(Math.round(d));
+      }
+    }
+    for (const [k, delays] of byClass) {
+      if (delays.size < 2 || !dur) continue;
+      const d = [...delays].sort((a, b) => a - b);
+      const step = (d[d.length - 1] - d[0]) / (d.length - 1);
+      if (step / dur < 0.04)
+        out.push(`.${k} staggers ${(step / dur * 100).toFixed(2)}% of its loop across `
+               + `${d.length} elements (floor 4%) — too small to read as a sequence`);
+    }
 
     // 7 — evidence that blinks. At 50% the page still looked broken: a reader
     //     scrolling past sees a different quarter of the argument missing every
