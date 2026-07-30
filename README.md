@@ -52,7 +52,7 @@ And the row that stays in the table because it's true: the hand-vectorised Adler
 
 <picture>
   <source media="(max-width: 500px)" srcset="./assets/m-3-cadence.svg">
-  <img src="./assets/plate-3-cadence.svg" width="100%" alt="Cadence: the sentence 'lunch with sam friday 1pm' is labelled in place — title, attendee, day and time — and filed into a Friday cell of the week grid. Its 36 API handlers are bundled into a single serverless function, because the hosting plan allows 12.">
+  <img src="./assets/plate-3-cadence.svg" width="100%" alt="Cadence: the sentence 'lunch with sam friday 1pm' is labelled in place — title, attendee, day and time — and filed into the Friday 1pm slot of a week grid that names its hours. Its 36 API handlers are bundled into a single serverless function, because the hosting plan allows 12.">
 </picture>
 
 A sentence typed the way you would say it becomes a calendar entry. The parser runs four parsers — chrono, hashtag, priority, language — and **every extracted span records the parser that produced it** — `source` is a required field on every tag, and conflict resolution depends on it, so a wrong tag is traceable to the parser that produced it. (The title is not a parser output: it is what is left of the sentence once the spans are removed, and it carries no `source`.)
