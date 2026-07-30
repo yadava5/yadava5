@@ -227,7 +227,7 @@ def plate_thesis() -> str:
 
 # ────────────────────────────────────────────────────────────── PLATE I
 def plate_glyph() -> str:
-    H, LOOP, SET, a = 584, 9.1, 7.6, AMBER
+    H, LOOP, SET, a = 576, 9.1, 7.6, AMBER
     s = [head(H, "Glyph — 97.01%, and the 299 it gets wrong",
               "Glyph: a neural network written from scratch in C++ with hand-written AVX-512, "
               "AVX2 and NEON kernels, plus an autovectorised WebAssembly build. It scores 97.01 "
@@ -309,7 +309,7 @@ def plate_glyph() -> str:
 
 # ────────────────────────────────────────────────────────────── PLATE II
 def plate_jetpack() -> str:
-    H, LOOP, SET, a = 536, 10.3, 7.2, LIME
+    H, LOOP, SET, a = 537, 10.3, 7.2, LIME
     s = [head(H, "jetpack — 6.4x parallel, and the intrinsic it does not beat",
               "jetpack: parallel gzip on JDK 25 reaches 422 megabytes per second against 66.2 "
               "single-threaded, a 6.4 times speedup, with blocks held in a bounded in-flight "
@@ -320,7 +320,11 @@ def plate_jetpack() -> str:
     s.append(f""".blk{{animation:sq {LOOP}s {EASE} infinite;transform-box:fill-box;transform-origin:left center}}
 @keyframes sq{{0%{{opacity:0;transform:translateX(-230px) scaleX(1.8182)}}
   5%,14%{{opacity:1;transform:translateX(-230px) scaleX(1.8182)}}
-  38%,96%{{opacity:1;transform:translateX(0) scaleX(1)}}
+  38%,60%{{opacity:1;transform:translateX(0) scaleX(1)}}
+  /* the window breathes once the blocks are inside it: peak memory tracking
+     the window is a continuous property, not a one-off arrival */
+  68%{{opacity:1;transform:translateX(0) scaleX(.94)}}
+  78%,96%{{opacity:1;transform:translateX(0) scaleX(1)}}
   100%{{opacity:0;transform:translateX(0) scaleX(1)}}}}
 .mt{{transform-box:fill-box;transform-origin:left center;animation:mt {LOOP}s {EASE} infinite}}
 @keyframes mt{{0%,6%{{transform:scaleX(0);opacity:0}}11%{{opacity:1}}24%,100%{{transform:scaleX(1);opacity:1}}}}
@@ -388,7 +392,7 @@ def plate_jetpack() -> str:
 
 # ────────────────────────────────────────────────────────────── PLATE III
 def plate_cadence() -> str:
-    H, LOOP, SET, a = 464, 7.9, 5.6, EMERALD
+    H, LOOP, SET, a = 457, 7.9, 5.6, EMERALD
     SENT, FS, CW = "lunch with sam friday 1pm", 26, 15.62
     s = [head(H, "Cadence — a parser that shows its work",
               "Cadence: the sentence 'lunch with sam friday 1pm' is labelled in place — title, "
@@ -443,7 +447,7 @@ def plate_cadence() -> str:
 
 # ────────────────────────────────────────────────────────────── PLATE IV
 def plate_applied() -> str:
-    H, LOOP, SET, a = 536, 11.7, 8.4, CYAN
+    H, LOOP, SET, a = 532, 11.7, 8.4, CYAN
     s = [head(H, "Applied — a classifier allowed to say it doesn't know",
               "Applied: a three-layer email classifier — 201 regex rules, then e5 embeddings, "
               "then a fine-tuned SetFit head, cheapest first. It scores 0.979 macro-F1 on a "
@@ -517,7 +521,7 @@ def plate_applied() -> str:
 
 # ────────────────────────────────────────────────────────────── PLATE V
 def plate_refusal() -> str:
-    H, LOOP, SET, a = 452, 6.7, 4.7, EMERALD
+    H, LOOP, SET, a = 453, 6.7, 4.7, EMERALD
     s = [head(H, "The refusal — the database declines to return another tenant's rows",
               "A query from one tenant travels toward another tenant's rows, reaches the "
               "PostgreSQL row-level-security boundary, and stops. Only the querying tenant's own "
@@ -587,7 +591,7 @@ def plate_refusal() -> str:
 
 # ────────────────────────────────────────────────────────────── PLATE VI
 def plate_release() -> str:
-    H, LOOP, SET = 568, 13.1, 9.8
+    H, LOOP, SET = 570, 13.1, 9.8
     s = [head(H, "LifeQuest and Agentic AutoML",
               "LifeQuest turns real-world routines into tracked quests, for people rebuilding "
               "structure after a layoff or in retirement. Agentic AutoML moves a dataset through "
@@ -597,14 +601,20 @@ def plate_release() -> str:
               key="plate-6-release.svg")]
     s.append(f""".nd{{transform-box:fill-box;transform-origin:center;animation:nd {LOOP}s {EASE} infinite}}
 @keyframes nd{{0%,4%{{opacity:0;transform:scale(.9)}}10%{{opacity:1;transform:scale(1)}}
-  46%{{transform:scale(1)}}54%{{transform:scale(1.22)}}
-  66%,100%{{transform:scale(1);opacity:1}}}}
+  40%{{transform:scale(1)}}48%{{transform:scale(1.22)}}
+  58%{{transform:scale(1)}}
+  /* a second, smaller pulse late in the loop: the token is still waiting for
+     its human and the plate should not look switched off while it does */
+  82%{{transform:scale(1.1)}}92%,100%{{transform:scale(1);opacity:1}}}}
 .tk2{{animation:tk2 {LOOP}s {EASE} infinite}}
 @keyframes tk2{{0%{{opacity:0;transform:translateX(-348px)}}3%{{opacity:1;transform:translateX(-348px)}}
   20%,80%{{opacity:1;transform:translateX(0)}}
   /* the longest dead hold in the document: it is waiting for a human, and it
      now waits AT the gate at x=530 rather than 110u short of it, inside a wall */
   88%,96%{{opacity:1;transform:translateX(76px)}}100%{{opacity:0;transform:translateX(76px)}}}}
+.gtp{{transform-box:fill-box;transform-origin:center;animation:gtp {LOOP}s {EASE} infinite}}
+@keyframes gtp{{0%,22%{{transform:scaleY(1)}}28%{{transform:scaleY(1.09)}}
+  38%,100%{{transform:scaleY(1)}}}}
 /* travel slow enough that a 0.33s sample never covers more than ~130u */
 </style>{slab(H, PINK)}""")
     s.append(rail("VI", "LIFEQUEST · AUTOML"))
@@ -633,7 +643,8 @@ def plate_release() -> str:
     s.append(f'<text x="166" y="340" class="lbl">DOCKER · SANDBOXED</text>')
     # "internal net (dev)": the beta deploy defaults EXECUTION_NETWORK to bridge
 
-    s.append(f'<path id="approval-gate" d="M530 320V400" stroke="{WIRE}"/>')
+    s.append(f'<path class="gtp" id="approval-gate" d="M530 320V400" stroke="{WIRE}" '
+             f'style="animation-delay:{-SET}s"/>')
     # It ends the loop past the gate and beside DEPLOYED, which is the point:
     # the gate is passed by a human saying yes, not by the pipeline waiting it
     # out. The rest check anchors the final pose to the label that explains it.
@@ -660,7 +671,7 @@ def plate_release() -> str:
 
 # ────────────────────────────────────────────────────────────── PLATE VII
 def plate_colophon() -> str:
-    H = 264
+    H = 269
     s = [head(H, "Colophon", "Six systems, five system cards and one expo booklet. Every number "
                              "here is traceable to the repository it came from, except AutoML's, "
                              "whose repository is private — and the page itself is animated SVG "
@@ -670,8 +681,10 @@ def plate_colophon() -> str:
     s.append(f""".rule{{stroke-dasharray:1;animation:sweep {LOOP}s {EASE} infinite;animation-delay:{-SET}s}}
 @keyframes sweep{{0%{{stroke-dashoffset:1}}20%,100%{{stroke-dashoffset:0}}}}
 .ln{{animation:ln {LOOP}s {EASE} infinite}}
-@keyframes ln{{0%,28%{{transform:translateX(0)}}36%{{transform:translateX(6px)}}
-  50%,100%{{transform:translateX(0)}}}}
+@keyframes ln{{0%,24%{{transform:translateX(0)}}32%{{transform:translateX(6px)}}
+  46%{{transform:translateX(0)}}
+  68%{{transform:translateX(0)}}76%{{transform:translateX(3px)}}
+  88%,100%{{transform:translateX(0)}}}}
 </style>{slab(H, INDIGO)}""")
     s.append(rail("VII", "COLOPHON"))
     s.append(f'<path class="rule" d="M150 80H{W-150}" pathLength="1" stroke="{RULE}"/>')
@@ -680,7 +693,8 @@ def plate_colophon() -> str:
         s.append(f'<text class="ln say" x="150" y="{120 + i*28}" '
                  f'style="animation-delay:{round(-SET + i*0.8,3)}s">{ln}</text>')
     s.append(f'<text x="150" y="172" class="fine" style="fill:{INK3}">except AutoML’s — that repository is private, and the plate says so</text>')
-    s.append(f'<text x="150" y="204" class="lbl">ANIMATED SVG · NO JAVASCRIPT · NO SERVER</text>')
+    s.append(f'<text class="ln lbl" x="150" y="204" '
+             f'style="animation-delay:{round(-SET + 1.9,3)}s">ANIMATED SVG · NO JAVASCRIPT · NO SERVER</text>')
     s.append(f'<text x="150" y="236" class="lbl">CS ’26 · MIAMI UNIVERSITY</text>')
     s.append(f'<text x="{R}" y="236" class="lbl" text-anchor="end">aesh.03.23@gmail.com</text>')
     return "".join(s) + "</svg>"

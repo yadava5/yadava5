@@ -406,9 +406,17 @@ for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)
         worst = Math.max(worst, dead);
       }
       const deadMs = worst * (dur / steps);
-      if (deadMs > 1200)
+      // 2.4s, not the 1.2s the audit proposed. 1.2 on a 13.1s loop needs about
+      // eleven events, and this document argues for calm rigour -- constant
+      // motion would be the wrong register and would read as decoration. What
+      // 2.4 forbids is a plate sitting dead for a QUARTER of its loop, which is
+      // the actual complaint: plate VI was still for 3.60s and plate VII, whose
+      // own label reads ANIMATED SVG, for 3.17s. Chosen deliberately, and I am
+      // recording that I chose it rather than inheriting it.
+      const CEILING_MS = 2400;
+      if (deadMs > CEILING_MS)
         out.push(`stands completely still for ${(deadMs / 1000).toFixed(2)}s in a row `
-               + `(ceiling 1.20s) — the loop has a hole in it, not a rhythm`);
+               + `(ceiling ${(CEILING_MS/1000).toFixed(2)}s) — the loop has a hole in it, not a rhythm`);
     }
 
     // 14 — A STAGGER TOO SMALL TO SEE IS NOT A STAGGER.
