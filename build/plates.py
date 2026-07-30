@@ -222,10 +222,9 @@ def plate_thesis() -> str:
     s.append(f""".rule{{stroke-dasharray:1;animation:sweep {LOOP}s {EASE} infinite;animation-delay:{-SET}s}}
 @keyframes sweep{{0%{{stroke-dashoffset:1}}18%,100%{{stroke-dashoffset:0}}}}
 .sw{{transform-box:fill-box;transform-origin:left center;animation:sw {LOOP}s {BREATHE} infinite}}
-@keyframes sw{{0%,6%{{transform:scaleX(0)}}18%{{transform:scaleX(1)}}
-  32%{{transform:scaleX(1)}}40%{{transform:scaleX(.55)}}50%{{transform:scaleX(1)}}
-  66%{{transform:scaleX(1)}}74%{{transform:scaleX(.55)}}
-  84%,100%{{transform:scaleX(1)}}}}
+@keyframes sw{{0%{{transform:translateY(0)}}10%{{transform:translateY(-8px)}}22%{{transform:translateY(0)}}
+  38%{{transform:translateY(0)}}48%{{transform:translateY(-8px)}}60%{{transform:translateY(0)}}
+  72%{{transform:translateY(0)}}82%{{transform:translateY(-8px)}}94%,100%{{transform:translateY(0)}}}}
 .ser{{font-family:ui-serif,Georgia,'Times New Roman',serif;font-size:34px;fill:{INK}}}
 </style>{slab(H, INK2)}""")
 
@@ -265,7 +264,7 @@ def plate_thesis() -> str:
         col, row = i % 3, i // 3
         x, y = L + col * 197, 398 + row * 70
         c = LEGEND[i][1]
-        s.append(f'<rect class="sw" x="{x}" y="{y}" width="26" height="3" rx="1" fill="{c}" '
+        s.append(f'<rect class="sw" x="{x}" y="{y}" width="44" height="4" rx="1" fill="{c}" '
                  f'style="animation-delay:{round(-SET + i*0.12,3)}s"/>')
         s.append(f'<text x="{x}" y="{y+24}" class="key">{nm}</text>')
         s.append(f'<text x="{x}" y="{y+42}" class="fine">{what}</text>')
