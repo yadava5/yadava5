@@ -350,7 +350,9 @@ for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)
         const got = attr === 'letter-spacing' ? norm(getComputedStyle(m.el)[prop])
                                               : norm(getComputedStyle(m.el)[prop]);
         // CSS reports a zero letter-spacing as the keyword `normal`
-        if (want === 'none' || want === '') continue;
+        // `currentColor` is a keyword whose whole purpose is to resolve to
+        // something else. It is not a discarded attribute.
+        if (want === 'none' || want === '' || want === 'currentcolor') continue;
         if (attr === 'letter-spacing' && (want === '0' || want === 'normal')
             && (got === 'normal' || got === '0')) continue;
         // a unitless letter-spacing attribute is in user units; CSS reports px

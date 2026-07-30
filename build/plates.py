@@ -79,6 +79,21 @@ OUT = ROOT.parent / "assets"
 OUT.mkdir(exist_ok=True)
 FONT = base64.b64encode((ROOT / "mono-subset.woff2").read_bytes()).decode()
 
+# The real product marks, extracted from each app's own logo and stripped to the
+# mark alone — the card already sets the name in type, so the wordmark would say
+# it twice, and the background tile would sit on a slab that is already the same
+# near-black. Every stroke and fill is currentColor, so the card supplies the
+# system's legend colour and the six marks read as one family rather than six
+# pasted assets. Inlined, not linked: nothing external can load in this medium.
+LOGOS = json.loads((ROOT / "logos.json").read_text())
+
+
+def logo(name: str, x: float, y: float, size: float, colour: str) -> str:
+    m = LOGOS[name]
+    k = size / m["size"]
+    return (f'<g transform="translate({x},{y}) scale({k:.4f})" '
+            f'style="color:{colour}">{m["body"]}</g>')
+
 W = 880
 SLAB, EDGE = "#0A0A0B", "rgba(255,255,255,0.14)"
 # Every structural line used to sit between 1.08:1 and 1.94:1 on the slab —
@@ -209,7 +224,7 @@ def plate_thesis() -> str:
     have they built" — legible in about eight seconds, after which everything
     below is optional depth.
     """
-    H, LOOP, SET = 558, 11.3, 9.0
+    H, LOOP, SET = 614, 11.3, 9.0
     s = [head(H, "Ayush Yadav — computer science graduate, Cincinnati OH",
               "Ayush Yadav, a computer science graduate in Cincinnati, Ohio, open to full-time "
               "engineering roles. Languages C++, TypeScript, Python, Java, Swift, Rust and "
@@ -221,10 +236,13 @@ def plate_thesis() -> str:
               "Agentic AutoML.", key="plate-0-thesis.svg")]
     s.append(f""".rule{{stroke-dasharray:1;animation:sweep {LOOP}s {EASE} infinite;animation-delay:{-SET}s}}
 @keyframes sweep{{0%{{stroke-dashoffset:1}}18%,100%{{stroke-dashoffset:0}}}}
-.sw{{transform-box:fill-box;transform-origin:left center;animation:sw {LOOP}s {BREATHE} infinite}}
-@keyframes sw{{0%{{transform:translateY(0)}}10%{{transform:translateY(-8px)}}22%{{transform:translateY(0)}}
-  38%{{transform:translateY(0)}}48%{{transform:translateY(-8px)}}60%{{transform:translateY(0)}}
-  72%{{transform:translateY(0)}}82%{{transform:translateY(-8px)}}94%,100%{{transform:translateY(0)}}}}
+.sw{{transform-box:fill-box;transform-origin:center;animation:sw {LOOP}s {BREATHE} infinite}}
+@keyframes sw{{0%{{transform:translateY(0) scale(1)}}10%{{transform:translateY(-7px) scale(1.06)}}
+  24%{{transform:translateY(0) scale(1)}}
+  40%{{transform:translateY(0) scale(1)}}50%{{transform:translateY(-7px) scale(1.06)}}
+  64%{{transform:translateY(0) scale(1)}}
+  76%{{transform:translateY(0) scale(1)}}86%{{transform:translateY(-7px) scale(1.06)}}
+  98%,100%{{transform:translateY(0) scale(1)}}}}
 .ser{{font-family:ui-serif,Georgia,'Times New Roman',serif;font-size:34px;fill:{INK}}}
 </style>{slab(H, INK2)}""")
 
@@ -262,13 +280,13 @@ def plate_thesis() -> str:
     ]
     for i, (nm, what, stack) in enumerate(CARDS):
         col, row = i % 3, i // 3
-        x, y = L + col * 197, 398 + row * 70
+        x, y = L + col * 197, 394 + row * 104
         c = LEGEND[i][1]
-        s.append(f'<rect class="sw" x="{x}" y="{y}" width="44" height="4" rx="1" fill="{c}" '
-                 f'style="animation-delay:{round(-SET + i*0.12,3)}s"/>')
-        s.append(f'<text x="{x}" y="{y+24}" class="key">{nm}</text>')
-        s.append(f'<text x="{x}" y="{y+42}" class="fine">{what}</text>')
-        s.append(f'<text x="{x}" y="{y+58}" class="fine" style="fill:{INK3}">{stack}</text>')
+        s.append(f'<g class="sw" style="animation-delay:{round(-SET + i*0.12,3)}s">'
+                 + logo(nm, x, y, 28, c) + '</g>')
+        s.append(f'<text x="{x}" y="{y+50}" class="key">{nm}</text>')
+        s.append(f'<text x="{x}" y="{y+68}" class="fine">{what}</text>')
+        s.append(f'<text x="{x}" y="{y+84}" class="fine" style="fill:{INK3}">{stack}</text>')
     return "".join(s) + "</svg>"
 
 
