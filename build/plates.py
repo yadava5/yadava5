@@ -738,37 +738,40 @@ def plate_refusal() -> str:
 
 # ────────────────────────────────────────────────────────────── PLATE VI
 def plate_release() -> str:
-    H, LOOP, SET = 570, 13.1, 9.8
-    LOOP2 = round(LOOP / 2, 2)
-    s = [head(H, "LifeQuest and Agentic AutoML",
+    H, LOOP, SET = 660, 13.1, 9.8
+    BEAT = round(LOOP / 4, 2)
+    s = [head(H, "LifeQuest",
               "LifeQuest turns real-world routines into tracked quests, for people rebuilding "
-              "structure after a layoff or in retirement. Agentic AutoML moves a dataset through "
-              "a hardened Docker sandbox and holds it for a human before a preprocessing step is "
-              "committed and before a model is trained. This is the one section on the page a "
-              "reader can now read for themselves: the repository is public.",
+              "structure after a layoff or in retirement. One source tree in apps/desktop is "
+              "built twice — as a Tauri 2 native binary and as a web app — with a shared Zod "
+              "schema package holding both of them to the same contract as the API. Behind it: "
+              "10 Prisma models and 14 REST endpoints across 6 NestJS controllers. When it "
+              "generates a quest it asks OpenAI, falls back to Hugging Face, and if neither is "
+              "configured it returns nothing rather than inventing one.",
               key="plate-6-release.svg")]
     s.append(f""".nd{{transform-box:fill-box;transform-origin:center;animation:nd {LOOP}s {BREATHE} infinite}}
 @keyframes nd{{0%,4%{{opacity:0;transform:scale(.9)}}10%{{opacity:1;transform:scale(1)}}
   40%{{transform:scale(1)}}48%{{transform:scale(1.22)}}
   58%{{transform:scale(1)}}
-  /* a second, smaller pulse late in the loop: the token is still waiting for
-     its human and the plate should not look switched off while it does */
+  /* a second, smaller pulse late in the loop, so the plate does not look
+     switched off between its two halves */
   82%{{transform:scale(1.1)}}92%,100%{{transform:scale(1);opacity:1}}}}
-.tk2{{animation:tk2 {LOOP}s {EASE} infinite}}
-@keyframes tk2{{0%{{opacity:0;transform:translateX(-348px)}}3%{{opacity:1;transform:translateX(-348px)}}
-  20%,80%{{opacity:1;transform:translateX(0)}}
-  /* the longest dead hold in the document: it is waiting for a human, and it
-     now waits AT the gate at x=530 rather than 110u short of it, inside a wall */
-  88%,96%{{opacity:1;transform:translateX(76px)}}100%{{opacity:0;transform:translateX(76px)}}}}
-.scan{{animation:scan {LOOP2}s linear infinite}}
-@keyframes scan{{0%{{transform:translateY(0)}}100%{{transform:translateY(74px)}}}}
-.gtp{{transform-box:fill-box;transform-origin:center;animation:gtp {LOOP}s {IMPACT} infinite}}
-@keyframes gtp{{0%,22%{{transform:scaleY(1)}}28%{{transform:scaleY(1.09)}}
-  38%,100%{{transform:scaleY(1)}}}}
-/* travel slow enough that a 0.33s sample never covers more than ~130u */
+/* The fallback chain lights left to right and the last link stays dim: it is
+   the one that declines. Late in the loop, so the lower half of the plate is
+   not dead while the upper half breathes. */
+.lnk{{animation:lnk {LOOP}s {ARRIVE} infinite}}
+@keyframes lnk{{0%,18%{{opacity:0;transform:translateX(-10px)}}
+  28%,100%{{opacity:1;transform:translateX(0)}}}}
+/* One build leaves the shared tree down each branch, four times a loop. This
+   is the plate's only continuous motion and the reason it no longer sits dead
+   for 3.6s in the middle: everything else here arrives once and then holds. */
+.bd{{animation:bd {BEAT}s {EASE} infinite}}
+@keyframes bd{{0%{{opacity:0;transform:translateX(-72px)}}
+  16%{{opacity:1}}84%{{opacity:1}}
+  100%{{opacity:0;transform:translateX(0)}}}}
 </style>{slab(H, PINK)}""")
-    s.append(rail("VII", "LIFEQUEST · AUTOML"))
-    s.append(f'<text x="150" y="56" class="lbl">LIFEQUEST</text>')
+    s.append(rail("VII", "LIFEQUEST"))
+    s.append(f'<text x="150" y="56" class="kick">CLAIM — WHAT YOU MEANT TO DO, AS QUESTS</text>')
     for i, txt in enumerate(["Reconnect with a mentor", "Document a new routine", "Share a win"]):
         s.append(f'<circle class="nd" cx="158" cy="{83+i*30}" r="7" fill="none" stroke="{PINK}" stroke-width="1.6" '
                  f'style="animation-delay:{round(-SET + i*0.14,3)}s"/>')
@@ -779,53 +782,175 @@ def plate_release() -> str:
     s.append(f'<text x="150" y="224" class="say">after a layoff, or in retirement.</text>')
 
     s.append(f'<path d="M150 256H730" stroke="{RULE}"/>')
-    s.append(f'<text x="150" y="288" class="lbl">AGENTIC AUTOML</text>')
-    s.append(f'<text x="{W-150}" y="288" class="lbl" text-anchor="end">SENIOR DESIGN · MIAMI UNIVERSITY</text>')
+    s.append(f'<text x="150" y="286" class="kick">MECHANISM — ONE SOURCE TREE, BUILT TWICE</text>')
 
-    # the lane, y 320→400. Nothing crosses this band but lane furniture, so the
-    # token cannot come to rest on a label — it did, on "APPROVAL", for 28% of
-    # the loop, until the gate learned to measure position instead of opacity.
-    # centred over the gate it names. It used to start at x=546 — 16u to the
-    # right of the line at 530 and 3px below the university credit, so it read
-    # as the second line of a right-aligned credit block instead of as a label.
-    s.append(f'<text x="530" y="316" class="kick" text-anchor="middle">HUMAN APPROVAL</text>')
-    s.append(f'<rect x="150" y="320" width="300" height="80" rx="3" fill="none" stroke="{INDIGO}"/>')
-    s.append(f'<rect class="scan" x="152" y="323" width="296" height="3" fill="{INDIGO}" opacity=".68"/>')
-    s.append(f'<text x="166" y="340" class="lbl">DOCKER · SANDBOXED</text>')
-    # "internal net (dev)": the beta deploy defaults EXECUTION_NETWORK to bridge
+    # the fork: the same apps/desktop tree is a Vite web build and a Tauri
+    # native binary, and packages/schemas is the Zod contract that keeps both
+    # of them honest against the NestJS API.
+    s.append(f'<rect x="150" y="304" width="196" height="46" rx="3" fill="none" stroke="{WIRE}"/>')
+    s.append(f'<text x="166" y="323" class="fine" style="fill:{INK}">apps/desktop</text>')
+    s.append(f'<text x="166" y="341" class="fine">React · Vite</text>')
+    s.append(f'<path d="M346 327H380M380 309V345" fill="none" stroke="{WIRE}"/>')
+    for i, (dy, txt) in enumerate([(-18, "TAURI 2 · NATIVE BINARY"), (18, "VITE BUILD · WEB APP")]):
+        s.append(f'<path d="M380 {327+dy}H452" fill="none" stroke="{WIRE}"/>')
+        # a build leaving down each branch, four times a loop, so the lower half
+        # of the plate is never still — and so the fork is shown, not asserted
+        s.append(f'<circle class="bd" cx="452" cy="{327+dy}" r="3.5" fill="{PINK}" '
+                 f'style="animation-delay:{round(-BEAT*0.5 + i*0.12, 3)}s"/>')
+        s.append(f'<text x="{R}" y="{332+dy}" class="lbl" text-anchor="end" style="fill:{PINK}">{txt}</text>')
+    s.append(f'<text x="150" y="378" class="fine">packages/schemas — one Zod contract for both builds</text>')
 
-    s.append(f'<path class="gtp" id="approval-gate" d="M530 320V400" stroke="{WIRE}" '
-             f'style="animation-delay:{-SET}s"/>')
-    # It ends the loop past the gate and beside DEPLOYED, which is the point:
-    # the gate is passed by a human saying yes, not by the pipeline waiting it
-    # out. The rest check anchors the final pose to the label that explains it.
-    # rest is the WAIT now, so the assertion points at the gate it waits on
-    s.append(f'<circle class="tk2" data-rest="approval-gate" data-rest-within="6" '
-             f'cx="524" cy="372" r="6" fill="{INDIGO}" style="animation-delay:{-SET}s"/>')
-    s.append(f'<text x="150" y="418" class="fine">non-root · read-only rootfs · internal net (dev)</text>')
-    # DEPLOYED now sits on the token's own row, so the rest check anchors to a
-    # label beside it rather than one 28u down and to the right.
-    s.append(f'<text id="deployed" class="lbl" x="618" y="378" style="fill:{INDIGO}">DEPLOYED</text>')
+    s.append(f'<path d="M150 402H730" stroke="{RULE}"/>')
+    for i, (n, lab, sub) in enumerate([("10", "PRISMA MODELS", "quests, rewards, meetups, rituals"),
+                                       ("14", "REST ENDPOINTS", "across 6 NestJS controllers")]):
+        y = 442 + i * 62
+        s.append(f'<text x="150" y="{y}" class="sub">{n}</text>')
+        s.append(f'<text x="230" y="{y}" class="lbl">{lab}</text>')
+        s.append(f'<text x="230" y="{y+22}" class="fine">{sub}</text>')
 
-    # This used to be a 64px "2". The number was wrong — the reproducible count
-    # of human-gate stages is four (preprocessing await_approval, feature
-    # engineering await_review, training propose_model and await_review) — and
-    # it was also the only hero on the page that no reader could check, because
-    # this repository is private. A hero nobody can verify, carrying a figure
-    # that is not even right, is the exact thing the rest of this page refuses.
-    # So the count is gone and the mechanism stays.
-    s.append(f'<text x="150" y="486" class="sub">HUMAN IN THE LOOP</text>')
-    s.append(f'<text x="150" y="514" class="fine">approval before a step commits, and before a model trains</text>')
-    s.append(f'<text x="150" y="538" class="fine" style="fill:{INK3}">source-available · noncommercial · built with Shree Chaturvedi</text>')
+    # The quest generator asks OpenAI, then Hugging Face, and if neither is
+    # configured it returns null rather than inventing a quest. Drawn as a
+    # chain because that is the shape of the code (ai-content.service.ts:49-56)
+    # and because the last link is the honest one.
+    s.append(f'<text x="150" y="{442+62+50}" class="kick">QUEST GENERATION — ASKS, THEN FALLS BACK, THEN DECLINES</text>')
+    for i, (txt, col) in enumerate([("OPENAI", PINK), ("HUGGING FACE", PINK), ("RETURNS NOTHING", INK3)]):
+        x = 150 + i * 200
+        s.append(f'<rect class="lnk" x="{x}" y="{442+62+64}" width="168" height="30" rx="3" fill="none" '
+                 f'stroke="{WIRE}" style="animation-delay:{round(-SET + i*0.11,3)}s"/>')
+        s.append(f'<text x="{x+14}" y="{442+62+84}" class="fine" style="fill:{col}">{txt}</text>')
+        if i < 2:
+            s.append(f'<path d="M{x+168} {442+62+79}H{x+200}" stroke="{WIRE}"/>')
+    s.append(f'<text x="150" y="{442+62+124}" class="fine" style="fill:{INK3}">source-available · noncommercial</text>')
     return "".join(s) + "</svg>"
 
 
 # ────────────────────────────────────────────────────────────── PLATE VII
+def plate_automl() -> str:
+    """AutoML's own plate.
+
+    It shared plate VII with LifeQuest until now — a quest tracker and a
+    multi-agent ML pipeline on one slab, which the audit called two plates in
+    one and measured as the least dense in the set. It also carried the line
+    "the one section you cannot check", because the repository was private.
+    That stopped being true on 2026-07-30, so every figure here is DERIVED from
+    a pinned commit like the other five systems, and the plate is built around
+    the one mechanism that is genuinely unusual: the model is never handed the
+    whole tool registry.
+    """
+    H, LOOP, SET = 624, 13.3, 9.9
+    TICKS, GEN = 44, 15
+    PITCH = (R - L) / TICKS                 # 44 ticks across the type column
+    BARS, BX = 7, L + GEN * PITCH           # the seven sets sit under the routed 29
+    BPITCH = (R - BX) / BARS
+    s = [head(H, "Agentic AutoML",
+              "Agentic AutoML takes a dataset and a sentence and returns a trained model. "
+              "Its tool registry holds 44 definitions, but the model never carries all of "
+              "them: 15 travel with it in every phase and the remaining 29 arrive with the "
+              "phase that needs them, routed by seven named tool sets — onboarding, "
+              "preprocessing, feature proposal, feature continue, feature engineering, "
+              "feature lifecycle and training lifecycle. The Python it writes executes in a "
+              "container with no network, a read-only root filesystem, a non-root user and "
+              "the dataset mounted read-only, leaving 5 tmpfs mounts as the only writable "
+              "surface. Behind it sits a 29-table Postgres schema with pgvector. Written "
+              "with Shree Chaturvedi; the repository is public and noncommercially licensed.",
+              key="plate-6b-automl.svg")]
+    s.append(f""".tk{{animation:tk {LOOP}s {ARRIVE} infinite}}
+@keyframes tk{{0%{{opacity:0;transform:translateY(9px)}}
+  9%,100%{{opacity:1;transform:translateY(0)}}}}
+/* The marker is the claim: it steps through the seven sets one at a time and
+   is never over more than one, because that is what phase-aware routing does.
+   Seven holds of ~1.6s each — under the 2.4s ceiling on a dead run, and the
+   sandbox scan runs underneath it the whole time so the plate is never still. */
+/* The wrap from the seventh set back to the first is a 328u jump, which the
+   gate calls a teleport and is right to. So it happens with the marker faded
+   out, the same way plate VII's token resets — a cycle that visibly snaps
+   backwards reads as a glitch, not as a new run starting. */
+.mk{{animation:mk {LOOP}s steps(1,end) infinite;animation-delay:{-SET}s}}
+@keyframes mk{{0%{{opacity:0;transform:translateX({-6*BPITCH:.1f}px)}}
+  2%,12%{{opacity:1;transform:translateX({-6*BPITCH:.1f}px)}}
+  14.3%,26%{{transform:translateX({-5*BPITCH:.1f}px)}}
+  28.6%,40%{{transform:translateX({-4*BPITCH:.1f}px)}}
+  42.9%,55%{{transform:translateX({-3*BPITCH:.1f}px)}}
+  57.1%,69%{{transform:translateX({-2*BPITCH:.1f}px)}}
+  71.4%,83%{{transform:translateX({-1*BPITCH:.1f}px)}}
+  85.7%,97%{{opacity:1;transform:translateX(0)}}
+  100%{{opacity:0;transform:translateX(0)}}}}
+.sc{{animation:sc {round(LOOP/2,2)}s linear infinite}}
+@keyframes sc{{0%{{transform:translateY(0)}}100%{{transform:translateY(118px)}}}}
+.mn{{transform-box:fill-box;transform-origin:center;animation:mn {LOOP}s {BREATHE} infinite}}
+@keyframes mn{{0%,6%{{opacity:.35;transform:scaleY(.6)}}
+  14%{{opacity:1;transform:scaleY(1)}}
+  34%{{opacity:1;transform:scaleY(1)}}
+  46%,100%{{opacity:1;transform:scaleY(1)}}}}
+</style>{slab(H, INDIGO)}""")
+    s.append(rail("VIII", "AGENTIC AUTOML"))
+    s.append(f'<text x="{L}" y="56" class="kick">CLAIM — DATASET IN, TRAINED MODEL OUT</text>')
+    s.append(f'<text x="{L}" y="78" class="kick">MECHANISM — ONE PHASE, ONE TOOL SET</text>')
+
+    # ── the registry, drawn at its real size
+    s.append(f'<text x="{L}" y="160" class="hero">{TICKS}</text>')
+    s.append(f'<text x="270" y="136" class="key">TOOL DEFINITIONS</text>')
+    s.append(f'<text x="270" y="160" class="fine">one MCP server over a LangGraph state machine</text>')
+    for i in range(TICKS):
+        x = L + i * PITCH
+        col = INDIGO if i < GEN else WIRE
+        s.append(f'<rect class="tk" x="{x:.1f}" y="190" width="5" height="22" fill="{col}" '
+                 f'style="animation-delay:{round(-SET + i*0.045,3)}s"/>')
+    # brackets naming the two halves. The labels sit at the two OUTER edges —
+    # left under the 15, right-anchored under the far end of the 29 — because
+    # putting both flush-left made them collide, and the gate said so.
+    s.append(f'<path d="M{L} 220V226H{L+(GEN-1)*PITCH+5:.1f}V220" fill="none" stroke="{WIRE}"/>')
+    s.append(f'<text x="{L}" y="244" class="kick" style="fill:{INDIGO}">{GEN} TRAVEL WITH THE MODEL</text>')
+    s.append(f'<path d="M{BX:.1f} 220V226H{L+(TICKS-1)*PITCH+5:.1f}V220" fill="none" stroke="{WIRE}"/>')
+    s.append(f'<text x="{R}" y="244" class="kick" text-anchor="end">{TICKS-GEN} ARRIVE WITH THE PHASE</text>')
+
+    # ── the seven sets, and the marker that is only ever under one of them.
+    # The marker underlines rather than overlays: an indigo rect ON the bar is
+    # a collision as far as the gate is concerned, and it was right to say so —
+    # two filled rects at the same coordinates is exactly what a bug looks like.
+    for i in range(BARS):
+        x = BX + i * BPITCH
+        last = ' id="set-last"' if i == BARS - 1 else ''
+        s.append(f'<rect{last} x="{x:.1f}" y="264" width="{BPITCH-8:.1f}" height="8" rx="1" fill="{ROW}"/>')
+    s.append(f'<rect class="mk" data-rest="set-last" data-rest-within="14" '
+             f'x="{BX + (BARS-1)*BPITCH:.1f}" y="278" width="{BPITCH-8:.1f}" height="3" rx="1" fill="{INDIGO}"/>')
+    s.append(f'<text x="{L}" y="276" class="lbl">SEVEN PHASE SETS</text>')
+
+    s.append(f'<path d="M{L} 300H{R}" stroke="{RULE}"/>')
+
+    # ── the sandbox, quoted from the docker run it actually builds
+    s.append(f'<text x="{L}" y="330" class="kick">WHERE THE GENERATED PYTHON RUNS</text>')
+    s.append(f'<rect x="{L}" y="344" width="330" height="124" rx="3" fill="none" stroke="{INDIGO}"/>')
+    s.append(f'<rect class="sc" x="{L+2}" y="347" width="326" height="3" fill="{INDIGO}" opacity=".6"/>')
+    for i, (flag, why) in enumerate([("--network none", "no egress"),
+                                     ("--read-only", "immutable rootfs"),
+                                     ("--user sandbox", "never root"),
+                                     ("/datasets:ro", "read-only mount")]):
+        s.append(f'<text x="{L+16}" y="{374+i*26}" class="fine" style="fill:{INK}">{flag}</text>')
+        s.append(f'<text x="{L+170}" y="{374+i*26}" class="fine">{why}</text>')
+    # the five writable mounts, drawn because their count IS the blast radius
+    s.append(f'<text x="520" y="366" class="key">5 TMPFS MOUNTS</text>')
+    s.append(f'<text x="520" y="388" class="fine">the only surface it can</text>')
+    s.append(f'<text x="520" y="406" class="fine">write to, and none of it</text>')
+    s.append(f'<text x="520" y="424" class="fine">survives the container</text>')
+    for i in range(5):
+        s.append(f'<rect class="mn" x="{520+i*30}" y="440" width="20" height="14" rx="1" '
+                 f'fill="none" stroke="{INDIGO}" style="animation-delay:{round(-SET + i*0.09,3)}s"/>')
+
+    s.append(f'<path d="M{L} 500H{R}" stroke="{RULE}"/>')
+    s.append(f'<text x="{L}" y="540" class="sub">29</text>')
+    s.append(f'<text x="200" y="540" class="lbl">TABLES · POSTGRES + PGVECTOR</text>')
+    s.append(f'<text x="200" y="562" class="fine">a Jupyter kernel per project, kept alive between cells</text>')
+    s.append(f'<text x="{L}" y="592" class="fine" style="fill:{INK3}">public · noncommercial · written with Shree Chaturvedi</text>')
+    return "".join(s) + "</svg>"
+
+
+# ────────────────────────────────────────────────────────────── PLATE IX
 def plate_colophon() -> str:
     H = 269
     s = [head(H, "Colophon", "Six systems, five system cards and one expo booklet. Every number "
-                             "here is traceable to the repository it came from, except AutoML's, "
-                             "and the page itself is animated SVG "
+                             "here is traceable to the repository it came from, and the page "
+                             "itself is animated SVG "
                              "with no JavaScript and no server.", key="plate-7-colophon.svg")]
     # This plate asserts "ANIMATED SVG" and used to be the only one that wasn't.
     LOOP, SET = 12.7, 10.0
@@ -836,8 +961,12 @@ def plate_colophon() -> str:
   46%{{transform:translateX(0)}}
   68%{{transform:translateX(0)}}76%{{transform:translateX(3px)}}
   88%,100%{{transform:translateX(0)}}}}
-</style>{slab(H, INDIGO)}""")
-    s.append(rail("VIII", "COLOPHON"))
+/* The colophon's accent used to be INDIGO, which the legend on plate 0 assigns
+   to AutoML. Now that AutoML has a plate of its own that reads as its colour,
+   the closing plate takes the neutral rule grey: it is not a system, so it
+   should not wear a system's colour. */
+</style>{slab(H, RULE)}""")
+    s.append(rail("IX", "COLOPHON"))
     s.append(f'<path class="rule" d="M150 80H{W-150}" pathLength="1" stroke="{RULE}"/>')
     for i, ln in enumerate(["Six systems. Five system cards, one booklet.",
                             "Every number traces to its repo."]):
@@ -856,7 +985,8 @@ PLATES = {
     "plate-1-glyph.svg": plate_glyph,
     "plate-2-jetpack.svg": plate_jetpack, "plate-3-cadence.svg": plate_cadence,
     "plate-4-applied.svg": plate_applied, "plate-5-refusal.svg": plate_refusal,
-    "plate-6-release.svg": plate_release, "plate-7-colophon.svg": plate_colophon,
+    "plate-6-release.svg": plate_release, "plate-6b-automl.svg": plate_automl,
+    "plate-7-colophon.svg": plate_colophon,
 }
 
 # ────────────────────────────────────────────────── the build-time gate

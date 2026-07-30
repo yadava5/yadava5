@@ -123,24 +123,42 @@ Tags was missed by the first sweep entirely, and is the one worth naming: its ex
 
 ---
 
-## VII · LifeQuest & Agentic AutoML
+## VII · LifeQuest
 
 <picture>
   <source media="(max-width: 500px)" srcset="./assets/m-6-release.svg">
-  <img src="./assets/plate-6-release.svg" width="100%" alt="LifeQuest turns real-world routines into tracked quests, for people rebuilding structure after a layoff or in retirement. Agentic AutoML moves a dataset through a hardened Docker sandbox and holds it for a human before a preprocessing step is committed and before a model is trained. This is the one section on the page a reader can now read for themselves: the repository is public.">
+  <img src="./assets/plate-6-release.svg" width="100%" alt="LifeQuest turns real-world routines into tracked quests, for people rebuilding structure after a layoff or in retirement. One source tree in apps/desktop is built twice — as a Tauri 2 native binary and as a web app — with a shared Zod schema package holding both of them to the same contract as the API. Behind it: 10 Prisma models and 14 REST endpoints across 6 NestJS controllers. When it generates a quest it asks OpenAI, falls back to Hugging Face, and if neither is configured it returns nothing rather than inventing one.">
 </picture>
 
-**LifeQuest** turns real-world routines into tracked quests with tiered progression — built for people rebuilding structure, whether after a layoff or in retirement. Tauri + React client, NestJS + Prisma API.
+**LifeQuest** turns the things you meant to do into quests you can finish — built for people rebuilding structure, whether after a layoff or in retirement.
 
-**Agentic AutoML** takes a dataset and returns a deployed model: LangGraph orchestration over an MCP tool registry, Python executed in a hardened Docker sandbox — non-root, read-only rootfs, an `--internal` Docker network with no outbound route (the beta deploy defaults to `bridge`), capped memory and CPU — and human approval gates before a preprocessing step is committed and before a model is trained. Worth being exact: preprocessing runs the code *before* it asks, so the gate protects what gets persisted rather than what gets spent — and whether a step needs approval is itself proposed by the model, defaulting to *no* approval when the model does not ask for one. Senior design at Miami University, co-built with Shree Chaturvedi.
+One source tree in `apps/desktop` is built twice: `vite build` for the web, and the same tree wrapped as a Tauri 2 native binary. `packages/schemas` is a Zod package both builds and the NestJS API import, so a shape can only change in one place. The API is 14 REST endpoints across 6 controllers over 10 Prisma models.
 
-[LifeQuest](https://getlifequest.vercel.app) · [system card](https://getlifequest.vercel.app/system-card) · [repo](https://github.com/yadava5/lifequest) — [AutoML](https://agentic-automl-platform.vercel.app) · [expo booklet](https://agentic-automl-platform.vercel.app/system-card) · [repo](https://github.com/yadava5/ai-augmented-auto-ml-toolchain)
+Quest generation asks OpenAI, falls back to Hugging Face, and returns `null` if neither key is configured rather than inventing a quest. There is no unit-test suite here; coverage is a Playwright spec, and the `test:api` script is `vitest --passWithNoTests`. Said plainly because the rest of this page is.
 
-AutoML is source-available under PolyForm Noncommercial — free to run, self-host and modify, commercial use by arrangement. Copyright is held jointly with Shree Chaturvedi, so neither of us can license it commercially alone.
+[LifeQuest](https://getlifequest.vercel.app) · [system card](https://getlifequest.vercel.app/system-card) · [repo](https://github.com/yadava5/lifequest)
 
 ---
 
-<img src="./assets/plate-7-colophon.svg" width="100%" alt="Six systems, five system cards and one expo booklet. Every number here is traceable to the repository it came from, except AutoML's, and the page itself is animated SVG with no JavaScript and no server.">
+## VIII · Agentic AutoML
+
+<img src="./assets/plate-6b-automl.svg" width="100%" alt="Agentic AutoML takes a dataset and a sentence and returns a trained model. Its tool registry holds 44 definitions, but the model never carries all of them: 15 travel with it in every phase and the remaining 29 arrive with the phase that needs them, routed by seven named tool sets — onboarding, preprocessing, feature proposal, feature continue, feature engineering, feature lifecycle and training lifecycle. The Python it writes executes in a container with no network, a read-only root filesystem, a non-root user and the dataset mounted read-only, leaving 5 tmpfs mounts as the only writable surface. Behind it sits a 29-table Postgres schema with pgvector. Written with Shree Chaturvedi; the repository is public and noncommercially licensed.">
+
+**Agentic AutoML** takes a dataset and a sentence and gives back a trained model. A LangGraph state machine drives it; an MCP server exposes the tools.
+
+The part worth looking at is what the model is allowed to hold. The registry has **44** tool definitions, but `LLM_TOOL_DEFINITIONS` — the set that travels with the model everywhere — is **15** of them: data, cell and package tools. The other 29 arrive with the phase that needs them, through seven exported sets: onboarding, preprocessing, feature proposal, feature continue, feature engineering, feature lifecycle, training lifecycle. A model in the training phase cannot reach a preprocessing tool, because it was never handed one.
+
+The Python it writes runs in a container built by `dockerBuilder.ts`: `--network none`, `--read-only` root, `--user sandbox`, datasets mounted `:ro`, memory and CPU capped. Five `--tmpfs` mounts are the entire writable surface, and none of it survives the container. When a cell raises, the repair loop re-prompts on the actual traceback rather than a summary of it.
+
+Behind that: a **29**-table Postgres schema with pgvector, and a Jupyter kernel held open per project so state survives between cells.
+
+[AutoML](https://agentic-automl-platform.vercel.app) · [expo booklet](https://agentic-automl-platform.vercel.app/system-card) · [repo](https://github.com/yadava5/ai-augmented-auto-ml-toolchain)
+
+Source-available under PolyForm Noncommercial — free to run, self-host and modify; commercial use by arrangement. Copyright is held jointly with Shree Chaturvedi, so neither of us can license it commercially alone.
+
+---
+
+<img src="./assets/plate-7-colophon.svg" width="100%" alt="Six systems, five system cards and one expo booklet. Every number here is traceable to the repository it came from, and the page itself is animated SVG with no JavaScript and no server.">
 
 <div align="center">
 <sub>
