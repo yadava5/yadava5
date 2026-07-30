@@ -71,7 +71,8 @@ SLAB, EDGE = "#0B0C0E", "rgba(255,255,255,0.07)"
 RULE = "#5A606A"   # 3.06:1 — section rules
 WIRE = "#6E737C"   # 4.05:1 — connectors, boundaries, brackets, box frames.
                    # Used at FULL opacity: a .45 alpha put it back under 2:1.
-ROW = "#3A424B"    # tenant row fills, paired with a WIRE stroke
+ROW = "#5A606A"    # 3.09:1 — tenant row fills. Was #3A424B at 1.92:1: eight
+                   # near-invisible rectangles carrying the whole of plate V.
 INK, INK2, INK3 = "#F7F8F8", "#8A8F98", "#62666D"
 AMBER, LIME, EMERALD = "#F5A524", "#B8E62E", "#34D399"
 CYAN, PINK, INDIGO = "#22D3EE", "#F472B6", "#818CF8"
@@ -194,11 +195,14 @@ def plate_thesis() -> str:
                             "that would catch it."]):
         s.append(f'<text x="150" y="{136 + i*40}" class="ser">{ln}</text>')
     # the ONLY polychrome frame in the document — and now it says what it means
+    adv = 8.4 + 0.6                      # .fine advance + its letter-spacing
+    wid = [len(nm) * adv for nm, _ in LEGEND]
+    gut = (R - 10 - L - sum(wid)) / (len(LEGEND) - 1)
     for i, (nm, c) in enumerate(LEGEND):
-        x = 150 + i * 96
-        s.append(f'<rect class="sw" x="{x}" y="248" width="14" height="4" rx="1" fill="{c}" '
+        x = L + sum(wid[:i]) + gut * i
+        s.append(f'<rect class="sw" x="{x:.1f}" y="248" width="14" height="4" rx="1" fill="{c}" '
                  f'style="animation-delay:{round(-SET + i*0.6,3)}s"/>')
-        s.append(f'<text x="{x}" y="272" class="fine">{nm}</text>')
+        s.append(f'<text x="{x:.1f}" y="272" class="fine">{nm}</text>')
     return "".join(s) + "</svg>"
 
 
@@ -234,9 +238,11 @@ def plate_glyph() -> str:
         y = 120 + i * 34
         s.append(f'<text x="330" y="{y+5}" class="key">{name}</text>')
         s.append(f'<path d="M470 {y}H660" stroke="{WIRE}" stroke-width="1"/>')
+        hand = i < 3
         s.append(f'<circle class="tok" data-rest="one-answer" data-rest-within="2" '
-                 f'cx="470" cy="{y}" r="4" fill="{a}" '
-                 f'style="animation-delay:{round(-SET + i*0.5,3)}s"/>')
+                 f'cx="470" cy="{y}" r="4" '
+                 + (f'fill="{a}" ' if hand else f'fill="none" stroke="{a}" stroke-width="1.6" stroke-dasharray="2.2 2" ')
+                 + f'style="animation-delay:{round(-SET + i*0.5,3)}s"/>')
     # four instruction sets, one answer — so all four tokens must actually
     # arrive at the collector, not merely set off in its direction
     s.append(f'<path id="one-answer" d="M660 116V226" stroke="{WIRE}" stroke-width="1"/>')
@@ -356,9 +362,9 @@ def plate_cadence() -> str:
     SENT, FS, CW = "lunch with sam friday 1pm", 26, 15.62
     s = [head(H, "Cadence — a parser that shows its work",
               "Cadence: the sentence 'lunch with sam friday 1pm' is labelled in place — title, "
-              "attendee, day and time — and filed into a Friday cell of the week grid. Its 36 "
-              "API handlers are bundled into a single serverless function, because the hosting "
-              "plan allows 12.", key="plate-3-cadence.svg")]
+              "attendee, day and time — and filed into the Friday 1pm slot of a week grid that "
+              "names its hours. Its 36 API handlers are bundled into a single serverless "
+              "function, because the hosting plan allows 12.", key="plate-3-cadence.svg")]
     s.append(f""".ul{{animation:ul {LOOP}s {EASE} infinite;transform-box:fill-box;transform-origin:left center}}
 @keyframes ul{{0%,4%{{transform:scaleX(0);opacity:0}}8%{{opacity:1}}18%,100%{{transform:scaleX(1);opacity:1}}}}
 .an{{animation:an {LOOP}s linear infinite}}
@@ -369,7 +375,8 @@ def plate_cadence() -> str:
 </style>{slab(H, a)}""")
     s.append(f'<text x="150" y="56" class="lbl">CLAIM — plain English in, calendar out</text>')
     s.append(rail("III", "CADENCE"))
-    s.append(f'<text x="150" y="104" font-size="{FS}" fill="{INK}" letter-spacing="0">{SENT}</text>')
+    s.append(f'<text x="150" y="78" class="lbl">MECHANISM — every span carries its parser</text>')
+    s.append(f'<text x="150" y="116" font-size="{FS}" fill="{INK}" letter-spacing="0">{SENT}</text>')
     # Four passes annotating the SAME sentence in place — a linguist's gloss.
     # The labels used to stagger onto two rows to dodge a collision, which made
     # a reader scan them TITLE→DATE→ATTENDEE→TIME. Short labels fit one row, so
@@ -378,23 +385,26 @@ def plate_cadence() -> str:
     for i, (start, ln, label) in enumerate(toks):
         x, w = 150 + start * CW, ln * CW
         dl = round(-SET + i * 0.5, 3)
-        s.append(f'<rect class="ul" x="{x:.0f}" y="114" width="{w:.0f}" height="2" fill="{a}" '
+        s.append(f'<rect class="ul" x="{x:.0f}" y="126" width="{w:.0f}" height="2" fill="{a}" '
                  f'style="animation-delay:{dl}s"/>')
-        s.append(f'<text class="an lbl" x="{x:.0f}" y="140" fill="{a}" '
+        s.append(f'<text class="an lbl" x="{x:.0f}" y="152" fill="{a}" '
                  f'style="animation-delay:{dl}s">{label}</text>')
-    s.append(f'<text x="150" y="200" class="lbl">MECHANISM — four stages, each one legible</text>')
+    s.append(f'<text x="150" y="200" class="lbl">FILED — into the hour it names</text>')
 
     # filed — a week grid with real hour rows, so it reads as a calendar
     s.append(f'<path d="M150 224H730" stroke="{RULE}"/>')
+    # the hour gutter — right-aligned so it cannot drift into the type column
+    for hy, hl in ((266, "12"), (290, "1pm"), (314, "2pm")):
+        s.append(f'<text x="182" y="{hy}" class="fine" text-anchor="end">{hl}</text>')
     for d, day in enumerate(["MON", "TUE", "WED", "THU", "FRI"]):
-        x = 150 + d * 116
+        x = 196 + d * 108
         s.append(f'<text x="{x}" y="252" class="lbl">{day}</text>')
-        s.append(f'<rect x="{x}" y="262" width="100" height="72" rx="3" fill="none" stroke="{WIRE}"/>')
+        s.append(f'<rect x="{x}" y="262" width="96" height="72" rx="3" fill="none" stroke="{WIRE}"/>')
         for hr in (286, 310):
-            s.append(f'<path d="M{x} {hr}H{x+100}" stroke="{RULE}" stroke-width="1"/>')
+            s.append(f'<path d="M{x} {hr}H{x+96}" stroke="{RULE}" stroke-width="1"/>')
     s.append(f'<g class="fil" style="animation-delay:{-SET}s">'
-             f'<rect x="616" y="288" width="96" height="20" rx="3" fill="#0E2A22" stroke="{a}"/>'
-             f'<text x="624" y="302" class="fine" fill="{a}">1pm · sam</text></g>')
+             f'<rect x="632" y="288" width="80" height="20" rx="3" fill="#0E2A22" stroke="{a}"/>'
+             f'<text x="640" y="302" class="fine" fill="{a}">sam</text></g>')
     s.append(f'<text x="150" y="410" class="hero">36</text>')
     s.append(f'<text x="232" y="394" class="lbl">HANDLERS IN ONE FUNCTION</text>')
     s.append(f'<text x="232" y="418" class="lbl">THE PLAN ALLOWS 12</text>')
