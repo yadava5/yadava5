@@ -135,18 +135,39 @@ const textOf = (f) => {
   fileText.set(f, t);
   return t;
 };
+// A NUMBER must appear as a whole token. String.includes was vacuous for every
+// single-digit value: "7".includes-test is satisfied by "97.01", so a row
+// claiming the page draws 7 was validated by a 7 buried inside an unrelated
+// number. That is how "IDOR: 7" could be falsified to "IDOR: 79" and ship
+// green. Words stay on substring, case-insensitively, because a row whose
+// value is "rules" is drawn as "RULES LAYER ONLY".
+const isNum = (v) => /^\d+(\.\d+)?$/.test(String(v));
+const drawsToken = (text, v) =>
+  isNum(v) ? new RegExp(`(?<![\\d.])${String(v).replace('.', '\\.')}(?!\\d)(?!\\.\\d)`).test(text)
+           : text.toLowerCase().includes(String(v).toLowerCase());
 for (const c of [...spec.claims, ...spec.unpinnable, ...spec.external]) {
   for (const f of c.drawn_on || []) {
-    // Case-insensitive: a row whose value is a word ("rules") is drawn on the
-    // plate in the document's uppercase label voice ("RULES LAYER ONLY").
-    if (!textOf(f).toLowerCase().includes(String(c.value).toLowerCase()))
-      fails.push(`${c.id}: drawn_on lists ${f}, but "${c.value}" does not appear there`);
+    if (!drawsToken(textOf(f), c.value))
+      fails.push(`${c.id}: drawn_on lists ${f}, but "${c.value}" does not appear there as a whole number`);
   }
 }
 
 // ── 3. coverage — the half that makes this a gate. Every number a plate draws
 //       must be a registered claim or a named exemption.
-const known = new Set([...spec.claims, ...spec.unpinnable, ...spec.external].map(c => String(c.value)));
+// Scoped per file, via drawn_on. A GLOBAL set of known values is the very
+// thing this file's own header warns against for exemptions -- it would "wave
+// through an unsourced 6 anywhere in the document" -- and the coverage check
+// was built on exactly that principle. Demonstrated: plate III's hosting cap
+// could be changed from 12 to 10 and pass, validated by jetpack's laptop core
+// count; plate V's IDOR figure could be changed to 79 and pass, validated by
+// Glyph's confident-error count.
+const knownIn = new Map();
+for (const c of [...spec.claims, ...spec.unpinnable, ...spec.external])
+  for (const f of c.drawn_on || []) {
+    if (!knownIn.has(f)) knownIn.set(f, new Set());
+    knownIn.get(f).add(String(c.value));
+  }
+const known = (f) => knownIn.get(f) || new Set();
 // An exemption is either global ("880": the viewBox) or scoped to one plate
 // ("plate-2-jetpack.svg:6"). Scoped is strongly preferred: exempting a bare "6"
 // everywhere would let a future unsourced 6 onto any plate in the document.
@@ -157,6 +178,16 @@ const exempt = new Set(Object.keys(spec.exempt).filter(k => k !== '$comment'));
 // never audited by the gate whose entire purpose is that no number goes
 // unaudited. Link targets are stripped first; a URL is an address, not a claim.
 const SWEPT = [...readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)).sort(), 'README.md'];
+// The contentious counts on this page are SPELLED OUT -- seven tenant tables,
+// four parsers, five system cards, a three-layer cascade -- and a sweep that
+// only matches \d audited none of them. "all seven tenant tables" could be
+// changed to "all nineteen" and ship green. one/two are deliberately excluded:
+// in this prose they are far more often articles than counts.
+const WORDNUM = { three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9,
+  ten: 10, eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15,
+  sixteen: 16, seventeen: 17, eighteen: 18, nineteen: 19, twenty: 20,
+  thirty: 30, forty: 40, fifty: 50, sixty: 60, seventy: 70, eighty: 80,
+  ninety: 90, hundred: 100, thousand: 1000, dozen: 12 };
 const numsOf = (f) => {
   // In README.md, three things are addresses rather than assertions: HTML
   // attributes (plate-0-thesis.svg, width="100%", the srcset), markdown link
@@ -166,11 +197,14 @@ const numsOf = (f) => {
   const t = f === 'README.md'
     ? textOf(f).replace(/<[^>]*>/g, ' ').replace(/\]\([^)]*\)/g, ' ').replace(/https?:\/\/\S+/g, ' ')
     : textOf(f);
-  return new Set(t.match(/\d+\.\d+|\b\d+\b/g) || []);
+  const out = new Set(t.match(/\d+\.\d+|\b\d+\b/g) || []);
+  for (const [w, n] of Object.entries(WORDNUM))
+    if (new RegExp(`\\b${w}\\b`, 'i').test(t)) out.add(String(n));
+  return out;
 };
 for (const file of SWEPT) {
   for (const n of numsOf(file)) {
-    if (known.has(n) || exempt.has(n) || exempt.has(`${file}:${n}`)) continue;
+    if (known(file).has(n) || exempt.has(n) || exempt.has(`${file}:${n}`)) continue;
     fails.push(`${file}: draws "${n}", which claims.json neither derives nor exempts`);
   }
 }
@@ -180,7 +214,7 @@ const usedExempt = new Set();
 for (const file of SWEPT) {
   for (const n of numsOf(file)) {
     if (exempt.has(`${file}:${n}`)) usedExempt.add(`${file}:${n}`);
-    else if (exempt.has(n) && !known.has(n)) usedExempt.add(n);
+    else if (exempt.has(n) && !known(file).has(n)) usedExempt.add(n);
   }
 }
 for (const k of exempt)
