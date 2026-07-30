@@ -127,20 +127,20 @@ Tags was missed by the first sweep entirely, and is the one worth naming: its ex
 
 <picture>
   <source media="(max-width: 500px)" srcset="./assets/m-6-release.svg">
-  <img src="./assets/plate-6-release.svg" width="100%" alt="LifeQuest turns real-world routines into tracked quests, for people rebuilding structure after a layoff or in retirement. Agentic AutoML moves a dataset through a hardened Docker sandbox and holds it for a human before a preprocessing step is committed and before a model is trained. This is the one section on the page a reader cannot check: the repository is private.">
+  <img src="./assets/plate-6-release.svg" width="100%" alt="LifeQuest turns real-world routines into tracked quests, for people rebuilding structure after a layoff or in retirement. Agentic AutoML moves a dataset through a hardened Docker sandbox and holds it for a human before a preprocessing step is committed and before a model is trained. This is the one section on the page a reader can now read for themselves: the repository is public.">
 </picture>
 
 **LifeQuest** turns real-world routines into tracked quests with tiered progression — built for people rebuilding structure, whether after a layoff or in retirement. Tauri + React client, NestJS + Prisma API.
 
 **Agentic AutoML** takes a dataset and returns a deployed model: LangGraph orchestration over an MCP tool registry, Python executed in a hardened Docker sandbox — non-root, read-only rootfs, an `--internal` Docker network with no outbound route (the beta deploy defaults to `bridge`), capped memory and CPU — and human approval gates before a preprocessing step is committed and before a model is trained. Worth being exact: preprocessing runs the code *before* it asks, so the gate protects what gets persisted rather than what gets spent — and whether a step needs approval is itself proposed by the model, defaulting to *no* approval when the model does not ask for one. Senior design at Miami University, co-built with Shree Chaturvedi.
 
-[LifeQuest](https://getlifequest.vercel.app) · [system card](https://getlifequest.vercel.app/system-card) · [repo](https://github.com/yadava5/lifequest) — [AutoML](https://agentic-automl-platform.vercel.app) · [expo booklet](https://agentic-automl-platform.vercel.app/system-card) · repo private
+[LifeQuest](https://getlifequest.vercel.app) · [system card](https://getlifequest.vercel.app/system-card) · [repo](https://github.com/yadava5/lifequest) — [AutoML](https://agentic-automl-platform.vercel.app) · [expo booklet](https://agentic-automl-platform.vercel.app/system-card) · [repo](https://github.com/yadava5/ai-augmented-auto-ml-toolchain)
 
-This is the one section on the page you cannot check. AutoML's repository is private, so nothing above is re-derivable by a reader, and the plate says so on its face rather than borrowing the credibility of the five sections that are.
+AutoML is source-available under PolyForm Noncommercial — free to run, self-host and modify, commercial use by arrangement. Copyright is held jointly with Shree Chaturvedi, so neither of us can license it commercially alone.
 
 ---
 
-<img src="./assets/plate-7-colophon.svg" width="100%" alt="Six systems, five system cards and one expo booklet. Every number here is traceable to the repository it came from, except AutoML's, whose repository is private — and the page itself is animated SVG with no JavaScript and no server.">
+<img src="./assets/plate-7-colophon.svg" width="100%" alt="Six systems, five system cards and one expo booklet. Every number here is traceable to the repository it came from, except AutoML's, and the page itself is animated SVG with no JavaScript and no server.">
 
 <div align="center">
 <sub>

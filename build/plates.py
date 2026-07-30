@@ -745,7 +745,7 @@ def plate_release() -> str:
               "structure after a layoff or in retirement. Agentic AutoML moves a dataset through "
               "a hardened Docker sandbox and holds it for a human before a preprocessing step is "
               "committed and before a model is trained. This is the one section on the page a "
-              "reader cannot check: the repository is private.",
+              "reader can now read for themselves: the repository is public.",
               key="plate-6-release.svg")]
     s.append(f""".nd{{transform-box:fill-box;transform-origin:center;animation:nd {LOOP}s {BREATHE} infinite}}
 @keyframes nd{{0%,4%{{opacity:0;transform:scale(.9)}}10%{{opacity:1;transform:scale(1)}}
@@ -816,7 +816,7 @@ def plate_release() -> str:
     # So the count is gone and the mechanism stays.
     s.append(f'<text x="150" y="486" class="sub">HUMAN IN THE LOOP</text>')
     s.append(f'<text x="150" y="514" class="fine">approval before a step commits, and before a model trains</text>')
-    s.append(f'<text x="150" y="538" class="fine" style="fill:{INK3}">the only section here you cannot check — this repository is private</text>')
+    s.append(f'<text x="150" y="538" class="fine" style="fill:{INK3}">source-available · noncommercial · built with Shree Chaturvedi</text>')
     return "".join(s) + "</svg>"
 
 
@@ -825,7 +825,7 @@ def plate_colophon() -> str:
     H = 269
     s = [head(H, "Colophon", "Six systems, five system cards and one expo booklet. Every number "
                              "here is traceable to the repository it came from, except AutoML's, "
-                             "whose repository is private — and the page itself is animated SVG "
+                             "and the page itself is animated SVG "
                              "with no JavaScript and no server.", key="plate-7-colophon.svg")]
     # This plate asserts "ANIMATED SVG" and used to be the only one that wasn't.
     LOOP, SET = 12.7, 10.0
@@ -843,7 +843,7 @@ def plate_colophon() -> str:
                             "Every number traces to its repo."]):
         s.append(f'<text class="ln say" x="150" y="{120 + i*28}" '
                  f'style="animation-delay:{round(-SET + i*0.15,3)}s">{ln}</text>')
-    s.append(f'<text x="150" y="172" class="fine" style="fill:{INK3}">except AutoML’s — that repository is private, and the plate says so</text>')
+    s.append(f'<text x="150" y="172" class="fine" style="fill:{INK3}">all six repositories are open — the work numbers come from my CV</text>')
     s.append(f'<text class="ln2 lbl" x="150" y="204" '
              f'style="animation-delay:{round(-SET + 1.9,3)}s">ANIMATED SVG · NO JAVASCRIPT · NO SERVER</text>')
     s.append(f'<text x="150" y="236" class="lbl">B.S. CS · MIAMI UNIVERSITY ’26</text>')
