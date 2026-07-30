@@ -534,6 +534,28 @@
       "path": "web/public/wasm/fast_mnist.wasm",
       "extractor": "shasum -a 256 \"$BLOB\" | cut -d' ' -f1",
       "note": "The page's strongest single piece of evidence, and it was uncited. The binary getglyph.vercel.app serves is byte-identical to this blob, so 'it came off a branch carrying real wasm_simd128 intrinsics' stops being testimony: curl the URL, hash it, compare."
+    },
+    {
+      "id": "applied.eval_misclassified",
+      "value": "2",
+      "drawn_on": [
+        "README.md"
+      ],
+      "repo": "applied",
+      "path": "backend/data/evaluation/baseline_rules_v3.json",
+      "extractor": "jq -r '.overall.misclassified' \"$BLOB\"",
+      "note": "0.979 with no uncertainty beside it was the page's one remaining asymmetry: jetpack's numbers all carry an interval and Applied's did not. The honest statement of a 96-row result is the error count."
+    },
+    {
+      "id": "applied.eval_per_class",
+      "value": "12",
+      "drawn_on": [
+        "README.md"
+      ],
+      "repo": "applied",
+      "path": "backend/data/evaluation/baseline_rules_v3.json",
+      "extractor": "jq -r '.label_distribution|to_entries|map(.value)|unique|.[0]' \"$BLOB\"",
+      "note": "The set is balanced 12 per class, which is why macro-F1 and weighted-F1 are identical to the last digit. Unstated until now, and it is the reason the two numbers agree."
     }
   ],
   "$unpinnable_note": [

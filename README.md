@@ -78,6 +78,8 @@ Your inbox already holds the verdict on most applications you've sent. A three-l
 
 **0.979 macro-F1** on a 96-message, 8-class evaluation set, and CI fails the build below 0.95 with a real non-zero exit.
 
+That score is **two mistakes**. The set is balanced at 12 messages per class — which is why macro-F1 and weighted-F1 come out identical — so one more error moves it about a point. jetpack's numbers on this page carry ±0.7% to ±6.9% because a JMH run hands you an interval; a 96-row evaluation does not, and quoting three decimals off two mistakes would be borrowing a precision I don't have.
+
 Worth being exact, because the number and the picture don't quite match: that score is generated with the `deterministic` profile, which switches the SetFit head off and empties the embedding store — so it measures **the regex layer alone**, and the rules-only baseline reproduces it to the last digit. The full three-layer cascade's own score, 0.9583, survives in exactly one line of prose (`docs/ML_EXECUTION_TRACKER.md:378`) because the run that produced it was overwritten by the deterministic re-run. I can hand you an artifact for 0.979 and not for 0.9583, so 0.979 is what the plate draws, labelled for what it actually measures.
 
 Anything under the **0.85 confidence gate** is not guessed at — it goes to a human. The model is allowed to say it doesn't know.
