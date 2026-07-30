@@ -615,15 +615,219 @@
     "README.md:243": "the last line of that same cited range",
     "README.md:03.23": "part of the contact address aesh.03.23@gmail.com",
     "plate-7-colophon.svg:03.23": "part of the contact address aesh.03.23@gmail.com",
-    "plate-0-thesis.svg:26": "'CS \u201926' \u2014 a graduation year",
-    "plate-7-colophon.svg:26": "'CS \u201926' \u2014 a graduation year",
+    "plate-7-colophon.svg:26": "'\u201926' \u2014 a graduation year, on the colophon that names the degree",
     "README.md:6": "'Six systems' \u2014 a count of this page's own contents, which the page then enumerates one per section; the reader checks it by scrolling",
     "README.md:5": "'Five system cards' \u2014 likewise enumerated on the page, and the sixth is named as an expo booklet",
     "plate-7-colophon.svg:6": "'Six systems' \u2014 the colophon restating the page's own contents",
     "plate-7-colophon.svg:5": "'Five system cards' \u2014 likewise",
     "README.md:256": "the '256' in `shasum -a 256` \u2014 the name of the hash algorithm in a command the reader is invited to run",
-    "README.md:26": "'CS '26' \u2014 a graduation year, the same exemption the plates already carry",
     "plate-0-thesis.svg:03.23": "part of the contact address aesh.03.23@gmail.com",
-    "plate-0-thesis.svg:512": "AVX-512 \u2014 an instruction-set name in the skills band"
-  }
+    "plate-0-thesis.svg:512": "AVX-512 \u2014 an instruction-set name in the skills band",
+    "README.md:2026": "the graduation date, May 2026 \u2014 a fact about the author, not a measurement of a repository",
+    "plate-0b-work.svg:2025": "'Jun 2025 \u2013 May 2026' \u2014 the dates of the role",
+    "plate-0b-work.svg:2026": "'Jun 2025 \u2013 May 2026', and 'DATAFEST 2026'",
+    "plate-0b-work.svg:5": "'5 years' \u2014 the span of query logs ingested",
+    "plate-0b-work.svg:0": "'FROM 0' \u2014 the compliance baseline the 96.72% is measured against",
+    "plate-0b-work.svg:3": "'3-PERSON' \u2014 the DataFest team size",
+    "README.md:2023": "Dean's List, Fall 2023 \u2014 a date",
+    "README.md:2025": "Dean's List and the two 2025 competition results \u2014 dates",
+    "README.md:0": "'from 0% to 96.72%' \u2014 the compliance baseline"
+  },
+  "$attested_note": [
+    "Facts about the AUTHOR rather than measurements of a repository.",
+    "",
+    "Everything in `claims` is re-derived in CI from a pinned commit, and that is",
+    "the page's whole argument. A year of internship work is not in any repository",
+    "a reader can clone: the Oracle logs, the Tableau inventory and the compliance",
+    "dashboard belong to Miami University. Nor is a competition result.",
+    "",
+    "Those facts are worth putting on the page, and pretending they carry the same",
+    "warrant as `422 MB/s` would be exactly the move this document exists to",
+    "refuse. So they live here, they are labelled ATTESTED on the plate that draws",
+    "them, and claims.mjs prints them separately from the derived set. The reader",
+    "is told which numbers they can check and which they are taking on trust."
+  ],
+  "attested": [
+    {
+      "id": "work.query_logs",
+      "value": "1.6",
+      "unit": "M Oracle Analytics query logs",
+      "drawn_on": [
+        "plate-0b-work.svg",
+        "README.md"
+      ],
+      "source": "Ayush Yadav CV, July 2026",
+      "why": "the work belongs to Miami University / a competition dataset; no public repository can be pinned"
+    },
+    {
+      "id": "work.field_usage_rows",
+      "value": "57.8",
+      "unit": "M-row field-usage table",
+      "drawn_on": [
+        "plate-0b-work.svg",
+        "README.md"
+      ],
+      "source": "Ayush Yadav CV, July 2026",
+      "why": "the work belongs to Miami University / a competition dataset; no public repository can be pinned"
+    },
+    {
+      "id": "work.inventory_rows",
+      "value": "10453",
+      "unit": "row master asset inventory",
+      "drawn_on": [
+        "plate-0b-work.svg",
+        "README.md"
+      ],
+      "source": "Ayush Yadav CV, July 2026",
+      "why": "the work belongs to Miami University / a competition dataset; no public repository can be pinned"
+    },
+    {
+      "id": "work.compliance_after",
+      "value": "96.72",
+      "unit": "% code compliance, from 0",
+      "drawn_on": [
+        "plate-0b-work.svg",
+        "README.md"
+      ],
+      "source": "Ayush Yadav CV, July 2026",
+      "why": "the work belongs to Miami University / a competition dataset; no public repository can be pinned"
+    },
+    {
+      "id": "work.projects",
+      "value": "61",
+      "unit": "project portfolio",
+      "drawn_on": [
+        "plate-0b-work.svg",
+        "README.md"
+      ],
+      "source": "Ayush Yadav CV, July 2026",
+      "why": "the work belongs to Miami University / a competition dataset; no public repository can be pinned"
+    },
+    {
+      "id": "datafest.patients",
+      "value": "349",
+      "unit": "K patients modelled",
+      "drawn_on": [
+        "plate-0b-work.svg",
+        "README.md"
+      ],
+      "source": "Ayush Yadav CV, July 2026",
+      "why": "the work belongs to Miami University / a competition dataset; no public repository can be pinned"
+    },
+    {
+      "id": "datafest.auc",
+      "value": "0.90",
+      "unit": "holdout AUC",
+      "drawn_on": [
+        "plate-0b-work.svg",
+        "README.md"
+      ],
+      "source": "Ayush Yadav CV, July 2026",
+      "why": "the work belongs to Miami University / a competition dataset; no public repository can be pinned"
+    },
+    {
+      "id": "datafest.encounters",
+      "value": "7.7",
+      "unit": "M encounters, 1.4 GB",
+      "drawn_on": [
+        "plate-0b-work.svg",
+        "README.md"
+      ],
+      "source": "Ayush Yadav CV, July 2026",
+      "why": "the work belongs to Miami University / a competition dataset; no public repository can be pinned"
+    },
+    {
+      "id": "datafest.linkage",
+      "value": "99.6",
+      "unit": "% social-determinant linkage preserved",
+      "drawn_on": [
+        "plate-0b-work.svg",
+        "README.md"
+      ],
+      "source": "Ayush Yadav CV, July 2026",
+      "why": "the work belongs to Miami University / a competition dataset; no public repository can be pinned"
+    },
+    {
+      "id": "datafest.naive_linkage",
+      "value": "32",
+      "unit": "% under a naive join",
+      "drawn_on": [
+        "plate-0b-work.svg",
+        "README.md"
+      ],
+      "source": "Ayush Yadav CV, July 2026",
+      "why": "the work belongs to Miami University / a competition dataset; no public repository can be pinned"
+    },
+    {
+      "id": "work.oas_users",
+      "value": "1153",
+      "unit": "distinct OAS users in the log set",
+      "drawn_on": [
+        "README.md"
+      ],
+      "source": "Ayush Yadav CV, July 2026",
+      "why": "the work belongs to Miami University / a competition dataset; no public repository can be pinned"
+    },
+    {
+      "id": "work.dashboards",
+      "value": "66",
+      "unit": "dashboards covered",
+      "drawn_on": [
+        "README.md"
+      ],
+      "source": "Ayush Yadav CV, July 2026",
+      "why": "the work belongs to Miami University / a competition dataset; no public repository can be pinned"
+    },
+    {
+      "id": "work.inventory_fields",
+      "value": "35",
+      "unit": "fields in the master inventory",
+      "drawn_on": [
+        "README.md"
+      ],
+      "source": "Ayush Yadav CV, July 2026",
+      "why": "the work belongs to Miami University / a competition dataset; no public repository can be pinned"
+    },
+    {
+      "id": "work.dashboard_months",
+      "value": "37",
+      "unit": "month Tableau compliance dashboard",
+      "drawn_on": [
+        "README.md"
+      ],
+      "source": "Ayush Yadav CV, July 2026",
+      "why": "the work belongs to Miami University / a competition dataset; no public repository can be pinned"
+    },
+    {
+      "id": "datafest.gigabytes",
+      "value": "1.4",
+      "unit": "GB of encounter data",
+      "drawn_on": [
+        "README.md"
+      ],
+      "source": "Ayush Yadav CV, July 2026",
+      "why": "the work belongs to Miami University / a competition dataset; no public repository can be pinned"
+    },
+    {
+      "id": "datafest.window_days",
+      "value": "90",
+      "unit": "day care-utilisation window",
+      "drawn_on": [
+        "plate-0b-work.svg",
+        "README.md"
+      ],
+      "source": "Ayush Yadav CV, July 2026",
+      "why": "the work belongs to Miami University / a competition dataset; no public repository can be pinned"
+    },
+    {
+      "id": "awards.mucat_grant",
+      "value": "2500",
+      "unit": "dollar MUCAT prototyping grant",
+      "drawn_on": [
+        "README.md"
+      ],
+      "source": "Ayush Yadav CV, July 2026",
+      "why": "the work belongs to Miami University / a competition dataset; no public repository can be pinned"
+    }
+  ]
 }

@@ -162,7 +162,7 @@ const drawsToken = (text, v) => {
   const w = WORDOF[String(v)];
   return w ? new RegExp(`\\b${w}\\b`, 'i').test(text) : false;
 };
-for (const c of [...spec.claims, ...spec.unpinnable, ...spec.external]) {
+for (const c of [...spec.claims, ...spec.unpinnable, ...spec.external, ...(spec.attested || [])]) {
   for (const f of c.drawn_on || []) {
     if (!drawsToken(textOf(f), c.value))
       fails.push(`${c.id}: drawn_on lists ${f}, but "${c.value}" does not appear there as a whole number`);
@@ -185,6 +185,13 @@ for (const c of [...spec.claims, ...spec.unpinnable, ...spec.external])
     knownIn.get(f).add(String(c.value));
   }
 const known = (f) => knownIn.get(f) || new Set();
+// Attested facts count for coverage but never for the derived total. They are
+// the author's word; the page says so where it draws them.
+for (const a of spec.attested || [])
+  for (const f of a.drawn_on || []) {
+    if (!knownIn.has(f)) knownIn.set(f, new Set());
+    knownIn.get(f).add(String(a.value));
+  }
 // An exemption is either global ("880": the viewBox) or scoped to one plate
 // ("plate-2-jetpack.svg:6"). Scoped is strongly preferred: exempting a bare "6"
 // everywhere would let a future unsourced 6 onto any plate in the document.
@@ -260,6 +267,9 @@ if (!OFFLINE && !process.env.CLAIMS_SKIP_FRESHNESS) {
 
 // ── report
 for (const n of notes) console.log(`  note  ${n}`);
+if ((spec.attested || []).length)
+  console.log(`  attested  ${spec.attested.length} facts taken on the author's word `
+            + `(${spec.attested[0].source}) — labelled ATTESTED where drawn, never counted as derived`);
 for (const e of spec.external)
   console.log(`  external  ${e.id} = "${e.value}" — platform fact, cited to ${e.source}`);
 // A row here would be a number the page draws and nobody can check. There are

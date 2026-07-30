@@ -210,8 +210,8 @@ def plate_thesis() -> str:
     below is optional depth.
     """
     H, LOOP, SET = 558, 11.3, 9.0
-    s = [head(H, "Ayush Yadav — CS '26, Miami University",
-              "Ayush Yadav, CS ’26 at Miami University, open to full-time software "
+    s = [head(H, "Ayush Yadav — computer science graduate, Cincinnati OH",
+              "Ayush Yadav, a computer science graduate in Cincinnati, Ohio, open to full-time "
               "engineering roles. Languages C++, TypeScript, Python, Java, Swift, Rust and "
               "SQL; systems work in SIMD, the Java Vector API, WebAssembly and OpenMP; "
               "machine learning with LangGraph, MCP, in-browser ONNX and SetFit; web and "
@@ -229,7 +229,7 @@ def plate_thesis() -> str:
 </style>{slab(H, INK2)}""")
 
     s.append(f'<text x="{L}" y="{TOP}" class="key" style="letter-spacing:5px">AYUSH YADAV</text>')
-    s.append(f'<text x="{R}" y="{TOP}" class="lbl" text-anchor="end">CS ’26 · MIAMI UNIVERSITY</text>')
+    s.append(f'<text x="{R}" y="{TOP}" class="lbl" text-anchor="end">CS GRADUATE · CINCINNATI, OH</text>')
     s.append(f'<path class="rule" d="M{L} 88H{R}" pathLength="1" stroke="{WIRE}"/>')
 
     # the one serif voice in the document, saying what the work IS
@@ -272,6 +272,79 @@ def plate_thesis() -> str:
     return "".join(s) + "</svg>"
 
 
+# ────────────────────────────────────────────────────────── PLATE I — WORK
+def plate_work() -> str:
+    """A year of paid engineering, and a national competition.
+
+    Neither appears in any repository a reader can clone — the Oracle logs, the
+    Tableau inventory and the compliance dashboard belong to Miami University,
+    and the DataFest data is a competition set. Every other number on this page
+    is re-derived in CI from a pinned commit; these are the author's word, and
+    the plate says so on its face rather than borrowing the warrant of the ones
+    that are checked.
+    """
+    H, LOOP, SET, a = 566, 9.7, 6.8, INK2
+    LOOP3 = round(LOOP / 3, 2)
+    s = [head(H, "Experience: a year as ITSM Data Integration Intern at Miami University, and "
+                 "team lead at DataFest 2026",
+              "Experience. As ITSM Data Integration Intern at Miami University from June 2025 "
+              "to May 2026: a Python pipeline turning 1.6 million Oracle Analytics query logs "
+              "into a 57.8 million-row field-usage table; code compliance lifted from 0 to "
+              "96.72 percent across a 61-project portfolio; and a 10,453-row master asset "
+              "inventory consolidated from Tableau and Workday. At DataFest 2026, team lead "
+              "of three: 90-day care utilisation modelled for 349 thousand patients at 0.90 "
+              "holdout AUC, over 7.7 million encounters processed with DuckDB and Polars, "
+              "preserving 99.6 percent of social-determinant linkage against 32 percent under "
+              "a naive join. These figures are attested by the author rather than derived "
+              "from a public repository.", key="plate-0b-work.svg")]
+    s.append(f""".fill{{transform-box:fill-box;transform-origin:left center;animation:fill {LOOP3}s {BREATHE} infinite}}
+@keyframes fill{{0%,6%{{transform:scaleX(.02)}}26%{{transform:scaleX(1)}}
+  38%{{transform:scaleX(1)}}46%{{transform:scaleX(.86)}}56%{{transform:scaleX(1)}}
+  68%{{transform:scaleX(1)}}76%{{transform:scaleX(.86)}}86%,100%{{transform:scaleX(1)}}}}
+</style>{slab(H, a)}""")
+
+    s.append(rail("I", "WORK"))
+    s.append(f'<text x="{L}" y="{TOP}" class="kick">ITSM DATA INTEGRATION INTERN · MIAMI UNIVERSITY</text>')
+    s.append(f'<text x="{L}" y="78" class="fine">Jun 2025 – May 2026</text>')
+
+    ROWS = [
+        ("57.8M",  "ROW FIELD-USAGE TABLE",     "from 1.6M Oracle Analytics query logs, 5 years"),
+        ("96.72%", "CODE COMPLIANCE ACROSS 61 PROJECTS", "from 0 — a legacy Laravel reporter, refactored"),
+        ("10,453", "ROW MASTER ASSET INVENTORY","Tableau and Workday consolidated, hash-deduped"),
+    ]
+    for i, (num, lab, det) in enumerate(ROWS):
+        y = [128, 184, 264][i]
+        s.append(f'<text x="{L}" y="{y}" class="sub">{num}</text>')
+        s.append(f'<text x="330" y="{y-8}" class="lbl">{lab}</text>')
+        s.append(f'<text x="330" y="{y+12}" class="fine">{det}</text>')
+    # the compliance number is a fill, so draw it as one
+    # track and fill are one composed object, so they live in a <g> — that also
+    # lets the bar be thick enough to see. At 3u it was a hairline the eye
+    # never caught: the plate measured 2% of samples showing real motion.
+    s.append(f'<g><rect x="330" y="204" width="300" height="26" rx="3" fill="{RULE}"/>'
+             f'<rect class="fill" x="330" y="204" width="300" height="26" rx="3" fill="{LIME}" '
+             f'style="animation-delay:{-SET}s"/></g>')
+
+    s.append(f'<path d="M{L} 330H{R}" stroke="{RULE}"/>')
+    s.append(f'<text x="{L}" y="362" class="kick">DATAFEST 2026 · TEAM LEAD, 3-PERSON, NATIONAL ASA COMPETITION</text>')
+    s.append(f'<text x="{L}" y="406" class="sub">0.90</text>')
+    s.append(f'<text x="330" y="398" class="lbl">HOLDOUT AUC</text>')
+    s.append(f'<text x="330" y="418" class="fine">90-day care utilisation for 349K patients</text>')
+    # the linkage claim is a comparison, so draw the comparison
+    s.append(f'<text x="{L}" y="470" class="sub">99.6%</text>')
+    s.append(f'<text x="330" y="452" class="lbl">OF LINKAGE PRESERVED</text>')
+    s.append(f'<text x="330" y="{"%d" % 508}" class="fine">7.7M encounters · DuckDB + Polars star schema</text>')
+    for j, (frac, col, tag) in enumerate([(1.0, LIME, "star"), (0.321, AMBER, "32% naive")]):
+        yy = 462 + j * 18
+        s.append(f'<g><rect x="330" y="{yy}" width="300" height="12" rx="2" fill="{RULE}"/>'
+                 f'<rect class="fill" x="330" y="{yy}" width="{300*frac:.0f}" height="12" rx="2" '
+                 f'fill="{col}" style="animation-delay:{round(-SET + j*0.14,3)}s"/></g>')
+        s.append(f'<text x="640" y="{yy+11}" class="fine">{tag}</text>')
+
+    s.append(f'<text x="{L}" y="534" class="fine" style="fill:{INK3}">ATTESTED — not derivable from a public repo</text>')
+    return "".join(s) + "</svg>"
+
+
 # ────────────────────────────────────────────────────────────── PLATE I
 def plate_glyph() -> str:
     H, LOOP, SET, a = 576, 9.1, 7.6, AMBER
@@ -296,7 +369,7 @@ def plate_glyph() -> str:
     # CLAIM — the seven, drawn by hand
     s.append(f'<text x="150" y="56" class="kick">THE 299 IT GETS WRONG</text>')
     s.append(f'<text x="330" y="80" class="kick">MECHANISM — 3 BY HAND, 1 AUTO</text>')
-    s.append(rail("I", "GLYPH"))
+    s.append(rail("II", "GLYPH"))
     # 0.68 keeps the three glyphs clear of the mechanism column at x=330;
     # they end at 306. Each is placed by its own ink, not its nominal box.
     hx = 150
@@ -384,7 +457,7 @@ def plate_jetpack() -> str:
 @keyframes rw{{0%,8%{{opacity:.86}}20%,100%{{opacity:1}}}}
 </style>{slab(H, a)}""")
     s.append(f'<text x="330" y="80" class="lbl">PARALLEL vs SINGLE-THREAD GZIP</text>')
-    s.append(rail("II", "JETPACK"))
+    s.append(rail("III", "JETPACK"))
     # NOT "CI ±5%": the 3-fork run's 99.9% intervals span ±0.7% to ±6.9%, so a
     # single figure would be a claim the committed JSON contradicts.
     s.append(f'<text x="330" y="104" class="lbl">JDK 25 · M1 PRO · 3 JMH FORKS</text>')
@@ -463,7 +536,7 @@ def plate_cadence() -> str:
   40%{{transform:scale(1)}}48%{{transform:scale(1.05)}}58%,100%{{transform:scale(1);opacity:1}}}}
 </style>{slab(H, a)}""")
     s.append(f'<text x="150" y="56" class="kick">CLAIM — plain English in, calendar out</text>')
-    s.append(rail("III", "CADENCE"))
+    s.append(rail("IV", "CADENCE"))
     s.append(f'<text x="150" y="78" class="kick">MECHANISM — every span carries its parser</text>')
     s.append(f'<text x="150" y="116" font-size="{FS}" fill="{INK}" letter-spacing="0">{SENT}</text>')
     # Four passes annotating the SAME sentence in place — a linguist's gloss.
@@ -535,7 +608,7 @@ def plate_applied() -> str:
     # re-run. So the hero is the number I can hand you, labelled for what it
     # actually measures, and the gap is stated rather than papered over.
     s.append(f'<text x="150" y="104" class="hero">0.979</text>')
-    s.append(rail("IV", "APPLIED"))
+    s.append(rail("V", "APPLIED"))
     s.append(f'<text x="400" y="80" class="lbl">MACRO-F1 · 96-MSG EVAL SET</text>')
     s.append(f'<text x="400" y="100" class="lbl" style="fill:{AMBER}">RULES LAYER ONLY</text>')
     s.append(f'<text x="400" y="118" class="fine">SetFit off, embeddings emptied</text>')
@@ -606,7 +679,7 @@ def plate_refusal() -> str:
   56%,100%{{transform:translateY(0)}}}}
 </style>{slab(H, a)}""")
 
-    s.append(rail("V", "THE REFUSAL"))
+    s.append(rail("VI", "THE REFUSAL"))
     s.append(f'<text x="150" y="80" class="lbl">TENANT B — THE CALLER</text>')
     s.append(f'<text x="560" y="80" class="lbl">TENANT A</text>')
     for i in range(4):
@@ -676,7 +749,7 @@ def plate_release() -> str:
   38%,100%{{transform:scaleY(1)}}}}
 /* travel slow enough that a 0.33s sample never covers more than ~130u */
 </style>{slab(H, PINK)}""")
-    s.append(rail("VI", "LIFEQUEST · AUTOML"))
+    s.append(rail("VII", "LIFEQUEST · AUTOML"))
     s.append(f'<text x="150" y="56" class="lbl">LIFEQUEST</text>')
     for i, txt in enumerate(["Reconnect with a mentor", "Document a new routine", "Share a win"]):
         s.append(f'<circle class="nd" cx="158" cy="{83+i*30}" r="7" fill="none" stroke="{PINK}" stroke-width="1.6" '
@@ -746,7 +819,7 @@ def plate_colophon() -> str:
   68%{{transform:translateX(0)}}76%{{transform:translateX(3px)}}
   88%,100%{{transform:translateX(0)}}}}
 </style>{slab(H, INDIGO)}""")
-    s.append(rail("VII", "COLOPHON"))
+    s.append(rail("VIII", "COLOPHON"))
     s.append(f'<path class="rule" d="M150 80H{W-150}" pathLength="1" stroke="{RULE}"/>')
     for i, ln in enumerate(["Six systems. Five system cards, one booklet.",
                             "Every number traces to its repo."]):
@@ -755,13 +828,14 @@ def plate_colophon() -> str:
     s.append(f'<text x="150" y="172" class="fine" style="fill:{INK3}">except AutoML’s — that repository is private, and the plate says so</text>')
     s.append(f'<text class="ln2 lbl" x="150" y="204" '
              f'style="animation-delay:{round(-SET + 1.9,3)}s">ANIMATED SVG · NO JAVASCRIPT · NO SERVER</text>')
-    s.append(f'<text x="150" y="236" class="lbl">CS ’26 · MIAMI UNIVERSITY</text>')
+    s.append(f'<text x="150" y="236" class="lbl">B.S. CS · MIAMI UNIVERSITY ’26</text>')
     s.append(f'<text x="{R}" y="236" class="lbl" text-anchor="end">aesh.03.23@gmail.com</text>')
     return "".join(s) + "</svg>"
 
 
 PLATES = {
-    "plate-0-thesis.svg": plate_thesis, "plate-1-glyph.svg": plate_glyph,
+    "plate-0-thesis.svg": plate_thesis, "plate-0b-work.svg": plate_work,
+    "plate-1-glyph.svg": plate_glyph,
     "plate-2-jetpack.svg": plate_jetpack, "plate-3-cadence.svg": plate_cadence,
     "plate-4-applied.svg": plate_applied, "plate-5-refusal.svg": plate_refusal,
     "plate-6-release.svg": plate_release, "plate-7-colophon.svg": plate_colophon,
