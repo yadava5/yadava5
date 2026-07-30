@@ -28,8 +28,15 @@ const MUTATIONS = [
   // inject a second run of type at coordinates already occupied. Moving an
   // existing label was a bad probe: it landed in empty space and proved nothing
   // except that the probe was wrong.
+  // Anchored on class="lbl" at y=56 until round 17, when that element became a
+  // class="kick" and the probe silently stopped matching anything. A stale
+  // probe reports "?? matched nothing" rather than a false pass, which is the
+  // right failure mode — but a probe that only works until someone edits a
+  // class is not much of a probe. This one keys on the SHAPE of any left-column
+  // label and injects a second run of type at the same coordinates.
   ['text collides with text', /collides with/,
-    (s) => s.replace(/(<text x="150" y="56" class="lbl">)/, '<text x="150" y="56" class="lbl">OVERLAP</text>$1')],
+    (s) => s.replace(/<text x="150" y="(\d+)" class="(\w+)">/,
+      (m, y, c) => `<text x="150" y="${y}" class="${c}">OVERLAP</text>${m}`)],
   ['ink leaves the canvas', /leaves the canvas/,
     (s) => s.replace(/<text x="150" y="56"/, '<text x="1500" y="56"')],
   ['a draw-on is blank at frame zero', /undrawn at frame zero/,

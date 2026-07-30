@@ -243,6 +243,9 @@ def plate_thesis() -> str:
   64%{{transform:translateY(0) scale(1)}}
   76%{{transform:translateY(0) scale(1)}}86%{{transform:translateY(-7px) scale(1.06)}}
   98%,100%{{transform:translateY(0) scale(1)}}}}
+.idx{{animation:idx {LOOP}s linear infinite;animation-delay:{-SET}s}}
+@keyframes idx{{0%{{transform:translateY(0);opacity:.5}}94%{{transform:translateY(219px);opacity:.5}}
+  97%,100%{{transform:translateY(219px);opacity:0}}}}
 .ser{{font-family:ui-serif,Georgia,'Times New Roman',serif;font-size:34px;fill:{INK}}}
 </style>{slab(H, INK2)}""")
 
@@ -287,6 +290,14 @@ def plate_thesis() -> str:
         s.append(f'<text x="{x}" y="{y+50}" class="key">{nm}</text>')
         s.append(f'<text x="{x}" y="{y+68}" class="fine">{what}</text>')
         s.append(f'<text x="{x}" y="{y+84}" class="fine" style="fill:{INK3}">{stack}</text>')
+    # the ambient element: an index cursor reading the contact sheet in turn,
+    # for the WHOLE loop — this is a sheet of six systems, and a sheet is a
+    # thing you scan. Everything above ran in the first 40% of the loop and
+    # then held, which the raster gate measured as 2.7s of dead air. At rest
+    # it sits ON the sheet's rule at 366 (6u lower it read as a doubled rule);
+    # 365→584 covers row one then row two, and the wrap fades out before the
+    # 219u reset, so the loop never snaps back in view. Hairline: passes type.
+    s.append(f'<rect class="idx" x="{L}" y="365" width="580" height="2" fill="{INK}" opacity=".5"/>')
     return "".join(s) + "</svg>"
 
 
@@ -383,6 +394,7 @@ def plate_work() -> str:
 # ────────────────────────────────────────────────────────────── PLATE I
 def plate_glyph() -> str:
     H, LOOP, SET, a = 576, 9.1, 7.6, AMBER
+    LOOP2 = round(LOOP / 2, 2)
     s = [head(H, "Glyph — 97.01%, and the 299 it gets wrong",
               "Glyph: a neural network written from scratch in C++ with hand-written AVX-512, "
               "AVX2 and NEON kernels, plus an autovectorised WebAssembly build. It scores 97.01 "
@@ -399,6 +411,8 @@ def plate_glyph() -> str:
 .gr{{transform-box:fill-box;transform-origin:left center;animation:gr {LOOP}s {BREATHE} infinite}}
 @keyframes gr{{0%,30%{{transform:translateY(0)}}38%{{transform:translateY(-5px)}}
   50%,100%{{transform:translateY(0)}}}}
+.rd{{animation:rd {LOOP2}s linear infinite;animation-delay:{-SET}s}}
+@keyframes rd{{0%{{transform:translateY(0)}}100%{{transform:translateY(92px)}}}}
 </style>{slab(H, a)}""")
 
     # CLAIM — the seven, drawn by hand
@@ -459,6 +473,12 @@ def plate_glyph() -> str:
                      f'<path d="{DIGITS[errs[i]]}" fill="none" stroke="{a}" stroke-width="15" '
                      f'stroke-linecap="round"/></g>')
         s.append('</g>')
+    # the ambient element: a read head passing over the 299, all loop long —
+    # the grid is the evidence, and the audit keeps re-reading it. The rest of
+    # the plate finished at 40% of the loop and left 2.5s of dead air on the
+    # raster gate. 456→548 spans the six rows; 92u a pass keeps the wrap under
+    # the teleport ceiling, so it needs no fade. Hairline: passes over marks.
+    s.append(f'<rect class="rd" x="{L}" y="456" width="566" height="2" fill="{a}" opacity=".55"/>')
     return "".join(s) + "</svg>"
 
 
@@ -485,7 +505,7 @@ def plate_jetpack() -> str:
   94%,96%{{opacity:1;transform:translateX(0) scaleX(1)}}
   100%{{opacity:0;transform:translateX(0) scaleX(1)}}}}
 .wscan{{animation:wscan {LOOP2}s linear infinite}}
-@keyframes wscan{{0%{{transform:translateY(0)}}100%{{transform:translateY(112px)}}}}
+@keyframes wscan{{0%{{transform:translateY(0)}}100%{{transform:translateY(104px)}}}}
 .mt{{transform-box:fill-box;transform-origin:left center;animation:mt {LOOP}s {ARRIVE} infinite}}
 @keyframes mt{{0%,6%{{transform:scaleX(0);opacity:0}}11%{{opacity:1}}24%,100%{{transform:scaleX(1);opacity:1}}}}
 .row{{animation:rw {LOOP}s {EASE} infinite}}
@@ -508,7 +528,20 @@ def plate_jetpack() -> str:
     # 404..524 puts 6u of air on each side of the thing it bounds.
     s.append(f'<path d="M174 152V268M174 152H194M174 268H194" stroke="{WIRE}" stroke-width="1"/>')
     s.append(f'<path d="M294 152V268M294 152H274M294 268H274" stroke="{WIRE}" stroke-width="1"/>')
-    s.append(f'<rect class="wscan" x="176" y="153" width="116" height="2" fill="{a}" opacity=".55"/>')
+    # The consume position cycling through the bounded window — blocks are
+    # held HERE until the in-order writer drains them, and that draining never
+    # stops while the file lasts. As one 2u line this moved ~500 raster px per
+    # 100ms sample, under the 0.2% floor of build/motion.mjs, which is why the
+    # plate measured 4.5s of dead air while its scan was technically moving.
+    # Three lines, each still a ≤3u hairline the collision rule exempts, carry
+    # three times the pixels; 104u of travel keeps the tail inside the window.
+    # .50 is the tail's floor twice over: check 7 counts anything under 0.5
+    # opacity as invisible, and lime below ~.45 drops under the 3:1 non-text
+    # contrast line.
+    s.append(f'<g class="wscan">'
+             f'<rect x="176" y="153" width="116" height="2" fill="{a}" opacity=".62"/>'
+             f'<rect x="176" y="157" width="116" height="2" fill="{a}" opacity=".56"/>'
+             f'<rect x="176" y="161" width="116" height="2" fill="{a}" opacity=".5"/></g>')
     for i in range(4):
         y = 168 + i * 26
         s.append(f'<rect class="blk" data-max-x="294" x="180" y="{y}" width="107.8" height="16" rx="2" fill="{a}" '
@@ -612,6 +645,7 @@ def plate_cadence() -> str:
 # ────────────────────────────────────────────────────────────── PLATE IV
 def plate_applied() -> str:
     H, LOOP, SET, a = 532, 11.7, 8.4, CYAN
+    LOOP2 = round(LOOP / 2, 2)
     s = [head(H, "Applied — a classifier allowed to say it doesn't know",
               "Applied: a three-layer email classifier — 201 regex rules, then e5 embeddings, "
               "then a fine-tuned SetFit head, cheapest first. It scores 0.979 macro-F1 on a "
@@ -627,6 +661,8 @@ def plate_applied() -> str:
    its bottom edge exactly on y=288, where it is held before being referred. */
 .ly{{stroke-dasharray:18 222;animation:ly {LOOP}s linear infinite}}
 @keyframes ly{{0%{{stroke-dashoffset:240}}100%{{stroke-dashoffset:0}}}}
+.strm{{animation:strm {LOOP2}s linear infinite;animation-delay:{-SET}s}}
+@keyframes strm{{0%{{transform:translateY(0)}}100%{{transform:translateY(148px)}}}}
 .div{{animation:dv {LOOP}s {ARRIVE} infinite}}
 @keyframes dv{{0%{{opacity:0;transform:translate(-146px,-212px)}}5%{{opacity:1;transform:translate(-146px,-212px)}}
   /* stopped ON the gate, and visibly held there — that pause is the refusal */
@@ -654,6 +690,13 @@ def plate_applied() -> str:
         # the lit layer, drawn over the dashed one as the messages arrive
         s.append(f'<path class="ly" d="M400 {y}H640" stroke="{a}" stroke-width="1.4" '
                  f'style="animation-delay:{round(-SET + i*0.18,3)}s"/>')
+    # the ambient element: the stream itself. Escalation is the claim — mail
+    # descends the cascade toward the gate continuously in production, but the
+    # falling envelopes show one cohort and then hold, which the raster gate
+    # measured as 4.8s of dead air. A hairline riding 148→296 crosses all
+    # three tiers and passes through the gate, twice a loop; 148u of travel
+    # stays under the 160u teleport ceiling, so the wrap needs no fade.
+    s.append(f'<rect class="strm" x="400" y="148" width="240" height="2" fill="{a}" opacity=".55"/>')
     # the gate that is allowed to decline
     s.append(f'<text x="150" y="293" class="lbl" style="fill:{a}">0.85 CONFIDENCE GATE</text>')
     s.append(f'<path d="M400 288H640" stroke="{a}" stroke-width="1"/>')
@@ -994,6 +1037,8 @@ def plate_colophon() -> str:
    to AutoML. Now that AutoML has a plate of its own that reads as its colour,
    the closing plate takes the neutral rule grey: it is not a system, so it
    should not wear a system's colour. */
+.ras{{animation:ras {LOOP}s linear infinite;animation-delay:{-SET}s}}
+@keyframes ras{{0%{{transform:translateY(0)}}100%{{transform:translateY(157px)}}}}
 </style>{slab(H, RULE)}""")
     s.append(rail("IX", "COLOPHON"))
     s.append(f'<path class="rule" d="M150 80H{W-150}" pathLength="1" stroke="{RULE}"/>')
@@ -1012,6 +1057,15 @@ def plate_colophon() -> str:
              f'style="animation-delay:{round(-SET + 1.9,3)}s">ANIMATED SVG · NO JAVASCRIPT · NO SERVER</text>')
     s.append(f'<text x="150" y="236" class="lbl">B.S. CS · MIAMI UNIVERSITY ’26</text>')
     s.append(f'<text x="{R}" y="236" class="lbl" text-anchor="end">aesh.03.23@gmail.com</text>')
+    # the ambient element: this plate SAYS animated SVG, and its two nudging
+    # lines left a 2.8s hole mid-loop on the raster gate — the claim standing
+    # still. So the closing plate carries the proof: one raster pass, 79→236,
+    # descending the colophon for the whole loop. At rest it lies ON the rule
+    # at 80, so the still frame shows one accent rule, not a doubled one; the
+    # 157u wrap stays under the 160u teleport ceiling. .68 keeps indigo 3:1+.
+    s.append(f'<rect class="ras" x="150" y="79" width="580" height="2" fill="{INK2}" opacity=".85"/>')
+    # INK2, not INDIGO: the colophon gave up AutoML's hue this round and the
+    # raster sweep would have quietly handed it back.
     return "".join(s) + "</svg>"
 
 
