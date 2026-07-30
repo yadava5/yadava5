@@ -528,8 +528,8 @@ def plate_jetpack() -> str:
     # NOT "CI ±5%": the 3-fork run's 99.9% intervals span ±0.7% to ±6.9%, so a
     # single figure would be a claim the committed JSON contradicts.
     s.append(f'<text x="330" y="104" class="lbl">JDK 25 · M1 PRO · 3 JMH FORKS</text>')
-    s.append(f'<text x="150" y="108" class="hero">6.4<tspan class="unit">×</tspan></text>')
-    s.append(f'<text x="150" y="152" class="kick">CLAIM</text>')
+    s.append(f'<text x="150" y="112" class="hero">6.4<tspan class="unit">×</tspan></text>')
+    s.append(f'<text x="150" y="144" class="kick">CLAIM</text>')
 
     # The bounded in-flight window. The bracket used to span 400→636 while the
     # compressed blocks came to rest at 410→518, leaving half the window
@@ -578,17 +578,23 @@ def plate_jetpack() -> str:
     # the verdict — the measured table, including the reference he does NOT beat
     s.append(f'<path d="M150 376H730" stroke="{RULE}"/>')
     rows = [
-        ("Adler-32 scalar (pure Java)", "1.52 GB/s", ""),
-        ("Adler-32 hand-vectorised", "4.26 GB/s", "2.80×"),
-        ("java.util.zip intrinsic", "14.06 GB/s", "not beaten"),
-        ("gzip, one thread", "66.2 MB/s", ""),
-        ("parallel virtual threads", "422 MB/s", "6.4×"),
+        ("Adler-32 scalar (pure Java)", "1.52", "GB/s", ""),
+        ("Adler-32 hand-vectorised", "4.26", "GB/s", "2.80×"),
+        ("java.util.zip intrinsic", "14.06", "GB/s", "not beaten"),
+        ("gzip, one thread", "66.2", "MB/s", ""),
+        ("parallel virtual threads", "422", "MB/s", "6.4×"),
     ]
-    for i, (name, score, note) in enumerate(rows):
+    for i, (name, score, unit, note) in enumerate(rows):
         y = 408 + i * 24
         dl = round(-SET + i * 0.12, 3)
         s.append(f'<text class="row lbl" x="150" y="{y}" style="animation-delay:{dl}s">{name}</text>')
-        s.append(f'<text class="row key" x="470" y="{y}" style="animation-delay:{dl}s">{score}</text>')
+        # D14 — five values left-aligned at x=470 in a monospace face, so the
+        # decimal points did not line up (14.06 pushed a column right) and GB/s
+        # sat in the same column as MB/s with nothing to say which was bigger.
+        # Numeral right-aligned, unit in its own column.
+        s.append(f'<text class="row key" x="530" y="{y}" text-anchor="end" '
+                 f'style="animation-delay:{dl}s">{score}</text>')
+        s.append(f'<text class="row lbl" x="542" y="{y}" style="animation-delay:{dl}s">{unit}</text>')
         if note:
             fill = INK if note == "not beaten" else a
             s.append(f'<text class="row lbl" x="604" y="{y}" '
@@ -706,11 +712,12 @@ def plate_applied() -> str:
     # because the run that produced it was overwritten by the deterministic
     # re-run. So the hero is the number I can hand you, labelled for what it
     # actually measures, and the gap is stated rather than papered over.
-    s.append(f'<text x="150" y="104" class="hero">0.979</text>')
+    s.append(f'<text x="150" y="122" class="hero">0.979</text>')
     s.append(rail("V", "APPLIED"))
     s.append(f'<text x="400" y="80" class="lbl">MACRO-F1 · 96-MSG EVAL SET</text>')
     s.append(f'<text x="400" y="100" class="lbl" style="fill:{AMBER}">RULES LAYER ONLY</text>')
     s.append(f'<text x="400" y="118" class="fine">SetFit off, embeddings emptied</text>')
+    s.append(f'<text x="150" y="380" class="fine">CI fails the build below 0.95</text>')
 
     for i, (label, y) in enumerate([("201 REGEX RULES", 160), ("e5 EMBEDDINGS", 200), ("SETFIT HEAD", 240)]):
         s.append(f'<text x="150" y="{y+5}" class="lbl">{label}</text>')
@@ -728,7 +735,6 @@ def plate_applied() -> str:
     # the gate that is allowed to decline
     s.append(f'<text x="150" y="293" class="lbl" style="fill:{a}">0.85 CONFIDENCE GATE</text>')
     s.append(f'<path d="M400 288H640" stroke="{a}" stroke-width="1"/>')
-    s.append(f'<text x="150" y="316" class="fine">CI fails the build below 0.95</text>')
 
     for i in range(5):
         if i == 2:
@@ -742,10 +748,10 @@ def plate_applied() -> str:
              f'x="650" y="340" width="30" height="20" rx="2" fill="none" '
              f'stroke="{AMBER}" stroke-width="1.6" style="animation-delay:{round(-SET + 0.2,3)}s"/>')
     s.append(f'<circle id="the-human" cx="700" cy="350" r="11" fill="none" stroke="{AMBER}" stroke-width="1.4"/>')
-    s.append(f'<text x="{W-150}" y="318" class="lbl" style="fill:{AMBER}" text-anchor="end">A HUMAN</text>')
+    s.append(f'<text x="{R}" y="382" class="lbl" style="fill:{AMBER}" text-anchor="end">A HUMAN</text>')
     # and the ones that DO clear the gate land on a name rather than in blank space
-    s.append(f'<text x="150" y="356" class="lbl">CLASSIFIED</text>')
-    s.append(f'<text x="150" y="400" class="say">It is allowed to say it doesn’t know.</text>')
+    s.append(f'<text x="150" y="327" class="lbl">CLASSIFIED</text>')
+    s.append(f'<text x="150" y="408" class="say">It is allowed to say it doesn’t know.</text>')
 
     s.append(f'<path d="M150 424H730" stroke="{RULE}"/>')
     s.append(f'<rect x="150" y="436" width="580" height="68" rx="3" fill="none" stroke="{WIRE}"/>')
