@@ -13,13 +13,16 @@
  * rasterises each plate every 100ms and reports the fraction of intervals in
  * which enough of the image actually changed.
  *
- * Deliberately a tool and not a check. Five plates fail it today, and wiring it
- * into CI before the motion is re-authored would just paint main red. It is
- * here so the next round can measure instead of guess — and so the claim "the
- * dead air is fixed", which I made from bounding-box deltas and which was
- * false, cannot be made again without evidence.
+ * Promoted from a tool to a gate. As a tool it reported five plates frozen —
+ * up to 4.8s of dead air — while gate.mjs check 17, which claims the same
+ * 2.4s ceiling, passed all of them, because check 17 watches bounding boxes
+ * at a 0.5u threshold and 0.5u is 0.7 device pixels. This file is the
+ * instrument that can actually see the defect, so under --gate it is the one
+ * allowed to fail the build: >=25% of samples must move, and no run of
+ * perceptually-identical image may exceed the same 2.4s check 17 promises.
+ * Without --gate it stays a measurement and always exits 0.
  *
- * Usage: node build/motion.mjs [--step 100] [--floor 0.002]
+ * Usage: node build/motion.mjs [--gate] [--step 100] [--floor 0.002]
  */
 import { chromium } from 'playwright';
 import { readFileSync, readdirSync } from 'node:fs';
@@ -31,6 +34,8 @@ const arg = (n, d) => { const i = process.argv.indexOf(n); return i > 0 ? Number
 const STEP = arg('--step', 100);          // ms between samples
 const FLOOR = arg('--floor', 0.002);      // fraction of pixels that must change
 const TARGET = 0.25;                      // of intervals
+const GATE = process.argv.includes('--gate');
+const CEILING = 2.4;                      // s — the ceiling check 17 claims to enforce
 
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 520, height: 760 } });
@@ -87,10 +92,19 @@ console.log(`  raster diff · ${STEP}ms steps · a sample counts as motion when 
           + `>=${(FLOOR * 100).toFixed(1)}% of pixels change\n`);
 let bad = 0;
 for (const [f, r] of rows) {
-  const ok = r.live >= TARGET;
+  const ok = r.live >= TARGET && (!GATE || r.worst <= CEILING);
   if (!ok) bad++;
   console.log(`  ${ok ? '..' : '!!'} ${f.padEnd(24)} ${(r.live * 100).toFixed(0).padStart(3)}% of samples move`
             + `   longest still run ${r.worst.toFixed(1)}s`);
 }
-console.log(`\n  ${rows.length - bad}/${rows.length} plates clear ${TARGET * 100}% of samples.`);
+console.log(`\n  ${rows.length - bad}/${rows.length} plates clear ${TARGET * 100}% of samples`
+          + (GATE ? ` and the ${CEILING}s still-run ceiling.` : '.'));
+if (GATE) {
+  if (bad) {
+    console.log(`\n  MOTION GATE FAILED — ${bad} plate${bad === 1 ? '' : 's'} with dead air.`);
+    process.exitCode = 1;
+  } else {
+    console.log('\n  MOTION GATE PASSED — every plate moves, all loop long.');
+  }
+}
 await browser.close();
