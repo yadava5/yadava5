@@ -63,7 +63,7 @@ OUT.mkdir(exist_ok=True)
 FONT = base64.b64encode((ROOT / "mono-subset.woff2").read_bytes()).decode()
 
 W = 880
-SLAB, EDGE = "#0B0C0E", "rgba(255,255,255,0.07)"
+SLAB, EDGE = "#0A0A0B", "rgba(255,255,255,0.14)"
 # Every structural line used to sit between 1.08:1 and 1.94:1 on the slab —
 # WCAG 1.4.11 wants 3:1 for anything non-text that carries meaning. So the
 # document was drawing its numbers at AAA and the mechanism behind them at
@@ -228,20 +228,31 @@ def plate_glyph() -> str:
 </style>{slab(H, a)}""")
 
     # CLAIM — the seven, drawn by hand
-    s.append(f'<text x="150" y="56" class="lbl">CLAIM</text>')
+    s.append(f'<text x="150" y="56" class="lbl">THE 299 IT GETS WRONG</text>')
     s.append(f'<text x="330" y="80" class="lbl">MECHANISM — 3 BY HAND, 1 AUTO</text>')
     s.append(rail("I", "GLYPH"))
-    s.append(f'<g {digit(DIGITS[7], 150, 104, 1.15)}><path class="ink" d="{DIGITS[7]}" pathLength="1"/></g>')
+    # 0.68 keeps the three glyphs clear of the mechanism column at x=330;
+    # they end at 306. Each is placed by its own ink, not its nominal box.
+    hx = 150
+    for j, d in enumerate([DIGITS[2], DIGITS[9], DIGITS[9]]):
+        s.append(f'<g {digit(d, hx, 104, 0.68)}>'
+                 f'<path class="ink" d="{d}" pathLength="1" '
+                 f'style="animation-delay:{round(-SET + j*0.55,3)}s"/></g>')
+        x0, x1 = ink(d)
+        hx += (x1 - x0) * 0.68 + 12
 
     # MECHANISM — four instruction sets, one answer
     for i, name in enumerate(["AVX-512", "AVX2", "NEON", "wasm (auto)"]):
         y = 120 + i * 34
         s.append(f'<text x="330" y="{y+5}" class="key">{name}</text>')
         s.append(f'<path d="M470 {y}H660" stroke="{WIRE}" stroke-width="1"/>')
+        # A 4u ring with a 2.2/2 dash renders as roughly six disconnected dots
+        # at 1:1 — it read as a broken glyph, not as "autovectorised". Hollow
+        # against three filled is the same distinction and survives the scale.
         hand = i < 3
         s.append(f'<circle class="tok" data-rest="one-answer" data-rest-within="2" '
                  f'cx="660" cy="{y}" r="4" '
-                 + (f'fill="{a}" ' if hand else f'fill="none" stroke="{a}" stroke-width="1.6" stroke-dasharray="2.2 2" ')
+                 + (f'fill="{a}" ' if hand else f'fill="none" stroke="{a}" stroke-width="1.8" ')
                  + f'style="animation-delay:{round(-SET + i*0.5,3)}s"/>')
     # four instruction sets, one answer — so all four tokens must actually
     # arrive at the collector, not merely set off in its direction
