@@ -144,7 +144,7 @@ Quest generation asks OpenAI, falls back to Hugging Face, and returns `null` if 
 
 <picture>
   <source media="(max-width: 500px)" srcset="./assets/m-6b-automl.svg">
-  <img src="./assets/plate-6b-automl.svg" width="100%" alt="Agentic AutoML takes a dataset and a sentence and returns a trained model. Its tool registry holds 44 definitions, but the model never carries all of them: 15 travel with it in every phase and the remaining 29 arrive with the phase that needs them, routed by seven named tool sets — onboarding, preprocessing, feature proposal, feature continue, feature engineering, feature lifecycle and training lifecycle. The Python it writes executes in a container with no network, a read-only root filesystem, a non-root user and the dataset mounted read-only, leaving 5 tmpfs mounts as the only writable surface. Behind it sits a 29-table Postgres schema with pgvector. Written with Shree Chaturvedi; the repository is public and noncommercially licensed.">
+  <img src="./assets/plate-6b-automl.svg" width="100%" alt="Agentic AutoML takes a dataset and a sentence and returns a trained model. Its tool registry holds 44 definitions, but the model never carries all of them: 15 travel with it in every phase and the remaining 29 arrive with the phase that needs them, routed by seven named tool sets — onboarding, preprocessing, feature proposal, feature continue, feature engineering, feature lifecycle and training lifecycle. The Python it writes executes in a container with no network, a read-only root filesystem, a non-root user and the dataset mounted read-only, leaving 5 tmpfs mounts as the only writable surface. Behind it sits a 29-table Postgres schema with pgvector. Written with Shree Chaturvedi; the repository is public and licensed GPL-3.0.">
 </picture>
 
 **Agentic AutoML** takes a dataset and a sentence and gives back a trained model. A LangGraph state machine drives it; an MCP server exposes the tools.
@@ -157,7 +157,7 @@ Behind that: a **29**-table Postgres schema with pgvector, and a Jupyter kernel 
 
 [AutoML](https://agentic-automl-platform.vercel.app) · [expo booklet](https://agentic-automl-platform.vercel.app/system-card) · [repo](https://github.com/yadava5/ai-augmented-auto-ml-toolchain)
 
-Source-available under PolyForm Noncommercial — free to run, self-host and modify; commercial use by arrangement. Copyright is held jointly with Shree Chaturvedi, so neither of us can license it commercially alone.
+Licensed **GPL-3.0** at the commit this page pins. A relicence to PolyForm Noncommercial is proposed in [PR #5](https://github.com/yadava5/ai-augmented-auto-ml-toolchain/pull/5) and needs my co-author's review before it means anything; until that merges, GPL-3.0 is what you get, and under GPL-3.0 commercial use needs no arrangement with either of us.
 
 ---
 

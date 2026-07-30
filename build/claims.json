@@ -572,6 +572,29 @@
       "note": "The set is balanced 12 per class, which is why macro-F1 and weighted-F1 are identical to the last digit. Unstated until now, and it is the reason the two numbers agree."
     },
     {
+      "id": "lifequest.license",
+      "value": "MIT",
+      "drawn_on": [
+        "plate-6-release.svg"
+      ],
+      "repo": "lifequest",
+      "path": "LICENSE",
+      "extractor": "head -1 \"$BLOB\" | awk '{print $1}'",
+      "note": "The first non-numeric claim in this file, and it exists because the page drew LifeQuest as 'source-available \u00b7 noncommercial' while the pinned LICENSE said MIT \u2014 the exact negation, since MIT grants the right to sell. Every number was audited and no licence was. A legal statement is a claim like any other."
+    },
+    {
+      "id": "automl.license",
+      "value": "GPL-3.0",
+      "drawn_on": [
+        "plate-6b-automl.svg",
+        "README.md"
+      ],
+      "repo": "automl",
+      "path": "LICENSE",
+      "extractor": "grep -qE '^ *GNU GENERAL PUBLIC LICENSE' \"$BLOB\" && grep -qE '^ *Version 3,' \"$BLOB\" && echo GPL-3.0",
+      "note": "The page asserted PolyForm Noncommercial because a relicence PR had been opened. A proposed licence is not a licence: PR #5 is still open, so the pinned commit is GPL-3.0 and that is what the page now says. Re-pin and change this row when it merges."
+    },
+    {
       "id": "lifequest.models",
       "value": "10",
       "drawn_on": [
@@ -753,6 +776,8 @@
     "plate-1-glyph.svg:3": "'3 BY HAND, 1 AUTO'",
     "plate-2-jetpack.svg:32": "the name of the Adler-32 algorithm",
     "plate-2-jetpack.svg:25": "JDK 25 \u2014 a toolchain version, not a measurement",
+    "plate-6b-automl.svg:3.0": "the version field of the licence identifier GPL-3.0, which automl.license derives whole from the pinned LICENSE file",
+    "README.md:3.0": "the version field of the licence identifier GPL-3.0 (see automl.license)",
     "plate-6-release.svg:2": "Tauri 2 \u2014 a framework major version, not a measurement, on the same footing as JDK 25 above",
     "README.md:2": "Tauri 2 \u2014 a framework major version, not a measurement",
     "m-2-jetpack.svg:25": "JDK 25 \u2014 a toolchain version, not a measurement",

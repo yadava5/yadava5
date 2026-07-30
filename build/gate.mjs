@@ -480,12 +480,18 @@ for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)
     for (const [k, delays] of byClass) {
       if (delays.size < 2 || !dur) continue;
       const d = [...delays].sort((a, b) => a - b);
-      const step = (d[d.length - 1] - d[0]) / (d.length - 1);
-      if (step < STAGGER_MIN)
-        out.push(`.${k} staggers ${Math.round(step)}ms across ${d.length} elements `
+      // The MEAN step hides a hole. This computed (last - first)/(n-1), so
+      // plate-4-applied's .env — real gaps 140 / 280 / 140ms, because the third
+      // slot in the queue is deliberately empty — averaged 186.7ms and cleared
+      // a 200ms ceiling it exceeded by 40%. A stagger is a wave; the thing a
+      // reader notices is the widest gap in it, not its average.
+      const gaps = d.slice(1).map((v, i) => v - d[i]);
+      const lo = Math.min(...gaps), hi = Math.max(...gaps);
+      if (lo < STAGGER_MIN)
+        out.push(`.${k} has a ${Math.round(lo)}ms step across ${d.length} elements `
                + `(floor ${STAGGER_MIN}ms) — too tight to read as a sequence`);
-      else if (step > STAGGER_MAX)
-        out.push(`.${k} staggers ${Math.round(step)}ms across ${d.length} elements `
+      else if (hi > STAGGER_MAX)
+        out.push(`.${k} has a ${Math.round(hi)}ms step across ${d.length} elements `
                + `(ceiling ${STAGGER_MAX}ms) — too slow to read as one gesture`);
     }
 
@@ -513,7 +519,16 @@ for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)
 
     for (const m of meta) {
       const st = getComputedStyle(m.el);
-      const alpha = parseFloat(st.opacity);
+      // opacity is NOT inherited, so getComputedStyle(child).opacity reads 1
+      // however dim the ancestor <g> is. This read parseFloat(st.opacity) and
+      // therefore graded every grouped element at full strength: an audit
+      // wrapped one 6.09:1 label in <g opacity="0.5">, dropping it to 2.32:1,
+      // and the gate passed. Already live in the document — plate-1-glyph's
+      // 220 .wrong glyphs sit inside a g at opacity .55 and were being graded
+      // at 8.5:1 while rendering at 3.76:1. opacityOf() walks the ancestor
+      // chain and has been sitting 377 lines up this file, used by four other
+      // checks, since the day it was written.
+      const alpha = opacityOf(m.el);
       if (alpha < 0.05) continue;
       // A shape outlined in something legible is legible: WCAG asks that the
       // component be perceivable, not that every channel of it clear 3:1.
@@ -593,22 +608,37 @@ for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)
   // 9 — every number the description claims must be drawn on the plate.
   //     (This only proves the two authored strings agree. It cannot prove
   //     either is TRUE — claims.json is what ties them to a repo.)
+  // Tags strip to a SPACE, not to ''. claims.mjs:130-133 learned this the hard
+  // way — collapsing `<text>n=10,000</text><text>299 wrong</text>` to nothing
+  // between them makes "10000299" a single token — and this file went on
+  // stripping to '' for another two rounds.
   const drawn = svg.replace(/<style[\s\S]*?<\/style>/g, ' ')
                    .replace(/<(?:title|desc)>[\s\S]*?<\/(?:title|desc)>/g, ' ')
-                   .replace(/<[^>]*>/g, '').replace(/,/g, '');
+                   .replace(/<[^>]*>/g, ' ').replace(/,/g, '');
   const meta = [...svg.matchAll(/<(?:title|desc)>([^<]*)<\/(?:title|desc)>/g)].map(m => m[1]).join(' ').replace(/,/g, '');
   // The desktop plate carries the whole argument, so its description must not
   // claim a number the plate does not draw. The mobile plate deliberately shows
   // a subset of the same shared description, so the check runs the other way:
   // every number it DOES draw must be one the description accounts for.
   const numsOf = s => [...new Set((s.match(/\d+\.\d+|\b\d+\b/g) || []))];
+  // A SUBSTRING test, which is what this was, is vacuous for any number that is
+  // a prefix of another on the same plate. claims.mjs documents this exactly
+  // ("that is how 'IDOR: 7' could be falsified to 'IDOR: 79' and ship green")
+  // and fixed it there; check 9 kept the bug, and check 9 is the only machine
+  // comparing a plate's accessible description to the plate. Demonstrated: an
+  // audit rewrote plate-1-glyph's desc to "29 wrong" and "97.0 percent",
+  // touching no drawing, and the gate passed both. So claims.mjs's note that a
+  // falsified alt is "caught twice upstream" was wrong — it was caught zero
+  // times. Token match, on word boundaries, like the sweep next door.
+  const has = (hay, n) =>
+    new RegExp(`(?:^|[^\\d.])${n.replace(/\./g, '\\.')}(?![\\d.]*\\d)`).test(hay);
   if (mobile) {
     for (const n of numsOf(drawn))
-      if (!meta.includes(n) && !/^(440|208)$/.test(n))
+      if (!has(meta, n))
         fails.push(`${file}: draws "${n}", which its description does not account for`);
   } else {
     for (const n of numsOf(meta))
-      if (!drawn.includes(n) && !/^(880)$/.test(n))
+      if (!has(drawn, n))
         fails.push(`${file}: description says "${n}" but the plate never draws it`);
   }
 

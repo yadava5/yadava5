@@ -54,6 +54,20 @@ const MUTATIONS = [
   // the person it must reach, in both the animated and the still frame.
   ['a token rests short of its target', /should come to rest at|still frame is the START/,
     (s) => s.replace(/data-rest-within="10" x="650"/, 'data-rest-within="10" x="560"')],
+  // Both of the following were dead until an audit ran them by hand. They are
+  // probes now so that cannot happen twice.
+  //
+  // Check 10 read the element's OWN opacity, which is never inherited, so
+  // anything inside a dimmed <g> was graded at full strength. Wrapping one
+  // 6.09:1 label in <g opacity="0.5"> takes it to 2.32:1 and the gate passed.
+  ['contrast is destroyed by an ancestor group opacity', /on the slab \(needs 4.5/,
+    (s) => s.replace(/(<text class="row lbl"[^>]*>[^<]*<\/text>)/, '<g opacity="0.5">$1</g>')],
+  // Check 9 compared the accessible description to the plate with
+  // String.includes, so any number that is a PREFIX of one the plate draws
+  // passed: "29" is a substring of "299". The desc is the only thing a screen
+  // reader gets, and it was the least guarded string in the repo.
+  ['a description number is falsified to a prefix', /description says/,
+    (s) => s.replace(/which means 299 wrong/g, 'which means 29 wrong')],
   ['a plate freezes for too long', /stands completely still/,
     (s) => s.replace(/@keyframes gr\{[^}]*\}[^}]*\}/, '@keyframes gr{0%,100%{transform:translateY(0)}}')],
 ];

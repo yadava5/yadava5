@@ -29,11 +29,32 @@ jobs:
           git diff --exit-code assets/ \
             || { echo "::error::assets/ is stale — run python3 build/plates.py and commit"; exit 1; }
 
-      - name: Measure every plate in motion
+      - name: Measure every plate's geometry across its loop
         run: |
           npm ci --no-audit --no-fund || npm install --no-audit --no-fund
           npx playwright install --with-deps chromium
           node build/gate.mjs
+
+      # gate.mjs measures GEOMETRY — bounding boxes at 0.5 viewBox units, which
+      # is 0.7 device pixels at the readme column, i.e. below the threshold of
+      # vision. It once passed five plates that were perceptually frozen for up
+      # to 4.8 seconds. This rasterises and diffs pixels, which is the only
+      # instrument that can answer "did a reader see anything happen".
+      #
+      # motion.mjs's own header has claimed since round 17 that --gate "makes it
+      # fail the build". It did in `npm test` and did not here, which is the
+      # same class of untruth this workflow exists to catch.
+      - name: Measure every plate in motion, in pixels
+        run: node build/motion.mjs --gate
+
+      # And the negative test. Four gates in this repo have shipped unable to
+      # fail; two more probes went stale as the plates they anchored on were
+      # rewritten; an audit found two further dead checks by hand. mutations.mjs
+      # breaks the plates ten ways and asserts each check notices. Its own
+      # header says the negative test must "stop being something you remember to
+      # do" — which it was, until this step.
+      - name: Prove every check can still fail
+        run: node build/mutations.mjs
 
       # The gate above proves the plates are internally consistent. This one
       # leaves the repository: it re-derives every drawn number from the pinned
