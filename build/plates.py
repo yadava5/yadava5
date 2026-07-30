@@ -550,7 +550,7 @@ def plate_refusal() -> str:
     s.append(f'<path d="M150 320H730" stroke="{RULE}"/>')
     s.append(f'<text x="150" y="352" class="say">The app didn’t remember to filter.</text>')
     s.append(f'<text x="150" y="380" class="say">The database refused.</text>')
-    s.append(f'<text x="150" y="420" class="lbl">IDOR: 7 REGRESSION TESTS</text>')
+    s.append(f'<text x="150" y="420" class="lbl">IDOR IN SIX SERVICES</text>')
     s.append(f'<text x="470" y="420" class="lbl">FOUND BY THE AUTHOR</text>')
     return "".join(s) + "</svg>"
 

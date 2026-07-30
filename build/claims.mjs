@@ -142,9 +142,26 @@ const textOf = (f) => {
 // green. Words stay on substring, case-insensitively, because a row whose
 // value is "rules" is drawn as "RULES LAYER ONLY".
 const isNum = (v) => /^\d+(\.\d+)?$/.test(String(v));
-const drawsToken = (text, v) =>
-  isNum(v) ? new RegExp(`(?<![\\d.])${String(v).replace('.', '\\.')}(?!\\d)(?!\\.\\d)`).test(text)
-           : text.toLowerCase().includes(String(v).toLowerCase());
+const WORDOF = {};   // digit -> the word a plate might draw it as
+// The contentious counts on this page are SPELLED OUT -- seven tenant tables,
+// four parsers, five system cards, a three-layer cascade -- and a sweep that
+// only matches \d audited none of them. "all seven tenant tables" could be
+// changed to "all nineteen" and ship green. one/two are deliberately excluded:
+// in this prose they are far more often articles than counts.
+const WORDNUM = { three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9,
+  ten: 10, eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15,
+  sixteen: 16, seventeen: 17, eighteen: 18, nineteen: 19, twenty: 20,
+  thirty: 30, forty: 40, fifty: 50, sixty: 60, seventy: 70, eighty: 80,
+  ninety: 90, hundred: 100, thousand: 1000, dozen: 12 };
+for (const [w, n] of Object.entries(WORDNUM)) if (!(n in WORDOF)) WORDOF[String(n)] = w;
+const drawsToken = (text, v) => {
+  if (!isNum(v)) return text.toLowerCase().includes(String(v).toLowerCase());
+  const asDigits = new RegExp(`(?<![\\d.])${String(v).replace('.', '\\.')}(?!\\d)(?!\\.\\d)`);
+  if (asDigits.test(text)) return true;
+  // a plate may draw the number as a word — "IDOR IN SIX SERVICES"
+  const w = WORDOF[String(v)];
+  return w ? new RegExp(`\\b${w}\\b`, 'i').test(text) : false;
+};
 for (const c of [...spec.claims, ...spec.unpinnable, ...spec.external]) {
   for (const f of c.drawn_on || []) {
     if (!drawsToken(textOf(f), c.value))
@@ -178,16 +195,6 @@ const exempt = new Set(Object.keys(spec.exempt).filter(k => k !== '$comment'));
 // never audited by the gate whose entire purpose is that no number goes
 // unaudited. Link targets are stripped first; a URL is an address, not a claim.
 const SWEPT = [...readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)).sort(), 'README.md'];
-// The contentious counts on this page are SPELLED OUT -- seven tenant tables,
-// four parsers, five system cards, a three-layer cascade -- and a sweep that
-// only matches \d audited none of them. "all seven tenant tables" could be
-// changed to "all nineteen" and ship green. one/two are deliberately excluded:
-// in this prose they are far more often articles than counts.
-const WORDNUM = { three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9,
-  ten: 10, eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15,
-  sixteen: 16, seventeen: 17, eighteen: 18, nineteen: 19, twenty: 20,
-  thirty: 30, forty: 40, fifty: 50, sixty: 60, seventy: 70, eighty: 80,
-  ninety: 90, hundred: 100, thousand: 1000, dozen: 12 };
 const numsOf = (f) => {
   // In README.md, three things are addresses rather than assertions: HTML
   // attributes (plate-0-thesis.svg, width="100%", the srcset), markdown link
