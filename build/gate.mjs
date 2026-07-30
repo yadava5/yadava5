@@ -451,12 +451,18 @@ for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)
                + `(ceiling ${(CEILING_MS/1000).toFixed(2)}s) — the loop has a hole in it, not a rhythm`);
     }
 
-    // 14 — A STAGGER TOO SMALL TO SEE IS NOT A STAGGER.
+    // 14 — A STAGGER IS A WAVE, NOT A QUEUE.
     //
-    // Plate I's four kernel tokens were 0.06s apart on a 9.1s loop — 0.66% —
-    // and all four measured at the identical x at every sample. The plate's
-    // whole point is three hand-written kernels and one autovectorised build,
-    // and the distinction was carried by a string and by nothing visual.
+    // This check used to enforce a 4% FLOOR, on the theory that plate I's
+    // 0.66%-of-loop stagger was invisible. The floor was the wrong instrument
+    // and it pushed the document the wrong way: raising every stagger to clear
+    // it produced gaps of 300-900ms, and at 600ms between siblings a group
+    // never reads as one gesture — plate 0's six swatches took 3.0s to finish a
+    // ripple inside an 11.3s loop, six independent events rather than a wave.
+    // Perception cares about the ABSOLUTE gap, not its fraction of the loop, so
+    // the constraint is absolute: long enough to be a sequence, short enough to
+    // be one gesture.
+    const STAGGER_MIN = 40, STAGGER_MAX = 200;   // ms
     const byClass = new Map();
     for (const a of anims) {
       const el = a.effect?.target;
@@ -473,21 +479,13 @@ for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)
       if (delays.size < 2 || !dur) continue;
       const d = [...delays].sort((a, b) => a - b);
       const step = (d[d.length - 1] - d[0]) / (d.length - 1);
-      if (step / dur < 0.04)
-        out.push(`.${k} staggers ${(step / dur * 100).toFixed(2)}% of its loop across `
-               + `${d.length} elements (floor 4%) — too small to read as a sequence`);
+      if (step < STAGGER_MIN)
+        out.push(`.${k} staggers ${Math.round(step)}ms across ${d.length} elements `
+               + `(floor ${STAGGER_MIN}ms) — too tight to read as a sequence`);
+      else if (step > STAGGER_MAX)
+        out.push(`.${k} staggers ${Math.round(step)}ms across ${d.length} elements `
+               + `(ceiling ${STAGGER_MAX}ms) — too slow to read as one gesture`);
     }
-
-    // A stagger-ORDER check was written here and removed rather than shipped.
-    // The intent was sound — with `animation-delay: -SET + i*step` the element
-    // with the largest |delay| wraps first, so a staggered group can read
-    // backwards — but every implementation of it fired on `.lbl`, a class
-    // shared by a dozen unrelated static labels that are not a sequence at all,
-    // and on `.row`, where two elements share each step so no single axis is
-    // ever monotonic. A check that flags things which are not defects trains
-    // you to ignore it, which is worse than not having it. The real cure is to
-    // put the stagger INSIDE the keyframes and share one delay; that is a
-    // design instruction, not something this file can assert cheaply.
 
     // 7 — evidence that blinks. At 50% the page still looked broken: a reader
     //     scrolling past sees a different quarter of the argument missing every
