@@ -1,0 +1,171 @@
+/**
+ * The claims gate.
+ *
+ * gate.mjs check 9 compares the plate's <desc> against the plate's own drawn
+ * text. That is worth having, but it only proves two strings the same author
+ * wrote agree with each other. Both can be false, and three rounds of audits
+ * found exactly that: a retracted figure lived on in the SVG after the prose
+ * was corrected, and a "corrected" claim was itself wrong.
+ *
+ * This gate goes outside the repository. For every number the page draws it
+ * fetches the pinned blob from raw.githubusercontent.com at a COMMIT SHA, runs
+ * the row's extractor against it, and requires the output to equal the value.
+ * A reader can run the same command. That is the difference between "every
+ * number is traceable" as a slogan and as a mechanism.
+ *
+ * It fails in BOTH directions:
+ *   · a registered claim whose extractor no longer reproduces its value
+ *   · a number a plate draws that no row and no exemption accounts for
+ *
+ * The second one is the load-bearing half. A claims file that only checked the
+ * numbers it happened to list is the same gate-that-cannot-fail this project
+ * has already shipped twice (the char-count gate, and the duty cycle summed
+ * per class). You cannot add a number to a plate without registering it here.
+ */
+import { readFileSync, readdirSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
+
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
+const ASSETS = join(ROOT, 'assets');
+const CACHE = join(ROOT, 'build', '.claims-cache');
+const spec = JSON.parse(readFileSync(join(ROOT, 'build', 'claims.json'), 'utf8'));
+const OFFLINE = process.argv.includes('--offline');
+
+mkdirSync(CACHE, { recursive: true });
+const fails = [];
+const notes = [];
+
+// ── fetch a blob, pinned. The SHA is in the path, so the cache can never go
+//    stale: a different commit is a different file.
+function blob(repoKey, path) {
+  const r = repo(repoKey);
+  const dest = join(CACHE, cacheKey(r, path));
+  if (existsSync(dest)) return dest;
+  if (OFFLINE) throw new Error(`--offline and ${path} is not cached`);
+  const url = `https://raw.githubusercontent.com/${r.github}/${r.ref}/${path}`;
+  const body = execFileSync('curl', ['-fsSL', '--max-time', '120', url], {
+    maxBuffer: 1 << 30, encoding: 'buffer',
+  });
+  writeFileSync(dest, body);
+  return dest;
+}
+
+const repo = (k) => {
+  const r = spec.repos[k];
+  if (!r) throw new Error(`claims.json: no repo entry "${k}"`);
+  return r;
+};
+const cacheKey = (r, path) =>
+  `${r.github.replace('/', '__')}__${r.ref.slice(0, 12)}__${path.replace(/[^\w.]/g, '_')}`;
+
+// ── a claim about a file's SIZE does not need the file. The two ONNX weights
+//    are 90 MB and 23 MB; downloading 113 MB on every CI run to type `wc -c` is
+//    the kind of cost that eventually gets a gate switched off. The contents
+//    API reports the byte length of the blob at that exact SHA.
+function bytes(repoKey, path) {
+  const r = repo(repoKey);
+  const dest = join(CACHE, cacheKey(r, path) + '.size');
+  if (existsSync(dest)) return readFileSync(dest, 'utf8').trim();
+  if (OFFLINE) throw new Error(`--offline and the size of ${path} is not cached`);
+  const url = `https://api.github.com/repos/${r.github}/contents/${path}?ref=${r.ref}`;
+  const args = ['-fsSL', '--max-time', '60', '-H', 'Accept: application/vnd.github+json'];
+  if (process.env.GITHUB_TOKEN) args.push('-H', `Authorization: Bearer ${process.env.GITHUB_TOKEN}`);
+  const size = String(JSON.parse(execFileSync('curl', [...args, url], { encoding: 'utf8' })).size);
+  writeFileSync(dest, size);
+  return size;
+}
+
+// ── 1. every registered claim must re-derive from its pinned blob
+let derived = 0;
+for (const c of spec.claims) {
+  if (!c.extractor) { notes.push(`${c.id}: no extractor — ${c.unpinned || 'unexplained'}`); continue; }
+  let out;
+  try {
+    // A row names one path, several paths (a count that lives across files), or
+    // asks for a byte length. $BLOB / $BLOBS / $BYTES, whichever it declared.
+    const env = { ...process.env };
+    if (c.bytes) env.BYTES = bytes(c.repo, c.path);
+    else if (c.paths) env.BLOBS = c.paths.map(p => blob(c.repo, p)).join(' ');
+    else env.BLOB = blob(c.repo, c.path);
+    out = execFileSync('bash', ['-c', c.extractor], {
+      env, encoding: 'utf8', maxBuffer: 1 << 28,
+    }).trim();
+  } catch (e) {
+    fails.push(`${c.id}: extractor failed — ${String(e.message).split('\n')[0]}`);
+    continue;
+  }
+  if (out !== String(c.value)) {
+    const r = repo(c.repo), where = c.path || (c.paths || []).join(',');
+    fails.push(`${c.id}: the page says "${c.value}", ${r.github}@${r.ref.slice(0, 7)}/${where} says "${out}"`);
+    continue;
+  }
+  derived++;
+  if (c.unpinned) notes.push(`${c.id}: ${c.unpinned}`);
+}
+
+// ── 2. drawn_on must be true. A row claiming the page shows a number the page
+//       does not show is bookkeeping, not evidence.
+const fileText = new Map();
+const textOf = (f) => {
+  if (fileText.has(f)) return fileText.get(f);
+  const raw = readFileSync(join(f.endsWith('.svg') ? ASSETS : ROOT, f), 'utf8');
+  // Tags become a SPACE, not nothing. Deleting them butts adjacent <text> runs
+  // together and invents numbers that nobody drew: "n=10,000" followed by
+  // "299 wrong" read as the single token 10000299, and the coverage check below
+  // then demanded evidence for it.
+  const t = f.endsWith('.svg')
+    ? raw.replace(/<style[\s\S]*?<\/style>/g, ' ')
+         .replace(/<(?:title|desc)>[\s\S]*?<\/(?:title|desc)>/g, ' ')
+         .replace(/<[^>]*>/g, ' ').replace(/,/g, '')
+    : raw.replace(/,/g, '');
+  fileText.set(f, t);
+  return t;
+};
+for (const c of [...spec.claims, ...spec.unpinnable]) {
+  for (const f of c.drawn_on || []) {
+    // Case-insensitive: a row whose value is a word ("rules") is drawn on the
+    // plate in the document's uppercase label voice ("RULES LAYER ONLY").
+    if (!textOf(f).toLowerCase().includes(String(c.value).toLowerCase()))
+      fails.push(`${c.id}: drawn_on lists ${f}, but "${c.value}" does not appear there`);
+  }
+}
+
+// ── 3. coverage — the half that makes this a gate. Every number a plate draws
+//       must be a registered claim or a named exemption.
+const known = new Set([...spec.claims, ...spec.unpinnable].map(c => String(c.value)));
+// An exemption is either global ("880": the viewBox) or scoped to one plate
+// ("plate-2-jetpack.svg:6"). Scoped is strongly preferred: exempting a bare "6"
+// everywhere would let a future unsourced 6 onto any plate in the document.
+const exempt = new Set(Object.keys(spec.exempt).filter(k => k !== '$comment'));
+for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)).sort()) {
+  const drawn = textOf(file);
+  for (const n of new Set(drawn.match(/\d+\.\d+|\b\d+\b/g) || [])) {
+    if (known.has(n) || exempt.has(n) || exempt.has(`${file}:${n}`)) continue;
+    fails.push(`${file}: draws "${n}", which claims.json neither derives nor exempts`);
+  }
+}
+// An exemption nobody uses is a stale excuse. Fail on it, the same way an
+// unreachable gate branch is a defect rather than a nicety.
+const usedExempt = new Set();
+for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f))) {
+  for (const n of new Set(textOf(file).match(/\d+\.\d+|\b\d+\b/g) || [])) {
+    if (exempt.has(`${file}:${n}`)) usedExempt.add(`${file}:${n}`);
+    else if (exempt.has(n) && !known.has(n)) usedExempt.add(n);
+  }
+}
+for (const k of exempt)
+  if (!usedExempt.has(k)) fails.push(`claims.json exempts "${k}", which no plate draws — stale exemption`);
+
+// ── report
+for (const n of notes) console.log(`  note  ${n}`);
+for (const u of spec.unpinnable)
+  console.log(`  NOT PUBLICLY DERIVABLE  ${u.id} = "${u.value}" — ${u.why.split('.')[0]}.`);
+
+if (fails.length) {
+  console.log(`\nCLAIMS GATE FAILED — ${fails.length} defects:`);
+  for (const f of fails) console.log(`  · ${f}`);
+  process.exit(1);
+}
+console.log(`\nCLAIMS GATE PASSED — ${derived} numbers re-derived from pinned commits; every number drawn is accounted for.`);

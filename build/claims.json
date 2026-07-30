@@ -1,0 +1,328 @@
+{
+  "$comment": [
+    "Every number this page draws, tied to the committed blob it came from.",
+    "",
+    "The page's thesis is 'every number is traceable to the repository it came",
+    "from'. Until this file existed that was a slogan: the plates and the prose",
+    "were checked against EACH OTHER (gate.mjs check 9) and against nothing else,",
+    "so two authored strings could agree perfectly and both be false. Three rounds",
+    "of audits found exactly that.",
+    "",
+    "A row is a derivation, not a citation. `extractor` is a shell command run",
+    "against $BLOB — the file fetched from raw.githubusercontent.com at `ref`,",
+    "which is a COMMIT SHA, never a branch name. Its stdout must equal `value`",
+    "exactly. Nobody has to trust the number; they run the command.",
+    "",
+    "`drawn_on` is where the value appears on this page. build/claims.mjs checks",
+    "both directions: every row must re-derive, AND every number a plate draws",
+    "must have a row here or an entry in `exempt`. A claims file that only",
+    "verified the numbers it happened to list would be the same gate-that-cannot-",
+    "fail this project has already shipped twice."
+  ],
+
+  "repos": {
+    "glyph": {
+      "github": "yadava5/glyph",
+      "ref": "97de73634c770a35326e4366afef69a068bd079a",
+      "branch": "main",
+      "public": true
+    },
+    "jetpack": {
+      "github": "yadava5/jetpack-compress",
+      "ref": "2caacd059921b28e4b6ae04a8cba0f7131def1e5",
+      "branch": "main",
+      "public": true
+    },
+    "cadence": {
+      "github": "yadava5/cadence",
+      "ref": "75180a36be474c53edfd3d40c71594d00b0faef8",
+      "branch": "main",
+      "public": true
+    },
+    "applied": {
+      "github": "yadava5/applied",
+      "ref": "9383288bd7b5c4c644faaf8b36a07f194f699853",
+      "branch": "main",
+      "public": true
+    },
+    "applied-web": {
+      "github": "yadava5/applied",
+      "ref": "b3297089f29125d4b35e7e52191501f54b41c0b0",
+      "branch": "integration/web-migration",
+      "public": true,
+      "note": "The in-browser ONNX build is NOT on main. The commit is pushed and public, so it pins and re-derives like any other — but the page must say which branch it is reading, and does."
+    }
+  },
+
+  "claims": [
+    {
+      "id": "glyph.accuracy_pct",
+      "value": "97.01",
+      "unit": "%",
+      "drawn_on": ["plate-1-glyph.svg", "m-1-glyph.svg", "README.md"],
+      "repo": "glyph",
+      "path": "benchmarks/mnist_eval.json",
+      "extractor": "jq -r '(.overall.accuracy_pct*100|round)/100' \"$BLOB\""
+    },
+    {
+      "id": "glyph.test_set_size",
+      "value": "10000",
+      "drawn_on": ["plate-1-glyph.svg", "README.md"],
+      "repo": "glyph",
+      "path": "benchmarks/mnist_eval.json",
+      "extractor": "jq -r '.dataset.images' \"$BLOB\""
+    },
+    {
+      "id": "glyph.correct",
+      "value": "9701",
+      "drawn_on": ["README.md"],
+      "repo": "glyph",
+      "path": "benchmarks/mnist_eval.json",
+      "extractor": "jq -r '.overall.correct' \"$BLOB\""
+    },
+    {
+      "id": "glyph.wrong",
+      "value": "299",
+      "drawn_on": ["plate-1-glyph.svg", "m-1-glyph.svg", "README.md"],
+      "repo": "glyph",
+      "path": "benchmarks/mnist_misclassified.csv",
+      "extractor": "tail -n +2 \"$BLOB\" | grep -c .",
+      "note": "Counted from the error list itself, not from 10000-9701 — so the 299 marks the plate draws and the number beside them come from one artifact."
+    },
+    {
+      "id": "glyph.confident_errors",
+      "value": "79",
+      "drawn_on": ["plate-1-glyph.svg", "README.md"],
+      "repo": "glyph",
+      "path": "benchmarks/mnist_misclassified.csv",
+      "extractor": "tail -n +2 \"$BLOB\" | awk -F, '$4>0.9' | grep -c .",
+      "note": "Column 4 is pred_activation — the softmax mass on the label it wrongly chose."
+    },
+
+    {
+      "id": "jetpack.parallel_mbs",
+      "value": "422",
+      "unit": "MB/s",
+      "drawn_on": ["plate-2-jetpack.svg", "README.md"],
+      "repo": "jetpack",
+      "path": "benchmarks/jmh-results-rigorous.json",
+      "extractor": "jq -r '[.[]|select(.benchmark|endswith(\"parallelVirtualThreads\")).primaryMetric.score][0]/1e6|round' \"$BLOB\""
+    },
+    {
+      "id": "jetpack.single_thread_mbs",
+      "value": "66.2",
+      "unit": "MB/s",
+      "drawn_on": ["plate-2-jetpack.svg", "README.md"],
+      "repo": "jetpack",
+      "path": "benchmarks/jmh-results-rigorous.json",
+      "extractor": "jq -r '([.[]|select(.benchmark|endswith(\"singleThreadedJdk\")).primaryMetric.score][0]/1e6*10|round)/10' \"$BLOB\""
+    },
+    {
+      "id": "jetpack.speedup",
+      "value": "6.4",
+      "unit": "x",
+      "drawn_on": ["plate-2-jetpack.svg", "m-2-jetpack.svg", "README.md"],
+      "repo": "jetpack",
+      "path": "benchmarks/jmh-results-rigorous.json",
+      "extractor": "jq -r '(([.[]|select(.benchmark|endswith(\"parallelVirtualThreads\")).primaryMetric.score][0]/[.[]|select(.benchmark|endswith(\"singleThreadedJdk\")).primaryMetric.score][0])*10|round)/10' \"$BLOB\"",
+      "note": "Derived from the two scores, not stored — so it cannot drift from them."
+    },
+    {
+      "id": "jetpack.adler_scalar_gbs",
+      "value": "1.52",
+      "unit": "GB/s",
+      "drawn_on": ["plate-2-jetpack.svg"],
+      "repo": "jetpack",
+      "path": "benchmarks/jmh-results-rigorous.json",
+      "extractor": "jq -r '([.[]|select(.benchmark|endswith(\"Adler32Benchmark.scalar\")).primaryMetric.score][0]/1e9*100|round)/100' \"$BLOB\""
+    },
+    {
+      "id": "jetpack.adler_vector_gbs",
+      "value": "4.26",
+      "unit": "GB/s",
+      "drawn_on": ["plate-2-jetpack.svg", "README.md"],
+      "repo": "jetpack",
+      "path": "benchmarks/jmh-results-rigorous.json",
+      "extractor": "jq -r '([.[]|select(.benchmark|endswith(\"Adler32Benchmark.vector\")).primaryMetric.score][0]/1e9*100|round)/100' \"$BLOB\""
+    },
+    {
+      "id": "jetpack.adler_jdk_intrinsic_gbs",
+      "value": "14.06",
+      "unit": "GB/s",
+      "drawn_on": ["plate-2-jetpack.svg", "README.md"],
+      "repo": "jetpack",
+      "path": "benchmarks/jmh-results-rigorous.json",
+      "extractor": "jq -r '([.[]|select(.benchmark|endswith(\"jdkIntrinsic\")).primaryMetric.score][0]/1e9*100|round)/100' \"$BLOB\"",
+      "note": "The row the page keeps because it loses to it."
+    },
+    {
+      "id": "jetpack.adler_vector_speedup",
+      "value": "2.80",
+      "unit": "x",
+      "drawn_on": ["plate-2-jetpack.svg", "README.md"],
+      "repo": "jetpack",
+      "path": "benchmarks/jmh-results-rigorous.json",
+      "extractor": "jq -r '([.[]|select(.benchmark|endswith(\"Adler32Benchmark.vector\")).primaryMetric.score][0]/[.[]|select(.benchmark|endswith(\"Adler32Benchmark.scalar\")).primaryMetric.score][0]*100|round)/100' \"$BLOB\" | awk '{printf \"%.2f\", $1}'"
+    },
+
+    {
+      "id": "cadence.handlers",
+      "value": "36",
+      "drawn_on": ["plate-3-cadence.svg", "m-3-cadence.svg", "README.md"],
+      "repo": "cadence",
+      "path": "api/index.ts",
+      "extractor": "awk '/^const ROUTES/,/^\\];/' \"$BLOB\" | grep -cE '^\\s*\\[\\['",
+      "note": "The dispatch table itself, not the import list — the import list agrees at 36, but routes are what the function actually serves."
+    },
+    {
+      "id": "cadence.function_cap",
+      "value": "12",
+      "drawn_on": ["plate-3-cadence.svg", "m-3-cadence.svg", "README.md"],
+      "repo": "cadence",
+      "path": "api/index.ts",
+      "extractor": "grep -oE 'caps deployments at [0-9]+' \"$BLOB\" | grep -oE '[0-9]+'",
+      "note": "Vercel's Hobby-tier limit is a platform fact, not a repo fact. What the repo can prove is that this limit is the reason the dispatcher exists, which is what the page claims."
+    },
+
+    {
+      "id": "applied.macro_f1",
+      "value": "0.979",
+      "drawn_on": ["plate-4-applied.svg", "m-4-applied.svg", "README.md"],
+      "repo": "applied",
+      "path": "backend/data/evaluation/baseline_rules_v3.json",
+      "extractor": "jq -r '(.overall.macro_f1*1000|round)/1000' \"$BLOB\""
+    },
+    {
+      "id": "applied.eval_set_size",
+      "value": "96",
+      "drawn_on": ["plate-4-applied.svg", "README.md"],
+      "repo": "applied",
+      "path": "backend/data/evaluation/baseline_rules_v3.json",
+      "extractor": "jq -r '.meta.sample_count' \"$BLOB\""
+    },
+    {
+      "id": "applied.eval_mode_is_rules_only",
+      "value": "rules",
+      "drawn_on": ["plate-4-applied.svg", "README.md"],
+      "repo": "applied",
+      "path": "backend/data/evaluation/baseline_rules_v3.json",
+      "extractor": "jq -r '.meta.mode' \"$BLOB\"",
+      "note": "This is the row that keeps the hero honest: the artifact itself says the score was produced with the rules layer alone, which is what the plate labels it."
+    },
+    {
+      "id": "applied.regex_rules",
+      "value": "201",
+      "drawn_on": ["plate-4-applied.svg", "README.md"],
+      "repo": "applied",
+      "path": "backend/jobtracker/classifier/rules.py",
+      "extractor": "python3 -c \"import ast,sys;t=ast.parse(open(sys.argv[1]).read());print(sum(1 for n in ast.walk(t) if isinstance(n,ast.AnnAssign) and getattr(n.target,'id','')=='PATTERNS' for s in ast.walk(n.value) if isinstance(s,ast.Constant) and isinstance(s.value,str)))\" \"$BLOB\"",
+      "note": "Parsed, not grepped. A second method — counting r-string lines inside the PATTERNS block — also gives 201."
+    },
+    {
+      "id": "applied.confidence_gate",
+      "value": "0.85",
+      "drawn_on": ["plate-4-applied.svg", "m-4-applied.svg", "README.md"],
+      "repo": "applied",
+      "path": "backend/jobtracker/api/classification.py",
+      "extractor": "grep -E '^REVIEW_QUEUE_CONFIDENCE_THRESHOLD' \"$BLOB\" | grep -oE '[0-9]+\\.[0-9]+'"
+    },
+    {
+      "id": "applied.ci_floor",
+      "value": "0.95",
+      "drawn_on": ["plate-4-applied.svg", "README.md"],
+      "repo": "applied",
+      "path": ".github/workflows/backend-ci.yml",
+      "extractor": "grep -oE '\\-\\-min-macro-f1 [0-9.]+' \"$BLOB\" | grep -oE '[0-9]+\\.[0-9]+' | sort -u",
+      "note": "The build really does fail below this: it is a CI flag, not a doc sentence."
+    },
+    {
+      "id": "applied.onnx_fp32_mb",
+      "value": "90.4",
+      "unit": "MB",
+      "drawn_on": ["plate-4-applied.svg", "README.md"],
+      "repo": "applied-web",
+      "path": "ml/browser/artifacts/model.onnx",
+      "bytes": true,
+      "extractor": "awk -v b=\"$BYTES\" 'BEGIN{printf \"%.1f\", b/1e6}'",
+      "note": "The byte length of the committed artifact, read from the contents API at that SHA. Not on main — see the applied-web repo entry."
+    },
+    {
+      "id": "applied.onnx_int8_mb",
+      "value": "22.8",
+      "unit": "MB",
+      "drawn_on": ["plate-4-applied.svg", "README.md"],
+      "repo": "applied-web",
+      "path": "ml/browser/artifacts/model_quantized.onnx",
+      "bytes": true,
+      "extractor": "awk -v b=\"$BYTES\" 'BEGIN{printf \"%.1f\", b/1e6}'"
+    },
+
+    {
+      "id": "refusal.idor_count",
+      "value": "8",
+      "drawn_on": ["plate-5-refusal.svg", "README.md"],
+      "repo": "cadence",
+      "paths": [
+        "lib/services/AttachmentService.ts",
+        "lib/services/CalendarService.ts",
+        "lib/services/EventService.ts",
+        "lib/services/TagService.ts",
+        "lib/services/TaskListService.ts",
+        "lib/services/TaskService.ts"
+      ],
+      "extractor": "grep -hoi idor $BLOBS | grep -c .",
+      "note": "One annotation per fixed vulnerability, in the docstring of the method that carried it: attachments 1, calendars 1, events 2 (read + delete), tags 1, task-lists 1, tasks 2 (read + delete). The commit log agrees by a second method — six `fix(security): scope …` commits, four of which name two methods."
+    },
+    {
+      "id": "jetpack.adler_known_answer",
+      "value": "11E60398",
+      "drawn_on": [],
+      "drawn_as": "plate-2-jetpack.svg draws it one hex glyph per <text>, twice — the vectorised row and the java.util.zip row — so the string never appears whole in the extracted text. The per-glyph digits are exempted below and point back at this row.",
+      "repo": "jetpack",
+      "path": "src/test/java/com/ayush/jetpack/Adler32Test.java",
+      "extractor": "grep -oE '0x[0-9A-F]{8}L' \"$BLOB\" | sort -u | head -1 | sed 's/^0x//; s/L$//'",
+      "note": "The canonical Adler-32 vector for the input \"Wikipedia\", asserted for both the scalar and the vectorised path (Adler32Test.java:36-37). The stronger claim on the plate — bit-identical to java.util.zip — is the separate matchesJdkAcrossSizes test, which compares both paths against java.util.zip.Adler32 across 26 input sizes."
+    }
+  ],
+
+  "unpinnable": [
+    {
+      "id": "automl.approval_gates",
+      "value": "2",
+      "drawn_on": ["plate-6-release.svg", "m-6-release.svg", "README.md"],
+      "why": "github.com/yadava5/ai-augmented-auto-ml-toolchain is PRIVATE, so raw.githubusercontent.com serves nothing to an anonymous reader and no extractor here can be run by anyone but its owner. It is drawn as a 64px hero — the largest unverifiable number on the page.",
+      "options": "make the repo public, replace the hero with a claim the reader can check, or state on the plate that this one is not publicly derivable."
+    }
+  ],
+
+  "exempt": {
+    "$comment": [
+      "Numbers a plate draws that are not measurements of a repository — names,",
+      "versions, viewBox geometry, and the glyphs of a hex constant. Each needs a",
+      "reason. Prefer a file-scoped key ('plate-2-jetpack.svg:6') over a bare one:",
+      "a global exemption for '6' would wave through an unsourced 6 anywhere in",
+      "the document. claims.mjs also fails on an exemption no plate uses, so this",
+      "list cannot quietly accumulate excuses for numbers that are already gone."
+    ],
+
+    "plate-1-glyph.svg:512": "AVX-512 — an instruction-set name. (AVX2, e5, int8 and 1pm need no entry: there is no word boundary before those digits, so they are never read as numbers.)",
+    "plate-1-glyph.svg:4": "'4 BUILDS · 1 ANSWER', counting the four build targets drawn directly above it",
+    "plate-1-glyph.svg:1": "'1 ANSWER' and '3 BY HAND, 1 AUTO' — the same four targets, counted",
+    "plate-1-glyph.svg:3": "'3 BY HAND, 1 AUTO'",
+    "plate-1-glyph.svg:0.9": "the confidence cut chosen to describe the errors. The cut is a choice; the 79 errors above it are derived (glyph.confident_errors)",
+
+    "plate-2-jetpack.svg:32": "the name of the Adler-32 algorithm",
+    "plate-2-jetpack.svg:25": "JDK 25 — a toolchain version, not a measurement",
+    "m-2-jetpack.svg:25": "JDK 25 — a toolchain version, not a measurement",
+    "plate-2-jetpack.svg:3": "'3 JMH FORKS' — the fork count of the run, recorded in the same JSON the scores come from",
+    "plate-2-jetpack.svg:1": "a glyph of the hex constant 11E60398 — see the jetpack.adler_known_answer row",
+    "plate-2-jetpack.svg:6": "a glyph of the hex constant 11E60398",
+    "plate-2-jetpack.svg:0": "a glyph of the hex constant 11E60398",
+    "plate-2-jetpack.svg:9": "a glyph of the hex constant 11E60398",
+    "plate-2-jetpack.svg:8": "a glyph of the hex constant 11E60398",
+
+    "plate-7-colophon.svg:03.23": "part of the contact address aesh.03.23@gmail.com",
+    "plate-0-thesis.svg:26": "'CS ’26' — a graduation year",
+    "plate-7-colophon.svg:26": "'CS ’26' — a graduation year"
+  }
+}
