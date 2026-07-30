@@ -108,7 +108,7 @@ The fine-tuned head exports to int8 ONNX (90.4 MB → 22.8 MB) and runs **in you
 
 <picture>
   <source media="(max-width: 500px)" srcset="./assets/m-5-refusal.svg">
-  <img src="./assets/plate-5-refusal.svg" width="100%" alt="A query from one tenant travels toward another tenant's rows, reaches the PostgreSQL row-level-security boundary, and stops. Only the querying tenant's own rows come back — because the database refused, not because the application remembered to filter.">
+  <img src="./assets/plate-5-refusal.svg" width="100%" alt="The IDOR found auditing Cadence, drawn service by service: in six services — attachments, calendars, events, task-lists, tasks and tags — any authenticated user could read or delete another user's records by id. Each service now carries the owner guard in its read and delete queries, so tenant A's rows are struck out of a read run as tenant B and only B's return. Two caveats stay on the plate: the tags test asserted the vulnerable query, and task-lists still has no regression test. Below, the layer that does not depend on remembering: an unfiltered SELECT count(*) FROM tasks, run as B, comes back B only, because PostgreSQL row-level security refused the rest.">
 </picture>
 
 Application code that filters by user is code that has to *remember* to filter. So the database enforces it instead: **PostgreSQL Row-Level Security**, `FORCE`d on all **seven** tenant tables (`users` and `user_profiles` are deliberately excluded — both are read and written pre-auth, so RLS on them would break login), with the app connecting as a dedicated non-`BYPASSRLS` role and the request identity carried as a transaction-local GUC.
