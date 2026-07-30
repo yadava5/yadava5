@@ -35,6 +35,7 @@ const M_LEFT = 30, M_RIGHT = 412;   // the 440-wide mobile canvas
 const STEPS = 40;                   // samples across one loop
 const TOL = 1.5;                    // antialiasing slack, in viewBox units
 const fails = [];
+const frame = [];   // desktop-only: first ink and right edge, for check 12
 
 const browser = await chromium.launch();
 const page = await browser.newPage();
@@ -359,6 +360,27 @@ for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)
 
   for (const f of found) fails.push(`${file}: ${f}`);
 
+  // desktop plates only — the mobile set is a different canvas and a different
+  // column, so comparing their margins to the desktop set would be meaningless
+  if (!mobile) {
+    const g = await page.evaluate(() => {
+      const svg = document.querySelector('svg');
+      const H = svg.viewBox.baseVal.height, W = svg.viewBox.baseVal.width;
+      const els = [...svg.querySelectorAll('text,rect,circle,path')].filter(e => {
+        const b = e.getBBox();
+        return !(b.width >= W - 2 && b.height >= H - 2) && !(b.width <= 5 && b.height >= H - 2);
+      });
+      let top = 1e9, right = -1;
+      for (const e of els) {
+        const c = e.getBoundingClientRect();
+        if (!c.width && !c.height) continue;
+        top = Math.min(top, c.y); right = Math.max(right, c.x + c.width);
+      }
+      return { top, rightGap: W - right };
+    });
+    frame.push(g);
+  }
+
   // 9 — every number the description claims must be drawn on the plate.
   //     (This only proves the two authored strings agree. It cannot prove
   //     either is TRUE — claims.json is what ties them to a repo.)
@@ -383,6 +405,21 @@ for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)
 
   console.log(`  measured ${file}`);
 }
+
+// 12 — THE DOCUMENT, not the plate.
+//
+// Everything above measures one plate at a time, and a multi-plate document
+// lives in the relationship between them. Measured before this existed: first
+// ink at 19, 23, 40 and 56; rightmost ink 150, 164, 164.8 and 166 short of the
+// canvas — so the right edge visibly wandered as you scrolled and the top
+// margin had three values. Neither gate could see it, because neither ever
+// compared two plates.
+const spread = (xs) => Math.max(...xs) - Math.min(...xs);
+const tops = frame.map(f => f.top), rights = frame.map(f => f.rightGap);
+if (spread(tops) > 2)
+  fails.push(`the desktop plates start at ${tops.map(t => Math.round(t)).join('/')} — the first ink must sit on one line across the document`);
+if (spread(rights) > 2)
+  fails.push(`the desktop plates end ${rights.map(r => Math.round(r)).join('/')} short of the canvas — the right edge wanders as you scroll`);
 
 await browser.close();
 if (fails.length) {

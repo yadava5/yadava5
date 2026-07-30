@@ -118,7 +118,7 @@ This is the one section on the page you cannot check. AutoML's repository is pri
 
 ---
 
-<img src="./assets/plate-7-colophon.svg" width="100%" alt="Six systems, six system cards. Every number here is traceable to the repository it came from, and the page itself is animated SVG with no JavaScript and no server.">
+<img src="./assets/plate-7-colophon.svg" width="100%" alt="Six systems, five system cards and one expo booklet. Every number here is traceable to the repository it came from, except AutoML's, whose repository is private — and the page itself is animated SVG with no JavaScript and no server.">
 
 <div align="center">
 <sub>
