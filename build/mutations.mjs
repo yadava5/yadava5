@@ -47,8 +47,13 @@ const MUTATIONS = [
     (s) => s.replace(/class="lbl" style="fill:#F5A524"/, 'class="lbl" fill="#F5A524"')],
   ['text drops below 4.5:1 on the slab', /on the slab \(needs 4.5/,
     (s) => s.replace(/\.fine\{font-size:13px;letter-spacing:0\.6px;fill:#8A8F98\}/, '.fine{font-size:13px;letter-spacing:0.6px;fill:#3A3E44}')],
+  // Anchored on plate V's refused dot until round 18, when that plate stopped
+  // drawing a travelling token at all — the refusal happens to the rows now.
+  // This keys on plate IV's diverted message instead, which still declares
+  // data-rest="the-human": pulling its authored x back 90u strands it short of
+  // the person it must reach, in both the animated and the still frame.
   ['a token rests short of its target', /should come to rest at|still frame is the START/,
-    (s) => s.replace(/translateX\(-104px\)/g, 'translateX(-160px)').replace(/cx="434"/, 'cx="378"')],
+    (s) => s.replace(/data-rest-within="10" x="650"/, 'data-rest-within="10" x="560"')],
   ['a plate freezes for too long', /stands completely still/,
     (s) => s.replace(/@keyframes gr\{[^}]*\}[^}]*\}/, '@keyframes gr{0%,100%{transform:translateY(0)}}')],
 ];
