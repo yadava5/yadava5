@@ -399,15 +399,16 @@ def plate_glyph() -> str:
               "Glyph: a neural network written from scratch in C++ with hand-written AVX-512, "
               "AVX2 and NEON kernels, plus an autovectorised WebAssembly build. It scores 97.01 "
               "percent on the 10,000-image MNIST test set, which means 299 wrong — every one of "
-              "them drawn as a grid of the labels it missed. 79 of those errors were made with "
-              "over 0.9 confidence.", key="plate-1-glyph.svg")]
+              "them drawn as a grid of the labels it missed. The 79 it was most confident about "
+              "are drawn in a heavier stroke than the rest.", key="plate-1-glyph.svg")]
     s.append(f""".ink{{fill:none;stroke:{a};stroke-width:7;stroke-linecap:round;stroke-linejoin:round;
   stroke-dasharray:1;stroke-dashoffset:0;animation:draw {LOOP}s linear infinite;animation-delay:{-SET}s}}
 @keyframes draw{{0%{{stroke-dashoffset:1}}17%{{stroke-dashoffset:0}}100%{{stroke-dashoffset:0}}}}
 .tok{{animation:run {LOOP}s {ARRIVE} infinite}}
 @keyframes run{{0%{{opacity:0;transform:translateX(-190px)}}5%{{opacity:1;transform:translateX(-190px)}}
   34%,96%{{opacity:1;transform:translateX(0)}}100%{{opacity:0;transform:translateX(0)}}}}
-.wrong{{opacity:.78}}
+.wrong{{opacity:.55}}
+.sure{{opacity:1}}
 .gr{{transform-box:fill-box;transform-origin:left center;animation:gr {LOOP}s {BREATHE} infinite}}
 @keyframes gr{{0%,30%{{transform:translateY(0)}}38%{{transform:translateY(-5px)}}
   50%,100%{{transform:translateY(0)}}}}
@@ -417,7 +418,10 @@ def plate_glyph() -> str:
 
     # CLAIM — the seven, drawn by hand
     s.append(f'<text x="150" y="56" class="kick">THE 299 IT GETS WRONG</text>')
-    s.append(f'<text x="330" y="80" class="kick">MECHANISM — 3 BY HAND, 1 AUTO</text>')
+    # flush left with the kicker above it. At x=330 the two header lines had two
+    # different left edges and no relationship — every other plate stacks its
+    # CLAIM/MECHANISM pair on the type column.
+    s.append(f'<text x="150" y="80" class="kick">MECHANISM — 3 BY HAND, 1 AUTO</text>')
     s.append(rail("II", "GLYPH"))
     # 0.68 keeps the three glyphs clear of the mechanism column at x=330;
     # they end at 306. Each is placed by its own ink, not its nominal box.
@@ -456,22 +460,30 @@ def plate_glyph() -> str:
     s.append(f'<path d="M150 312H730" stroke="{RULE}"/>')
     s.append(f'<text x="150" y="392" class="hero">97.01<tspan class="unit">%</tspan></text>')
     s.append(f'<text x="470" y="392" class="lbl">MNIST TEST · n=10,000</text>')
-    s.append(f'<text x="150" y="436" class="say">299 wrong, drawn below. 79 above 0.9 conf.</text>')
+    s.append(f'<text x="150" y="436" class="say">299 wrong. The 79 it was sure of are bold.</text>')
 
     # THE MOVE — the REAL errors. Each mark is the true label of one image the
     # model got wrong, read from benchmarks/mnist_misclassified.csv in the Glyph
     # repo. Previously these were random glyphs; now the picture is the evidence.
     # 50 per row leaves 49 in the last of six rows. 46 per row left exactly half
     # a row hanging, which reads as a mistake rather than as the end of a list.
-    errs = json.loads((ROOT / "errors.json").read_text())["true"]
+    # All 299 marks used to be styled byte-identically — same class, same stroke,
+    # same width, same opacity — under a line reading "79 above 0.9 conf." The
+    # most interesting fact on the plate (a model wrong AND certain) was stated
+    # in 20px type and encoded nowhere. `conf` comes from the same column of the
+    # same pinned CSV that glyph.confident_errors derives from, so the 79 drawn
+    # heavy and the 79 named above are the same 79.
+    _e = json.loads((ROOT / "errors.json").read_text())
+    errs, conf = _e["true"], _e["conf"]
     gx, gy, cols = 150, 468, 50
     for r in range((len(errs) + cols - 1) // cols):
         s.append(f'<g class="gr" style="animation-delay:{round(-SET + r*0.12,3)}s">')
         for i in range(r * cols, min((r + 1) * cols, len(errs))):
             x, y = gx + (i % cols) * 11.4, gy + r * 14.0
-            s.append(f'<g class="wrong" {digit(DIGITS[errs[i]], x, y, 0.068, centre=10.4)}>'
-                     f'<path d="{DIGITS[errs[i]]}" fill="none" stroke="{a}" stroke-width="15" '
-                     f'stroke-linecap="round"/></g>')
+            sure = conf[i]
+            s.append(f'<g class="{"sure" if sure else "wrong"}" {digit(DIGITS[errs[i]], x, y, 0.068, centre=10.4)}>'
+                     f'<path d="{DIGITS[errs[i]]}" fill="none" stroke="{a}" '
+                     f'stroke-width="{22 if sure else 13}" stroke-linecap="round"/></g>')
         s.append('</g>')
     # the ambient element: a read head passing over the 299, all loop long —
     # the grid is the evidence, and the audit keeps re-reading it. The rest of
@@ -589,10 +601,12 @@ def plate_cadence() -> str:
     H, LOOP, SET, a = 457, 7.9, 5.6, EMERALD
     SENT, FS, CW = "lunch with sam friday 1pm", 26, 15.62
     s = [head(H, "Cadence — a parser that shows its work",
-              "Cadence: the sentence 'lunch with sam friday 1pm' is labelled in place — title, "
-              "attendee, day and time — and filed into the Friday 1pm slot of a week grid that "
-              "names its hours. Its 36 API handlers are bundled into a single serverless "
-              "function, because the hosting plan allows 12.", key="plate-3-cadence.svg")]
+              "Cadence: the sentence 'lunch with sam friday 1pm' is labelled in place with the "
+              "parser that produced each span — compromise found the person, chrono-node found "
+              "both the day and the time — while the title is left unmarked because it is what "
+              "remains once the spans are removed and carries no parser. It is then filed into "
+              "the Friday 1pm slot of a week grid that names its hours. Its 36 API handlers are "
+              "bundled into a single serverless function, because the hosting plan allows 12.", key="plate-3-cadence.svg")]
     s.append(f""".ul{{animation:ul {LOOP}s {EASE} infinite;transform-box:fill-box;transform-origin:left center}}
 @keyframes ul{{0%,4%{{transform:scaleX(0);opacity:0}}8%{{opacity:1}}18%,100%{{transform:scaleX(1);opacity:1}}}}
 .an{{animation:an {LOOP}s linear infinite}}
@@ -607,19 +621,33 @@ def plate_cadence() -> str:
     s.append(rail("IV", "CADENCE"))
     s.append(f'<text x="150" y="78" class="kick">MECHANISM — every span carries its parser</text>')
     s.append(f'<text x="150" y="116" font-size="{FS}" fill="{INK}" letter-spacing="0">{SENT}</text>')
-    # Four passes annotating the SAME sentence in place — a linguist's gloss.
-    # The labels used to stagger onto two rows to dodge a collision, which made
-    # a reader scan them TITLE→DATE→ATTENDEE→TIME. Short labels fit one row, so
-    # the reading order is the sentence order again.
-    toks = [(0, 5, "TITLE"), (11, 3, "WHO"), (15, 6, "DAY"), (22, 3, "TIME")]
-    for i, (start, ln, label) in enumerate(toks):
+    # The kicker says "every span carries its parser" and this diagram used to
+    # label TITLE / WHO / DAY / TIME — which are field TYPES, not parsers. It
+    # also underlined the title in the same green as the rest, while README §IV
+    # states the opposite: the title is what is LEFT once the spans are removed,
+    # and it carries no `source` at all. So the plate contradicted both its own
+    # kicker and the prose beneath it.
+    #
+    # Now it names the parser that produced each span, from Cadence's own
+    # booklet/src/content.ts: chrono-node (priority 10) reads dates and times,
+    # compromise (priority 6) does the in-browser NLP pass that finds people.
+    # "friday" and "1pm" therefore share a label, which is the useful part —
+    # one parser, two spans. The title gets no underline, because it has no
+    # parser to carry.
+    for i, (start, ln) in enumerate([(11, 3), (15, 6), (22, 3)]):
         x, w = 150 + start * CW, ln * CW
-        dl = round(-SET + i * 0.12, 3)
         s.append(f'<rect class="ul" x="{x:.0f}" y="126" width="{w:.0f}" height="2" fill="{a}" '
-                 f'style="animation-delay:{dl}s"/>')
-        s.append(f'<text class="an lbl" x="{x:.0f}" y="152" '
-                 f'style="fill:{a};animation-delay:{dl}s">{label}</text>')
-    s.append(f'<text x="150" y="200" class="kick">FILED — into the hour it names</text>')
+                 f'style="animation-delay:{round(-SET + i * 0.12, 3)}s"/>')
+    # friday and 1pm are ONE parser's output, so they get one bracket and one
+    # label. That is the fact worth drawing: a parser is not a field.
+    bx, bw = 150 + 15 * CW, 10 * CW
+    s.append(f'<path d="M{bx:.0f} 134V140H{bx+bw:.0f}V134" fill="none" stroke="{a}" opacity=".7"/>')
+    s.append(f'<text class="an fine" x="{150 + 11 * CW:.0f}" y="160" '
+             f'style="fill:{a};animation-delay:{round(-SET, 3)}s">compromise</text>')
+    s.append(f'<text class="an fine" x="{bx + bw / 2:.0f}" y="160" text-anchor="middle" '
+             f'style="fill:{a};animation-delay:{round(-SET + 0.12, 3)}s">chrono</text>')
+    s.append(f'<text x="150" y="184" class="kick">THE TITLE IS WHAT IS LEFT — IT CARRIES NO PARSER</text>')
+    s.append(f'<text x="150" y="204" class="kick">FILED — into the hour it names</text>')
 
     # filed — a week grid with real hour rows, so it reads as a calendar
     s.append(f'<path d="M150 224H730" stroke="{RULE}"/>')
@@ -632,7 +660,7 @@ def plate_cadence() -> str:
         s.append(f'<rect x="{x}" y="262" width="96" height="72" rx="3" fill="none" stroke="{WIRE}"/>')
         for hr in (286, 310):
             s.append(f'<path d="M{x} {hr}H{x+96}" stroke="{RULE}" stroke-width="1"/>')
-    s.append(f'<rect class="now" x="110" y="263" width="528" height="2" fill="{a}" opacity=".62"/>')
+    s.append(f'<rect class="now" x="196" y="263" width="528" height="2" fill="{a}" opacity=".62"/>')
     s.append(f'<g class="fil" style="animation-delay:{-SET}s">'
              f'<rect x="632" y="288" width="80" height="20" rx="3" fill="#0E2A22" stroke="{a}"/>'
              f'<text x="640" y="302" class="fine" style="fill:{a}">lunch</text></g>')

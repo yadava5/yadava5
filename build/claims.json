@@ -751,7 +751,6 @@
     "plate-1-glyph.svg:4": "'4 BUILDS \u00b7 1 PATH COMPILED', counting the four build targets drawn directly above it",
     "plate-1-glyph.svg:1": "'4 BUILDS \u00b7 1 PATH COMPILED' and '3 BY HAND, 1 AUTO' \u2014 the same four targets, counted",
     "plate-1-glyph.svg:3": "'3 BY HAND, 1 AUTO'",
-    "plate-1-glyph.svg:0.9": "the confidence cut chosen to describe the errors. The cut is a choice; the 79 errors above it are derived (glyph.confident_errors)",
     "plate-2-jetpack.svg:32": "the name of the Adler-32 algorithm",
     "plate-2-jetpack.svg:25": "JDK 25 \u2014 a toolchain version, not a measurement",
     "plate-6-release.svg:2": "Tauri 2 \u2014 a framework major version, not a measurement, on the same footing as JDK 25 above",
