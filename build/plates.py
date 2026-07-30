@@ -173,6 +173,7 @@ text{{font-family:'M',ui-monospace,SFMono-Regular,Menlo,monospace}}
 .lbl{{font-size:16px;letter-spacing:1.6px;fill:{INK2}}}
 .key{{font-size:16px;letter-spacing:1.6px;fill:{INK}}}
 .fine{{font-size:13px;letter-spacing:0.6px;fill:{INK2}}}
+.kick{{font-size:11px;letter-spacing:2.6px;fill:{INK3}}}
 @media (prefers-reduced-motion: reduce){{*{{animation:none!important}}}}
 """
 
@@ -247,8 +248,8 @@ def plate_glyph() -> str:
 </style>{slab(H, a)}""")
 
     # CLAIM — the seven, drawn by hand
-    s.append(f'<text x="150" y="56" class="lbl">THE 299 IT GETS WRONG</text>')
-    s.append(f'<text x="330" y="80" class="lbl">MECHANISM — 3 BY HAND, 1 AUTO</text>')
+    s.append(f'<text x="150" y="56" class="kick">THE 299 IT GETS WRONG</text>')
+    s.append(f'<text x="330" y="80" class="kick">MECHANISM — 3 BY HAND, 1 AUTO</text>')
     s.append(rail("I", "GLYPH"))
     # 0.68 keeps the three glyphs clear of the mechanism column at x=330;
     # they end at 306. Each is placed by its own ink, not its nominal box.
@@ -337,12 +338,12 @@ def plate_jetpack() -> str:
     # single figure would be a claim the committed JSON contradicts.
     s.append(f'<text x="330" y="104" class="lbl">JDK 25 · M1 PRO · 3 JMH FORKS</text>')
     s.append(f'<text x="150" y="108" class="hero">6.4<tspan class="unit">×</tspan></text>')
-    s.append(f'<text x="150" y="152" class="lbl">CLAIM</text>')
+    s.append(f'<text x="150" y="152" class="kick">CLAIM</text>')
 
     # The bounded in-flight window. The bracket used to span 400→636 while the
     # compressed blocks came to rest at 410→518, leaving half the window
     # permanently void — it drew a window twice the size of the thing it bounds.
-    s.append(f'<text x="400" y="136" class="lbl">BOUNDED IN-FLIGHT WINDOW</text>')
+    s.append(f'<text x="400" y="136" class="kick">BOUNDED IN-FLIGHT WINDOW</text>')
     # the window used to span 400..540 while the compressed blocks came to rest
     # at 410..517.8 — 32.2u of permanent void, split unevenly 10 left / 22 right.
     # 404..524 puts 6u of air on each side of the thing it bounds.
@@ -354,7 +355,7 @@ def plate_jetpack() -> str:
                  f'style="animation-delay:{round(-SET + i*0.56,3)}s"/>')
     for j, ln in enumerate(["peak memory", "tracks the window,", "not the file"]):
         s.append(f'<text x="560" y="{194 + j*20}" class="fine">{ln}</text>')
-    s.append(f'<text x="150" y="288" class="lbl">MECHANISM — one virtual thread per block</text>')
+    s.append(f'<text x="150" y="288" class="kick">MECHANISM — one virtual thread per block</text>')
 
     # checksum audit: the fast path checked against the reference
     s.append(f'<text x="150" y="328" class="lbl">SIMD ADLER-32</text>')
@@ -407,9 +408,9 @@ def plate_cadence() -> str:
 @keyframes fil{{0%,10%{{opacity:0;transform:scale(.94)}}16%{{opacity:1;transform:scale(1)}}
   40%{{transform:scale(1)}}48%{{transform:scale(1.05)}}58%,100%{{transform:scale(1);opacity:1}}}}
 </style>{slab(H, a)}""")
-    s.append(f'<text x="150" y="56" class="lbl">CLAIM — plain English in, calendar out</text>')
+    s.append(f'<text x="150" y="56" class="kick">CLAIM — plain English in, calendar out</text>')
     s.append(rail("III", "CADENCE"))
-    s.append(f'<text x="150" y="78" class="lbl">MECHANISM — every span carries its parser</text>')
+    s.append(f'<text x="150" y="78" class="kick">MECHANISM — every span carries its parser</text>')
     s.append(f'<text x="150" y="116" font-size="{FS}" fill="{INK}" letter-spacing="0">{SENT}</text>')
     # Four passes annotating the SAME sentence in place — a linguist's gloss.
     # The labels used to stagger onto two rows to dodge a collision, which made
@@ -423,7 +424,7 @@ def plate_cadence() -> str:
                  f'style="animation-delay:{dl}s"/>')
         s.append(f'<text class="an lbl" x="{x:.0f}" y="152" '
                  f'style="fill:{a};animation-delay:{dl}s">{label}</text>')
-    s.append(f'<text x="150" y="200" class="lbl">FILED — into the hour it names</text>')
+    s.append(f'<text x="150" y="200" class="kick">FILED — into the hour it names</text>')
 
     # filed — a week grid with real hour rows, so it reads as a calendar
     s.append(f'<path d="M150 224H730" stroke="{RULE}"/>')
@@ -638,7 +639,7 @@ def plate_release() -> str:
     # centred over the gate it names. It used to start at x=546 — 16u to the
     # right of the line at 530 and 3px below the university credit, so it read
     # as the second line of a right-aligned credit block instead of as a label.
-    s.append(f'<text x="530" y="316" class="lbl" text-anchor="middle">HUMAN APPROVAL</text>')
+    s.append(f'<text x="530" y="316" class="kick" text-anchor="middle">HUMAN APPROVAL</text>')
     s.append(f'<rect x="150" y="320" width="300" height="80" rx="3" fill="none" stroke="{INDIGO}"/>')
     s.append(f'<text x="166" y="340" class="lbl">DOCKER · SANDBOXED</text>')
     # "internal net (dev)": the beta deploy defaults EXECUTION_NETWORK to bridge

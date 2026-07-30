@@ -10,6 +10,7 @@ text{font-family:'M',ui-monospace,SFMono-Regular,Menlo,monospace}
 .lbl{font-size:16px;letter-spacing:1.6px;fill:#8A8F98}
 .key{font-size:16px;letter-spacing:1.6px;fill:#F7F8F8}
 .fine{font-size:13px;letter-spacing:0.6px;fill:#8A8F98}
+.kick{font-size:11px;letter-spacing:2.6px;fill:#767B84}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
 .rule{stroke-dasharray:1;animation:sweep 12.7s cubic-bezier(.4,0,.2,1) infinite;animation-delay:-10.0s}
 @keyframes sweep{0%{stroke-dashoffset:1}20%,100%{stroke-dashoffset:0}}
