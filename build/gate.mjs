@@ -562,11 +562,25 @@ for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)
         const b = e.getBBox();
         return !(b.width >= W - 2 && b.height >= H - 2) && !(b.width <= 5 && b.height >= H - 2);
       });
+      // Normalise TEXT width by the measured font metric, exactly as check 5
+      // does. Chromium on Linux advances ~4% wider for this embedded woff2, so
+      // a line that clears the column locally reports the document's right edge
+      // 5u further out on CI — and check 12 was failing a plate that check 5
+      // had already passed. Two checks measuring the same edge with different
+      // rulers is worse than either ruler being wrong.
+      const REF = 448;
+      const probe = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      probe.setAttribute('class', 'lbl'); probe.setAttribute('x', '0'); probe.setAttribute('y', '0');
+      probe.textContent = 'M'.repeat(40);
+      svg.appendChild(probe);
+      const metric = probe.getBoundingClientRect().width / REF || 1;
+      probe.remove();
       let top = 1e9, right = -1, bottom = -1;
       for (const e of els) {
         const c = e.getBoundingClientRect();
         if (!c.width && !c.height) continue;
-        top = Math.min(top, c.y); right = Math.max(right, c.x + c.width);
+        const w = e.tagName === 'text' ? c.width / metric : c.width;
+        top = Math.min(top, c.y); right = Math.max(right, c.x + w);
         bottom = Math.max(bottom, c.y + c.height);
       }
       return { top, rightGap: W - right, bottomGap: H - bottom };
