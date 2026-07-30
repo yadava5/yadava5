@@ -13,13 +13,21 @@
  * rasterises each plate every 100ms and reports the fraction of intervals in
  * which enough of the image actually changed.
  *
- * Deliberately a tool and not a check. Five plates fail it today, and wiring it
- * into CI before the motion is re-authored would just paint main red. It is
- * here so the next round can measure instead of guess — and so the claim "the
- * dead air is fixed", which I made from bounding-box deltas and which was
- * false, cannot be made again without evidence.
+ * Was deliberately a tool and not a check, because five plates failed it and
+ * wiring it into CI before the motion was re-authored would just have painted
+ * main red. All nine now clear the 25% floor, so as of round 17 `--gate` makes
+ * it fail the build.
  *
- * Usage: node build/motion.mjs [--step 100] [--floor 0.002]
+ * It enforces the SECOND half too, and that is the point of promoting it.
+ * gate.mjs check 17 already claims a 2.4s ceiling on the longest frozen run,
+ * but it measures bounding boxes: a plate can hold four and a half seconds of
+ * perceptually dead image while one animated label creeps 0.6u and check 17
+ * calls every interval alive. That is the check-5/check-12 ruler mismatch
+ * again — two checks measuring the same edge with different instruments — and
+ * it is why plates II and IV shipped with 4.6s and 4.4s holes in them under a
+ * green gate. Geometry cannot answer "did a reader see anything happen".
+ *
+ * Usage: node build/motion.mjs [--step 100] [--floor 0.002] [--gate]
  */
 import { chromium } from 'playwright';
 import { readFileSync, readdirSync } from 'node:fs';
@@ -31,6 +39,8 @@ const arg = (n, d) => { const i = process.argv.indexOf(n); return i > 0 ? Number
 const STEP = arg('--step', 100);          // ms between samples
 const FLOOR = arg('--floor', 0.002);      // fraction of pixels that must change
 const TARGET = 0.25;                      // of intervals
+const CEILING = 2.4;                      // seconds of consecutive dead image
+const GATE = process.argv.includes('--gate');
 
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 520, height: 760 } });
@@ -85,12 +95,25 @@ for (const f of readdirSync(ASSETS).filter(x => /^plate-.*\.svg$/.test(x)).sort(
 
 console.log(`  raster diff · ${STEP}ms steps · a sample counts as motion when `
           + `>=${(FLOOR * 100).toFixed(1)}% of pixels change\n`);
-let bad = 0;
+const fail = [];
 for (const [f, r] of rows) {
-  const ok = r.live >= TARGET;
-  if (!ok) bad++;
-  console.log(`  ${ok ? '..' : '!!'} ${f.padEnd(24)} ${(r.live * 100).toFixed(0).padStart(3)}% of samples move`
+  const thin = r.live < TARGET;
+  const frozen = r.worst > CEILING;
+  if (thin) fail.push(`${f}: only ${(r.live * 100).toFixed(0)}% of samples change enough to see `
+                    + `(floor ${TARGET * 100}%)`);
+  if (frozen) fail.push(`${f}: the image is perceptually identical for ${r.worst.toFixed(1)}s in a row `
+                      + `(ceiling ${CEILING}s) — a hole, not a rhythm`);
+  console.log(`  ${thin || frozen ? '!!' : '..'} ${f.padEnd(24)} ${(r.live * 100).toFixed(0).padStart(3)}% of samples move`
             + `   longest still run ${r.worst.toFixed(1)}s`);
 }
-console.log(`\n  ${rows.length - bad}/${rows.length} plates clear ${TARGET * 100}% of samples.`);
 await browser.close();
+
+if (!GATE) {
+  console.log(`\n  ${rows.length - new Set(fail.map(s => s.split(':')[0])).size}/${rows.length} plates pass.`);
+} else if (fail.length) {
+  console.error('\nMOTION GATE FAILED\n' + fail.map(s => '  ' + s).join('\n'));
+  process.exit(1);
+} else {
+  console.log(`\nMOTION GATE PASSED — every plate moves visibly, and none of them `
+            + `stops for more than ${CEILING}s.`);
+}

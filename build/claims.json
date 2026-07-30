@@ -57,6 +57,20 @@
       "branch": "yadava5/fix-hero-media-validation",
       "public": true,
       "note": "The branch the DEPLOYED WebAssembly came off. main's wasm has no intrinsics; this one does."
+    },
+    "lifequest": {
+      "github": "yadava5/lifequest",
+      "ref": "514908cb9c95fc50a4a959256270f291a008e7e6",
+      "branch": "main",
+      "public": true,
+      "note": "apps/api is the live NestJS service. legacy/backend holds an earlier Prisma schema with 6 models; anything counted here must name apps/api explicitly or it will pick up the wrong tree."
+    },
+    "automl": {
+      "github": "yadava5/ai-augmented-auto-ml-toolchain",
+      "ref": "e506c9168e9dc2d036697ebd90233c4fd1e735d7",
+      "branch": "main",
+      "public": true,
+      "note": "Public since 2026-07-30. Every AutoML figure on this page was ATTESTED before that and is now DERIVED, which is the whole point of the distinction. Written with Shree Chaturvedi; the repository has disjoint histories, so main is the only branch worth pinning."
     }
   },
   "claims": [
@@ -556,6 +570,141 @@
       "path": "backend/data/evaluation/baseline_rules_v3.json",
       "extractor": "jq -r '.label_distribution|to_entries|map(.value)|unique|.[0]' \"$BLOB\"",
       "note": "The set is balanced 12 per class, which is why macro-F1 and weighted-F1 are identical to the last digit. Unstated until now, and it is the reason the two numbers agree."
+    },
+    {
+      "id": "lifequest.models",
+      "value": "10",
+      "drawn_on": [
+        "plate-6-release.svg",
+        "m-6-release.svg",
+        "README.md"
+      ],
+      "repo": "lifequest",
+      "path": "apps/api/prisma/schema.prisma",
+      "extractor": "grep -c '^model ' \"$BLOB\"",
+      "note": "User, Quest, QuestProgress, Reward, Redemption, Meetup, ResumePrompt, Session, ContentGeneration, RitualLog. Deliberately apps/api and not legacy/backend, whose older schema has 6."
+    },
+    {
+      "id": "lifequest.endpoints",
+      "value": "14",
+      "drawn_on": [
+        "plate-6-release.svg",
+        "m-6-release.svg",
+        "README.md"
+      ],
+      "repo": "lifequest",
+      "paths": [
+        "apps/api/src/auth/auth.controller.ts",
+        "apps/api/src/health/health.controller.ts",
+        "apps/api/src/meetups/meetups.controller.ts",
+        "apps/api/src/quests/quests.controller.ts",
+        "apps/api/src/rewards/rewards.controller.ts",
+        "apps/api/src/users/users.controller.ts"
+      ],
+      "extractor": "cat $BLOBS | grep -coE '@(Get|Post|Patch|Put|Delete)\\('",
+      "note": "Every file carrying an @Controller decorator in apps/api/src. Route-method decorators, not handler methods, so a method serving two verbs counts twice — which is what an endpoint count should mean."
+    },
+    {
+      "id": "lifequest.controllers",
+      "value": "6",
+      "drawn_on": [
+        "plate-6-release.svg"
+      ],
+      "repo": "lifequest",
+      "paths": [
+        "apps/api/src/auth/auth.controller.ts",
+        "apps/api/src/health/health.controller.ts",
+        "apps/api/src/meetups/meetups.controller.ts",
+        "apps/api/src/quests/quests.controller.ts",
+        "apps/api/src/rewards/rewards.controller.ts",
+        "apps/api/src/users/users.controller.ts"
+      ],
+      "extractor": "grep -lE '@Controller\\(' $BLOBS | grep -c .",
+      "note": "auth, health, meetups, quests, rewards, users."
+    },
+    {
+      "id": "automl.tools",
+      "value": "44",
+      "drawn_on": [
+        "plate-6b-automl.svg",
+        "m-6b-automl.svg",
+        "README.md"
+      ],
+      "repo": "automl",
+      "paths": [
+        "backend/src/services/llm/tools/dataTools.ts",
+        "backend/src/services/llm/tools/cellTools.ts",
+        "backend/src/services/llm/tools/packageTools.ts",
+        "backend/src/services/llm/tools/featureTools.ts",
+        "backend/src/services/llm/tools/preprocessingTools.ts",
+        "backend/src/services/llm/tools/trainingTools.ts",
+        "backend/src/services/llm/tools/uiTools.ts"
+      ],
+      "extractor": "cat $BLOBS | grep -cE \"^\\s+name: '\"",
+      "note": "Counted two ways and they agree: the seven files sum 4+8+3+6+14+6+3, and a single grep across all seven returns 44."
+    },
+    {
+      "id": "automl.tools_general",
+      "value": "15",
+      "drawn_on": [
+        "plate-6b-automl.svg",
+        "README.md"
+      ],
+      "repo": "automl",
+      "paths": [
+        "backend/src/services/llm/tools/dataTools.ts",
+        "backend/src/services/llm/tools/cellTools.ts",
+        "backend/src/services/llm/tools/packageTools.ts"
+      ],
+      "extractor": "cat $BLOBS | grep -cE \"^\\s+name: '\"",
+      "note": "LLM_TOOL_DEFINITIONS in tools/index.ts is data + cell + package only. This is the number that makes the routing claim concrete: 44 tools exist, and the general set the model carries everywhere is 15 of them."
+    },
+    {
+      "id": "automl.tool_sets",
+      "value": "7",
+      "drawn_on": [
+        "plate-6b-automl.svg",
+        "README.md"
+      ],
+      "repo": "automl",
+      "path": "backend/src/services/llm/tools/index.ts",
+      "extractor": "grep -E '^export const LLM_[A-Z_]+_TOOLS' \"$BLOB\" | grep -vc LLM_ALL_TOOLS",
+      "note": "Seven exported phase sets: onboarding, preprocessing, feature proposal, feature continue, feature engineering, feature lifecycle, training lifecycle. LLM_ALL_TOOLS is excluded because it is the union, not a phase."
+    },
+    {
+      "id": "automl.tables",
+      "value": "29",
+      "drawn_on": [
+        "plate-6b-automl.svg",
+        "README.md"
+      ],
+      "repo": "automl",
+      "paths": [
+        "backend/migrations/001_init.sql",
+        "backend/migrations/002_auth.sql",
+        "backend/migrations/004_notebooks.sql",
+        "backend/migrations/007_workflows.sql",
+        "backend/migrations/009_savepoints.sql",
+        "backend/migrations/010_experiments.sql",
+        "backend/migrations/011_nl_placeholder_suggestions.sql",
+        "backend/migrations/014_models.sql",
+        "backend/migrations/016_plan_chats.sql",
+        "backend/migrations/017_deployments.sql",
+        "backend/migrations/019_email_verification_tokens.sql"
+      ],
+      "extractor": "cat $BLOBS | grep -ciE '^create table'",
+      "note": "Two methods agree: 29 CREATE TABLE statements, and 29 distinct table names after lowercasing and deduplicating. Eleven of the 24 migrations create tables (7+3+3+6+1+1+1+1+1+4+1); the other thirteen alter, backfill or index, and listing them would only pad the fetch."
+    },
+    {
+      "id": "automl.sandbox_tmpfs",
+      "value": "5",
+      "drawn_on": [
+        "plate-6b-automl.svg"
+      ],
+      "repo": "automl",
+      "path": "backend/src/services/container/dockerBuilder.ts",
+      "extractor": "grep -c -- '--tmpfs' \"$BLOB\"",
+      "note": "The container is --read-only with --network none, so these five tmpfs mounts are the entire writable surface the generated Python gets. Drawing the count is drawing the size of the blast radius."
     }
   ],
   "$unpinnable_note": [
@@ -605,6 +754,8 @@
     "plate-1-glyph.svg:0.9": "the confidence cut chosen to describe the errors. The cut is a choice; the 79 errors above it are derived (glyph.confident_errors)",
     "plate-2-jetpack.svg:32": "the name of the Adler-32 algorithm",
     "plate-2-jetpack.svg:25": "JDK 25 \u2014 a toolchain version, not a measurement",
+    "plate-6-release.svg:2": "Tauri 2 \u2014 a framework major version, not a measurement, on the same footing as JDK 25 above",
+    "README.md:2": "Tauri 2 \u2014 a framework major version, not a measurement",
     "m-2-jetpack.svg:25": "JDK 25 \u2014 a toolchain version, not a measurement",
     "plate-2-jetpack.svg:3": "'3 JMH FORKS' \u2014 the fork count of the run, recorded in the same JSON the scores come from",
     "README.md:512": "AVX-512 \u2014 an instruction-set name",
