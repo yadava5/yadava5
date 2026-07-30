@@ -24,7 +24,7 @@
  *   9. every number in <desc> is drawn on the plate
  */
 import { chromium } from 'playwright';
-import { readFileSync, readdirSync } from 'node:fs';
+import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
@@ -40,19 +40,37 @@ const M_LEFT = 30, M_RIGHT = 412;   // the 440-wide mobile canvas
 const STEPS = 40;                   // samples across one loop
 const TOL = 1.5;                    // antialiasing slack, in viewBox units
 const fails = [];
-const frame = [];   // desktop-only: first ink and right edge, for check 12
+const frame = [];   // desktop-only: first ink and right edge, for check 12 (carries its theme tag)
 
 const browser = await chromium.launch();
 const page = await browser.newPage();
-// A second page with motion switched off. The plates carry
-// `@media (prefers-reduced-motion: reduce){*{animation:none!important}}`, so
-// this renders exactly what a reduced-motion reader sees — and, because it is
-// the authored attributes with no animation applied, also what every static
-// rasteriser produces: resvg, librsvg, share-card pipelines, PDF export.
+// A second page with motion switched off. This is the authored attributes with
+// no animation applied, which is what every STATIC RASTERISER produces: resvg,
+// librsvg, share-card pipelines, PDF export.
+//
+// It is NOT what a reduced-motion reader sees, and this comment claimed it was
+// for four rounds. `prefers-reduced-motion` does not propagate into an SVG
+// referenced by an <img>; the media query is evaluated against that document's
+// own isolated environment. On GitHub — the only place this page is published —
+// every plate animates regardless of the reader's preference. That is a
+// property of the medium, not a bug in the plates, and the colophon says so.
 const still = await browser.newPage({ reducedMotion: 'reduce' });
 
-for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)).sort()) {
-  const svg = readFileSync(join(ASSETS, file), 'utf8');
+// Two themes, one document. `assets/light/` holds a light-slab twin of every
+// plate, served by <picture media="(prefers-color-scheme: light)">. It is not
+// a second-class asset: GitHub's light theme is the DEFAULT, so for roughly
+// half of all readers those files ARE the page, and they are measured by every
+// check here. The contrast checks adapt on their own — they read the slab
+// colour off the plate's own first <rect> rather than assuming a dark ground.
+const SETS = [{ dir: ASSETS, tag: '' }];
+const LIGHT_DIR = join(ASSETS, 'light');
+if (existsSync(LIGHT_DIR)) SETS.push({ dir: LIGHT_DIR, tag: 'light/' });
+const sheet = (re) => SETS.flatMap(({ dir, tag }) =>
+  readdirSync(dir).filter(f => re.test(f)).sort().map(f => ({ dir, tag, file: f })));
+
+for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
+  const file = tag + base;
+  const svg = readFileSync(join(dir, base), 'utf8');
 
   // 1 — does it render when embedded the way GitHub embeds it?
   await page.setContent(
@@ -66,7 +84,7 @@ for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)
 
   // measure inside the live document, where the animations actually run
   await page.setContent(`<body style="margin:0">${svg}</body>`);
-  const mobile = /^m-/.test(file);
+  const mobile = /^m-/.test(base);
   const L = mobile ? M_LEFT : LEFT, R = mobile ? M_RIGHT : RIGHT;
 
   const found = await page.evaluate(async ({ L, R, STEPS, TOL }) => {
@@ -602,7 +620,7 @@ for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)
       }
       return { top, rightGap: W - right, bottomGap: H - bottom };
     });
-    frame.push(g);
+    frame.push({ ...g, tag });
   }
 
   // 9 — every number the description claims must be drawn on the plate.
@@ -653,16 +671,25 @@ for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)
 // canvas — so the right edge visibly wandered as you scrolled and the top
 // margin had three values. Neither gate could see it, because neither ever
 // compared two plates.
+// Run PER THEME. The light plates are geometrically identical to their dark
+// twins, so pooling them would still pass — but a message interleaving twenty
+// numbers from two sets would be unreadable the day it does fail, and "these
+// two sets agree with each other" is not the property being asserted here.
 const spread = (xs) => Math.max(...xs) - Math.min(...xs);
-const tops = frame.map(f => f.top), rights = frame.map(f => f.rightGap);
+for (const { tag } of SETS) {
+const themed = frame.filter(f => f.tag === tag);
+if (!themed.length) continue;
+const where = tag ? `the ${tag.replace('/', '')} plates` : 'the desktop plates';
+const tops = themed.map(f => f.top), rights = themed.map(f => f.rightGap);
 if (spread(tops) > 2)
-  fails.push(`the desktop plates start at ${tops.map(t => Math.round(t)).join('/')} — the first ink must sit on one line across the document`);
+  fails.push(`${where} start at ${tops.map(t => Math.round(t)).join('/')} — the first ink must sit on one line across the document`);
 if (spread(rights) > 2)
-  fails.push(`the desktop plates end ${rights.map(r => Math.round(r)).join('/')} short of the canvas — the right edge wanders as you scroll`);
+  fails.push(`${where} end ${rights.map(r => Math.round(r)).join('/')} short of the canvas — the right edge wanders as you scroll`);
 // three edges were enforced and the fourth wandered 12.8u
-const bottoms = frame.map(f => f.bottomGap);
+const bottoms = themed.map(f => f.bottomGap);
 if (spread(bottoms) > 2)
-  fails.push(`the desktop plates leave ${bottoms.map(b => Math.round(b)).join('/')} below their last ink — the bottom edge is the one margin nothing was checking`);
+  fails.push(`${where} leave ${bottoms.map(b => Math.round(b)).join('/')} below their last ink — the bottom edge is the one margin nothing was checking`);
+}
 
 // 16 — THE STILL FRAME MUST BE THE FINISHED FRAME.
 //
@@ -678,8 +705,9 @@ if (spread(bottoms) > 2)
 //
 // Check 11 could not see any of it: it measures the animated timeline, and
 // every one of these plates is correct once it is allowed to move.
-for (const file of readdirSync(ASSETS).filter(f => /^plate-.*\.svg$/.test(f)).sort()) {
-  await still.setContent(`<body style="margin:0">${readFileSync(join(ASSETS, file), 'utf8')}</body>`);
+for (const { dir, tag, file: base } of sheet(/^plate-.*\.svg$/)) {
+  const file = tag + base;
+  await still.setContent(`<body style="margin:0">${readFileSync(join(dir, base), 'utf8')}</body>`);
   const bad = await still.evaluate(async () => {
     await document.fonts.ready;
     const svgEl = document.querySelector('svg');

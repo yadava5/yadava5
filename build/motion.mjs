@@ -30,7 +30,7 @@
  * Usage: node build/motion.mjs [--step 100] [--floor 0.002] [--gate]
  */
 import { chromium } from 'playwright';
-import { readFileSync, readdirSync } from 'node:fs';
+import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
@@ -70,8 +70,20 @@ const decodeAndDiff = async (b64, first) => page.evaluate(async ({ b64, first })
   return changed / (W * H);
 }, { b64, first });
 
-for (const f of readdirSync(ASSETS).filter(x => /^plate-.*\.svg$/.test(x)).sort()) {
-  await page.setContent(`<body style="margin:0">${readFileSync(join(ASSETS, f), 'utf8')}</body>`);
+// Both themes. The light plates are supposed to be the same document under a
+// different palette, so their motion SHOULD be identical — but 'should be' is
+// exactly the assumption this file exists to stop anyone making. An opacity
+// chosen for a light slab can drop a sweep under the 0.2% perceptual floor
+// while its dark twin sails through.
+const SETS = [{ dir: ASSETS, tag: '' }];
+const LIGHT_DIR = join(ASSETS, 'light');
+if (existsSync(LIGHT_DIR)) SETS.push({ dir: LIGHT_DIR, tag: 'light/' });
+const plates = SETS.flatMap(({ dir, tag }) =>
+  readdirSync(dir).filter(x => /^plate-.*\.svg$/.test(x)).sort().map(x => ({ dir, tag, base: x })));
+
+for (const { dir, tag, base } of plates) {
+  const f = tag + base;
+  await page.setContent(`<body style="margin:0">${readFileSync(join(dir, base), 'utf8')}</body>`);
   const dur = await page.evaluate(async () => {
     await document.fonts.ready;
     const a = document.getAnimations();
