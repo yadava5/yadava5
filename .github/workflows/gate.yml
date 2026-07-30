@@ -34,3 +34,13 @@ jobs:
           npm ci --no-audit --no-fund || npm install --no-audit --no-fund
           npx playwright install --with-deps chromium
           node build/gate.mjs
+
+      # The gate above proves the plates are internally consistent. This one
+      # leaves the repository: it re-derives every drawn number from the pinned
+      # commit it came from, over the network, the same way a reader would.
+      # Without it "every number is traceable" is a sentence the page writes
+      # about itself.
+      - name: Re-derive every number from the repo it came from
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node build/claims.mjs
