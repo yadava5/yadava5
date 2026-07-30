@@ -17,7 +17,11 @@ Design rules encoded here (each one is a finding, not a preference):
     margin — an earlier version of this comment claimed 56 and 32 and the
     measured values were 19..56 and 27..36. Two 64px heroes set their own top
     margin, because a 84u-tall glyph box cannot start where a 21u label does.
-  * opaque slab on every plate — refuses the light/dark problem entirely
+  * opaque slab on every plate. This used to read "refuses the light/dark
+    problem entirely", and the refusal was the defect: on GitHub's DEFAULT
+    (light) theme the page was ten black bricks on a white page. The whole set
+    is now built twice — dark to assets/, light to assets/light/, same
+    basenames — and the README's <picture> picks per prefers-color-scheme.
   * a 4u accent bar at x=0, the same device the mobile plates already used;
     the old "rail" was two 26u stubs outside the type column, absent from two
     of eight plates, and legible on none
@@ -95,23 +99,95 @@ def logo(name: str, x: float, y: float, size: float, colour: str) -> str:
             f'style="color:{colour}">{m["body"]}</g>')
 
 W = 880
-SLAB, EDGE = "#0A0A0B", "rgba(255,255,255,0.14)"
-# Every structural line used to sit between 1.08:1 and 1.94:1 on the slab —
-# WCAG 1.4.11 wants 3:1 for anything non-text that carries meaning. So the
-# document was drawing its numbers at AAA and the mechanism behind them at
-# roughly half the legibility floor, which is the exact inversion of its thesis.
-RULE = "#5A606A"   # 3.06:1 — section rules
-WIRE = "#6E737C"   # 4.05:1 — connectors, boundaries, brackets, box frames.
-                   # Used at FULL opacity: a .45 alpha put it back under 2:1.
-ROW = "#5A606A"    # 3.09:1 — tenant row fills. Was #3A424B at 1.92:1: eight
-                   # near-invisible rectangles carrying the whole of plate V.
-INK, INK2, INK3 = "#F7F8F8", "#8A8F98", "#767B84"   # 18.39:1 / 6.02:1 / 4.60:1
-AMBER, LIME, EMERALD = "#F5A524", "#B8E62E", "#34D399"
-CYAN, PINK, INDIGO = "#22D3EE", "#F472B6", "#818CF8"
 
-# one colour per system, in the order the README presents them
-LEGEND = [("GLYPH", AMBER), ("JETPACK", LIME), ("CADENCE", EMERALD),
-          ("APPLIED", CYAN), ("LIFEQUEST", PINK), ("AUTOML", INDIGO)]
+# ── the two palettes. GitHub's default canvas is white; its dark one is
+# #0d1117. A slab that ignores the canvas it sits on is ten black bricks pasted
+# onto a white page, which is what this document was on the theme most readers
+# see first. The greys are matched by ROLE, not by value — a grey carried
+# across from the dark slab keeps its name and loses its contrast — so every
+# value below is measured against its OWN slab (the same formula gate.mjs
+# check 10 runs), never derived from its twin.
+#
+# Every structural line used to sit between 1.08:1 and 1.94:1 on the dark
+# slab — WCAG 1.4.11 wants 3:1 for anything non-text that carries meaning. So
+# the document was drawing its numbers at AAA and the mechanism behind them at
+# roughly half the legibility floor, which is the exact inversion of its
+# thesis. RULE/WIRE/ROW are used at FULL opacity: a .45 alpha put them back
+# under 2:1 (translucency is handled by op() below, per theme).
+#
+# The six accents are the same six identities in both palettes — dark at
+# roughly the 400 step of each family, light at the 600–700 step, because
+# #F5A524 on the light slab is 1.9:1: an accent you cannot see. All six light
+# accents clear the 4.5:1 TEXT floor, not just the 3:1 non-text one, because
+# four of them are drawn as labels (plate IV's RULES LAYER ONLY and A HUMAN,
+# plate VIII's phase kicks, plate III's parser names); an accent legible as a
+# bar but illegible as a word would split one identity into two colours.
+THEMES = {
+    "dark": dict(
+        SLAB="#0A0A0B", EDGE="rgba(255,255,255,0.14)",
+        RULE="#5A606A",     # 3.06:1 — section rules
+        WIRE="#6E737C",     # 4.05:1 — connectors, boundaries, brackets, frames
+        ROW="#5A606A",      # 3.09:1 — tenant row fills. Was #3A424B at 1.92:1:
+                            # eight near-invisible rects carrying all of plate V
+        INK="#F7F8F8", INK2="#8A8F98", INK3="#767B84",  # 18.39 / 6.02 / 4.60:1
+        AMBER="#F5A524", LIME="#B8E62E", EMERALD="#34D399",
+        CYAN="#22D3EE", PINK="#F472B6", INDIGO="#818CF8",
+        CHIP="#0E2A22",     # the filed event's fill, a tint of the accent
+    ),
+    "light": dict(
+        SLAB="#F6F7F8",     # 1.07:1 off the white page — a plate, not a hole;
+                            # the EDGE stroke is what draws the boundary
+        EDGE="rgba(0,0,0,0.16)",
+        RULE="#848A93",     # 3.24:1
+        WIRE="#737981",     # 4.10:1
+        ROW="#848A93",      # 3.24:1
+        INK="#1A1D21", INK2="#555B63", INK3="#6B7178",  # 15.77 / 6.39 / 4.60:1
+        AMBER="#B45309",    # 4.68:1 — Glyph
+        LIME="#4D7C0F",     # 4.66:1 — jetpack
+        EMERALD="#047857",  # 5.11:1 — Cadence
+        CYAN="#0E7490",     # 5.00:1 — Applied
+        PINK="#BE185D",     # 5.63:1 — LifeQuest
+        INDIGO="#4F46E5",   # 5.86:1 — AutoML
+        CHIP="#DEF2E8",
+    ),
+}
+
+THEME = "dark"
+
+
+def set_theme(name: str) -> None:
+    """Point every colour global at one palette.
+
+    The plate functions read these globals at call time, so the same code
+    draws both documents — the light set is the same document in a different
+    light, not a second design.
+    """
+    globals().update(THEMES[name])
+    globals()["THEME"] = name
+    # one colour per system, in the order the README presents them
+    t = THEMES[name]
+    globals()["LEGEND"] = [
+        ("GLYPH", t["AMBER"]), ("JETPACK", t["LIME"]), ("CADENCE", t["EMERALD"]),
+        ("APPLIED", t["CYAN"]), ("LIFEQUEST", t["PINK"]), ("AUTOML", t["INDIGO"]),
+    ]
+
+
+set_theme("dark")
+
+
+def op(v: float) -> float:
+    """Translucent-accent opacity, per theme.
+
+    The raw values were tuned against the dark slab, where alpha is cheap:
+    lime at .5 over #0A0A0B still measures 3.96:1. The same .5 over the light
+    slab measures 2.01:1 — compositing toward white destroys chroma contrast
+    far faster than compositing toward black, and no accent dark enough to
+    survive .5 on white exists (even #064E3B lands at 2.61:1). So light lifts
+    every alpha through 0.6 + 0.4v: the tuned ordering is preserved and the
+    weakest case (lime .5 → .80) measures 3.25:1. All twelve translucent uses
+    are recomputed in scratch and clear 3:1; the solid uses never had alpha.
+    """
+    return v if THEME == "dark" else round(0.6 + 0.4 * v, 2)
 
 # single-stroke digits in a 120x160 box — the same pen Glyph's landing uses
 DIGITS = [
@@ -184,6 +260,12 @@ BREATHE = "cubic-bezier(.37,0,.63,1)"     # symmetric sine, for ambient loops
 
 def head(h: int, title: str, desc: str, key: str = "") -> str:
     if key:
+        # The light pass re-authors the same key. The two themes are one
+        # document, so a plate and its light twin must carry byte-identical
+        # descriptions — asserted, not assumed, because a colour name drifting
+        # into a desc would silently fork the accessible text per theme.
+        if key in ALT and ALT[key] != desc:
+            raise SystemExit(f"{key}: description diverged between themes")
         ALT[key] = desc
     return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="{VB_X} 0 {VB_W} {h}" width="{VB_W}" height="{h}" role="img" aria-label="{desc}">
 <title>{title}</title><desc>{desc}</desc>
@@ -244,8 +326,8 @@ def plate_thesis() -> str:
   76%{{transform:translateY(0) scale(1)}}86%{{transform:translateY(-7px) scale(1.06)}}
   98%,100%{{transform:translateY(0) scale(1)}}}}
 .idx{{animation:idx {LOOP}s linear infinite;animation-delay:{-SET}s}}
-@keyframes idx{{0%{{transform:translateY(0);opacity:.5}}94%{{transform:translateY(219px);opacity:.5}}
-  97%,100%{{transform:translateY(219px);opacity:0}}}}
+@keyframes idx{{0%{{transform:translateY(-219px);opacity:{op(0.5)}}}94%{{transform:translateY(0);opacity:{op(0.5)}}}
+  97%,100%{{transform:translateY(0);opacity:0}}}}
 .ser{{font-family:ui-serif,Georgia,'Times New Roman',serif;font-size:34px;fill:{INK}}}
 </style>{slab(H, INK2)}""")
 
@@ -293,11 +375,16 @@ def plate_thesis() -> str:
     # the ambient element: an index cursor reading the contact sheet in turn,
     # for the WHOLE loop — this is a sheet of six systems, and a sheet is a
     # thing you scan. Everything above ran in the first 40% of the loop and
-    # then held, which the raster gate measured as 2.7s of dead air. At rest
-    # it sits ON the sheet's rule at 366 (6u lower it read as a doubled rule);
-    # 365→584 covers row one then row two, and the wrap fades out before the
-    # 219u reset, so the loop never snaps back in view. Hairline: passes type.
-    s.append(f'<rect class="idx" x="{L}" y="379" width="580" height="2" fill="{INK}" opacity=".5"/>')
+    # then held, which the raster gate measured as 2.7s of dead air.
+    #
+    # It is authored at the END of the read, not the start. Authored at the top
+    # it had nowhere good to rest: ON the sheet's rule it composited to 8.69:1,
+    # the brightest line in the document and 2.8x every other rule; 13u below,
+    # it read as a doubled rule, which is worse. Both are the same mistake —
+    # the still frame is supposed to be the FINISHED pose, and a cursor that
+    # has read the sheet is at the bottom of it. Now it rests in clear space
+    # under the last card row and travels UP from 365 to get there.
+    s.append(f'<rect class="idx" x="{L}" y="584" width="580" height="2" fill="{INK}" opacity="{op(0.5)}"/>')
     return "".join(s) + "</svg>"
 
 
@@ -407,7 +494,7 @@ def plate_glyph() -> str:
 .tok{{animation:run {LOOP}s {ARRIVE} infinite}}
 @keyframes run{{0%{{opacity:0;transform:translateX(-190px)}}5%{{opacity:1;transform:translateX(-190px)}}
   34%,96%{{opacity:1;transform:translateX(0)}}100%{{opacity:0;transform:translateX(0)}}}}
-.wrong{{opacity:.72}}
+.wrong{{opacity:{op(0.72)}}}
 .sure{{opacity:1}}
 .gr{{transform-box:fill-box;transform-origin:left center;animation:gr {LOOP}s {BREATHE} infinite}}
 @keyframes gr{{0%,30%{{transform:translateY(0)}}38%{{transform:translateY(-5px)}}
@@ -490,7 +577,7 @@ def plate_glyph() -> str:
     # the plate finished at 40% of the loop and left 2.5s of dead air on the
     # raster gate. 456→548 spans the six rows; 92u a pass keeps the wrap under
     # the teleport ceiling, so it needs no fade. Hairline: passes over marks.
-    s.append(f'<rect class="rd" x="{L}" y="456" width="566" height="2" fill="{a}" opacity=".55"/>')
+    s.append(f'<rect class="rd" x="{L}" y="456" width="566" height="2" fill="{a}" opacity="{op(0.55)}"/>')
     return "".join(s) + "</svg>"
 
 
@@ -548,12 +635,13 @@ def plate_jetpack() -> str:
     # Three lines, each still a ≤3u hairline the collision rule exempts, carry
     # three times the pixels; 104u of travel keeps the tail inside the window.
     # .50 is the tail's floor twice over: check 7 counts anything under 0.5
-    # opacity as invisible, and lime below ~.45 drops under the 3:1 non-text
-    # contrast line.
+    # opacity as invisible, and dark-theme lime below ~.45 drops under the 3:1
+    # non-text contrast line. (op() lifts all three for the light slab, where
+    # the same alphas measure under 2:1.)
     s.append(f'<g class="wscan">'
-             f'<rect x="176" y="153" width="116" height="2" fill="{a}" opacity=".62"/>'
-             f'<rect x="176" y="157" width="116" height="2" fill="{a}" opacity=".56"/>'
-             f'<rect x="176" y="161" width="116" height="2" fill="{a}" opacity=".5"/></g>')
+             f'<rect x="176" y="153" width="116" height="2" fill="{a}" opacity="{op(0.62)}"/>'
+             f'<rect x="176" y="157" width="116" height="2" fill="{a}" opacity="{op(0.56)}"/>'
+             f'<rect x="176" y="161" width="116" height="2" fill="{a}" opacity="{op(0.5)}"/></g>')
     for i in range(4):
         y = 168 + i * 26
         s.append(f'<rect class="blk" data-max-x="294" x="180" y="{y}" width="107.8" height="16" rx="2" fill="{a}" '
@@ -647,7 +735,7 @@ def plate_cadence() -> str:
     # friday and 1pm are ONE parser's output, so they get one bracket and one
     # label. That is the fact worth drawing: a parser is not a field.
     bx, bw = 150 + 15 * CW, 10 * CW
-    s.append(f'<path d="M{bx:.0f} 134V140H{bx+bw:.0f}V134" fill="none" stroke="{a}" opacity=".7"/>')
+    s.append(f'<path d="M{bx:.0f} 134V140H{bx+bw:.0f}V134" fill="none" stroke="{a}" opacity="{op(0.7)}"/>')
     s.append(f'<text class="an fine" x="{150 + 11 * CW:.0f}" y="160" '
              f'style="fill:{a};animation-delay:{round(-SET, 3)}s">compromise</text>')
     s.append(f'<text class="an fine" x="{bx + bw / 2:.0f}" y="160" text-anchor="middle" '
@@ -666,9 +754,9 @@ def plate_cadence() -> str:
         s.append(f'<rect x="{x}" y="262" width="96" height="72" rx="3" fill="none" stroke="{WIRE}"/>')
         for hr in (286, 310):
             s.append(f'<path d="M{x} {hr}H{x+96}" stroke="{RULE}" stroke-width="1"/>')
-    s.append(f'<rect class="now" x="196" y="263" width="528" height="2" fill="{a}" opacity=".62"/>')
+    s.append(f'<rect class="now" x="196" y="263" width="528" height="2" fill="{a}" opacity="{op(0.62)}"/>')
     s.append(f'<g class="fil" style="animation-delay:{-SET}s">'
-             f'<rect x="632" y="288" width="88" height="20" rx="3" fill="#0E2A22" stroke="{a}"/>'
+             f'<rect x="632" y="288" width="88" height="20" rx="3" fill="{CHIP}" stroke="{a}"/>'
              f'<text x="640" y="302" class="fine" style="fill:{a}">lunch</text></g>')
     s.append(f'<text x="150" y="410" class="hero">36</text>')
     s.append(f'<text x="232" y="394" class="lbl">HANDLERS IN ONE FUNCTION</text>')
@@ -731,7 +819,7 @@ def plate_applied() -> str:
     # measured as 4.8s of dead air. A hairline riding 148→296 crosses all
     # three tiers and passes through the gate, twice a loop; 148u of travel
     # stays under the 160u teleport ceiling, so the wrap needs no fade.
-    s.append(f'<rect class="strm" x="400" y="148" width="240" height="2" fill="{a}" opacity=".55"/>')
+    s.append(f'<rect class="strm" x="400" y="148" width="240" height="2" fill="{a}" opacity="{op(0.55)}"/>')
     # the gate that is allowed to decline
     s.append(f'<text x="150" y="293" class="lbl" style="fill:{a}">0.85 CONFIDENCE GATE</text>')
     s.append(f'<path d="M400 288H640" stroke="{a}" stroke-width="1"/>')
@@ -847,7 +935,7 @@ def plate_refusal() -> str:
         s.append(f'<rect class="ret" x="620" y="{y-12}" width="110" height="16" rx="2" fill="{ROW}" '
                  f'stroke="{a}" style="animation-delay:{round(-SET + i*0.18,3)}s"/>')
     # the read head, over the table it is reading, for the whole loop
-    s.append(f'<rect class="swp" x="{L}" y="116" width="580" height="2" style="fill:{a}" opacity=".55"/>')
+    s.append(f'<rect class="swp" x="{L}" y="116" width="580" height="2" style="fill:{a}" opacity="{op(0.55)}"/>')
     s.append(f'<text x="{L}" y="312" class="fine">A’s rows withheld, B’s returned — the guard sits in the query</text>')
 
     s.append(f'<path d="M{L} 336H{R}" stroke="{RULE}"/>')
@@ -929,7 +1017,7 @@ def plate_release() -> str:
     # The box is 240x70 rather than 196x46 so the scan bar inside it is 236u
     # wide with 64u of travel. That size is the whole point: see the .sc comment.
     s.append(f'<rect x="150" y="296" width="240" height="70" rx="3" fill="none" stroke="{WIRE}"/>')
-    s.append(f'<rect class="sc" x="152" y="299" width="236" height="3" fill="{PINK}" opacity=".72"/>')
+    s.append(f'<rect class="sc" x="152" y="299" width="236" height="3" fill="{PINK}" opacity="{op(0.72)}"/>')
     s.append(f'<text x="166" y="326" class="fine" style="fill:{INK}">apps/desktop</text>')
     s.append(f'<text x="166" y="348" class="fine">React · Vite</text>')
     s.append(f'<path d="M390 331H420M420 313V349" fill="none" stroke="{WIRE}"/>')
@@ -1066,7 +1154,7 @@ def plate_automl() -> str:
     # ── the sandbox, quoted from the docker run it actually builds
     s.append(f'<text x="{L}" y="330" class="kick">WHERE THE GENERATED PYTHON RUNS</text>')
     s.append(f'<rect x="{L}" y="344" width="330" height="124" rx="3" fill="none" stroke="{INDIGO}"/>')
-    s.append(f'<rect class="sc" x="{L+2}" y="347" width="326" height="3" fill="{INDIGO}" opacity=".6"/>')
+    s.append(f'<rect class="sc" x="{L+2}" y="347" width="326" height="3" fill="{INDIGO}" opacity="{op(0.6)}"/>')
     for i, (flag, why) in enumerate([("--network none", "no egress"),
                                      ("--read-only", "immutable rootfs"),
                                      ("--user sandbox", "never root"),
@@ -1136,7 +1224,7 @@ def plate_colophon() -> str:
     # descending the colophon for the whole loop. At rest it lies ON the rule
     # at 80, so the still frame shows one accent rule, not a doubled one; the
     # 157u wrap stays under the 160u teleport ceiling. .68 keeps indigo 3:1+.
-    s.append(f'<rect class="ras" x="150" y="95" width="580" height="2" fill="{INK2}" opacity=".85"/>')
+    s.append(f'<rect class="ras" x="150" y="95" width="580" height="2" fill="{INK2}" opacity="{op(0.85)}"/>')
     # INK2, not INDIGO: the colophon gave up AutoML's hue this round and the
     # raster sweep would have quietly handed it back.
     return "".join(s) + "</svg>"
@@ -1151,23 +1239,6 @@ PLATES = {
     "plate-7-colophon.svg": plate_colophon,
 }
 
-# ────────────────────────────────────────────────── the build-time gate
-# Cheap structural checks only. The REAL layout gate is build/gate.mjs, which
-# renders every plate in Chromium and measures 40 samples across each loop —
-# arithmetic here cannot see a transform, and pretending otherwise is how nine
-# collisions once shipped under a PASS.
-import re as _re, sys as _sys, xml.dom.minidom as _xml
-
-_fail = []
-for fn, gen in PLATES.items():
-    path = OUT / fn
-    path.write_text(gen())
-    try:
-        _xml.parseString(path.read_text())
-    except Exception as e:
-        _fail.append(f"{fn}: MALFORMED XML — {e}")
-    print(f"{fn}: {path.stat().st_size:,} bytes")
-
 # ────────────────────────────────────────────────── mobile set
 # At GitHub's real 324px column a 16-unit label on an 880 canvas renders at
 # 5.9px — unreadable. So the phone gets its own plates: a 440 canvas at the SAME
@@ -1175,10 +1246,16 @@ for fn, gen in PLATES.items():
 # argument itself is already in the markdown, which is selectable, searchable
 # and theme-native. Served via <picture media="(max-width:500px)">.
 #
-# The <desc> here is the SAME string as the desktop plate's, because <picture>
-# permits one alt for both sources — so the alt has to be true of whichever
-# image the browser picked. gate.mjs enforces the direction that matters: every
-# number the mobile plate DRAWS must appear in that shared description.
+# The <desc> here used to be the desktop plate's string verbatim, and it
+# described a picture the mobile file does not draw: m-5's said six services
+# are "drawn service by service" over three text nodes, m-3's said a sentence
+# "is labelled in place" over a plate that draws one number. The README's
+# single <img> alt stays the desktop description — <picture> permits one alt,
+# and that string describes the CLAIM, true whichever source loaded — but the
+# file's own <desc>/aria-label is what a reader gets when the SVG is opened
+# directly, so each mobile plate now carries a description of ITSELF. gate.mjs
+# check 9 holds the pair honest in the direction that matters here: every
+# number a mobile plate DRAWS must appear in its own description.
 MW = 440
 
 
@@ -1205,25 +1282,72 @@ def plate_mobile(accent: str, kicker: str, hero: str, unit: str,
         "</svg>"])
 
 
+# The accent is the COLOUR'S NAME, resolved per theme at write time — a hex
+# baked into this dict would hand the light pass the dark palette.
 MOBILE = {
- "m-1-glyph.svg": ("GLYPH", AMBER, "97.01", "%", "A neural net written from", "scratch in C++. 299 wrong.", "plate-1-glyph.svg"),
- "m-2-jetpack.svg": ("JETPACK", LIME, "6.4", "×", "Parallel gzip on JDK 25.", "The JDK intrinsic still wins.", "plate-2-jetpack.svg"),
- "m-3-cadence.svg": ("CADENCE", EMERALD, "36", "", "handlers bundled into one", "function. The plan allows 12.", "plate-3-cadence.svg"),
- "m-4-applied.svg": ("APPLIED", CYAN, "0.979", "", "macro-F1, rules layer only.", "Below 0.85 it asks a human.", "plate-4-applied.svg"),
- "m-5-refusal.svg": ("THE REFUSAL", EMERALD, "B", " only", "The app didn't remember", "to filter. The database refused.", "plate-5-refusal.svg"),
- # Was ("LIFEQUEST · AUTOML", "HUMAN", "in the loop before a step commits",
- # "or a model trains. Not public.") — describing a plate that no longer exists,
- # and ending on a statement that stopped being true when the repository went
- # public. It survived because the mobile check only enforces that numbers a
- # mobile plate DRAWS appear in the shared description; stale prose carrying no
- # digits passes silently. Mobile is parked, but parked is not a licence to
- # serve a false sentence.
- "m-6-release.svg": ("LIFEQUEST", PINK, "10", "", "Prisma models, 14 endpoints.", "One tree, built desktop and web.", "plate-6-release.svg"),
- "m-6b-automl.svg": ("AGENTIC AUTOML", INDIGO, "44", "", "tools in the registry. The model", "only ever holds its phase's set.", "plate-6b-automl.svg"),
+ "m-0-thesis.svg": ("AYUSH YADAV · CINCINNATI, OH", "INK2", "6", " systems",
+   "From SIMD kernels to the", "browser they run in.",
+   "Ayush Yadav, a computer science graduate in Cincinnati, Ohio, open to "
+   "full-time engineering roles: 6 systems, from SIMD kernels to the browser "
+   "they run in."),
+ "m-0b-work.svg": ("WORK · MIAMI UNIVERSITY", "INK2", "57.8", "M rows",
+   "from 1.6M Oracle query logs —", "a year of paid work, attested.",
+   "Experience, attested by the author rather than derived from a public "
+   "repository: as ITSM Data Integration Intern at Miami University, a Python "
+   "pipeline turned 1.6 million Oracle Analytics query logs into a 57.8 "
+   "million-row field-usage table."),
+ "m-1-glyph.svg": ("GLYPH", "AMBER", "97.01", "%", "A neural net written from", "scratch in C++. 299 wrong.",
+   "Glyph: a neural network written from scratch in C++. It scores 97.01 percent on the MNIST test set — 299 wrong."),
+ "m-2-jetpack.svg": ("JETPACK", "LIME", "6.4", "×", "Parallel gzip on JDK 25.", "The JDK intrinsic still wins.",
+   "jetpack: parallel gzip on JDK 25, a 6.4 times speedup over one thread — and the JDK's own checksum intrinsic still wins."),
+ "m-3-cadence.svg": ("CADENCE", "EMERALD", "36", "", "handlers bundled into one", "function. The plan allows 12.",
+   "Cadence: 36 API handlers bundled into one serverless function, because the hosting plan allows 12."),
+ "m-4-applied.svg": ("APPLIED", "CYAN", "0.979", "", "macro-F1, rules layer only.", "Below 0.85 it asks a human.",
+   "Applied: an email classifier scoring 0.979 macro-F1 with the rules layer alone. Below the 0.85 confidence gate it asks a human rather than guessing."),
+ "m-5-refusal.svg": ("THE REFUSAL", "EMERALD", "B", " only", "The app didn't remember", "to filter. The database refused.",
+   "The refusal: a query run as tenant B returns B only. The app didn't remember to filter; PostgreSQL row-level security refused."),
+ # This entry once described a plate that no longer exists and asserted "Not
+ # public" after the repository went public. It survived because stale prose
+ # carrying no digits passes the number check silently. Parked is not a
+ # licence to serve a false sentence.
+ "m-6-release.svg": ("LIFEQUEST", "PINK", "10", "", "Prisma models, 14 endpoints.", "One tree, built desktop and web.",
+   "LifeQuest: routines as tracked quests — 10 Prisma models and 14 REST endpoints behind one source tree, built desktop and web."),
+ "m-6b-automl.svg": ("AGENTIC AUTOML", "INDIGO", "44", "", "tools in the registry. The model", "only ever holds its phase's set.",
+   "Agentic AutoML: dataset in, trained model out. Its registry holds 44 tool definitions, but the model only ever holds the set its phase needs."),
+ "m-7-colophon.svg": ("COLOPHON", "RULE", "SVG", "",
+   "Animated — no JavaScript,", "no server, no external assets.",
+   "Colophon: this page is animated SVG with no JavaScript, no server and no "
+   "external assets."),
 }
-for _fn, (_k, _a, _n, _u, _l1, _l2, _src) in MOBILE.items():
-    (OUT / _fn).write_text(plate_mobile(_a, _k, _n, _u, _l1, _l2, ALT[_src]))
-print(f"mobile set: {len(MOBILE)} plates at {MW}w")
+
+# ────────────────────────────────────────────────── the build-time gate
+# Cheap structural checks only. The REAL layout gate is build/gate.mjs, which
+# renders every plate in Chromium and measures 40 samples across each loop —
+# arithmetic here cannot see a transform, and pretending otherwise is how nine
+# collisions once shipped under a PASS.
+import re as _re, sys as _sys, xml.dom.minidom as _xml
+
+_fail = []
+# One build, two documents. Dark keeps every path it has always had — it is
+# the README's <img> fallback and the thing every external pin points at.
+# Light lands in assets/light/ under the SAME basenames: build/gate.mjs keys
+# its second measuring pass on that directory, so the naming is load-bearing.
+for _theme in ("dark", "light"):
+    set_theme(_theme)
+    _out = OUT if _theme == "dark" else OUT / "light"
+    _out.mkdir(exist_ok=True)
+    for fn, gen in PLATES.items():
+        path = _out / fn
+        path.write_text(gen())
+        try:
+            _xml.parseString(path.read_text())
+        except Exception as e:
+            _fail.append(f"{_theme}/{fn}: MALFORMED XML — {e}")
+        print(f"{_theme:5s} {fn}: {path.stat().st_size:,} bytes")
+    for _fn, (_k, _acc, _n, _u, _l1, _l2, _desc) in MOBILE.items():
+        (_out / _fn).write_text(plate_mobile(globals()[_acc], _k, _n, _u, _l1, _l2, _desc))
+    print(f"{_theme:5s} mobile set: {len(MOBILE)} plates at {MW}w")
+set_theme("dark")
 
 # ────────────────────────────────────────────────── alt/desc/README agreement
 # Every description is authored once in ALT and must reach the README verbatim —
