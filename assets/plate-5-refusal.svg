@@ -10,6 +10,7 @@ text{font-family:'M',ui-monospace,SFMono-Regular,Menlo,monospace}
 .lbl{font-size:16px;letter-spacing:1.6px;fill:#8A8F98}
 .key{font-size:16px;letter-spacing:1.6px;fill:#F7F8F8}
 .fine{font-size:13px;letter-spacing:0.6px;fill:#8A8F98}
+.kick{font-size:11px;letter-spacing:2.6px;fill:#767B84}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
 .q{animation:seek 6.7s cubic-bezier(.05,.75,.1,1) infinite;animation-delay:-4.7s}
 @keyframes seek{0%{opacity:0;transform:translateX(-104px)}5%{opacity:1;transform:translateX(-104px)}
