@@ -221,8 +221,15 @@ for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)
         zero = s.map(e => e.o);
         for (const e of s) {
           const st = getComputedStyle(e.el);
-          const da = parseFloat(st.strokeDasharray), dof = parseFloat(st.strokeDashoffset);
-          if (da > 0 && Math.abs(dof) / da > 0.5)
+          // "Undrawn" only means something for a DRAW-ON: one dash as long as
+          // the whole path, revealed by pulling its offset to zero. A two-value
+          // dasharray is a repeating pattern -- a travelling pulse -- and it is
+          // never "undrawn", it is just somewhere along the line. Reading
+          // parseFloat of "18px 222px" as the dash length called a perfectly
+          // healthy pulse a frame-zero defect.
+          const pat = (st.strokeDasharray || '').split(',').map(v => parseFloat(v)).filter(Number.isFinite);
+          const da = pat[0], dof = parseFloat(st.strokeDashoffset);
+          if (pat.length === 1 && da > 0 && Math.abs(dof) / da > 0.5)
             out.push(`${e.nm} is undrawn at frame zero (dashoffset ${dof}/${da})`);
         }
       }
