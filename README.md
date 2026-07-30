@@ -4,9 +4,9 @@
 
 **C++ · TypeScript · Python · Java · Swift · Rust** — B.S. Computer Science, Miami University (May 2026). Based in Cincinnati, OH; open to full-time software engineering roles: **[aesh.03.23@gmail.com](mailto:aesh.03.23@gmail.com)** · [LinkedIn](https://www.linkedin.com/in/ayush-yadav-developer)
 
-I build systems that prove themselves. Six of them are live, publicly reachable, and five of the six ship a **system card** — a print-format walkthrough of the architecture and the evidence behind its numbers. AutoML's equivalent is an expo booklet.
+Every number below is recomputed in CI from a pinned commit, except §I, which is my word. Six systems are live, publicly reachable, and five of the six ship a **system card** — a print-format walkthrough of the architecture and the evidence behind its numbers. AutoML's equivalent is an expo booklet.
 
-What follows is five system plates (LifeQuest and AutoML share the last), plus one for the habit that runs underneath all of them, between an opening and a colophon. Each shows the claim, then the mechanism that would catch the claim if it were a lie.
+Each section shows the claim, then the mechanism that would catch the claim if it were a lie.
 
 ---
 
@@ -33,7 +33,7 @@ Also from that year: Dean's List in Fall 2023, Spring 2025 and Fall 2025; finali
 
 A neural network written **from scratch in C++** — no framework — with hand-written SIMD kernels for AVX-512, AVX2 and NEON. On `main`, the WebAssembly build carries no intrinsics of its own: under Emscripten every ISA predicate misses and the scalar path is autovectorised by `-msimd128` (`CMakeLists.txt:279`). The branches are `#if`/`#elif`, so one binary compiles one path and nothing cross-checks them.
 
-The live page and `main` diverge, so be exact about which you're reading. `getglyph.vercel.app` **does** fetch and instantiate WebAssembly — `/wasm/fast_mnist.wasm`, 46,960 bytes, `application/wasm` — and it is a SIMD build, off [`yadava5/fix-hero-media-validation`](https://github.com/yadava5/glyph/tree/yadava5/fix-hero-media-validation), which carries real `wasm_simd128` intrinsics.
+The live page and `main` diverge. `getglyph.vercel.app` **does** fetch and instantiate WebAssembly — `/wasm/fast_mnist.wasm`, 46,960 bytes, `application/wasm` — and it is a SIMD build, off [`yadava5/fix-hero-media-validation`](https://github.com/yadava5/glyph/tree/yadava5/fix-hero-media-validation), which carries real `wasm_simd128` intrinsics.
 
 Don't take that on trust. `curl -s https://getglyph.vercel.app/wasm/fast_mnist.wasm | shasum -a 256` gives `396dc0f4848ddc0b9c35420cdad5e5cc0af53f4a408024ba10f7364470d9807e` — byte-identical to that branch's blob. What `main` builds is the autovectorised one, which is not what the link serves.
 
@@ -60,7 +60,7 @@ The checksum is hand-vectorised — so it is checked **bit-identical against `ja
 
 The ratio itself is the least stable number here: it moved **6.89× → 6.38×** between the quick run and the rigorous one — an 8% spread, *wider* than either run's own interval, and wider than the 4% spread I disclose on the SIMD result below. `benchmarks/ENVIRONMENT.md` says so too. I quote the rigorous run because it is the more careful one, not because it is the kinder one.
 
-And the row that stays in the table because it's true: the hand-vectorised Adler-32 reaches **4.26 GB/s**, while the JDK's own native intrinsic does **14.06 GB/s**. I don't beat it. The SIMD result is honest against the *scalar* baseline (2.80× on the 3-fork run, 2.92× on the quick one — they disagree at the second figure, and that spread is the uncertainty), and the intrinsic is printed next to it as the reference it loses to.
+The hand-vectorised Adler-32 reaches **4.26 GB/s**, while the JDK's own native intrinsic does **14.06 GB/s**. I don't beat it. The SIMD result is honest against the *scalar* baseline (2.80× on the 3-fork run, 2.92× on the quick one — they disagree at the second figure, and that spread is the uncertainty), and the intrinsic is printed next to it as the reference it loses to.
 
 [live](https://jetpack-compress.vercel.app) · [system card](https://jetpack-compress.vercel.app/system-card) · [repo](https://github.com/yadava5/jetpack-compress)
 
@@ -94,7 +94,7 @@ Your inbox already holds the verdict on most applications you've sent. A three-l
 
 That score is **two mistakes**. The set is balanced at 12 messages per class — which is why macro-F1 and weighted-F1 come out identical — so one more error moves it about a point. jetpack's numbers on this page carry ±0.7% to ±6.9% because a JMH run hands you an interval; a 96-row evaluation does not, and quoting three decimals off two mistakes would be borrowing a precision I don't have.
 
-Worth being exact, because the number and the picture don't quite match: that score is generated with the `deterministic` profile, which switches the SetFit head off and empties the embedding store — so it measures **the regex layer alone**, and the rules-only baseline reproduces it to the last digit. The full three-layer cascade's own score, 0.9583, survives in exactly one line of prose (`docs/ML_EXECUTION_TRACKER.md:378`) because the run that produced it was overwritten by the deterministic re-run. I can hand you an artifact for 0.979 and not for 0.9583, so 0.979 is what the plate draws, labelled for what it actually measures.
+That score is generated with the `deterministic` profile, which switches the SetFit head off and empties the embedding store — so it measures **the regex layer alone**, and the rules-only baseline reproduces it to the last digit. The full three-layer cascade's own score, 0.9583, survives in exactly one line of prose (`docs/ML_EXECUTION_TRACKER.md:378`) because the run that produced it was overwritten by the deterministic re-run. I can hand you an artifact for 0.979 and not for 0.9583, so 0.979 is what the plate draws, labelled for what it actually measures.
 
 Anything under the **0.85 confidence gate** is not guessed at — it goes to a human. The model is allowed to say it doesn't know.
 
@@ -113,11 +113,11 @@ The fine-tuned head exports to int8 ONNX (90.4 MB → 22.8 MB) and runs **in you
 
 Application code that filters by user is code that has to *remember* to filter. So the database enforces it instead: **PostgreSQL Row-Level Security**, `FORCE`d on all **seven** tenant tables (`users` and `user_profiles` are deliberately excluded — both are read and written pre-auth, so RLS on them would break login), with the app connecting as a dedicated non-`BYPASSRLS` role and the request identity carried as a transaction-local GUC.
 
-The test that matters runs a raw, unfiltered `SELECT count(*) FROM tasks` as user B. It returns **user B's rows only** — because the database refused, not because the query remembered. Being exact: the migrations are hand-run, and production still connects as the owner role, so today this is proven in CI against ephemeral Postgres rather than enforced in the deployed database.
+The test that matters runs a raw, unfiltered `SELECT count(*) FROM tasks` as user B. It returns **user B's rows only** — because the database refused, not because the query remembered. The migrations are hand-run, and production still connects as the owner role, so today this is proven in CI against ephemeral Postgres rather than enforced in the deployed database.
 
 Auditing my own work, I found the same defect in **six services** — attachments, calendars, events, task-lists, tasks and tags — where any authenticated user could read or delete another user's records by id, because the service dropped the `userId` the handler had passed it and fell through to the base class's unscoped `WHERE id = $1`. Events, tasks and tags carried it on both read and delete. All six now scope every query by owner, and that is what the plate draws, because it is the part a machine can count from the code rather than from my own commit messages.
 
-Tags was missed by the first sweep entirely, and is the one worth naming: its existing test asserted the *vulnerable* query, so it would have reported green forever. Task-lists is the one still without a regression test. The tag one is worth naming, because its existing test asserted the *vulnerable* query and would have reported green forever.
+Tags was missed by the first sweep entirely, and is the one worth naming: its existing test asserted the *vulnerable* query, so it would have reported green forever. Task-lists is the one still without a regression test.
 
 [the migration](https://github.com/yadava5/cadence/blob/main/lib/config/migrations/0002_enable_rls.sql) · [the app role](https://github.com/yadava5/cadence/blob/main/lib/config/migrations/0003_create_cadence_app_role.sql) · [the isolation suite](https://github.com/yadava5/cadence/blob/main/lib/__tests__/rls.postgres.test.ts)
 

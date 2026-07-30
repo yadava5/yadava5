@@ -316,9 +316,14 @@ def plate_work() -> str:
               "a naive join. These figures are attested by the author rather than derived "
               "from a public repository.", key="plate-0b-work.svg")]
     s.append(f""".fill{{transform-box:fill-box;transform-origin:left center;animation:fill {LOOP3}s {BREATHE} infinite}}
-@keyframes fill{{0%,6%{{transform:scaleX(.02)}}26%{{transform:scaleX(1)}}
-  38%{{transform:scaleX(1)}}46%{{transform:scaleX(.86)}}56%{{transform:scaleX(1)}}
-  68%{{transform:scaleX(1)}}76%{{transform:scaleX(.86)}}86%,100%{{transform:scaleX(1)}}}}
+/* Growth, then hold. The old loop dipped to scaleX(.86) twice, which on a bar
+   authored at its true width would draw 83% and 86% of a value the label puts
+   at 96.72% and 99.6% — motion inventing numbers that were never measured.
+   A bar growing from nothing reads as growing; a bar settling at 86% reads as
+   86%. "from 0" is the claim, so the growth IS the claim, and once it arrives
+   it stays. */
+@keyframes fill{{0%,4%{{transform:scaleX(.02)}}28%,54%{{transform:scaleX(1)}}
+  60%{{transform:scaleX(.02)}}84%,100%{{transform:scaleX(1)}}}}
 </style>{slab(H, a)}""")
 
     s.append(rail("I", "WORK"))
@@ -339,9 +344,18 @@ def plate_work() -> str:
     # track and fill are one composed object, so they live in a <g> — that also
     # lets the bar be thick enough to see. At 3u it was a hairline the eye
     # never caught: the plate measured 2% of samples showing real motion.
+    #
+    # The fill was 300 of a 300 track — a bar reading 100% under a number
+    # reading 96.72%, resting there under prefers-reduced-motion, and breathing
+    # between 86% and 100% so that it never once passed through its own value.
+    # The two DataFest bars below it have always been drawn at 300*frac. On a
+    # page whose entire argument is that a drawn number must be the measured
+    # number, this was the worst defect in the document.
     s.append(f'<g><rect x="330" y="204" width="300" height="26" rx="3" fill="{RULE}"/>'
-             f'<rect class="fill" x="330" y="204" width="300" height="26" rx="3" fill="{LIME}" '
+             f'<rect class="fill" x="330" y="204" width="{300*0.9672:.2f}" height="26" rx="3" fill="{LIME}" '
              f'style="animation-delay:{-SET}s"/></g>')
+    # the 3.28% the refactor did not reach, marked so the gap is legible
+    s.append(f'<path d="M630 200V234" stroke="{WIRE}"/>')
 
     s.append(f'<path d="M{L} 330H{R}" stroke="{RULE}"/>')
     s.append(f'<text x="{L}" y="362" class="kick">DATAFEST 2026 · TEAM LEAD, 3-PERSON, NATIONAL ASA COMPETITION</text>')
@@ -352,10 +366,13 @@ def plate_work() -> str:
     s.append(f'<text x="{L}" y="470" class="sub">99.6%</text>')
     s.append(f'<text x="330" y="452" class="lbl">OF LINKAGE PRESERVED</text>')
     s.append(f'<text x="330" y="{"%d" % 508}" class="fine">7.7M encounters · DuckDB + Polars star schema</text>')
-    for j, (frac, col, tag) in enumerate([(1.0, LIME, "star"), (0.321, AMBER, "32% naive")]):
+    # 0.996 and 0.32, not 1.0 and 0.321 — the bars were drawing 100% and 32.1%
+    # under labels reading 99.6% and 32%. Same class of defect as the compliance
+    # bar above: the geometry was authored by eye instead of from the value.
+    for j, (frac, col, tag) in enumerate([(0.996, LIME, "star"), (0.32, AMBER, "32% naive")]):
         yy = 462 + j * 18
         s.append(f'<g><rect x="330" y="{yy}" width="300" height="12" rx="2" fill="{RULE}"/>'
-                 f'<rect class="fill" x="330" y="{yy}" width="{300*frac:.0f}" height="12" rx="2" '
+                 f'<rect class="fill" x="330" y="{yy}" width="{300*frac:.2f}" height="12" rx="2" '
                  f'fill="{col}" style="animation-delay:{round(-SET + j*0.14,3)}s"/></g>')
         s.append(f'<text x="640" y="{yy+11}" class="fine">{tag}</text>')
 
@@ -980,11 +997,17 @@ def plate_colophon() -> str:
 </style>{slab(H, RULE)}""")
     s.append(rail("IX", "COLOPHON"))
     s.append(f'<path class="rule" d="M150 80H{W-150}" pathLength="1" stroke="{RULE}"/>')
+    # This used to read "Every number traces to its repo." on one line, with
+    # "the work numbers come from my CV" directly beneath it in 13px at INK3 —
+    # a headline claim and, one line down, smaller and dimmer, the disclaimer
+    # that falsifies it. That is precisely the move this whole page exists to
+    # refuse, committed by the page itself, on the plate that states the thesis.
+    # One line now, true as written, at full size.
     for i, ln in enumerate(["Six systems. Five system cards, one booklet.",
-                            "Every number traces to its repo."]):
+                            "Every number traces to its repo, except §I."]):
         s.append(f'<text class="ln say" x="150" y="{120 + i*28}" '
                  f'style="animation-delay:{round(-SET + i*0.15,3)}s">{ln}</text>')
-    s.append(f'<text x="150" y="172" class="fine" style="fill:{INK3}">all six repositories are open — the work numbers come from my CV</text>')
+    s.append(f'<text x="150" y="172" class="fine" style="fill:{INK3}">§I is my employment and DataFest work — attested, not derivable</text>')
     s.append(f'<text class="ln2 lbl" x="150" y="204" '
              f'style="animation-delay:{round(-SET + 1.9,3)}s">ANIMATED SVG · NO JAVASCRIPT · NO SERVER</text>')
     s.append(f'<text x="150" y="236" class="lbl">B.S. CS · MIAMI UNIVERSITY ’26</text>')
