@@ -136,12 +136,14 @@ for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)
     const steps = dur ? STEPS : 1;
     const seenVis = [];                 // per-element count of samples visible
     const peak = [];                    // per-element max opacity over the loop
+    const frames = [];                  // every sample, kept for the rest check
     let zero = [], prev = null;
 
     for (let i = 0; i < steps; i++) {
       const t = dur ? dur * i / steps : 0;
       seek(t);
       const s = snap();
+      frames.push(s.map(e => ({ x: e.x, y: e.y, w: e.w, h: e.h, o: e.o })));
       const at = dur ? ` at t=${(t / 1000).toFixed(2)}s` : '';
       const vis = s.filter(e => e.o >= 0.5);
 
@@ -238,6 +240,63 @@ for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)
     meta.forEach((m, k) => {
       if (peak[k] >= 0.5 && zero[k] < peak[k] - 0.01)
         out.push(`${m.nm} is dimmed at frame zero (${zero[k].toFixed(2)} of ${peak[k].toFixed(2)})`);
+    });
+
+    // 11 — WHERE A TOKEN COMES TO REST.
+    //
+    // Every other check here asks whether the plate is well-formed. None of
+    // them can see the defect that has cost this document the most: a diagram
+    // that is clean, legible, collision-free — and depicts the opposite of its
+    // own caption. Plate V once showed tenant A asking and B receiving. Plate
+    // VI's token waited for its human 110u short of the gate, inside a wall.
+    // Both passed every check above.
+    //
+    // So the claim is authored next to the drawing: the moving element carries
+    // data-rest="<id of what it should reach>", and this asserts it. Rest is
+    // the longest run of consecutive samples where the element is visible and
+    // its position is stable — the pose a reader actually sees, since these
+    // timelines deliberately hold their final frame for most of the loop.
+    const restOf = (k) => {
+      let best = { len: 0 }, run = 0, start = 0;
+      for (let i = 0; i < frames.length; i++) {
+        const c = frames[i][k], p = i ? frames[i - 1][k] : null;
+        const still = p && c.o >= 0.5 && Math.abs(c.x - p.x) < 1 && Math.abs(c.y - p.y) < 1;
+        if (still) { if (!run) start = i - 1; run++; } else run = 0;
+        if (run > best.len) best = { len: run, at: start, f: c };
+      }
+      return best.len ? best : null;
+    };
+    meta.forEach((m, k) => {
+      const want = m.el.getAttribute('data-rest');
+      if (!want) return;
+      const within = parseFloat(m.el.getAttribute('data-rest-within') || '24');
+      const target = svgEl.querySelector(`#${CSS.escape(want)}`);
+      if (!target) {
+        out.push(`${m.nm} declares data-rest="${want}", which is not an element on this plate`);
+        return;
+      }
+      const rest = restOf(k);
+      if (!rest) { out.push(`${m.nm} declares a rest position but never holds still`); return; }
+      // gap between the two boxes, 0 when they touch or overlap.
+      // getBoundingClientRect returns width/height, NOT w/h — reading T.w gave
+      // undefined, so every gap computed as NaN and `NaN > within` is false.
+      // The check silently passed everything, including a token resting 24u
+      // short of the wall it is supposed to be stopped by. That is the third
+      // gate in this repo that could not fail; it was caught only because the
+      // negative test was run before the code was trusted. Run the negative
+      // test. A green gate you have not tried to break is decoration.
+      const T = target.getBoundingClientRect(), r = rest.f;
+      const dx = Math.max(T.x - (r.x + r.w), r.x - (T.x + T.width), 0);
+      const dy = Math.max(T.y - (r.y + r.h), r.y - (T.y + T.height), 0);
+      const gap = Math.hypot(dx, dy);
+      if (!Number.isFinite(gap)) {
+        out.push(`${m.nm}: rest-position check computed a non-finite gap — the check is broken, not the plate`);
+        return;
+      }
+      const held = Math.round((rest.len / steps) * 100);
+      if (gap > within)
+        out.push(`${m.nm} should come to rest at #${want} but stops ${Math.round(gap)}u away `
+               + `(allowed ${within}u), and holds there for ${held}% of the loop`);
     });
 
     // 7 — evidence that blinks. At 50% the page still looked broken: a reader

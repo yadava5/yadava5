@@ -83,6 +83,12 @@ DIGITS = [
 ]
 
 EASE = "cubic-bezier(.4,0,.2,1)"
+# EASE is ease-IN-out: it accelerates first, then settles. That is right for a
+# thing travelling somewhere, and wrong for a thing being STOPPED — plate V's
+# comment claimed its query "decelerates into the boundary" while easing into it
+# like a lift arriving. A refusal needs an arrest: nearly all the deceleration
+# in the last fifth of the travel.
+ARREST = "cubic-bezier(.05,.75,.1,1)"
 
 
 def head(h: int, title: str, desc: str, key: str = "") -> str:
@@ -173,9 +179,12 @@ def plate_glyph() -> str:
         y = 96 + i * 34
         s.append(f'<text x="330" y="{y+5}" class="key">{name}</text>')
         s.append(f'<path d="M470 {y}H660" stroke="{WIRE}" stroke-width="1"/>')
-        s.append(f'<circle class="tok" cx="470" cy="{y}" r="4" fill="{a}" '
+        s.append(f'<circle class="tok" data-rest="one-answer" data-rest-within="8" '
+                 f'cx="470" cy="{y}" r="4" fill="{a}" '
                  f'style="animation-delay:{round(-SET + i*0.06,3)}s"/>')
-    s.append(f'<path d="M660 92V202" stroke="{WIRE}" stroke-width="1"/>')
+    # four instruction sets, one answer — so all four tokens must actually
+    # arrive at the collector, not merely set off in its direction
+    s.append(f'<path id="one-answer" d="M660 92V202" stroke="{WIRE}" stroke-width="1"/>')
     s.append(f'<text x="470" y="232" class="lbl">4 BUILDS · 1 ANSWER</text>')
 
     # VERDICT — the hero clears the rule by 16u; at 64px its box runs from
@@ -336,10 +345,19 @@ def plate_applied() -> str:
     s.append(f""".env{{animation:fall {LOOP}s {EASE} infinite}}
 @keyframes fall{{0%{{opacity:0;transform:translateY(0)}}5%{{opacity:1;transform:translateY(0)}}
   46%,96%{{opacity:1;transform:translateY(184px)}}100%{{opacity:0;transform:translateY(184px)}}}}
-.div{{animation:dv {LOOP}s {EASE} infinite}}
+/* The corner used to be at translateY(212px) — 52u BELOW the gate, so the one
+   message that is supposed to be refused crossed the gate first and turned
+   underneath it. Nothing on the plate was ever stopped by anything. 140px puts
+   its bottom edge exactly on y=288, where it is held before being referred. */
+.div{{animation:dv {LOOP}s {ARREST} infinite}}
 @keyframes dv{{0%{{opacity:0;transform:translate(0,0)}}5%{{opacity:1;transform:translate(0,0)}}
-  34%{{opacity:1;transform:translate(0,212px)}}
-  52%,96%{{opacity:1;transform:translate(146px,212px)}}100%{{opacity:0;transform:translate(146px,212px)}}}}
+  /* stopped ON the gate, and visibly held there — that pause is the refusal */
+  30%,44%{{opacity:1;transform:translate(0,140px)}}
+  /* then referred: down through the empty slot it left in the stack, and out
+     to a person. It descends in its OWN column, so it never crosses a message
+     still falling — routing it diagonally put it through slot 4 in flight. */
+  56%{{opacity:1;transform:translate(0,212px)}}
+  68%,96%{{opacity:1;transform:translate(146px,212px)}}100%{{opacity:0;transform:translate(146px,212px)}}}}
 </style>{slab(H, a)}""")
     # 0.979 is the number with artifacts behind it: five committed files carry
     # it. 0.9583 — the full cascade — survives in exactly one line of prose,
@@ -366,10 +384,15 @@ def plate_applied() -> str:
         s.append(f'<rect class="env" x="{416 + i*44}" y="128" width="30" height="20" rx="2" fill="none" '
                  f'stroke="{a}" stroke-width="1.6" style="animation-delay:{round(-SET + i*0.4,3)}s"/>')
     # the one that does not clear the gate leaves the stack and goes sideways
-    s.append(f'<rect class="div" x="504" y="128" width="30" height="20" rx="2" fill="none" '
+    # the whole claim of this plate is that the one that fails the gate reaches
+    # a PERSON. If it merely leaves the stack, the plate says nothing.
+    s.append(f'<rect class="div" data-rest="the-human" data-rest-within="10" '
+             f'x="504" y="128" width="30" height="20" rx="2" fill="none" '
              f'stroke="{AMBER}" stroke-width="1.6" style="animation-delay:{round(-SET + 0.2,3)}s"/>')
-    s.append(f'<circle cx="700" cy="350" r="11" fill="none" stroke="{AMBER}" stroke-width="1.4"/>')
-    s.append(f'<text x="634" y="384" class="lbl" fill="{AMBER}">A HUMAN</text>')
+    s.append(f'<circle id="the-human" cx="700" cy="350" r="11" fill="none" stroke="{AMBER}" stroke-width="1.4"/>')
+    s.append(f'<text x="{W-150}" y="318" class="lbl" fill="{AMBER}" text-anchor="end">A HUMAN</text>')
+    # and the ones that DO clear the gate land on a name rather than in blank space
+    s.append(f'<text x="150" y="356" class="lbl">CLASSIFIED</text>')
     s.append(f'<text x="150" y="400" class="say">It is allowed to say it doesn’t know.</text>')
 
     s.append(f'<path d="M150 424H730" stroke="{RULE}"/>')
@@ -387,10 +410,22 @@ def plate_refusal() -> str:
               "PostgreSQL row-level-security boundary, and stops. Only the querying tenant's own "
               "rows come back — because the database refused, not because the application "
               "remembered to filter.", key="plate-5-refusal.svg")]
-    s.append(f""".q{{animation:seek {LOOP}s {EASE} infinite;animation-delay:{-SET}s}}
+    # The travel used to be 80px, which left the dot's right edge at 415 — five
+    # units short of a boundary it is supposed to be stopped BY, for 66% of the
+    # loop and at frame zero. A refusal that never touches the wall is a diagram
+    # of a query losing interest. 104px lands the edge exactly on 439.
+    s.append(f""".q{{animation:seek {LOOP}s {ARREST} infinite;animation-delay:{-SET}s}}
 @keyframes seek{{0%{{opacity:0;transform:translateX(0)}}5%{{opacity:1;transform:translateX(0)}}
-  /* it decelerates into the boundary and simply stops — no bounce, no alarm */
-  30%,96%{{opacity:1;transform:translateX(80px)}}100%{{opacity:0;transform:translateX(80px)}}}}
+  /* contact at 28%, a 3u recoil, then it stays stopped. The recoil is the
+     difference between "arrived here" and "was refused here". */
+  28%{{opacity:1;transform:translateX(104px)}}30%{{transform:translateX(101px)}}
+  32%,96%{{opacity:1;transform:translateX(104px)}}100%{{opacity:0;transform:translateX(104px)}}}}
+/* The boundary reacts once, on contact. It cannot do this with opacity: an
+   element that flashes is either dimmed at frame zero or below the 70% duty
+   floor, and both are gate failures. So it flexes instead — always fully
+   visible, at rest in the finished frame. */
+.wall{{transform-box:fill-box;transform-origin:center;animation:wall {LOOP}s {EASE} infinite;animation-delay:{-SET}s}}
+@keyframes wall{{0%,27%{{transform:scaleY(1)}}31%{{transform:scaleY(1.06)}}42%,100%{{transform:scaleY(1)}}}}
 .zero{{animation:land {LOOP}s linear infinite;animation-delay:{-SET}s}}
 @keyframes land{{0%,14%{{opacity:0}}22%,100%{{opacity:1}}}}
 </style>{slab(H, a)}""")
@@ -399,13 +434,25 @@ def plate_refusal() -> str:
     s.append(f'<text x="560" y="56" class="lbl">TENANT A</text>')
     for i in range(4):
         y = 80 + i * 28
-        # a #12171B fill sat at 1.08:1 — eight rows nobody could see
-        s.append(f'<rect x="150" y="{y}" width="160" height="18" rx="2" fill="{ROW}" stroke="{WIRE}"/>')
+        # Both stacks are 170 wide. They were 160 and 170 — two things that must
+        # read as symmetric peers, differing by 10u for no reason.
+        # And they are no longer the same grey: B's rows are the ones that come
+        # back, so they carry the accent. The plate said "B only" in 32px type
+        # and drew eight identical rectangles.
+        s.append(f'<rect x="150" y="{y}" width="170" height="18" rx="2" fill="{ROW}" stroke="{a}"/>')
         s.append(f'<rect x="560" y="{y}" width="170" height="18" rx="2" fill="{ROW}" stroke="{WIRE}"/>')
 
-    # the boundary: a plain hairline that never reacts
-    s.append(f'<path d="M420 68V200" stroke="{WIRE}" stroke-width="1"/>')
-    s.append(f'<circle class="q" cx="330" cy="89" r="5" fill="{a}"/>')
+    # The boundary now sits on the midpoint between the two stacks (320→560) and
+    # is a 2u wall rather than a 1u hairline the reader cannot find.
+    s.append(f'<rect class="wall" id="rls-boundary" x="439" y="68" width="2" height="132" fill="{WIRE}"/>')
+    # data-rest is the caption, made checkable, and 2u means CONTACT. This plate
+    # has already shipped inverted once — tenant A asking and B receiving — and
+    # every geometric check passed it, because an inverted diagram is still a
+    # well-formed diagram. A loose tolerance here would repeat that: the round-9
+    # geometry stopped 5u short, so any allowance above 4 would have called the
+    # defect this check exists to catch a pass.
+    s.append(f'<circle class="q" data-rest="rls-boundary" data-rest-within="2" '
+             f'cx="330" cy="89" r="5" fill="{a}"/>')
 
     # unfiltered on purpose: a predicate that names B and returns B proves nothing
     s.append(f'<text x="150" y="216" class="key">SELECT * FROM tasks</text>')
@@ -463,10 +510,14 @@ def plate_release() -> str:
     s.append(f'<text x="166" y="340" class="lbl">DOCKER · SANDBOXED</text>')
     # "internal net (dev)": the beta deploy defaults EXECUTION_NETWORK to bridge
 
-    s.append(f'<path d="M530 320V400" stroke="{WIRE}"/>')
-    s.append(f'<circle class="tk2" cx="176" cy="372" r="6" fill="{INDIGO}" style="animation-delay:{-SET}s"/>')
+    s.append(f'<path id="approval-gate" d="M530 320V400" stroke="{WIRE}"/>')
+    # It ends the loop past the gate and beside DEPLOYED, which is the point:
+    # the gate is passed by a human saying yes, not by the pipeline waiting it
+    # out. The rest check anchors the final pose to the label that explains it.
+    s.append(f'<circle class="tk2" data-rest="deployed" data-rest-within="34" '
+             f'cx="176" cy="372" r="6" fill="{INDIGO}" style="animation-delay:{-SET}s"/>')
     s.append(f'<text x="150" y="418" class="fine">non-root · read-only rootfs · internal net (dev)</text>')
-    s.append(f'<text class="ok lbl" x="618" y="418" fill="{INDIGO}" style="animation-delay:{-SET}s">DEPLOYED</text>')
+    s.append(f'<text id="deployed" class="ok lbl" x="618" y="418" fill="{INDIGO}" style="animation-delay:{-SET}s">DEPLOYED</text>')
 
     s.append(f'<text x="150" y="496" class="hero">2</text>')
     s.append(f'<text x="210" y="480" class="lbl">APPROVAL GATES BEFORE</text>')
