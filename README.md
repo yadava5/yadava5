@@ -1,5 +1,5 @@
 <div align="center">
-<img src="./assets/plate-0-thesis.svg" width="100%" alt="The thesis plate: Ayush Yadav, and the sentence 'Every number on this page is followed by the thing that would catch it.' Below it, the six colours the document uses, one per system: Glyph, jetpack, Cadence, Applied, LifeQuest, AutoML.">
+<img src="./assets/plate-0-thesis.svg" width="100%" alt="Ayush Yadav, CS ’26 at Miami University, open to full-time software engineering roles. Languages C++, TypeScript, Python, Java, Swift, Rust and SQL; systems work in SIMD, the Java Vector API, WebAssembly and OpenMP; machine learning with LangGraph, MCP, in-browser ONNX and SetFit; web and backend in React, Next.js, Tauri, SwiftUI, FastAPI and NestJS; infrastructure on GitHub Actions, Docker, Postgres, CodeQL and fuzzing. Below, the six systems this page documents: Glyph, jetpack, Cadence, Applied, LifeQuest and Agentic AutoML.">
 </div>
 
 **C++ · TypeScript · Python · Java · Rust** — CS '26, Miami University. Open to full-time software engineering roles: **[aesh.03.23@gmail.com](mailto:aesh.03.23@gmail.com)** · [LinkedIn](https://www.linkedin.com/in/ayush-yadav-developer)

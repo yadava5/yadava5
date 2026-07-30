@@ -199,40 +199,76 @@ def slab(h: int, accent: str | None = None) -> str:
 
 # ────────────────────────────────────────────────────────────── PLATE 0
 def plate_thesis() -> str:
-    H = 304
-    s = [head(H, "Ayush Yadav — every number is followed by the thing that would catch it",
-              "The thesis plate: Ayush Yadav, and the sentence 'Every number on this page is "
-              "followed by the thing that would catch it.' Below it, the six colours the "
-              "document uses, one per system: Glyph, jetpack, Cadence, Applied, LifeQuest, AutoML.",
-              key="plate-0-thesis.svg")]
-    # A one-shot with a negative delay equal to its duration starts finished and
-    # never moves again — plate 0 was a static image wearing an animation. The
-    # legend now carries a real loop, and frame zero still lands on full strength.
-    LOOP, SET = 11.3, 9.0
+    """Identity and contact sheet.
+
+    This plate used to open with a thesis about falsifiability and a colour
+    legend. It was the most distinctive thing on the page and the wrong thing to
+    lead with: a reader met a sentence about numbers catching lies before
+    learning what any of this is. The proof is the payoff, not the premise, so
+    it moved to the colophon and this became the answer to "who is this and what
+    have they built" — legible in about eight seconds, after which everything
+    below is optional depth.
+    """
+    H, LOOP, SET = 558, 11.3, 9.0
+    s = [head(H, "Ayush Yadav — CS '26, Miami University",
+              "Ayush Yadav, CS ’26 at Miami University, open to full-time software "
+              "engineering roles. Languages C++, TypeScript, Python, Java, Swift, Rust and "
+              "SQL; systems work in SIMD, the Java Vector API, WebAssembly and OpenMP; "
+              "machine learning with LangGraph, MCP, in-browser ONNX and SetFit; web and "
+              "backend in React, Next.js, Tauri, SwiftUI, FastAPI and NestJS; infrastructure "
+              "on GitHub Actions, Docker, Postgres, CodeQL and fuzzing. Below, the six "
+              "systems this page documents: Glyph, jetpack, Cadence, Applied, LifeQuest and "
+              "Agentic AutoML.", key="plate-0-thesis.svg")]
     s.append(f""".rule{{stroke-dasharray:1;animation:sweep {LOOP}s {EASE} infinite;animation-delay:{-SET}s}}
 @keyframes sweep{{0%{{stroke-dashoffset:1}}18%,100%{{stroke-dashoffset:0}}}}
-.sw{{transform-box:fill-box;transform-origin:center;animation:sw {LOOP}s {BREATHE} infinite}}
-@keyframes sw{{0%,4%{{opacity:.45;transform:translateY(0)}}12%{{opacity:1;transform:translateY(0)}}
-  26%{{transform:translateY(0)}}34%{{transform:translateY(-7px)}}44%{{transform:translateY(0)}}
-  64%{{transform:translateY(0)}}72%{{transform:translateY(-7px)}}
-  84%,100%{{transform:translateY(0);opacity:1}}}}
+.sw{{transform-box:fill-box;transform-origin:left center;animation:sw {LOOP}s {BREATHE} infinite}}
+@keyframes sw{{0%{{transform:translateY(0)}}10%{{transform:translateY(-8px)}}22%{{transform:translateY(0)}}
+  38%{{transform:translateY(0)}}48%{{transform:translateY(-8px)}}60%{{transform:translateY(0)}}
+  72%{{transform:translateY(0)}}82%{{transform:translateY(-8px)}}94%,100%{{transform:translateY(0)}}}}
 .ser{{font-family:ui-serif,Georgia,'Times New Roman',serif;font-size:34px;fill:{INK}}}
-</style>{slab(H, AMBER)}""")
-    s.append(f'<text x="150" y="56" class="key" style="letter-spacing:5px">AYUSH YADAV</text>')
+</style>{slab(H, INK2)}""")
+
+    s.append(f'<text x="{L}" y="{TOP}" class="key" style="letter-spacing:5px">AYUSH YADAV</text>')
     s.append(f'<text x="{R}" y="{TOP}" class="lbl" text-anchor="end">CS ’26 · MIAMI UNIVERSITY</text>')
-    s.append(f'<path class="rule" d="M150 88H{W-150}" pathLength="1" stroke="{WIRE}"/>')
-    for i, ln in enumerate(["Every number on this page is", "followed by the thing",
-                            "that would catch it."]):
-        s.append(f'<text x="150" y="{136 + i*40}" class="ser">{ln}</text>')
-    # the ONLY polychrome frame in the document — and now it says what it means
-    adv = 8.4 + 0.6                      # .fine advance + its letter-spacing
-    wid = [len(nm) * adv for nm, _ in LEGEND]
-    gut = (R - 10 - L - sum(wid)) / (len(LEGEND) - 1)
-    for i, (nm, c) in enumerate(LEGEND):
-        x = L + sum(wid[:i]) + gut * i
-        s.append(f'<rect class="sw" x="{x:.1f}" y="248" width="14" height="4" rx="1" fill="{c}" '
+    s.append(f'<path class="rule" d="M{L} 88H{R}" pathLength="1" stroke="{WIRE}"/>')
+
+    # the one serif voice in the document, saying what the work IS
+    for i, ln in enumerate(["Systems, from SIMD kernels", "to the browser they run in."]):
+        s.append(f'<text x="{L}" y="{132 + i*40}" class="ser">{ln}</text>')
+    s.append(f'<text x="{L}" y="200" class="fine">Open to full-time software engineering roles · aesh.03.23@gmail.com</text>')
+
+    # what he actually works in, grouped so it can be scanned rather than read
+    SKILLS = [
+        ("LANGUAGES", "C++ · TypeScript · Python · Java · Swift · Rust"),
+        ("SYSTEMS",   "SIMD AVX-512 · Vector API · WebAssembly · OpenMP"),
+        ("ML",        "LangGraph · MCP · in-browser ONNX · SetFit"),
+        ("WEB",       "React · Next.js · Tauri · SwiftUI · FastAPI · NestJS"),
+        ("INFRA",     "GitHub Actions · Docker · Postgres · CodeQL"),
+    ]
+    for i, (dom, items) in enumerate(SKILLS):
+        y = 240 + i * 22
+        s.append(f'<text x="{L}" y="{y}" class="kick">{dom}</text>')
+        s.append(f'<text x="262" y="{y}" class="fine">{items}</text>')
+
+    # the contact sheet: every system on the page, at a glance
+    s.append(f'<path d="M{L} 366H{R}" stroke="{RULE}"/>')
+    CARDS = [
+        ("GLYPH",     "A neural net in C++",   "C++ · SIMD · WASM"),
+        ("JETPACK",   "Parallel gzip",         "Java · Vector API"),
+        ("CADENCE",   "NL calendar + tasks",   "TS · Postgres"),
+        ("APPLIED",   "Inbox → job pipeline",  "Python · ONNX"),
+        ("LIFEQUEST", "Routines as quests",    "Tauri · NestJS"),
+        ("AUTOML",    "Dataset → model",       "LangGraph · Docker"),
+    ]
+    for i, (nm, what, stack) in enumerate(CARDS):
+        col, row = i % 3, i // 3
+        x, y = L + col * 197, 398 + row * 70
+        c = LEGEND[i][1]
+        s.append(f'<rect class="sw" x="{x}" y="{y}" width="44" height="4" rx="1" fill="{c}" '
                  f'style="animation-delay:{round(-SET + i*0.12,3)}s"/>')
-        s.append(f'<text x="{x:.1f}" y="272" class="fine">{nm}</text>')
+        s.append(f'<text x="{x}" y="{y+24}" class="key">{nm}</text>')
+        s.append(f'<text x="{x}" y="{y+42}" class="fine">{what}</text>')
+        s.append(f'<text x="{x}" y="{y+58}" class="fine" style="fill:{INK3}">{stack}</text>')
     return "".join(s) + "</svg>"
 
 
