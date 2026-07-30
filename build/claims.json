@@ -622,6 +622,8 @@
     "plate-7-colophon.svg:6": "'Six systems' \u2014 the colophon restating the page's own contents",
     "plate-7-colophon.svg:5": "'Five system cards' \u2014 likewise",
     "README.md:256": "the '256' in `shasum -a 256` \u2014 the name of the hash algorithm in a command the reader is invited to run",
-    "README.md:26": "'CS '26' \u2014 a graduation year, the same exemption the plates already carry"
+    "README.md:26": "'CS '26' \u2014 a graduation year, the same exemption the plates already carry",
+    "plate-0-thesis.svg:03.23": "part of the contact address aesh.03.23@gmail.com",
+    "plate-0-thesis.svg:512": "AVX-512 \u2014 an instruction-set name in the skills band"
   }
 }
