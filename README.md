@@ -10,7 +10,21 @@ What follows is five system plates (LifeQuest and AutoML share the last), plus o
 
 ---
 
-## I · Glyph — *I don't trust the library*
+## I · Work — *a year of it, and it isn't in a repo*
+
+<img src="./assets/plate-0b-work.svg" width="100%" alt="Experience. As ITSM Data Integration Intern at Miami University from June 2025 to May 2026: a Python pipeline turning 1.6 million Oracle Analytics query logs into a 57.8 million-row field-usage table; code compliance lifted from 0 to 96.72 percent across a 61-project portfolio; and a 10,453-row master asset inventory consolidated from Tableau and Workday. At DataFest 2026, team lead of three: 90-day care utilisation modelled for 349 thousand patients at 0.90 holdout AUC, over 7.7 million encounters processed with DuckDB and Polars, preserving 99.6 percent of social-determinant linkage against 32 percent under a naive join. These figures are attested by the author rather than derived from a public repository.">
+
+For a year I was **ITSM Data Integration Intern at Miami University**. A Python pipeline ingested **1.6M Oracle Analytics query logs** — five years, 1,153 users, 66 dashboards — into a **57.8M-row** field-usage table, flagging which fields were actually in use for an OAS-to-Tableau migration. A second pass consolidated asset data siloed across Tableau and Workday into one **10,453-row, 35-field** master inventory with hash-based dedup, backed by ruff + pytest in CI. And a legacy Laravel compliance reporter became a clean ETL feed powering a 37-month dashboard that lifted code compliance **from 0% to 96.72%** across a **61-project** portfolio.
+
+At **DataFest 2026** I led a three-person team in the national ASA competition: 90-day care utilisation modelled for **349K patients** at **0.90 holdout AUC** with XGBoost, CatBoost and LightGBM, drivers explained with SHAP, and PyTorch DeepSurv and GRU survival models benchmarked against them. **7.7M encounters (1.4 GB)** went through a DuckDB + Polars star schema that preserved **99.6%** of social-determinant linkage against **32%** under a naive join.
+
+Be exact about the warrant here, because it is different from every other section: **none of these numbers can be re-derived by you.** The Oracle logs, the Tableau inventory and the compliance dashboard belong to Miami University; the DataFest data is a competition set that is not mine to publish. Everything else on this page is fetched from a pinned commit and recomputed in CI. This section is my word, and the plate says so on its face.
+
+Also from that year: Dean's List in Fall 2023, Spring 2025 and Fall 2025; finalist in MUCAT Design Innovation with a LiDAR visual-assistance proposal and a $2,500 prototyping grant; and fourth place at Social Innovation Weekend, where LifeQuest was first built with a seven-person team.
+
+---
+
+## II · Glyph — *I don't trust the library*
 
 <picture>
   <source media="(max-width: 500px)" srcset="./assets/m-1-glyph.svg">
@@ -31,7 +45,7 @@ That same test set also selected the checkpoint and triggered early stopping (`a
 
 ---
 
-## II · jetpack — *I don't trust my own optimisation*
+## III · jetpack — *I don't trust my own optimisation*
 
 <picture>
   <source media="(max-width: 500px)" srcset="./assets/m-2-jetpack.svg">
@@ -52,7 +66,7 @@ And the row that stays in the table because it's true: the hand-vectorised Adler
 
 ---
 
-## III · Cadence — *I don't trust the black box*
+## IV · Cadence — *I don't trust the black box*
 
 <picture>
   <source media="(max-width: 500px)" srcset="./assets/m-3-cadence.svg">
@@ -67,7 +81,7 @@ A sentence typed the way you would say it becomes a calendar entry. The parser r
 
 ---
 
-## IV · Applied — *I don't trust the model*
+## V · Applied — *I don't trust the model*
 
 <picture>
   <source media="(max-width: 500px)" srcset="./assets/m-4-applied.svg">
@@ -90,7 +104,7 @@ The fine-tuned head exports to int8 ONNX (90.4 MB → 22.8 MB) and runs **in you
 
 ---
 
-## V · The refusal — *I don't trust myself*
+## VI · The refusal — *I don't trust myself*
 
 <picture>
   <source media="(max-width: 500px)" srcset="./assets/m-5-refusal.svg">
@@ -109,7 +123,7 @@ Tags was missed by the first sweep entirely, and is the one worth naming: its ex
 
 ---
 
-## VI · LifeQuest & Agentic AutoML
+## VII · LifeQuest & Agentic AutoML
 
 <picture>
   <source media="(max-width: 500px)" srcset="./assets/m-6-release.svg">
