@@ -29,8 +29,13 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const ASSETS = join(ROOT, 'assets');
-const LEFT = 150, RIGHT = 730;
+// Overridable so build/mutations.mjs can point the whole gate at a directory
+// of deliberately-broken plates. A check nobody has tried to break is a check
+// nobody knows is connected.
+const ASSETS = process.env.GATE_ASSETS || join(ROOT, 'assets');
+// screen-space bounds of the type column. The plates author at x=150..730 but
+// the viewBox starts at 86, so the column lands 64..644 in rendered units.
+const LEFT = 64, RIGHT = 644;
 const M_LEFT = 30, M_RIGHT = 412;   // the 440-wide mobile canvas
 const STEPS = 40;                   // samples across one loop
 const TOL = 1.5;                    // antialiasing slack, in viewBox units
@@ -382,6 +387,36 @@ for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)
       if (frac < 0.35)
         out.push(`only ${Math.round(frac * 100)}% of this loop shows anything moving `
                + `(floor 35%) — it reveals once and then holds for the rest`);
+
+      // 17 — a total is not a distribution. A plate can clear the 35% floor and
+      // still stand perfectly still for five consecutive seconds, which is what
+      // a reader actually notices: measured, plate VII froze for 5.08s of a
+      // 12.7s loop, plate II for 4.12s, plate 0 for 3.77s. Motion spread thinly
+      // across the loop reads as alive; motion bunched at the start reads as a
+      // still image that twitched once.
+      let dead = 0, worst = 0;
+      for (let i = 1; i < frames.length; i++) {
+        const moved = frames[i].some((c, k) => {
+          const q = frames[i - 1][k];
+          return Math.abs(c.x - q.x) > 0.5 || Math.abs(c.y - q.y) > 0.5
+              || Math.abs(c.w - q.w) > 0.5 || Math.abs(c.o - q.o) > 0.02
+              || Math.abs(c.d - q.d) > 0.002;
+        });
+        dead = moved ? 0 : dead + 1;
+        worst = Math.max(worst, dead);
+      }
+      const deadMs = worst * (dur / steps);
+      // 2.4s, not the 1.2s the audit proposed. 1.2 on a 13.1s loop needs about
+      // eleven events, and this document argues for calm rigour -- constant
+      // motion would be the wrong register and would read as decoration. What
+      // 2.4 forbids is a plate sitting dead for a QUARTER of its loop, which is
+      // the actual complaint: plate VI was still for 3.60s and plate VII, whose
+      // own label reads ANIMATED SVG, for 3.17s. Chosen deliberately, and I am
+      // recording that I chose it rather than inheriting it.
+      const CEILING_MS = 2400;
+      if (deadMs > CEILING_MS)
+        out.push(`stands completely still for ${(deadMs / 1000).toFixed(2)}s in a row `
+               + `(ceiling ${(CEILING_MS/1000).toFixed(2)}s) — the loop has a hole in it, not a rhythm`);
     }
 
     // 14 — A STAGGER TOO SMALL TO SEE IS NOT A STAGGER.
@@ -410,6 +445,17 @@ for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)
         out.push(`.${k} staggers ${(step / dur * 100).toFixed(2)}% of its loop across `
                + `${d.length} elements (floor 4%) — too small to read as a sequence`);
     }
+
+    // A stagger-ORDER check was written here and removed rather than shipped.
+    // The intent was sound — with `animation-delay: -SET + i*step` the element
+    // with the largest |delay| wraps first, so a staggered group can read
+    // backwards — but every implementation of it fired on `.lbl`, a class
+    // shared by a dozen unrelated static labels that are not a sequence at all,
+    // and on `.row`, where two elements share each step so no single axis is
+    // ever monotonic. A check that flags things which are not defects trains
+    // you to ignore it, which is worse than not having it. The real cure is to
+    // put the stagger INSIDE the keyframes and share one delay; that is a
+    // design instruction, not something this file can assert cheaply.
 
     // 7 — evidence that blinks. At 50% the page still looked broken: a reader
     //     scrolling past sees a different quarter of the argument missing every
@@ -486,13 +532,14 @@ for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)
         const b = e.getBBox();
         return !(b.width >= W - 2 && b.height >= H - 2) && !(b.width <= 5 && b.height >= H - 2);
       });
-      let top = 1e9, right = -1;
+      let top = 1e9, right = -1, bottom = -1;
       for (const e of els) {
         const c = e.getBoundingClientRect();
         if (!c.width && !c.height) continue;
         top = Math.min(top, c.y); right = Math.max(right, c.x + c.width);
+        bottom = Math.max(bottom, c.y + c.height);
       }
-      return { top, rightGap: W - right };
+      return { top, rightGap: W - right, bottomGap: H - bottom };
     });
     frame.push(g);
   }
@@ -536,6 +583,10 @@ if (spread(tops) > 2)
   fails.push(`the desktop plates start at ${tops.map(t => Math.round(t)).join('/')} — the first ink must sit on one line across the document`);
 if (spread(rights) > 2)
   fails.push(`the desktop plates end ${rights.map(r => Math.round(r)).join('/')} short of the canvas — the right edge wanders as you scroll`);
+// three edges were enforced and the fourth wandered 12.8u
+const bottoms = frame.map(f => f.bottomGap);
+if (spread(bottoms) > 2)
+  fails.push(`the desktop plates leave ${bottoms.map(b => Math.round(b)).join('/')} below their last ink — the bottom edge is the one margin nothing was checking`);
 
 // 16 — THE STILL FRAME MUST BE THE FINISHED FRAME.
 //

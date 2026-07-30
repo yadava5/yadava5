@@ -199,8 +199,18 @@ const numsOf = (f) => {
   // In README.md, three things are addresses rather than assertions: HTML
   // attributes (plate-0-thesis.svg, width="100%", the srcset), markdown link
   // targets, and bare URLs. Sweeping them demanded evidence for the "0" in a
-  // filename. Alt text is not lost by stripping the tags — every alt is the
-  // plate's own <desc>, and the plates are swept in the same pass.
+  // filename.
+  //
+  // A previous version of this comment claimed alt text survives the strip
+  // "because every alt is the plate's own <desc>, and the plates are swept in
+  // the same pass". That was wrong about this file's own behaviour: the plate
+  // sweep strips <title> and <desc> too, so NO alt-text number is audited here.
+  // It is not a live hole — plates.py fails the build if a README alt drifts
+  // from its plate's <desc>, and gate.mjs check 9 fails if a <desc> names a
+  // number the plate does not draw, so a falsified alt is caught twice
+  // upstream. But this gate advertises that no number goes unaudited, and the
+  // honest statement is that it audits the drawn text and leans on two other
+  // checks for the accessible copy.
   const t = f === 'README.md'
     ? textOf(f).replace(/<[^>]*>/g, ' ').replace(/\]\([^)]*\)/g, ' ').replace(/https?:\/\/\S+/g, ' ')
     : textOf(f);
@@ -226,6 +236,27 @@ for (const file of SWEPT) {
 }
 for (const k of exempt)
   if (!usedExempt.has(k)) fails.push(`claims.json exempts "${k}", which no plate draws — stale exemption`);
+
+// ── how old is the evidence?
+//
+// A pin cannot drift — that is the point of pinning. But a pin that has fallen
+// a long way behind its branch means the page is describing a state of the
+// repository that no longer exists, and nothing here would ever say so. This
+// does not fail the build: citing an older commit is legitimate, and a claim
+// verified against a specific SHA stays verified. It just refuses to let the
+// distance go unmentioned.
+if (!OFFLINE && !process.env.CLAIMS_SKIP_FRESHNESS) {
+  for (const [key, r] of Object.entries(spec.repos)) {
+    try {
+      const args = ['-fsSL', '--max-time', '20', '-H', 'Accept: application/vnd.github+json'];
+      if (process.env.GITHUB_TOKEN) args.push('-H', `Authorization: Bearer ${process.env.GITHUB_TOKEN}`);
+      const url = `https://api.github.com/repos/${r.github}/compare/${r.ref}...${encodeURIComponent(r.branch)}`;
+      const cmp = JSON.parse(execFileSync('curl', [...args, url], { encoding: 'utf8' }));
+      if (cmp.ahead_by > 0)
+        notes.push(`${key} is pinned ${cmp.ahead_by} commit(s) behind ${r.branch} — still verified, but the page is citing an older ${r.github}`);
+    } catch { /* offline or rate-limited: freshness is a courtesy, not a gate */ }
+  }
+}
 
 // ── report
 for (const n of notes) console.log(`  note  ${n}`);
