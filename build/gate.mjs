@@ -33,7 +33,9 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 // of deliberately-broken plates. A check nobody has tried to break is a check
 // nobody knows is connected.
 const ASSETS = process.env.GATE_ASSETS || join(ROOT, 'assets');
-const LEFT = 150, RIGHT = 730;
+// screen-space bounds of the type column. The plates author at x=150..730 but
+// the viewBox starts at 86, so the column lands 64..644 in rendered units.
+const LEFT = 64, RIGHT = 644;
 const M_LEFT = 30, M_RIGHT = 412;   // the 440-wide mobile canvas
 const STEPS = 40;                   // samples across one loop
 const TOL = 1.5;                    // antialiasing slack, in viewBox units

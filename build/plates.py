@@ -48,6 +48,23 @@ L, R = 150, 730
 TOP = 56
 HERO_GAP = 16
 
+# ── the canvas window.
+# The type column is L..R = 580 units wide on an 880-unit canvas, so 34.1% of
+# every plate was margin and ink covered 7.1% of the document. That 150 was
+# chosen for one reason — legibility of a 16u label on a phone — and the phone
+# is out of scope now, so the reason is gone and the emptiness is not.
+#
+# Rather than move several hundred coordinates, tighten the WINDOW: the viewBox
+# starts at VB_X and is VB_W wide, so authored x=150 lands 64 from the left edge
+# and authored x=730 lands 64 from the right. Every relative position, every
+# travel distance and every collision is untouched.
+#
+# The second effect is the one that matters more. The plate scales to the width
+# of GitHub's readme column either way, so a narrower canvas renders everything
+# LARGER: a 16px label goes from ~17.8px to ~22px at a 980px column. The plates
+# were not only empty, they were small.
+VB_X, VB_W = 86, 708
+
 # every plate's description is authored ONCE here and flows to three places:
 # the SVG <desc>, the SVG aria-label, and the README's <img alt>. They diverged
 # once already; the gate below now fails the build if the README drifts.
@@ -144,7 +161,7 @@ ARREST = "cubic-bezier(.05,.75,.1,1)"
 def head(h: int, title: str, desc: str, key: str = "") -> str:
     if key:
         ALT[key] = desc
-    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {h}" width="{W}" height="{h}" role="img" aria-label="{desc}">
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="{VB_X} 0 {VB_W} {h}" width="{VB_W}" height="{h}" role="img" aria-label="{desc}">
 <title>{title}</title><desc>{desc}</desc>
 <style>
 @font-face{{font-family:'M';src:url(data:font/woff2;base64,{FONT}) format('woff2')}}
@@ -161,10 +178,12 @@ text{{font-family:'M',ui-monospace,SFMono-Regular,Menlo,monospace}}
 
 
 def slab(h: int, accent: str | None = None) -> str:
-    s = (f'<rect width="{W}" height="{h}" rx="2" fill="{SLAB}"/>'
-         f'<rect x="0.5" y="0.5" width="{W-1}" height="{h-1}" rx="2" fill="none" stroke="{EDGE}"/>')
+    # drawn at the viewBox origin, not the authoring origin, so the slab, its
+    # border and the accent bar all sit on the visible edge
+    s = (f'<rect x="{VB_X}" width="{VB_W}" height="{h}" rx="2" fill="{SLAB}"/>'
+         f'<rect x="{VB_X+0.5}" y="0.5" width="{VB_W-1}" height="{h-1}" rx="2" fill="none" stroke="{EDGE}"/>')
     if accent:
-        s += f'<rect x="0" y="0" width="4" height="{h}" fill="{accent}"/>'
+        s += f'<rect x="{VB_X}" y="0" width="4" height="{h}" fill="{accent}"/>'
     return s
 
 
