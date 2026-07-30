@@ -39,6 +39,12 @@ const frame = [];   // desktop-only: first ink and right edge, for check 12
 
 const browser = await chromium.launch();
 const page = await browser.newPage();
+// A second page with motion switched off. The plates carry
+// `@media (prefers-reduced-motion: reduce){*{animation:none!important}}`, so
+// this renders exactly what a reduced-motion reader sees — and, because it is
+// the authored attributes with no animation applied, also what every static
+// rasteriser produces: resvg, librsvg, share-card pipelines, PDF export.
+const still = await browser.newPage({ reducedMotion: 'reduce' });
 
 for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)).sort()) {
   const svg = readFileSync(join(ASSETS, file), 'utf8');
@@ -309,6 +315,45 @@ for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)
                + `(allowed ${within}u), and holds there for ${held}% of the loop`);
     });
 
+    // 15 — WHAT WAS AUTHORED IS WHAT RENDERS.
+    //
+    // `fill="#34D399"` on a <text class="an lbl"> is a PRESENTATION ATTRIBUTE,
+    // and a presentation attribute loses to any CSS rule — including this
+    // document's own `.lbl{fill:#8A8F98}`. Fifteen text elements asked for an
+    // accent colour and rendered grey, for rounds. Plate III's four parser
+    // labels were grey while the four underlines they gloss were emerald, on
+    // the plate whose entire thesis is that every span carries its parser.
+    //
+    // Nothing could see it: the contrast check only asks whether what renders
+    // is legible, never whether it is what the file asked for. A silently
+    // discarded attribute is the quietest defect in the medium — the build
+    // succeeds, the gate passes, and the picture argues something else.
+    const norm = (v) => (v || '').trim().toLowerCase()
+      .replace(/\s+/g, '').replace(/px$/, '');
+    const asRGB = (v) => {
+      const m = /^#([0-9a-f]{6})$/.exec(norm(v));
+      if (!m) return norm(v);
+      const n = parseInt(m[1], 16);
+      return `rgb(${n >> 16 & 255},${n >> 8 & 255},${n & 255})`;
+    };
+    for (const m of meta) {
+      for (const [attr, prop] of [['fill', 'fill'], ['stroke', 'stroke'],
+                                  ['letter-spacing', 'letterSpacing']]) {
+        if (!m.el.hasAttribute(attr)) continue;
+        const want = attr === 'letter-spacing' ? norm(m.el.getAttribute(attr))
+                                               : asRGB(m.el.getAttribute(attr));
+        const got = attr === 'letter-spacing' ? norm(getComputedStyle(m.el)[prop])
+                                              : norm(getComputedStyle(m.el)[prop]);
+        // CSS reports a zero letter-spacing as the keyword `normal`
+        if (want === 'none' || want === '') continue;
+        if (attr === 'letter-spacing' && (want === '0' || want === 'normal')
+            && (got === 'normal' || got === '0')) continue;
+        // a unitless letter-spacing attribute is in user units; CSS reports px
+        if (want !== got && !(attr === 'letter-spacing' && want === got.replace('px', '')))
+          out.push(`${m.nm} asks for ${attr}="${m.el.getAttribute(attr)}" and renders ${getComputedStyle(m.el)[prop]} — a CSS rule is overriding the attribute`);
+      }
+    }
+
     // 13 — DOES IT MOVE, AND HOW OFTEN.
     //
     // Nothing here ever asked whether a plate animates at all, or whether it
@@ -414,8 +459,13 @@ for (const file of readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)
         if (a < 0.05) continue;
         const eff = over(rgb.slice(0, 3), SLABRGB, a);
         const r = ratio(eff, SLABRGB);
-        if (r >= 3.0 || Math.abs(r - 1) < 0.02) continue;          // 1:1 == it IS the slab
+        // The 4.5:1 text floor was UNREACHABLE. `continue`-ing on r >= 3.0 before
+        // computing `need` meant text between 3.0 and 4.5 was waved through, and
+        // the 4.5 branch only ever ran where `r < 4.5` was already true. The
+        // gate advertised AA on text and enforced the non-text floor. Compute
+        // the floor first, then compare against it.
         const need = m.tag === 'text' ? 4.5 : 3.0;
+        if (r >= need || Math.abs(r - 1) < 0.02) continue;          // 1:1 == it IS the slab
         if (r < need)
           out.push(`${m.nm} ${prop} is ${r.toFixed(2)}:1 on the slab (needs ${need}:1)`);
       }
@@ -486,6 +536,45 @@ if (spread(tops) > 2)
   fails.push(`the desktop plates start at ${tops.map(t => Math.round(t)).join('/')} — the first ink must sit on one line across the document`);
 if (spread(rights) > 2)
   fails.push(`the desktop plates end ${rights.map(r => Math.round(r)).join('/')} short of the canvas — the right edge wanders as you scroll`);
+
+// 16 — THE STILL FRAME MUST BE THE FINISHED FRAME.
+//
+// plates.py has claimed since round 6 that "the finished frame is authored;
+// animation supplies the START". No plate did it. Every animated element was
+// authored at its STARTING position and moved to its rest by a transform, so
+// with motion off the document showed: four ISA tokens that never reached the
+// collector (186u short), Applied's cascade with nothing fallen and nothing
+// refused (246u), the RLS query 104u short of the wall it is named for, and
+// AutoML's token 436u from its destination. Plate II drew four uncompressed
+// bars OUTSIDE an empty "bounded in-flight window" — a diagram of memory that
+// is not bounded.
+//
+// Check 11 could not see any of it: it measures the animated timeline, and
+// every one of these plates is correct once it is allowed to move.
+for (const file of readdirSync(ASSETS).filter(f => /^plate-.*\.svg$/.test(f)).sort()) {
+  await still.setContent(`<body style="margin:0">${readFileSync(join(ASSETS, file), 'utf8')}</body>`);
+  const bad = await still.evaluate(async () => {
+    await document.fonts.ready;
+    const svgEl = document.querySelector('svg');
+    if (document.getAnimations().length) return ['reduced-motion did not stop the animations'];
+    const out = [];
+    for (const el of svgEl.querySelectorAll('[data-rest]')) {
+      const want = el.getAttribute('data-rest');
+      const within = parseFloat(el.getAttribute('data-rest-within') || '24');
+      const t = svgEl.querySelector(`#${CSS.escape(want)}`);
+      if (!t) { out.push(`declares data-rest="${want}", which is not on this plate`); continue; }
+      const r = el.getBoundingClientRect(), T = t.getBoundingClientRect();
+      const dx = Math.max(T.x - (r.x + r.width), r.x - (T.x + T.width), 0);
+      const dy = Math.max(T.y - (r.y + r.height), r.y - (T.y + T.height), 0);
+      const gap = Math.hypot(dx, dy);
+      if (gap > within)
+        out.push(`with motion off, <${el.tagName}.${(el.getAttribute('class') || '').split(/\s+/)[0]}> `
+               + `sits ${Math.round(gap)}u from #${want} (allowed ${within}u) — the still frame is the START pose, not the finished one`);
+    }
+    return out;
+  });
+  for (const b of bad) fails.push(`${file}: ${b}`);
+}
 
 await browser.close();
 if (fails.length) {
