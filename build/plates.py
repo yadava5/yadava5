@@ -762,13 +762,22 @@ def plate_release() -> str:
 .lnk{{animation:lnk {LOOP}s {ARRIVE} infinite}}
 @keyframes lnk{{0%,18%{{opacity:0;transform:translateX(-10px)}}
   28%,100%{{opacity:1;transform:translateX(0)}}}}
-/* One build leaves the shared tree down each branch, four times a loop. This
-   is the plate's only continuous motion and the reason it no longer sits dead
-   for 3.6s in the middle: everything else here arrives once and then holds. */
+/* One build leaves the shared tree down each branch, four times a loop. */
 .bd{{animation:bd {BEAT}s {EASE} infinite}}
-@keyframes bd{{0%{{opacity:0;transform:translateX(-72px)}}
+@keyframes bd{{0%{{opacity:0;transform:translateX(-42px)}}
   16%{{opacity:1}}84%{{opacity:1}}
   100%{{opacity:0;transform:translateX(0)}}}}
+/* The build reading the shared tree, continuously, for the whole loop.
+   .bd alone did not do this job. Two 3.5u dots are geometrically real motion
+   and perceptually nothing: build/motion.mjs rasterises and needs 0.2% of
+   pixels to change, and the dots moved about 0.03%. The plate reported 5% of
+   samples alive with a 7.0s dead run while every bounding-box instrument said
+   it was fine. Whatever carries the continuous motion has to be BIG — this bar
+   is 236u wide, which is the same idiom that gives plate VIII's sandbox 100%.
+   A filled highlight the size of a whole box was the other candidate and the
+   gate refused it, rightly: it sat on top of the text it was highlighting. */
+.sc{{animation:sc {round(LOOP/2,2)}s linear infinite}}
+@keyframes sc{{0%{{transform:translateY(0)}}100%{{transform:translateY(64px)}}}}
 </style>{slab(H, PINK)}""")
     s.append(rail("VII", "LIFEQUEST"))
     s.append(f'<text x="150" y="56" class="kick">CLAIM — WHAT YOU MEANT TO DO, AS QUESTS</text>')
@@ -787,20 +796,23 @@ def plate_release() -> str:
     # the fork: the same apps/desktop tree is a Vite web build and a Tauri
     # native binary, and packages/schemas is the Zod contract that keeps both
     # of them honest against the NestJS API.
-    s.append(f'<rect x="150" y="304" width="196" height="46" rx="3" fill="none" stroke="{WIRE}"/>')
-    s.append(f'<text x="166" y="323" class="fine" style="fill:{INK}">apps/desktop</text>')
-    s.append(f'<text x="166" y="341" class="fine">React · Vite</text>')
-    s.append(f'<path d="M346 327H380M380 309V345" fill="none" stroke="{WIRE}"/>')
+    # The box is 240x70 rather than 196x46 so the scan bar inside it is 236u
+    # wide with 64u of travel. That size is the whole point: see the .sc comment.
+    s.append(f'<rect x="150" y="296" width="240" height="70" rx="3" fill="none" stroke="{WIRE}"/>')
+    s.append(f'<rect class="sc" x="152" y="299" width="236" height="3" fill="{PINK}" opacity=".72"/>')
+    s.append(f'<text x="166" y="326" class="fine" style="fill:{INK}">apps/desktop</text>')
+    s.append(f'<text x="166" y="348" class="fine">React · Vite</text>')
+    s.append(f'<path d="M390 331H420M420 313V349" fill="none" stroke="{WIRE}"/>')
     for i, (dy, txt) in enumerate([(-18, "TAURI 2 · NATIVE BINARY"), (18, "VITE BUILD · WEB APP")]):
-        s.append(f'<path d="M380 {327+dy}H452" fill="none" stroke="{WIRE}"/>')
-        # a build leaving down each branch, four times a loop, so the lower half
-        # of the plate is never still — and so the fork is shown, not asserted
-        s.append(f'<circle class="bd" cx="452" cy="{327+dy}" r="3.5" fill="{PINK}" '
+        s.append(f'<path d="M420 {331+dy}H462" fill="none" stroke="{WIRE}"/>')
+        # a build leaving down each branch, four times a loop — so the fork is
+        # shown, not asserted
+        s.append(f'<circle class="bd" cx="462" cy="{331+dy}" r="3.5" fill="{PINK}" '
                  f'style="animation-delay:{round(-BEAT*0.5 + i*0.12, 3)}s"/>')
-        s.append(f'<text x="{R}" y="{332+dy}" class="lbl" text-anchor="end" style="fill:{PINK}">{txt}</text>')
-    s.append(f'<text x="150" y="378" class="fine">packages/schemas — one Zod contract for both builds</text>')
+        s.append(f'<text x="{R}" y="{336+dy}" class="lbl" text-anchor="end" style="fill:{PINK}">{txt}</text>')
+    s.append(f'<text x="150" y="392" class="fine">packages/schemas — one Zod contract for both builds</text>')
 
-    s.append(f'<path d="M150 402H730" stroke="{RULE}"/>')
+    s.append(f'<path d="M150 412H730" stroke="{RULE}"/>')
     for i, (n, lab, sub) in enumerate([("10", "PRISMA MODELS", "quests, rewards, meetups, rituals"),
                                        ("14", "REST ENDPOINTS", "across 6 NestJS controllers")]):
         y = 442 + i * 62
