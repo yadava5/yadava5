@@ -237,6 +237,27 @@ for (const file of SWEPT) {
 for (const k of exempt)
   if (!usedExempt.has(k)) fails.push(`claims.json exempts "${k}", which no plate draws — stale exemption`);
 
+// ── how old is the evidence?
+//
+// A pin cannot drift — that is the point of pinning. But a pin that has fallen
+// a long way behind its branch means the page is describing a state of the
+// repository that no longer exists, and nothing here would ever say so. This
+// does not fail the build: citing an older commit is legitimate, and a claim
+// verified against a specific SHA stays verified. It just refuses to let the
+// distance go unmentioned.
+if (!OFFLINE && !process.env.CLAIMS_SKIP_FRESHNESS) {
+  for (const [key, r] of Object.entries(spec.repos)) {
+    try {
+      const args = ['-fsSL', '--max-time', '20', '-H', 'Accept: application/vnd.github+json'];
+      if (process.env.GITHUB_TOKEN) args.push('-H', `Authorization: Bearer ${process.env.GITHUB_TOKEN}`);
+      const url = `https://api.github.com/repos/${r.github}/compare/${r.ref}...${encodeURIComponent(r.branch)}`;
+      const cmp = JSON.parse(execFileSync('curl', [...args, url], { encoding: 'utf8' }));
+      if (cmp.ahead_by > 0)
+        notes.push(`${key} is pinned ${cmp.ahead_by} commit(s) behind ${r.branch} — still verified, but the page is citing an older ${r.github}`);
+    } catch { /* offline or rate-limited: freshness is a courtesy, not a gate */ }
+  }
+}
+
 // ── report
 for (const n of notes) console.log(`  note  ${n}`);
 for (const e of spec.external)
