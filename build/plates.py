@@ -297,7 +297,7 @@ def plate_thesis() -> str:
     # it sits ON the sheet's rule at 366 (6u lower it read as a doubled rule);
     # 365→584 covers row one then row two, and the wrap fades out before the
     # 219u reset, so the loop never snaps back in view. Hairline: passes type.
-    s.append(f'<rect class="idx" x="{L}" y="365" width="580" height="2" fill="{INK}" opacity=".5"/>')
+    s.append(f'<rect class="idx" x="{L}" y="379" width="580" height="2" fill="{INK}" opacity=".5"/>')
     return "".join(s) + "</svg>"
 
 
@@ -407,7 +407,7 @@ def plate_glyph() -> str:
 .tok{{animation:run {LOOP}s {ARRIVE} infinite}}
 @keyframes run{{0%{{opacity:0;transform:translateX(-190px)}}5%{{opacity:1;transform:translateX(-190px)}}
   34%,96%{{opacity:1;transform:translateX(0)}}100%{{opacity:0;transform:translateX(0)}}}}
-.wrong{{opacity:.55}}
+.wrong{{opacity:.72}}
 .sure{{opacity:1}}
 .gr{{transform-box:fill-box;transform-origin:left center;animation:gr {LOOP}s {BREATHE} infinite}}
 @keyframes gr{{0%,30%{{transform:translateY(0)}}38%{{transform:translateY(-5px)}}
@@ -668,7 +668,7 @@ def plate_cadence() -> str:
             s.append(f'<path d="M{x} {hr}H{x+96}" stroke="{RULE}" stroke-width="1"/>')
     s.append(f'<rect class="now" x="196" y="263" width="528" height="2" fill="{a}" opacity=".62"/>')
     s.append(f'<g class="fil" style="animation-delay:{-SET}s">'
-             f'<rect x="632" y="288" width="80" height="20" rx="3" fill="#0E2A22" stroke="{a}"/>'
+             f'<rect x="632" y="288" width="88" height="20" rx="3" fill="#0E2A22" stroke="{a}"/>'
              f'<text x="640" y="302" class="fine" style="fill:{a}">lunch</text></g>')
     s.append(f'<text x="150" y="410" class="hero">36</text>')
     s.append(f'<text x="232" y="394" class="lbl">HANDLERS IN ONE FUNCTION</text>')
@@ -736,11 +736,13 @@ def plate_applied() -> str:
     s.append(f'<text x="150" y="293" class="lbl" style="fill:{a}">0.85 CONFIDENCE GATE</text>')
     s.append(f'<path d="M400 288H640" stroke="{a}" stroke-width="1"/>')
 
-    for i in range(5):
-        if i == 2:
-            continue          # slot 2 belongs to the .div below — five messages, not six
+    # The delay index counts DRAWN envelopes, not slots. Keying it to the slot
+    # index left a 280ms hole where slot 2 is empty — real gaps 140/280/140 —
+    # and the stagger check averaged them to 186.7ms and passed. The gap in the
+    # queue is a spatial statement; it should not also be a temporal one.
+    for j, i in enumerate([0, 1, 3, 4]):    # slot 2 belongs to the .div below
         s.append(f'<rect class="env" x="{416 + i*44}" y="312" width="30" height="20" rx="2" fill="none" '
-                 f'stroke="{a}" stroke-width="1.6" style="animation-delay:{round(-SET + i*0.14,3)}s"/>')
+                 f'stroke="{a}" stroke-width="1.6" style="animation-delay:{round(-SET + j*0.14,3)}s"/>')
     # the one that does not clear the gate leaves the stack and goes sideways
     # the whole claim of this plate is that the one that fails the gate reaches
     # a PERSON. If it merely leaves the stack, the plate says nothing.
@@ -954,13 +956,13 @@ def plate_release() -> str:
     # and because the last link is the honest one.
     s.append(f'<text x="150" y="{442+62+50}" class="kick">QUEST GENERATION — ASKS, THEN FALLS BACK, THEN DECLINES</text>')
     for i, (txt, col) in enumerate([("OPENAI", PINK), ("HUGGING FACE", PINK), ("RETURNS NOTHING", INK3)]):
-        x = 150 + i * 200
-        s.append(f'<rect class="lnk" x="{x}" y="{442+62+64}" width="168" height="30" rx="3" fill="none" '
+        x = 150 + i * 204
+        s.append(f'<rect class="lnk" x="{x}" y="{442+62+64}" width="172" height="30" rx="3" fill="none" '
                  f'stroke="{WIRE}" style="animation-delay:{round(-SET + i*0.11,3)}s"/>')
         s.append(f'<text x="{x+14}" y="{442+62+84}" class="fine" style="fill:{col}">{txt}</text>')
         if i < 2:
-            s.append(f'<path d="M{x+168} {442+62+79}H{x+200}" stroke="{WIRE}"/>')
-    s.append(f'<text x="150" y="{442+62+124}" class="fine" style="fill:{INK3}">source-available · noncommercial</text>')
+            s.append(f'<path d="M{x+172} {442+62+79}H{x+204}" stroke="{WIRE}"/>')
+    s.append(f'<text x="150" y="{442+62+124}" class="fine" style="fill:{INK3}">MIT</text>')
     return "".join(s) + "</svg>"
 
 
@@ -979,9 +981,12 @@ def plate_automl() -> str:
     """
     H, LOOP, SET = 624, 13.3, 9.9
     TICKS, GEN = 44, 15
-    PITCH = (R - L) / TICKS                 # 44 ticks across the type column
+    # pitch is set so the LAST tick's right edge lands on R, not so the first
+    # 44 pitches span the column — the old form left the strip 8.3u short.
+    PITCH = (R - L - 5) / (TICKS - 1)
     BARS, BX = 7, L + GEN * PITCH           # the seven sets sit under the routed 29
-    BPITCH = (R - BX) / BARS
+    BGAP = 8
+    BPITCH = (R - BX + BGAP) / BARS   # last bar's right edge lands on R
     s = [head(H, "Agentic AutoML",
               "Agentic AutoML takes a dataset and a sentence and returns a trained model. "
               "Its tool registry holds 44 definitions, but the model never carries all of "
@@ -992,7 +997,7 @@ def plate_automl() -> str:
               "container with no network, a read-only root filesystem, a non-root user and "
               "the dataset mounted read-only, leaving 5 tmpfs mounts as the only writable "
               "surface. Behind it sits a 29-table Postgres schema with pgvector. Written "
-              "with Shree Chaturvedi; the repository is public and noncommercially licensed.",
+              "with Shree Chaturvedi; the repository is public and licensed GPL-3.0.",
               key="plate-6b-automl.svg")]
     s.append(f""".tk{{animation:tk {LOOP}s {ARRIVE} infinite}}
 @keyframes tk{{0%{{opacity:0;transform:translateY(9px)}}
@@ -1051,9 +1056,9 @@ def plate_automl() -> str:
     for i in range(BARS):
         x = BX + i * BPITCH
         last = ' id="set-last"' if i == BARS - 1 else ''
-        s.append(f'<rect{last} x="{x:.1f}" y="264" width="{BPITCH-8:.1f}" height="8" rx="1" fill="{ROW}"/>')
+        s.append(f'<rect{last} x="{x:.1f}" y="264" width="{BPITCH-BGAP:.1f}" height="8" rx="1" fill="{ROW}"/>')
     s.append(f'<rect class="mk" data-rest="set-last" data-rest-within="14" '
-             f'x="{BX + (BARS-1)*BPITCH:.1f}" y="278" width="{BPITCH-8:.1f}" height="3" rx="1" fill="{INDIGO}"/>')
+             f'x="{BX + (BARS-1)*BPITCH:.1f}" y="278" width="{BPITCH-BGAP:.1f}" height="3" rx="1" fill="{INDIGO}"/>')
     s.append(f'<text x="{L}" y="276" class="lbl">SEVEN PHASE SETS</text>')
 
     s.append(f'<path d="M{L} 300H{R}" stroke="{RULE}"/>')
@@ -1081,7 +1086,7 @@ def plate_automl() -> str:
     s.append(f'<text x="{L}" y="540" class="sub">29</text>')
     s.append(f'<text x="200" y="540" class="lbl">TABLES · POSTGRES + PGVECTOR</text>')
     s.append(f'<text x="200" y="562" class="fine">a Jupyter kernel per project, kept alive between cells</text>')
-    s.append(f'<text x="{L}" y="592" class="fine" style="fill:{INK3}">public · noncommercial · written with Shree Chaturvedi</text>')
+    s.append(f'<text x="{L}" y="592" class="fine" style="fill:{INK3}">public · GPL-3.0 · written with Shree Chaturvedi</text>')
     return "".join(s) + "</svg>"
 
 
@@ -1131,7 +1136,7 @@ def plate_colophon() -> str:
     # descending the colophon for the whole loop. At rest it lies ON the rule
     # at 80, so the still frame shows one accent rule, not a doubled one; the
     # 157u wrap stays under the 160u teleport ceiling. .68 keeps indigo 3:1+.
-    s.append(f'<rect class="ras" x="150" y="79" width="580" height="2" fill="{INK2}" opacity=".85"/>')
+    s.append(f'<rect class="ras" x="150" y="95" width="580" height="2" fill="{INK2}" opacity=".85"/>')
     # INK2, not INDIGO: the colophon gave up AutoML's hue this round and the
     # raster sweep would have quietly handed it back.
     return "".join(s) + "</svg>"
