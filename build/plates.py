@@ -570,13 +570,11 @@ def plate_release() -> str:
   46%{{transform:scale(1)}}54%{{transform:scale(1.22)}}
   66%,100%{{transform:scale(1);opacity:1}}}}
 .tk2{{animation:tk2 {LOOP}s {EASE} infinite}}
-@keyframes tk2{{0%{{opacity:0;transform:translateX(-424px)}}3%{{opacity:1;transform:translateX(-424px)}}
-  18%,26%{{opacity:1;transform:translateX(-76px)}}
+@keyframes tk2{{0%{{opacity:0;transform:translateX(-348px)}}3%{{opacity:1;transform:translateX(-348px)}}
+  20%,80%{{opacity:1;transform:translateX(0)}}
   /* the longest dead hold in the document: it is waiting for a human, and it
      now waits AT the gate at x=530 rather than 110u short of it, inside a wall */
-  32%,96%{{opacity:1;transform:translateX(0)}}100%{{opacity:0;transform:translateX(0)}}}}
-.ok{{animation:ok {LOOP}s linear infinite}}
-@keyframes ok{{0%,26%{{opacity:0}}30%,100%{{opacity:1}}}}
+  88%,96%{{opacity:1;transform:translateX(76px)}}100%{{opacity:0;transform:translateX(76px)}}}}
 /* travel slow enough that a 0.33s sample never covers more than ~130u */
 </style>{slab(H, PINK)}""")
     s.append(rail("VI", "LIFEQUEST · AUTOML"))
@@ -609,12 +607,13 @@ def plate_release() -> str:
     # It ends the loop past the gate and beside DEPLOYED, which is the point:
     # the gate is passed by a human saying yes, not by the pipeline waiting it
     # out. The rest check anchors the final pose to the label that explains it.
-    s.append(f'<circle class="tk2" data-rest="deployed" data-rest-within="14" '
-             f'cx="600" cy="372" r="6" fill="{INDIGO}" style="animation-delay:{-SET}s"/>')
+    # rest is the WAIT now, so the assertion points at the gate it waits on
+    s.append(f'<circle class="tk2" data-rest="approval-gate" data-rest-within="6" '
+             f'cx="524" cy="372" r="6" fill="{INDIGO}" style="animation-delay:{-SET}s"/>')
     s.append(f'<text x="150" y="418" class="fine">non-root · read-only rootfs · internal net (dev)</text>')
     # DEPLOYED now sits on the token's own row, so the rest check anchors to a
     # label beside it rather than one 28u down and to the right.
-    s.append(f'<text id="deployed" class="ok lbl" x="618" y="378" style="fill:{INDIGO};animation-delay:{-SET}s">DEPLOYED</text>')
+    s.append(f'<text id="deployed" class="lbl" x="618" y="378" style="fill:{INDIGO}">DEPLOYED</text>')
 
     # This used to be a 64px "2". The number was wrong — the reproducible count
     # of human-gate stages is four (preprocessing await_approval, feature
