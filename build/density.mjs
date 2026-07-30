@@ -38,9 +38,16 @@ for (const f of readdirSync(ASSETS).filter(x => /^plate-.*\.svg$/.test(x)).sort(
     const c = document.createElement('canvas'); c.width = W; c.height = H;
     const x = c.getContext('2d'); x.drawImage(img, 0, 0);
     const d = x.getImageData(0, 0, W, H).data;
+    // Derive the slab from the plate itself. This constant used to be a
+    // hardcoded #0B0C0E and the slab moved to #0A0A0B without it — the number
+    // stayed right only because the delta (6) was under the threshold (24).
+    // A measurement tool carrying its own copy of the thing it measures will
+    // eventually lie, quietly.
+    const mid = ((H >> 1) * W + 4) * 4;
+    const [sr, sg, sb] = [d[mid], d[mid + 1], d[mid + 2]];
     let ink = 0;
     for (let i = 0; i < d.length; i += 4)
-      if (Math.abs(d[i] - 0x0B) + Math.abs(d[i + 1] - 0x0C) + Math.abs(d[i + 2] - 0x0E) > 24) ink++;
+      if (Math.abs(d[i] - sr) + Math.abs(d[i + 1] - sg) + Math.abs(d[i + 2] - sb) > 24) ink++;
     return { W, H, ink };
   }, svg);
   inkTotal += r.ink; areaTotal += r.W * r.H;
