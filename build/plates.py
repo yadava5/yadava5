@@ -762,71 +762,105 @@ def plate_applied() -> str:
 
 # ────────────────────────────────────────────────────────────── PLATE V
 def plate_refusal() -> str:
-    H, LOOP, SET, a = 453, 6.7, 4.7, EMERALD
-    s = [head(H, "The refusal — the database declines to return another tenant's rows",
-              "A query from one tenant travels toward another tenant's rows, reaches the "
-              "PostgreSQL row-level-security boundary, and stops. Only the querying tenant's own "
-              "rows come back — because the database refused, not because the application "
-              "remembered to filter.", key="plate-5-refusal.svg")]
-    # The travel used to be 80px, which left the dot's right edge at 415 — five
-    # units short of a boundary it is supposed to be stopped BY, for 66% of the
-    # loop and at frame zero. A refusal that never touches the wall is a diagram
-    # of a query losing interest. 104px lands the edge exactly on 439.
-    s.append(f""".q{{animation:seek {LOOP}s {IMPACT} infinite;animation-delay:{-SET}s}}
-@keyframes seek{{0%{{opacity:0;transform:translateX(-104px)}}5%{{opacity:1;transform:translateX(-104px)}}
-  /* contact at 28%, a 3u recoil, then it stays stopped. The recoil is the
-     difference between "arrived here" and "was refused here". */
-  28%{{opacity:1;transform:translateX(0)}}30%{{transform:translateX(-3px)}}
-  32%,96%{{opacity:1;transform:translateX(0)}}100%{{opacity:0;transform:translateX(0)}}}}
-/* The boundary reacts once, on contact. It cannot do this with opacity: an
-   element that flashes is either dimmed at frame zero or below the 70% duty
-   floor, and both are gate failures. So it flexes instead — always fully
-   visible, at rest in the finished frame. */
-.wall{{transform-box:fill-box;transform-origin:center;animation:wall {LOOP}s {IMPACT} infinite;animation-delay:{-SET}s}}
-@keyframes wall{{0%,27%{{transform:scaleY(1)}}31%{{transform:scaleY(1.06)}}42%,100%{{transform:scaleY(1)}}}}
-.zero{{animation:land {LOOP}s linear infinite;animation-delay:{-SET}s}}
-@keyframes land{{0%,14%{{opacity:0}}22%,100%{{opacity:1}}}}
+    """The Cadence isolation audit, drawn service by service.
+
+    Two defects this layout replaces. The plate said IDOR IN SIX SERVICES and
+    then drew four anonymous grey bars per tenant — an assertion where the page
+    promises evidence, on the one plate whose whole subject is what happens
+    when you take an assertion at its word. And its mechanism was a recolour of
+    the AutoML approval gate: a token travels, meets a line, is held. Two
+    consecutive plates drew "something is stopped" with the same object.
+
+    So the six services are NAMED, and the refusal happens to the ROWS. Each
+    service row carries its owner-scoped read and delete marks — the property
+    claims.mjs re-derives from the guard in the query, not from a commit
+    message — and tenant A's row is struck out of a read run as B while B's
+    row returns. The two asterisks are the most interesting thing the audit
+    found and they stay on the plate: the tags test asserted the vulnerable
+    query, so it would have reported green forever, and task-lists still has
+    no regression test. A drawn caveat is worth more than a drawn trophy.
+    """
+    H, LOOP, SET, a = 570, 6.7, 4.7, EMERALD
+    s = [head(H, "The refusal — six services named, and the database that declines",
+              "The IDOR found auditing Cadence, drawn service by service: in six services — "
+              "attachments, calendars, events, task-lists, tasks and tags — any authenticated "
+              "user could read or delete another user's records by id. Each service now "
+              "carries the owner guard in its read and delete queries, so tenant A's rows are "
+              "struck out of a read run as tenant B and only B's return. Two caveats stay on "
+              "the plate: the tags test asserted the vulnerable query, and task-lists still "
+              "has no regression test. Below, the layer that does not depend on remembering: "
+              "an unfiltered SELECT count(*) FROM tasks, run as B, comes back B only, because "
+              "PostgreSQL row-level security refused the rest.", key="plate-5-refusal.svg")]
+    # The continuous element is the read itself: a full-column hairline passing
+    # down the six services for the whole loop. The old plate's only sustained
+    # motion was a 5u dot, which is why it measured 36% alive with a 1.9s dead
+    # run — the thinnest-moving plate in the set. A 580u bar is the idiom that
+    # actually registers on the raster gate. 150u of travel stays under the
+    # 160u teleport ceiling, so the wrap needs no fade.
+    s.append(f""".swp{{animation:swp {LOOP}s linear infinite;animation-delay:{-SET}s}}
+@keyframes swp{{0%{{transform:translateY(0)}}100%{{transform:translateY(150px)}}}}
+/* the owner guards land first, then the strikes are drawn through A's rows —
+   the refusal is something that happens TO the rows, not a token bouncing off
+   a wall. The strikes grow from the left, the direction the read travels. */
+.gm{{animation:gm {LOOP}s linear infinite}}
+@keyframes gm{{0%,3%{{opacity:0}}9%,100%{{opacity:1}}}}
+.strk{{transform-box:fill-box;transform-origin:left center;animation:strk {LOOP}s {ARRIVE} infinite}}
+@keyframes strk{{0%,6%{{transform:scaleX(0)}}18%,100%{{transform:scaleX(1)}}}}
 .ret{{transform-box:fill-box;transform-origin:left center;animation:ret {LOOP}s {EASE} infinite}}
 @keyframes ret{{0%,34%{{transform:translateY(0)}}42%{{transform:translateY(-4px)}}
   56%,100%{{transform:translateY(0)}}}}
+.zero{{animation:land {LOOP}s linear infinite;animation-delay:{-SET}s}}
+@keyframes land{{0%,14%{{opacity:0}}22%,100%{{opacity:1}}}}
 </style>{slab(H, a)}""")
 
     s.append(rail("VI", "THE REFUSAL"))
-    s.append(f'<text x="150" y="80" class="lbl">TENANT B — THE CALLER</text>')
-    s.append(f'<text x="560" y="80" class="lbl">TENANT A</text>')
-    for i in range(4):
-        y = 104 + i * 28
-        # Both stacks are 170 wide. They were 160 and 170 — two things that must
-        # read as symmetric peers, differing by 10u for no reason.
-        # And they are no longer the same grey: B's rows are the ones that come
-        # back, so they carry the accent. The plate said "B only" in 32px type
-        # and drew eight identical rectangles.
-        s.append(f'<rect class="ret" x="150" y="{y}" width="170" height="18" rx="2" fill="{ROW}" '
+    s.append(f'<text x="{L}" y="{TOP}" class="kick">IDOR IN SIX SERVICES — FOUND BY THE AUTHOR</text>')
+    s.append(f'<text x="{L}" y="80" class="kick">EACH NOW SCOPED BY OWNER, ON READ AND ON DELETE</text>')
+
+    # ── the table: six services, named. Column headers in the same 11px voice.
+    # B's header names it the CALLER, because that is the entire scene: B asks,
+    # and what B gets back is the last column. Right-anchored on the column's
+    # own edge at 730, which is also the rail's edge.
+    for x, t in ((340, "READ"), (404, "DELETE"), (480, "TENANT A")):
+        s.append(f'<text x="{x}" y="110" class="kick">{t}</text>')
+    s.append(f'<text x="{R}" y="110" class="kick" text-anchor="end">TENANT B — CALLER</text>')
+    # README order, which is the audit's order — not alphabetical, and not
+    # anonymised. The two markers are footnoted at the bottom of the plate.
+    SVCS = ["attachments", "calendars", "events", "task-lists*", "tasks", "tags**"]
+    for i, name in enumerate(SVCS):
+        y = 140 + i * 28
+        dl = round(-SET + i * 0.12, 3)
+        s.append(f'<text x="{L}" y="{y}" class="lbl">{name}</text>')
+        # the guard, present in both the read and the delete query — the fact
+        # claims.mjs counts from AND "userId" = $ in the six service files
+        for mx in (354, 427):
+            s.append(f'<rect class="gm" x="{mx}" y="{y-10}" width="8" height="8" '
+                     f'style="fill:{a};animation-delay:{dl}s"/>')
+        # tenant A's row EXISTS — grey, framed like any stored row — and is
+        # struck out of the result. Withheld is not deleted.
+        s.append(f'<rect x="480" y="{y-12}" width="110" height="16" rx="2" fill="{ROW}" stroke="{WIRE}"/>')
+        s.append(f'<rect class="strk" x="484" y="{y-5}" width="102" height="2" '
+                 f'style="fill:{a};animation-delay:{dl}s"/>')
+        # tenant B's row is the one that comes back, so it carries the accent
+        s.append(f'<rect class="ret" x="620" y="{y-12}" width="110" height="16" rx="2" fill="{ROW}" '
                  f'stroke="{a}" style="animation-delay:{round(-SET + i*0.18,3)}s"/>')
-        s.append(f'<rect x="560" y="{y}" width="170" height="18" rx="2" fill="{ROW}" stroke="{WIRE}"/>')
+    # the read head, over the table it is reading, for the whole loop
+    s.append(f'<rect class="swp" x="{L}" y="116" width="580" height="2" style="fill:{a}" opacity=".55"/>')
+    s.append(f'<text x="{L}" y="312" class="fine">A’s rows withheld, B’s returned — the guard sits in the query</text>')
 
-    # The boundary now sits on the midpoint between the two stacks (320→560) and
-    # is a 2u wall rather than a 1u hairline the reader cannot find.
-    s.append(f'<rect class="wall" id="rls-boundary" x="439" y="92" width="2" height="132" fill="{WIRE}"/>')
-    # data-rest is the caption, made checkable, and 2u means CONTACT. This plate
-    # has already shipped inverted once — tenant A asking and B receiving — and
-    # every geometric check passed it, because an inverted diagram is still a
-    # well-formed diagram. A loose tolerance here would repeat that: the round-9
-    # geometry stopped 5u short, so any allowance above 4 would have called the
-    # defect this check exists to catch a pass.
-    s.append(f'<circle class="q" data-rest="rls-boundary" data-rest-within="2" '
-             f'cx="434" cy="113" r="5" fill="{a}"/>')
-
+    s.append(f'<path d="M{L} 336H{R}" stroke="{RULE}"/>')
     # unfiltered on purpose: a predicate that names B and returns B proves nothing
-    s.append(f'<text x="150" y="240" class="key">SELECT count(*) FROM tasks</text>')
-    s.append(f'<text class="zero sub" x="150" y="280">B only</text>')
-    s.append(f'<text x="440" y="272" class="lbl">ROW-LEVEL SECURITY</text>')
+    s.append(f'<text x="{L}" y="372" class="key">SELECT count(*) FROM tasks</text>')
+    s.append(f'<text x="470" y="372" class="fine">as B — unfiltered on purpose</text>')
+    s.append(f'<text class="zero sub" x="{L}" y="416">B only</text>')
+    s.append(f'<text x="470" y="416" class="lbl">ROW-LEVEL SECURITY</text>')
+    s.append(f'<text x="{L}" y="456" class="say">The app didn’t remember to filter.</text>')
+    s.append(f'<text x="{L}" y="484" class="say">The database refused.</text>')
 
-    s.append(f'<path d="M150 320H730" stroke="{RULE}"/>')
-    s.append(f'<text x="150" y="352" class="say">The app didn’t remember to filter.</text>')
-    s.append(f'<text x="150" y="380" class="say">The database refused.</text>')
-    s.append(f'<text x="150" y="420" class="lbl">IDOR IN SIX SERVICES</text>')
-    s.append(f'<text x="470" y="420" class="lbl">FOUND BY THE AUTHOR</text>')
+    # the footnotes ARE the finding. A table of six green rows is a trophy;
+    # these two lines are what an audit that means it looks like.
+    s.append(f'<text x="{L}" y="518" class="fine" style="fill:{INK3}">*  task-lists — still has no regression test</text>')
+    s.append(f'<text x="{L}" y="538" class="fine" style="fill:{INK3}">** tags — its test asserted the vulnerable query. Green forever.</text>')
     return "".join(s) + "</svg>"
 
 
