@@ -826,7 +826,7 @@ def plate_refusal() -> str:
     s.append(f'<text x="{R}" y="110" class="kick" text-anchor="end">TENANT B — CALLER</text>')
     # README order, which is the audit's order — not alphabetical, and not
     # anonymised. The two markers are footnoted at the bottom of the plate.
-    SVCS = ["attachments", "calendars", "events", "task-lists**", "tasks", "tags*"]
+    SVCS = ["attachments", "calendars", "events", "task-lists*", "tasks", "tags**"]
     for i, name in enumerate(SVCS):
         y = 140 + i * 28
         dl = round(-SET + i * 0.12, 3)
@@ -859,8 +859,8 @@ def plate_refusal() -> str:
 
     # the footnotes ARE the finding. A table of six green rows is a trophy;
     # these two lines are what an audit that means it looks like.
-    s.append(f'<text x="{L}" y="518" class="fine" style="fill:{INK3}">*  tags — its test asserted the vulnerable query. Green forever.</text>')
-    s.append(f'<text x="{L}" y="538" class="fine" style="fill:{INK3}">** task-lists — still has no regression test</text>')
+    s.append(f'<text x="{L}" y="518" class="fine" style="fill:{INK3}">*  task-lists — still has no regression test</text>')
+    s.append(f'<text x="{L}" y="538" class="fine" style="fill:{INK3}">** tags — its test asserted the vulnerable query. Green forever.</text>')
     return "".join(s) + "</svg>"
 
 
