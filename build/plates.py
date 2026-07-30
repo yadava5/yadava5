@@ -326,8 +326,8 @@ def plate_thesis() -> str:
   76%{{transform:translateY(0) scale(1)}}86%{{transform:translateY(-7px) scale(1.06)}}
   98%,100%{{transform:translateY(0) scale(1)}}}}
 .idx{{animation:idx {LOOP}s linear infinite;animation-delay:{-SET}s}}
-@keyframes idx{{0%{{transform:translateY(0);opacity:{op(0.5)}}}94%{{transform:translateY(219px);opacity:{op(0.5)}}}
-  97%,100%{{transform:translateY(219px);opacity:0}}}}
+@keyframes idx{{0%{{transform:translateY(-219px);opacity:{op(0.5)}}}94%{{transform:translateY(0);opacity:{op(0.5)}}}
+  97%,100%{{transform:translateY(0);opacity:0}}}}
 .ser{{font-family:ui-serif,Georgia,'Times New Roman',serif;font-size:34px;fill:{INK}}}
 </style>{slab(H, INK2)}""")
 
@@ -375,11 +375,16 @@ def plate_thesis() -> str:
     # the ambient element: an index cursor reading the contact sheet in turn,
     # for the WHOLE loop — this is a sheet of six systems, and a sheet is a
     # thing you scan. Everything above ran in the first 40% of the loop and
-    # then held, which the raster gate measured as 2.7s of dead air. At rest
-    # it sits ON the sheet's rule at 366 (6u lower it read as a doubled rule);
-    # 365→584 covers row one then row two, and the wrap fades out before the
-    # 219u reset, so the loop never snaps back in view. Hairline: passes type.
-    s.append(f'<rect class="idx" x="{L}" y="379" width="580" height="2" fill="{INK}" opacity="{op(0.5)}"/>')
+    # then held, which the raster gate measured as 2.7s of dead air.
+    #
+    # It is authored at the END of the read, not the start. Authored at the top
+    # it had nowhere good to rest: ON the sheet's rule it composited to 8.69:1,
+    # the brightest line in the document and 2.8x every other rule; 13u below,
+    # it read as a doubled rule, which is worse. Both are the same mistake —
+    # the still frame is supposed to be the FINISHED pose, and a cursor that
+    # has read the sheet is at the bottom of it. Now it rests in clear space
+    # under the last card row and travels UP from 365 to get there.
+    s.append(f'<rect class="idx" x="{L}" y="584" width="580" height="2" fill="{INK}" opacity="{op(0.5)}"/>')
     return "".join(s) + "</svg>"
 
 
