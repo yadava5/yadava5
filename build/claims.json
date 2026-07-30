@@ -50,6 +50,13 @@
       "branch": "integration/web-migration",
       "public": true,
       "note": "The in-browser ONNX build is NOT on main. The commit is pushed and public, so it pins and re-derives like any other \u2014 but the page must say which branch it is reading, and does."
+    },
+    "glyph-simd": {
+      "github": "yadava5/glyph",
+      "ref": "287744ef5a7aaa2655405939914c36f28ad18e18",
+      "branch": "yadava5/fix-hero-media-validation",
+      "public": true,
+      "note": "The branch the DEPLOYED WebAssembly came off. main's wasm has no intrinsics; this one does."
     }
   },
   "claims": [
@@ -477,25 +484,6 @@
       "note": "Pins the citation itself. If the tracker grows a line above 378, this fails and the README's reference is corrected rather than silently pointing at the wrong row."
     },
     {
-      "id": "refusal.idor_regression_tests",
-      "value": "7",
-      "drawn_on": [
-        "plate-5-refusal.svg",
-        "README.md"
-      ],
-      "repo": "cadence",
-      "paths": [
-        "lib/services/__tests__/AttachmentService.test.ts",
-        "lib/services/__tests__/CalendarService.test.ts",
-        "lib/services/__tests__/EventService.test.ts",
-        "lib/services/__tests__/TagService.test.ts",
-        "lib/services/__tests__/TaskListService.test.ts",
-        "lib/services/__tests__/TaskService.test.ts"
-      ],
-      "extractor": "cat $BLOBS | grep -ciE 'cross-tenant IDOR|IDOR regression'",
-      "note": "The plate used to draw '8 FOUND, 8 FIXED'. Eight is true and eight is documented, but it is an AUDIT FINDING, not a property of any file \u2014 the previous extractor here reached 8 by counting the word 'IDOR' in comments, which is the page counting its own prose. It happened to be right and would have broken silently on the next comment edit. Seven regression tests IS a file property, and it is the more honest number besides: TaskListService.test.ts contributes 0, which is exactly the gap the README admits. The eighth vulnerability keeps its story in prose, where testimony belongs."
-    },
-    {
       "id": "cadence.tenant_tables",
       "value": "7",
       "drawn_on": [
@@ -516,6 +504,36 @@
       "path": "src/test/java/com/ayush/jetpack/Adler32Test.java",
       "extractor": "grep -oE '0x[0-9A-F]{8}L' \"$BLOB\" | sort -u | head -1 | sed 's/^0x//; s/L$//'",
       "note": "The canonical Adler-32 vector for the input \"Wikipedia\", asserted for both the scalar and the vectorised path (Adler32Test.java:36-37). It is now drawn as one string per row rather than eight <text> elements, so it appears whole in the plate and needs no per-glyph exemptions. The stronger claim on the plate \u2014 bit-identical to java.util.zip \u2014 is the separate matchesJdkAcrossSizes test, which compares both paths across 26 input sizes."
+    },
+    {
+      "id": "cadence.idor_services",
+      "value": "6",
+      "drawn_on": [
+        "plate-5-refusal.svg",
+        "README.md"
+      ],
+      "repo": "cadence",
+      "paths": [
+        "lib/services/AttachmentService.ts",
+        "lib/services/CalendarService.ts",
+        "lib/services/EventService.ts",
+        "lib/services/TagService.ts",
+        "lib/services/TaskListService.ts",
+        "lib/services/TaskService.ts"
+      ],
+      "extractor": "grep -lE 'AND \"userId\" = [$]' $BLOBS | grep -c .",
+      "note": "Counted from the guard in the QUERY, not from a comment about it. The previous row here counted the word IDOR in docstrings and returned 7; four different methods return 7, 8, 9 and 15, so the count of vulnerabilities is an audit finding and belongs in prose. How many services now scope by owner is a property of the code."
+    },
+    {
+      "id": "glyph.deployed_wasm_sha256",
+      "value": "396dc0f4848ddc0b9c35420cdad5e5cc0af53f4a408024ba10f7364470d9807e",
+      "drawn_on": [
+        "README.md"
+      ],
+      "repo": "glyph-simd",
+      "path": "web/public/wasm/fast_mnist.wasm",
+      "extractor": "shasum -a 256 \"$BLOB\" | cut -d' ' -f1",
+      "note": "The page's strongest single piece of evidence, and it was uncited. The binary getglyph.vercel.app serves is byte-identical to this blob, so 'it came off a branch carrying real wasm_simd128 intrinsics' stops being testimony: curl the URL, hash it, compare."
     }
   ],
   "$unpinnable_note": [
@@ -545,8 +563,8 @@
         "m-3-cadence.svg",
         "README.md"
       ],
-      "source": "https://vercel.com/docs/functions/limitations",
-      "why": "Vercel's Hobby-tier cap of 12 Serverless Functions per deployment is a platform fact, not a measurement of this repository. The previous extractor grepped `caps deployments at 12` out of api/index.ts \u2014 the author's own comment \u2014 so the page was citing itself and calling it derivation. What the repo genuinely proves is the consequence: one function serving 36 routes, which cadence.handlers derives."
+      "source": "https://vercel.com/docs/functions/runtimes#functions-created-per-deployment",
+      "why": "Vercel's Hobby-tier cap of 12 Vercel Functions per deployment is a platform fact (the docs moved: /docs/limits now says 'framework-dependent', and the 12 lives at the runtimes page cited above), not a measurement of this repository. The previous extractor grepped `caps deployments at 12` out of api/index.ts \u2014 the author's own comment \u2014 so the page was citing itself and calling it derivation. What the repo genuinely proves is the consequence: one function serving 36 routes, which cadence.handlers derives."
     }
   ],
   "exempt": {
@@ -559,8 +577,8 @@
       "list cannot quietly accumulate excuses for numbers that are already gone."
     ],
     "plate-1-glyph.svg:512": "AVX-512 \u2014 an instruction-set name. (AVX2, e5, int8 and 1pm need no entry: there is no word boundary before those digits, so they are never read as numbers.)",
-    "plate-1-glyph.svg:4": "'4 BUILDS \u00b7 1 ANSWER', counting the four build targets drawn directly above it",
-    "plate-1-glyph.svg:1": "'1 ANSWER' and '3 BY HAND, 1 AUTO' \u2014 the same four targets, counted",
+    "plate-1-glyph.svg:4": "'4 BUILDS \u00b7 1 PATH COMPILED', counting the four build targets drawn directly above it",
+    "plate-1-glyph.svg:1": "'4 BUILDS \u00b7 1 PATH COMPILED' and '3 BY HAND, 1 AUTO' \u2014 the same four targets, counted",
     "plate-1-glyph.svg:3": "'3 BY HAND, 1 AUTO'",
     "plate-1-glyph.svg:0.9": "the confidence cut chosen to describe the errors. The cut is a choice; the 79 errors above it are derived (glyph.confident_errors)",
     "plate-2-jetpack.svg:32": "the name of the Adler-32 algorithm",
@@ -580,6 +598,7 @@
     "README.md:6": "'Six systems' \u2014 a count of this page's own contents, which the page then enumerates one per section; the reader checks it by scrolling",
     "README.md:5": "'Five system cards' \u2014 likewise enumerated on the page, and the sixth is named as an expo booklet",
     "plate-7-colophon.svg:6": "'Six systems' \u2014 the colophon restating the page's own contents",
-    "plate-7-colophon.svg:5": "'Five system cards' \u2014 likewise"
+    "plate-7-colophon.svg:5": "'Five system cards' \u2014 likewise",
+    "README.md:256": "the '256' in `shasum -a 256` \u2014 the name of the hash algorithm in a command the reader is invited to run"
   }
 }
