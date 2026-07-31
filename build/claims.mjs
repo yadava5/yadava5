@@ -83,6 +83,28 @@ function bytes(repoKey, path) {
 //    anyone with curl, and it SHOULD break if the deployment changes — that is
 //    the claim. Not cached: a stale cache would defeat the point.
 function live(url, header) {
+  // `curl -f` exits non-zero on any 4xx/5xx and prints nothing useful, so this
+  // used to surface as "extractor failed — Command failed: curl", which does
+  // not tell a reader of CI the one thing they need to know: whether the PAGE
+  // is wrong or the HOST is unreachable. Those are different problems with
+  // different owners.
+  //
+  // The verdict is unchanged either way — a claim the page tells readers to
+  // check with curl, which they cannot check, is a failure and should stay one.
+  // Only the diagnosis improves.
+  let status = '';
+  try {
+    status = execFileSync('curl', ['-sS', '-o', '/dev/null', '-w', '%{http_code}',
+                                   '--max-time', '60', url], { encoding: 'utf8' }).trim();
+  } catch { /* fall through to the fetch below, which reports the real error */ }
+  if (status && !/^2\d\d$/.test(status)) {
+    const why = status === '403'
+      ? 'the deployment is behind access protection (Vercel Deployment Protection, most likely)'
+      : status === '404' ? 'the path is gone from the deployment'
+      : `the host answered ${status}`;
+    throw new Error(`${url} returns ${status} — ${why}. The page tells a reader to verify this `
+                  + `artifact with curl, so right now that instruction does not work.`);
+  }
   const out = execFileSync('curl', ['-fsSI', '--max-time', '60', url], { encoding: 'utf8' });
   const m = out.match(new RegExp(`^${header}:\\s*(.+)$`, 'im'));
   return m ? m[1].trim() : '';
@@ -182,6 +204,12 @@ for (const c of [...spec.claims, ...spec.unpinnable, ...spec.external, ...(spec.
 const knownIn = new Map();
 for (const c of [...spec.claims, ...spec.unpinnable, ...spec.external])
   for (const f of c.drawn_on || []) {
+    // A claim that ANCHORS its occurrences in a file does not also contribute
+    // its value to that file's permitted-value pool. Otherwise anchoring would
+    // be additive only: the phrase would be pinned and every OTHER occurrence
+    // of the same number would still ride free on the row. Pinning an
+    // occurrence means the row accounts for that occurrence and no other.
+    if (c.anchors && c.anchors[f]) continue;
     if (!knownIn.has(f)) knownIn.set(f, new Set());
     knownIn.get(f).add(String(c.value));
   }
@@ -190,6 +218,7 @@ const known = (f) => knownIn.get(f) || knownIn.get(unthemed(f)) || new Set();
 // the author's word; the page says so where it draws them.
 for (const a of spec.attested || [])
   for (const f of a.drawn_on || []) {
+    if (a.anchors && a.anchors[f]) continue;      // same rule as the derived rows
     if (!knownIn.has(f)) knownIn.set(f, new Set());
     knownIn.get(f).add(String(a.value));
   }
@@ -236,14 +265,51 @@ const numsOf = (f) => {
   // upstream. But this gate advertises that no number goes unaudited, and the
   // honest statement is that it audits the drawn text and leans on two other
   // checks for the accessible copy.
+  const src = sweepText(f) ?? textOf(f);
   const t = f === 'README.md'
-    ? textOf(f).replace(/<[^>]*>/g, ' ').replace(/\]\([^)]*\)/g, ' ').replace(/https?:\/\/\S+/g, ' ')
-    : textOf(f);
+    ? src.replace(/<[^>]*>/g, ' ').replace(/\]\([^)]*\)/g, ' ').replace(/https?:\/\/\S+/g, ' ')
+    : src;
   const out = new Set(t.match(/\d+\.\d+|\b\d+\b/g) || []);
   for (const [w, n] of Object.entries(WORDNUM))
     if (new RegExp(`\\b${w}\\b`, 'i').test(t)) out.add(String(n));
   return out;
 };
+// ── ANCHORS. Coverage above is a per-file SET of permitted values, and for a
+//    plate carrying five to ten numbers that is close to exact. For README.md
+//    it is close to vacuous: ~79 values are permitted, and WORDNUM folds
+//    three/seven/ten into the same tokens, so ANY registered value legitimises
+//    EVERY other occurrence of that value anywhere in the file. An audit
+//    demonstrated six live falsifications that shipped green, including the
+//    headline claim of section VI:
+//
+//      "on all **seven** tenant tables"  ->  "ten"     licensed by jetpack.cores = 10
+//      "a 3-fork JMH run"                ->  "10-fork" licensed by jetpack.cores = 10
+//      "I led a three-person team"       ->  "twelve"  licensed by applied.eval_per_class = 12
+//
+//    A row may now pin its occurrence rather than its value: `anchors` lists
+//    exact strings that must appear verbatim in a file. Each is verified and
+//    then MASKED OUT before the value sweep, so the numbers inside it are
+//    accounted for by that claim and by nothing else. Change a digit or a
+//    numeral word inside an anchored phrase and the anchor stops matching.
+const masked = new Map();
+for (const c of [...spec.claims, ...(spec.attested || [])]) {
+  for (const [file, list] of Object.entries(c.anchors || {})) {
+    let text = masked.has(file) ? masked.get(file) : textOf(file);
+    for (const anchor of list) {
+      if (!text.includes(anchor)) {
+        fails.push(`${c.id}: anchor ${JSON.stringify(anchor)} no longer appears in ${file} `
+                 + `— the sentence it pins was edited, so the value is no longer where the row says it is`);
+        continue;
+      }
+      if (!drawsToken(anchor, c.value))
+        fails.push(`${c.id}: anchor ${JSON.stringify(anchor)} does not contain the value "${c.value}"`);
+      text = text.split(anchor).join(' '.repeat(anchor.length));
+    }
+    masked.set(file, text);
+  }
+}
+const sweepText = (f) => masked.has(f) ? masked.get(f) : null;
+
 for (const file of SWEPT) {
   for (const n of numsOf(file)) {
     if (known(file).has(n) || exempt.has(n)
