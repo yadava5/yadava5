@@ -584,7 +584,6 @@ def plate_glyph() -> str:
 # ────────────────────────────────────────────────────────────── PLATE II
 def plate_jetpack() -> str:
     H, LOOP, SET, a = 537, 10.3, 7.2, LIME
-    LOOP2 = round(LOOP / 2, 2)
     s = [head(H, "jetpack — 6.4x parallel, and the intrinsic it does not beat",
               "jetpack: parallel gzip on JDK 25 reaches 422 megabytes per second against 66.2 "
               "single-threaded, a 6.4 times speedup, with blocks held in a bounded in-flight "
@@ -592,19 +591,44 @@ def plate_jetpack() -> str:
               "and is verified bit-identical against java.util.zip — whose own native intrinsic "
               "is faster still, at 14.06, and is printed here as the reference it loses to.",
               key="plate-2-jetpack.svg")]
-    s.append(f""".blk{{animation:sq {LOOP}s {ARRIVE} infinite;transform-box:fill-box;transform-origin:left center}}
-@keyframes sq{{0%{{opacity:0;transform:translateX(-88px) scaleX(1)}}
-  5%,14%{{opacity:1;transform:translateX(-88px) scaleX(1)}}
-  38%,60%{{opacity:1;transform:translateX(0) scaleX(1)}}
-  /* the window breathes once the blocks are inside it: peak memory tracking
-     the window is a continuous property, not a one-off arrival */
-  52%{{opacity:1;transform:translateX(0) scaleX(.94)}}
-  66%,78%{{opacity:1;transform:translateX(0) scaleX(1)}}
-  86%{{opacity:1;transform:translateX(0) scaleX(.97)}}
-  94%,96%{{opacity:1;transform:translateX(0) scaleX(1)}}
-  100%{{opacity:0;transform:translateX(0) scaleX(1)}}}}
-.wscan{{animation:wscan {LOOP2}s linear infinite}}
-@keyframes wscan{{0%{{transform:translateY(0)}}100%{{transform:translateY(104px)}}}}
+    # ── the window, drawn DOING what its caption claims. The old form slid four
+    # blocks in once and held them for 60% of the loop, with three hairlines
+    # cycling inside the bracket to carry the raster gate — a decoration doing
+    # the work the diagram should. Now the diagram does it: the in-order writer
+    # drains the OLDEST block from the top slot, the queue advances one slot,
+    # and a fresh block enters the bottom from the left. Four blocks in
+    # rotation, one drain every quarter loop, and the count in flight never
+    # exceeds four — which is the entire claim. The drain is a shrink toward
+    # the right edge (streamed out to the file), not a slide past x=294: the
+    # window's far line is declared with data-max-x and a block visibly
+    # crossing it would be the bound failing to bind.
+    #
+    # Each block gets its OWN keyframes, one quarter-loop apart. A shared
+    # class would put four 2.6s delays in one stagger group, and check 14 is
+    # right that 2.6s siblings do not read as one gesture — these are four
+    # positions in a rotation, not a wave. The timeline is simulated once
+    # here rather than authored four times by eye.
+    BH, SP, BY0 = 18, 26, 166      # block height, slot pitch, top slot y
+    cyc = []
+    for k in range(4):
+        off = lambda j: (j - k) * SP
+        stop = lambda t, j, x=0, o=1, sx=1: seg.append(
+            (t, f"opacity:{o};transform:translate({x}px,{off(j)}px) scaleX({sx})"))
+        seg, c = [], k
+        stop(0, k)
+        for j in range(4):
+            e = 2 + 25 * j
+            if j == k:                       # this block's own drain
+                stop(e, 0); stop(e + 3.5, 0, o=0, sx=0.08)
+                stop(e + 5.5, 3, x=-88, o=0) # hidden reposition to the entry
+                stop(e + 9, 3); c = 3
+            else:                            # the queue advances one slot
+                stop(e + 1.5, c); c -= 1; stop(e + 5, c)
+        stop(100, k)
+        cyc.append(f".b{k}{{transform-box:fill-box;transform-origin:right center;"
+                   f"animation:cyc{k} {LOOP}s {EASE} infinite}}\n@keyframes cyc{k}{{"
+                   + "".join(f"{t:g}%{{{v}}}" for t, v in seg) + "}")
+    s.append("".join(cyc) + f"""
 .mt{{transform-box:fill-box;transform-origin:left center;animation:mt {LOOP}s {ARRIVE} infinite}}
 @keyframes mt{{0%,6%{{transform:scaleX(0);opacity:0}}11%{{opacity:1}}24%,100%{{transform:scaleX(1);opacity:1}}}}
 .row{{animation:rw {LOOP}s {EASE} infinite}}
@@ -627,25 +651,13 @@ def plate_jetpack() -> str:
     # 404..524 puts 6u of air on each side of the thing it bounds.
     s.append(f'<path d="M174 152V268M174 152H194M174 268H194" stroke="{WIRE}" stroke-width="1"/>')
     s.append(f'<path d="M294 152V268M294 152H274M294 268H274" stroke="{WIRE}" stroke-width="1"/>')
-    # The consume position cycling through the bounded window — blocks are
-    # held HERE until the in-order writer drains them, and that draining never
-    # stops while the file lasts. As one 2u line this moved ~500 raster px per
-    # 100ms sample, under the 0.2% floor of build/motion.mjs, which is why the
-    # plate measured 4.5s of dead air while its scan was technically moving.
-    # Three lines, each still a ≤3u hairline the collision rule exempts, carry
-    # three times the pixels; 104u of travel keeps the tail inside the window.
-    # .50 is the tail's floor twice over: check 7 counts anything under 0.5
-    # opacity as invisible, and dark-theme lime below ~.45 drops under the 3:1
-    # non-text contrast line. (op() lifts all three for the light slab, where
-    # the same alphas measure under 2:1.)
-    s.append(f'<g class="wscan">'
-             f'<rect x="176" y="153" width="116" height="2" fill="{a}" opacity="{op(0.62)}"/>'
-             f'<rect x="176" y="157" width="116" height="2" fill="{a}" opacity="{op(0.56)}"/>'
-             f'<rect x="176" y="161" width="116" height="2" fill="{a}" opacity="{op(0.5)}"/></g>')
-    for i in range(4):
-        y = 168 + i * 26
-        s.append(f'<rect class="blk" data-max-x="294" x="180" y="{y}" width="107.8" height="16" rx="2" fill="{a}" '
-                 f'style="animation-delay:{round(-SET + i*0.12,3)}s"/>')
+    # Authored full: the finished frame shows the window holding its bound of
+    # four, which is the picture the caption describes. The keyframes above
+    # supply the rotation; block k's 0% IS its authored slot, so there is no
+    # negative delay to carry and no start pose to hide.
+    for k in range(4):
+        s.append(f'<rect class="b{k}" data-max-x="294" x="180" y="{BY0 + k*SP}" '
+                 f'width="107.8" height="{BH}" rx="2" style="fill:{a}"/>')
     for j, ln in enumerate(["peak memory", "tracks the window,", "not the file"]):
         s.append(f'<text x="400" y="{194 + j*20}" class="fine">{ln}</text>')
     s.append(f'<text x="150" y="288" class="kick">MECHANISM — one virtual thread per block</text>')
@@ -692,7 +704,7 @@ def plate_jetpack() -> str:
 
 # ────────────────────────────────────────────────────────────── PLATE III
 def plate_cadence() -> str:
-    H, LOOP, SET, a = 457, 7.9, 5.6, EMERALD
+    H, LOOP, SET, a = 545, 7.9, 5.6, EMERALD
     SENT, FS, CW = "lunch with sam friday 1pm", 26, 15.62
     s = [head(H, "Cadence — a parser that shows its work",
               "Cadence: the sentence 'lunch with sam friday 1pm' is labelled in place with the "
@@ -705,11 +717,23 @@ def plate_cadence() -> str:
 @keyframes ul{{0%,4%{{transform:scaleX(0);opacity:0}}8%{{opacity:1}}18%,100%{{transform:scaleX(1);opacity:1}}}}
 .an{{animation:an {LOOP}s linear infinite}}
 @keyframes an{{0%,6%{{opacity:0}}12%,100%{{opacity:1}}}}
-.now{{animation:now {LOOP}s linear infinite}}
-@keyframes now{{0%{{transform:translateY(0)}}100%{{transform:translateY(70px)}}}}
+/* The now-line is the one sweep on this page that is not a metaphor: a week
+   grid HAS a now-line. It used to cross a 72u toy grid at 0.9u per 100ms —
+   legitimate and invisible, 0.25% of pixels per sample. The grid now names
+   five hours instead of two, which is both more honest as a calendar and
+   gives the line 158u of travel: 2u per 100ms across a 528u width clears the
+   0.5% perceptual floor on its own, and 158 stays under the 160u teleport
+   ceiling so the wrap needs no fade. Authored at the bottom of the day — the
+   finished pose is the day mostly spent. */
+.now{{animation:now {LOOP}s linear infinite;animation-delay:{-SET}s}}
+@keyframes now{{0%{{transform:translateY(-158px)}}100%{{transform:translateY(0)}}}}
+/* the filing itself, drawn: a lead from the chrono span down to the slot it
+   names, redrawn every loop just before the chip lands */
+.lead{{stroke-dasharray:1;animation:lead {LOOP}s {EASE} infinite;animation-delay:{-SET}s}}
+@keyframes lead{{0%,8%{{stroke-dashoffset:1}}26%,100%{{stroke-dashoffset:0}}}}
 .fil{{transform-box:fill-box;transform-origin:center;animation:fil {LOOP}s {BREATHE} infinite}}
-@keyframes fil{{0%,10%{{opacity:0;transform:scale(.94)}}16%{{opacity:1;transform:scale(1)}}
-  40%{{transform:scale(1)}}48%{{transform:scale(1.05)}}58%,100%{{transform:scale(1);opacity:1}}}}
+@keyframes fil{{0%,16%{{opacity:0;transform:scale(.94)}}24%{{opacity:1;transform:scale(1)}}
+  44%{{transform:scale(1)}}50%{{transform:scale(1.06)}}60%,100%{{transform:scale(1);opacity:1}}}}
 </style>{slab(H, a)}""")
     s.append(f'<text x="150" y="56" class="kick">CLAIM — plain English in, calendar out</text>')
     s.append(rail("IV", "CADENCE"))
@@ -743,24 +767,33 @@ def plate_cadence() -> str:
     s.append(f'<text x="150" y="184" class="kick">THE TITLE IS WHAT IS LEFT — IT CARRIES NO PARSER</text>')
     s.append(f'<text x="150" y="204" class="kick">FILED — into the hour it names</text>')
 
-    # filed — a week grid with real hour rows, so it reads as a calendar
+    # filed — a week grid with real hour rows, so it reads as a calendar.
+    # Five hours, not two: the taller grid is what lets the now-line's travel
+    # register (see the .now comment), and a working afternoon is a more
+    # honest calendar than a 72u sliver of one. "1pm" and "3pm" never strip to
+    # bare numerals, so the extra hour labels add no unaudited numbers.
     s.append(f'<path d="M150 224H730" stroke="{RULE}"/>')
     # the hour gutter — right-aligned so it cannot drift into the type column
-    for hy, hl in ((266, "12"), (290, "1pm"), (314, "2pm")):
+    for hy, hl in ((266, "12"), (298, "1pm"), (330, "2pm"), (362, "3pm"), (394, "4pm")):
         s.append(f'<text x="182" y="{hy}" class="fine" text-anchor="end">{hl}</text>')
     for d, day in enumerate(["MON", "TUE", "WED", "THU", "FRI"]):
         x = 196 + d * 108
         s.append(f'<text x="{x}" y="252" class="lbl">{day}</text>')
-        s.append(f'<rect x="{x}" y="262" width="96" height="72" rx="3" fill="none" stroke="{WIRE}"/>')
-        for hr in (286, 310):
+        s.append(f'<rect x="{x}" y="262" width="96" height="160" rx="3" fill="none" stroke="{WIRE}"/>')
+        for hr in (294, 326, 358, 390):
             s.append(f'<path d="M{x} {hr}H{x+96}" stroke="{RULE}" stroke-width="1"/>')
-    s.append(f'<rect class="now" x="196" y="263" width="528" height="2" fill="{a}" opacity="{op(0.62)}"/>')
+    s.append(f'<rect class="now" x="196" y="419" width="528" height="2" fill="{a}" opacity="{op(0.62)}"/>')
+    # the lead from the parsed span to the slot it names — a hairline, so it
+    # may pass over the grid frames, and routed to start where the chrono
+    # bracket ends so it never crosses its own label
+    s.append(f'<path class="lead" d="M540 140C620 190 676 220 676 296" pathLength="1" '
+             f'fill="none" stroke="{a}" stroke-width="1.4" opacity="{op(0.7)}"/>')
     s.append(f'<g class="fil" style="animation-delay:{-SET}s">'
-             f'<rect x="632" y="288" width="88" height="20" rx="3" fill="{CHIP}" stroke="{a}"/>'
-             f'<text x="640" y="302" class="fine" style="fill:{a}">lunch</text></g>')
-    s.append(f'<text x="150" y="410" class="hero">36</text>')
-    s.append(f'<text x="232" y="394" class="lbl">HANDLERS IN ONE FUNCTION</text>')
-    s.append(f'<text x="232" y="418" class="lbl">THE PLAN ALLOWS 12</text>')
+             f'<rect x="632" y="300" width="88" height="20" rx="3" fill="{CHIP}" stroke="{a}"/>'
+             f'<text x="640" y="314" class="fine" style="fill:{a}">lunch</text></g>')
+    s.append(f'<text x="150" y="498" class="hero">36</text>')
+    s.append(f'<text x="232" y="482" class="lbl">HANDLERS IN ONE FUNCTION</text>')
+    s.append(f'<text x="232" y="506" class="lbl">THE PLAN ALLOWS 12</text>')
     return "".join(s) + "</svg>"
 
 
@@ -774,26 +807,51 @@ def plate_applied() -> str:
               "96-message evaluation set, measured with the rules layer alone; anything that "
               "fails to clear the 0.85 confidence gate is referred to a human rather than "
               "guessed at. Inference runs inside your browser.", key="plate-4-applied.svg")]
-    s.append(f""".env{{animation:fall {LOOP}s {ARRIVE} infinite}}
-@keyframes fall{{0%{{opacity:0;transform:translateY(-184px)}}5%{{opacity:1;transform:translateY(-184px)}}
-  46%,96%{{opacity:1;transform:translateY(0)}}100%{{opacity:0;transform:translateY(0)}}}}
-/* The corner used to be at translateY(212px) — 52u BELOW the gate, so the one
-   message that is supposed to be refused crossed the gate first and turned
-   underneath it. Nothing on the plate was ever stopped by anything. 140px puts
-   its bottom edge exactly on y=288, where it is held before being referred. */
+    # ── the cascade, run continuously. The old loop dropped one cohort of
+    # envelopes and held them for the back half of the loop, while a hairline
+    # slid down the tiers carrying the raster gate on its own — the claim
+    # arrived once and the decoration moved forever. Now the mail does what
+    # mail does in production: each slot's envelope periodically files away and
+    # its REPLACEMENT falls the full height of the cascade into the same slot,
+    # so at any moment the stack is either complete or being refilled. Each
+    # envelope has its own keyframes (a shared class would put four multi-
+    # second delays in one stagger group, which check 14 rightly refuses);
+    # 0% is the authored slot, so the still frame is the classified stack.
+    #
+    # The fall is 184u in 0.76s — quick on purpose. build/motion.mjs counts a
+    # sample alive at 0.5% of pixels changed, and a filled 30u envelope only
+    # clears that in company with the stream hairline when it moves ~20u per
+    # 100ms. A stately fall is geometrically identical and perceptually absent.
+    env = []
+    for k in range(4):
+        p = 2 + 19 * k
+        env.append(
+            f".e{k}{{animation:drop{k} {LOOP}s {EASE} infinite}}\n@keyframes drop{k}{{"
+            f"0%,{p}%{{opacity:1;transform:translateY(0)}}"
+            f"{p+1.5:g}%{{opacity:0;transform:translateY(0)}}"
+            f"{p+3:g}%{{opacity:0;transform:translateY(-184px)}}"
+            f"{p+4.5:g}%{{opacity:1;transform:translateY(-184px)}}"
+            f"{p+11:g}%,100%{{opacity:1;transform:translateY(0)}}}}")
+    s.append("".join(env) + f"""
 .ly{{stroke-dasharray:18 222;animation:ly {LOOP}s linear infinite}}
 @keyframes ly{{0%{{stroke-dashoffset:240}}100%{{stroke-dashoffset:0}}}}
+/* the stream is SUPPORT now, not the show: alone it moves ~0.3% of pixels per
+   sample, under the perceptual floor — it reads as the ambient flow of mail
+   while the envelopes above it carry the plate. */
 .strm{{animation:strm {LOOP2}s linear infinite;animation-delay:{-SET}s}}
 @keyframes strm{{0%{{transform:translateY(0)}}100%{{transform:translateY(148px)}}}}
-.div{{animation:dv {LOOP}s {ARRIVE} infinite}}
-@keyframes dv{{0%{{opacity:0;transform:translate(-146px,-212px)}}5%{{opacity:1;transform:translate(-146px,-212px)}}
+.div{{animation:dv {LOOP}s {EASE} infinite}}
+@keyframes dv{{0%,80%{{opacity:1;transform:translate(0,0)}}
+  81.5%{{opacity:0;transform:translate(0,0)}}
+  83%{{opacity:0;transform:translate(-146px,-212px)}}
+  84.5%{{opacity:1;transform:translate(-146px,-212px)}}
   /* stopped ON the gate, and visibly held there — that pause is the refusal */
-  30%,44%{{opacity:1;transform:translate(-146px,-72px)}}
+  89%,93%{{opacity:1;transform:translate(-146px,-72px)}}
   /* then referred: down through the empty slot it left in the stack, and out
      to a person. It descends in its OWN column, so it never crosses a message
      still falling — routing it diagonally put it through slot 4 in flight. */
-  56%{{opacity:1;transform:translate(-146px,0)}}
-  68%,96%{{opacity:1;transform:translate(0,0)}}100%{{opacity:0;transform:translate(0,0)}}}}
+  95.5%{{opacity:1;transform:translate(-146px,0)}}
+  98.5%,100%{{opacity:1;transform:translate(0,0)}}}}
 </style>{slab(H, a)}""")
     # 0.979 is the number with artifacts behind it: five committed files carry
     # it. 0.9583 — the full cascade — survives in exactly one line of prose,
@@ -813,30 +871,31 @@ def plate_applied() -> str:
         # the lit layer, drawn over the dashed one as the messages arrive
         s.append(f'<path class="ly" d="M400 {y}H640" stroke="{a}" stroke-width="1.4" '
                  f'style="animation-delay:{round(-SET + i*0.18,3)}s"/>')
-    # the ambient element: the stream itself. Escalation is the claim — mail
-    # descends the cascade toward the gate continuously in production, but the
-    # falling envelopes show one cohort and then hold, which the raster gate
-    # measured as 4.8s of dead air. A hairline riding 148→296 crosses all
-    # three tiers and passes through the gate, twice a loop; 148u of travel
-    # stays under the 160u teleport ceiling, so the wrap needs no fade.
+    # the stream, kept in a supporting role: mail flows toward the gate all
+    # loop, but it no longer carries the plate — the envelopes above re-run
+    # the descent themselves. 148u of travel stays under the 160u teleport
+    # ceiling, so the wrap needs no fade.
     s.append(f'<rect class="strm" x="400" y="148" width="240" height="2" fill="{a}" opacity="{op(0.55)}"/>')
     # the gate that is allowed to decline
     s.append(f'<text x="150" y="293" class="lbl" style="fill:{a}">0.85 CONFIDENCE GATE</text>')
     s.append(f'<path d="M400 288H640" stroke="{a}" stroke-width="1"/>')
 
-    # The delay index counts DRAWN envelopes, not slots. Keying it to the slot
-    # index left a 280ms hole where slot 2 is empty — real gaps 140/280/140 —
-    # and the stagger check averaged them to 186.7ms and passed. The gap in the
-    # queue is a spatial statement; it should not also be a temporal one.
+    # Filled, not hollow: a moving outline is ~500u² of changed pixels however
+    # fast it goes, which is how the last round's motion was real to every
+    # bounding-box check and invisible to the raster. The fill sits at op(.5) —
+    # 3.4:1 on the dark slab, and op() lifts it for the light one — with the
+    # full-strength stroke keeping the component legible either way.
     for j, i in enumerate([0, 1, 3, 4]):    # slot 2 belongs to the .div below
-        s.append(f'<rect class="env" x="{416 + i*44}" y="312" width="30" height="20" rx="2" fill="none" '
-                 f'stroke="{a}" stroke-width="1.6" style="animation-delay:{round(-SET + j*0.14,3)}s"/>')
+        s.append(f'<rect class="e{j}" x="{416 + i*44}" y="312" width="30" height="20" rx="2" '
+                 f'style="fill:{a};fill-opacity:{op(0.5)};stroke:{a};stroke-width:1.6"/>')
     # the one that does not clear the gate leaves the stack and goes sideways
     # the whole claim of this plate is that the one that fails the gate reaches
-    # a PERSON. If it merely leaves the stack, the plate says nothing.
+    # a PERSON. If it merely leaves the stack, the plate says nothing. Its
+    # journey is re-run late in every loop; the rest pose — 80% of the loop,
+    # and the authored frame — is with the human it was referred to.
     s.append(f'<rect class="div" data-rest="the-human" data-rest-within="10" '
-             f'x="650" y="340" width="30" height="20" rx="2" fill="none" '
-             f'stroke="{AMBER}" stroke-width="1.6" style="animation-delay:{round(-SET + 0.2,3)}s"/>')
+             f'x="650" y="340" width="30" height="20" rx="2" '
+             f'style="fill:{AMBER};fill-opacity:{op(0.5)};stroke:{AMBER};stroke-width:1.6"/>')
     s.append(f'<circle id="the-human" cx="700" cy="350" r="11" fill="none" stroke="{AMBER}" stroke-width="1.4"/>')
     s.append(f'<text x="{R}" y="382" class="lbl" style="fill:{AMBER}" text-anchor="end">A HUMAN</text>')
     # and the ones that DO clear the gate land on a name rather than in blank space
@@ -882,23 +941,40 @@ def plate_refusal() -> str:
               "an unfiltered SELECT count(*) FROM tasks, run as B, comes back B only, because "
               "PostgreSQL row-level security refused the rest.", key="plate-5-refusal.svg")]
     # The continuous element is the read itself: a full-column hairline passing
-    # down the six services for the whole loop. The old plate's only sustained
-    # motion was a 5u dot, which is why it measured 36% alive with a 1.9s dead
-    # run — the thinnest-moving plate in the set. A 580u bar is the idiom that
-    # actually registers on the raster gate. 150u of travel stays under the
-    # 160u teleport ceiling, so the wrap needs no fade.
+    # down the six services for the whole loop. It is no longer just a carrier:
+    # the strikes and B's returned rows are KEYED to it — as the head crosses a
+    # service, A's strike for that row clears and redraws under it and B's row
+    # answers with its bounce, so every pass is visibly a re-run of the audit
+    # rather than a sweep over a finished table. The head now covers all six
+    # rows (116→288, 172u), which exceeds the 160u teleport ceiling, so it
+    # fades across the wrap instead of snapping back. Its dimmed opacity moves
+    # into the keyframes because an animated opacity overrides the attribute.
+    #
+    # Each strike/return pair gets its own keyframes: the head takes ~1.1s per
+    # row, and six 1.1s siblings in one class is a queue, not a wave — the
+    # exact thing check 14's 200ms ceiling exists to refuse.
+    ROWY = [140 + i * 28 for i in range(6)]
+    sync = []
+    for i, y in enumerate(ROWY):
+        p = round((y - 5 - 116) / 172 * 100, 1)   # head reaches this row's strike
+        sync.append(
+            f".s{i}{{transform-box:fill-box;transform-origin:left center;"
+            f"animation:sk{i} {LOOP}s {ARRIVE} infinite;animation-delay:{-SET}s}}\n"
+            f"@keyframes sk{i}{{0%,{p-1.2:g}%{{transform:scaleX(1)}}{p:g}%{{transform:scaleX(0)}}"
+            f"{p+5.5:g}%,100%{{transform:scaleX(1)}}}}\n"
+            f".r{i}{{transform-box:fill-box;transform-origin:left center;"
+            f"animation:rt{i} {LOOP}s {EASE} infinite;animation-delay:{-SET}s}}\n"
+            f"@keyframes rt{i}{{0%,{p:g}%{{transform:translateY(0)}}{p+2.5:g}%{{transform:translateY(-4px)}}"
+            f"{p+6.5:g}%,100%{{transform:translateY(0)}}}}")
     s.append(f""".swp{{animation:swp {LOOP}s linear infinite;animation-delay:{-SET}s}}
-@keyframes swp{{0%{{transform:translateY(0)}}100%{{transform:translateY(150px)}}}}
+@keyframes swp{{0%{{opacity:0;transform:translateY(-172px)}}2.5%{{opacity:{op(0.55)}}}
+  95%{{opacity:{op(0.55)}}}100%{{opacity:0;transform:translateY(0)}}}}
 /* the owner guards land first, then the strikes are drawn through A's rows —
    the refusal is something that happens TO the rows, not a token bouncing off
    a wall. The strikes grow from the left, the direction the read travels. */
 .gm{{animation:gm {LOOP}s linear infinite}}
 @keyframes gm{{0%,3%{{opacity:0}}9%,100%{{opacity:1}}}}
-.strk{{transform-box:fill-box;transform-origin:left center;animation:strk {LOOP}s {ARRIVE} infinite}}
-@keyframes strk{{0%,6%{{transform:scaleX(0)}}18%,100%{{transform:scaleX(1)}}}}
-.ret{{transform-box:fill-box;transform-origin:left center;animation:ret {LOOP}s {EASE} infinite}}
-@keyframes ret{{0%,34%{{transform:translateY(0)}}42%{{transform:translateY(-4px)}}
-  56%,100%{{transform:translateY(0)}}}}
+{"".join(sync)}
 .zero{{animation:land {LOOP}s linear infinite;animation-delay:{-SET}s}}
 @keyframes land{{0%,14%{{opacity:0}}22%,100%{{opacity:1}}}}
 </style>{slab(H, a)}""")
@@ -929,13 +1005,17 @@ def plate_refusal() -> str:
         # tenant A's row EXISTS — grey, framed like any stored row — and is
         # struck out of the result. Withheld is not deleted.
         s.append(f'<rect x="480" y="{y-12}" width="110" height="16" rx="2" fill="{ROW}" stroke="{WIRE}"/>')
-        s.append(f'<rect class="strk" x="484" y="{y-5}" width="102" height="2" '
-                 f'style="fill:{a};animation-delay:{dl}s"/>')
-        # tenant B's row is the one that comes back, so it carries the accent
-        s.append(f'<rect class="ret" x="620" y="{y-12}" width="110" height="16" rx="2" fill="{ROW}" '
-                 f'stroke="{a}" style="animation-delay:{round(-SET + i*0.18,3)}s"/>')
-    # the read head, over the table it is reading, for the whole loop
-    s.append(f'<rect class="swp" x="{L}" y="116" width="580" height="2" style="fill:{a}" opacity="{op(0.55)}"/>')
+        # the strike clears and redraws as the head crosses THIS row — see the
+        # per-row keyframes above. Authored drawn: the finished frame is the
+        # audited table.
+        s.append(f'<rect class="s{i}" x="484" y="{y-5}" width="102" height="2" '
+                 f'style="fill:{a}"/>')
+        # tenant B's row is the one that comes back, so it answers the same pass
+        s.append(f'<rect class="r{i}" x="620" y="{y-12}" width="110" height="16" rx="2" fill="{ROW}" '
+                 f'stroke="{a}"/>')
+    # the read head — authored at the BOTTOM of the table it has just read,
+    # because the finished pose of a read is a read that finished
+    s.append(f'<rect class="swp" x="{L}" y="288" width="580" height="2" style="fill:{a}"/>')
     s.append(f'<text x="{L}" y="312" class="fine">A’s rows withheld, B’s returned — the guard sits in the query</text>')
 
     s.append(f'<path d="M{L} 336H{R}" stroke="{RULE}"/>')
@@ -967,59 +1047,130 @@ def plate_release() -> str:
               "generates a quest it asks OpenAI, falls back to Hugging Face, and if neither is "
               "configured it returns nothing rather than inventing one.",
               key="plate-6-release.svg")]
-    s.append(f""".nd{{transform-box:fill-box;transform-origin:center;animation:nd {LOOP}s {BREATHE} infinite}}
-@keyframes nd{{0%,4%{{opacity:0;transform:scale(.9)}}10%{{opacity:1;transform:scale(1)}}
-  40%{{transform:scale(1)}}48%{{transform:scale(1.22)}}
-  58%{{transform:scale(1)}}
-  /* a second, smaller pulse late in the loop, so the plate does not look
-     switched off between its two halves */
-  82%{{transform:scale(1.1)}}92%,100%{{transform:scale(1);opacity:1}}}}
-/* The fallback chain lights left to right and the last link stays dim: it is
-   the one that declines. Late in the loop, so the lower half of the plate is
-   not dead while the upper half breathes. */
-.lnk{{animation:lnk {LOOP}s {ARRIVE} infinite}}
-@keyframes lnk{{0%,18%{{opacity:0;transform:translateX(-10px)}}
-  28%,100%{{opacity:1;transform:translateX(0)}}}}
+    # ── the quest list, run as a rotation. LifeQuest's claim is that ROUTINES
+    # become quests, and a routine is a thing that recurs — so the list lives:
+    # the top quest completes (its ring fills), files away, the list advances
+    # one slot, and the completed quest re-enters at the bottom to come around
+    # again. Four quests, one completion every quarter loop. This replaces the
+    # scan bar that used to sweep the source-tree box: that bar existed, by its
+    # own comment's admission, to be BIG enough for the raster gate — a
+    # decoration engineered to satisfy an instrument. The rows shifting
+    # together are what actually register now (~0.8% of pixels per sample),
+    # and they mean something.
+    #
+    # One keyframes per quest: four 3.2s siblings in one class would be a
+    # queue, not a wave, and check 14's 200ms ceiling is right to refuse it.
+    QP, QY = 28, 83                    # quest pitch, first circle centre
+    E = [2 + 24.5 * j for j in range(4)]
+    quests = []
+    for k in range(4):
+        off = lambda j: (j - k) * QP
+        stop = lambda t, j, x=0, o=1: seg.append(
+            (round(t, 1), f"opacity:{o};transform:translate({x}px,{off(j)}px)"))
+        seg, c = [], k
+        stop(0, k)
+        for j, e in enumerate(E):
+            if j == k:                 # complete: nudge, fill (see .c{k}), file away
+                stop(e, 0); stop(e + 1.2, 0, x=6); stop(e + 2.6, 0)
+                stop(e + 3.5, 0); stop(e + 5.8, 0, o=0)
+                stop(e + 6.8, 3, x=-16, o=0)   # hidden reposition below the list
+                stop(e + 8.5, 3, x=-16, o=0)
+                stop(e + 11, 3); c = 3         # …and the routine comes around again
+            else:                      # the list advances one slot — unhurried:
+                stop(e + 4, c); c -= 1         # ~4u per 100ms reads as the list
+                stop(e + 9.5, c)               # breathing, not twitching
+        stop(100, k)
+        quests.append(
+            f".q{k}{{animation:qst{k} {LOOP}s {EASE} infinite}}\n@keyframes qst{k}{{"
+            + "".join(f"{t:g}%{{{v}}}" for t, v in seg) + "}\n"
+            f".c{k}{{animation:cir{k} {LOOP}s linear infinite}}\n@keyframes cir{k}{{"
+            f"0%,{E[k]:g}%{{fill-opacity:0}}{E[k]+1.5:g}%,{E[k]+5:g}%{{fill-opacity:1}}"
+            f"{E[k]+6.5:g}%,100%{{fill-opacity:0}}}}\n"
+            # the completing quest's label brightens for exactly as long as it
+            # is the one being completed, and files away bright
+            f".t{k}{{animation:tq{k} {LOOP}s linear infinite}}\n@keyframes tq{k}{{"
+            f"0%,{E[k]:g}%{{fill:{INK2}}}{E[k]+1:g}%,{E[k]+5.5:g}%{{fill:{INK}}}"
+            f"{E[k]+7:g}%,100%{{fill:{INK2}}}}}")
+    s.append("".join(quests) + f"""
 /* One build leaves the shared tree down each branch, four times a loop. */
 .bd{{animation:bd {BEAT}s {EASE} infinite}}
 @keyframes bd{{0%{{opacity:0;transform:translateX(-42px)}}
   16%{{opacity:1}}84%{{opacity:1}}
   100%{{opacity:0;transform:translateX(0)}}}}
-/* The build reading the shared tree, continuously, for the whole loop.
-   .bd alone did not do this job. Two 3.5u dots are geometrically real motion
-   and perceptually nothing: build/motion.mjs rasterises and needs 0.2% of
-   pixels to change, and the dots moved about 0.03%. The plate reported 5% of
-   samples alive with a 7.0s dead run while every bounding-box instrument said
-   it was fine. Whatever carries the continuous motion has to be BIG — this bar
-   is 236u wide, which is the same idiom that gives plate VIII's sandbox 100%.
-   A filled highlight the size of a whole box was the other candidate and the
-   gate refused it, rightly: it sat on top of the text it was highlighting. */
-.sc{{animation:sc {round(LOOP/2,2)}s linear infinite}}
-@keyframes sc{{0%{{transform:translateY(0)}}100%{{transform:translateY(64px)}}}}
+/* the tree is BUILT, visibly, twice a loop: the source box knocks, a build
+   leaves down the branch, and the target label answers (.l0/.l1) — once for
+   the native binary, once for the web app */
+.tr{{animation:tr {LOOP}s {IMPACT} infinite}}
+@keyframes tr{{0%,15%{{transform:translateX(0)}}16.6%{{transform:translateX(7px)}}
+  18.4%,63.5%{{transform:translateX(0)}}65.1%{{transform:translateX(7px)}}66.9%,100%{{transform:translateX(0)}}}}
+.l0{{animation:l0 {LOOP}s linear infinite}}
+@keyframes l0{{0%,15.5%{{fill:{PINK}}}17%,21%{{fill:{INK}}}25%,100%{{fill:{PINK}}}}}
+.l1{{animation:l1 {LOOP}s linear infinite}}
+@keyframes l1{{0%,64%{{fill:{PINK}}}65.5%,69.5%{{fill:{INK}}}73.5%,100%{{fill:{PINK}}}}}
+/* the asked endpoint's label whitens WITH its knock — the flip doubles the
+   ink the raster sees per knock, and names which link is being tried */
+.m0{{animation:m0 {LOOP}s linear infinite}}
+@keyframes m0{{0%,39%{{fill:{PINK}}}40.2%,41.5%{{fill:{INK}}}44.5%,88%{{fill:{PINK}}}
+  89.2%,90.5%{{fill:{INK}}}93.5%,100%{{fill:{PINK}}}}}
+.m1{{animation:m1 {LOOP}s linear infinite}}
+@keyframes m1{{0%,43.5%{{fill:{PINK}}}44.7%,46%{{fill:{INK}}}49%,92.5%{{fill:{PINK}}}
+  93.7%,95%{{fill:{INK}}}98%,100%{{fill:{PINK}}}}}
+/* A hollow box's knock is ~0.25% of pixels however hard it knocks — outline
+   ink is all the raster can see of it. So the knocked box also takes a faint
+   interior wash while it is the active endpoint. The wash lives inside the
+   box's own group, where the gate rightly permits a fill behind the label the
+   group owns; ramps are kept steep because a slow decay changes less per
+   sample than the diff threshold and might as well not happen. */
+.ft{{animation:ft {LOOP}s linear infinite}}
+@keyframes ft{{0%,15%{{fill-opacity:0}}16.2%,17.6%{{fill-opacity:.11}}19.2%,63.5%{{fill-opacity:0}}
+  64.7%,66.1%{{fill-opacity:.11}}67.7%,100%{{fill-opacity:0}}}}
+.f0{{animation:f0 {LOOP}s linear infinite}}
+@keyframes f0{{0%,39%{{fill-opacity:0}}40.2%,41.6%{{fill-opacity:.14}}43.2%,88%{{fill-opacity:0}}
+  89.2%,90.6%{{fill-opacity:.14}}92.2%,100%{{fill-opacity:0}}}}
+.f1{{animation:f1 {LOOP}s linear infinite}}
+@keyframes f1{{0%,43.5%{{fill-opacity:0}}44.7%,46.1%{{fill-opacity:.14}}47.7%,92.5%{{fill-opacity:0}}
+  93.7%,95.1%{{fill-opacity:.14}}96.7%,100%{{fill-opacity:0}}}}
+/* The fallback chain STEPS through its links now instead of fading in once:
+   the request knocks on OpenAI, then on Hugging Face, twice a loop — and the
+   third box is never knocked on, because it is not an endpoint, it is the
+   null the chain returns. The knock is a 6u shove of the whole box: small
+   travel, but the box's full ink changes position, which is exactly what the
+   raster sees and a slow fade is not. */
+.k0{{animation:k0 {LOOP}s {IMPACT} infinite}}
+@keyframes k0{{0%,39%{{transform:translateX(0)}}40.2%{{transform:translateX(6px)}}
+  41.8%,88%{{transform:translateX(0)}}89.2%{{transform:translateX(6px)}}90.8%,100%{{transform:translateX(0)}}}}
+.k1{{animation:k1 {LOOP}s {IMPACT} infinite}}
+@keyframes k1{{0%,43.5%{{transform:translateX(0)}}44.7%{{transform:translateX(6px)}}
+  46.3%,92.5%{{transform:translateX(0)}}93.7%{{transform:translateX(6px)}}95.3%,100%{{transform:translateX(0)}}}}
 </style>{slab(H, PINK)}""")
     s.append(rail("VII", "LIFEQUEST"))
     s.append(f'<text x="150" y="56" class="kick">CLAIM — WHAT YOU MEANT TO DO, AS QUESTS</text>')
-    for i, txt in enumerate(["Reconnect with a mentor", "Document a new routine", "Share a win"]):
-        s.append(f'<circle class="nd" cx="158" cy="{83+i*30}" r="7" fill="none" stroke="{PINK}" stroke-width="1.6" '
-                 f'style="animation-delay:{round(-SET + i*0.14,3)}s"/>')
-        if i < 2:
-            s.append(f'<path d="M158 {91+i*30}V{106+i*30}" stroke="{WIRE}" stroke-width="1"/>')
-        s.append(f'<text x="178" y="{88+i*30}" class="lbl">{txt}</text>')
-    s.append(f'<text x="150" y="196" class="say">For people rebuilding structure —</text>')
-    s.append(f'<text x="150" y="224" class="say">after a layoff, or in retirement.</text>')
+    # circle and label move as one quest, so they share a <g>; the rail of
+    # connectors stays put — it belongs to the LIST, not to any quest on it
+    QUESTS = ["Reconnect with a mentor", "Document a new routine",
+              "Share a win", "Take the morning walk"]
+    for i, txt in enumerate(QUESTS):
+        s.append(f'<g class="q{i}">'
+                 f'<circle class="c{i}" cx="158" cy="{QY+i*QP}" r="7" '
+                 f'style="fill:{PINK};fill-opacity:0;stroke:{PINK};stroke-width:1.6"/>'
+                 f'<text x="178" y="{QY+5+i*QP}" class="lbl t{i}">{txt}</text></g>')
+        if i < 3:
+            s.append(f'<path d="M158 {QY+8+i*QP}V{QY+20+i*QP}" stroke="{WIRE}" stroke-width="1"/>')
+    s.append(f'<text x="150" y="200" class="say">For people rebuilding structure —</text>')
+    s.append(f'<text x="150" y="228" class="say">after a layoff, or in retirement.</text>')
 
     s.append(f'<path d="M150 256H730" stroke="{RULE}"/>')
     s.append(f'<text x="150" y="286" class="kick">MECHANISM — ONE SOURCE TREE, BUILT TWICE</text>')
 
     # the fork: the same apps/desktop tree is a Vite web build and a Tauri
     # native binary, and packages/schemas is the Zod contract that keeps both
-    # of them honest against the NestJS API.
-    # The box is 240x70 rather than 196x46 so the scan bar inside it is 236u
-    # wide with 64u of travel. That size is the whole point: see the .sc comment.
-    s.append(f'<rect x="150" y="296" width="240" height="70" rx="3" fill="none" stroke="{WIRE}"/>')
-    s.append(f'<rect class="sc" x="152" y="299" width="236" height="3" fill="{PINK}" opacity="{op(0.72)}"/>')
-    s.append(f'<text x="166" y="326" class="fine" style="fill:{INK}">apps/desktop</text>')
-    s.append(f'<text x="166" y="348" class="fine">React · Vite</text>')
+    # of them honest against the NestJS API. The box and its two labels move
+    # as one thing when a build knocks, so they share a <g>.
+    s.append(f'<g class="tr">'
+             f'<rect class="ft" x="150" y="296" width="240" height="70" rx="3" '
+             f'style="fill:{PINK};fill-opacity:0;stroke:{WIRE}"/>'
+             f'<text x="166" y="326" class="fine" style="fill:{INK}">apps/desktop</text>'
+             f'<text x="166" y="348" class="fine">React · Vite</text></g>')
     s.append(f'<path d="M390 331H420M420 313V349" fill="none" stroke="{WIRE}"/>')
     for i, (dy, txt) in enumerate([(-18, "TAURI 2 · NATIVE BINARY"), (18, "VITE BUILD · WEB APP")]):
         s.append(f'<path d="M420 {331+dy}H462" fill="none" stroke="{WIRE}"/>')
@@ -1027,7 +1178,7 @@ def plate_release() -> str:
         # shown, not asserted
         s.append(f'<circle class="bd" cx="462" cy="{331+dy}" r="3.5" fill="{PINK}" '
                  f'style="animation-delay:{round(-BEAT*0.5 + i*0.12, 3)}s"/>')
-        s.append(f'<text x="{R}" y="{336+dy}" class="lbl" text-anchor="end" style="fill:{PINK}">{txt}</text>')
+        s.append(f'<text x="{R}" y="{336+dy}" class="lbl l{i}" text-anchor="end" style="fill:{PINK}">{txt}</text>')
     s.append(f'<text x="150" y="392" class="fine">packages/schemas — one Zod contract for both builds</text>')
 
     s.append(f'<path d="M150 412H730" stroke="{RULE}"/>')
@@ -1043,11 +1194,17 @@ def plate_release() -> str:
     # chain because that is the shape of the code (ai-content.service.ts:49-56)
     # and because the last link is the honest one.
     s.append(f'<text x="150" y="{442+62+50}" class="kick">QUEST GENERATION — ASKS, THEN FALLS BACK, THEN DECLINES</text>')
+    # the first two links are endpoints the code knocks on, so they knock (.k0,
+    # .k1, in order, twice a loop); the third is the null it returns, and a
+    # null does not answer — it never moves
     for i, (txt, col) in enumerate([("OPENAI", PINK), ("HUGGING FACE", PINK), ("RETURNS NOTHING", INK3)]):
         x = 150 + i * 204
-        s.append(f'<rect class="lnk" x="{x}" y="{442+62+64}" width="172" height="30" rx="3" fill="none" '
-                 f'stroke="{WIRE}" style="animation-delay:{round(-SET + i*0.11,3)}s"/>')
-        s.append(f'<text x="{x+14}" y="{442+62+84}" class="fine" style="fill:{col}">{txt}</text>')
+        fill = (f'class="f{i}" style="fill:{PINK};fill-opacity:0;stroke:{WIRE}"'
+                if i < 2 else f'fill="none" stroke="{WIRE}"')
+        cls = f'fine m{i}' if i < 2 else 'fine'
+        box = (f'<rect {fill} x="{x}" y="{442+62+64}" width="172" height="30" rx="3"/>'
+               f'<text x="{x+14}" y="{442+62+84}" class="{cls}" style="fill:{col}">{txt}</text>')
+        s.append(f'<g class="k{i}">{box}</g>' if i < 2 else box)
         if i < 2:
             s.append(f'<path d="M{x+172} {442+62+79}H{x+204}" stroke="{WIRE}"/>')
     s.append(f'<text x="150" y="{442+62+124}" class="fine" style="fill:{INK3}">MIT</text>')
@@ -1067,7 +1224,7 @@ def plate_automl() -> str:
     the one mechanism that is genuinely unusual: the model is never handed the
     whole tool registry.
     """
-    H, LOOP, SET = 624, 13.3, 9.9
+    H, LOOP, SET = 640, 13.3, 9.9
     TICKS, GEN = 44, 15
     # pitch is set so the LAST tick's right edge lands on R, not so the first
     # 44 pitches span the column — the old form left the strip 8.3u short.
@@ -1087,9 +1244,42 @@ def plate_automl() -> str:
               "surface. Behind it sits a 29-table Postgres schema with pgvector. Written "
               "with Shree Chaturvedi; the repository is public and licensed GPL-3.0.",
               key="plate-6b-automl.svg")]
+    # ── the phase clock. Everything that claims "one phase, one tool set" is
+    # keyed to one set of seven windows: the marker (.mk) steps to set j, the
+    # model's carried cluster (.mv) travels there, the slice of the 29 that
+    # routes to that phase lights (.p0-.p6), and the set's own bar lights with
+    # it (.sb0-.sb6). Windows are ~1.6s holds with 0.6s transits, all on the
+    # same -9.9s clock, so the four devices can never disagree about which
+    # phase is active.
+    A = [round(100 / 7 * j + 2.25, 2) for j in range(7)]           # arrive at set j
+    D = [round(100 / 7 * (j + 1) - 2.25, 2) for j in range(7)]     # depart set j
+    phase = []
+    for j in range(7):
+        phase.append(
+            f".p{j}{{animation:p{j} {LOOP}s linear infinite;animation-delay:{-SET}s}}\n"
+            f"@keyframes p{j}{{0%,{A[j]-1.5:g}%{{fill:{WIRE}}}{A[j]:g}%,{D[j]:g}%{{fill:{INDIGO}}}"
+            f"{min(D[j]+1.5, 99.9):g}%,100%{{fill:{WIRE}}}}}\n"
+            f".sb{j}{{animation:kb{j} {LOOP}s linear infinite;animation-delay:{-SET}s}}\n"
+            f"@keyframes kb{j}{{0%,{A[j]-1.5:g}%{{fill:{ROW}}}{A[j]:g}%,{D[j]:g}%{{fill:{INDIGO}}}"
+            f"{min(D[j]+1.5, 99.9):g}%,100%{{fill:{ROW}}}}}")
     s.append(f""".tk{{animation:tk {LOOP}s {ARRIVE} infinite}}
 @keyframes tk{{0%{{opacity:0;transform:translateY(9px)}}
   9%,100%{{opacity:1;transform:translateY(0)}}}}
+{"".join(phase)}
+/* THE 15 TRAVEL WITH THE MODEL — so they travel. The cluster is the model's
+   carried registry: a frame of fifteen ticks that physically steps from set
+   to set under the strip, arriving as each phase's slice lights above it.
+   This is the plate's claim performed instead of captioned, and it is also
+   what the raster gate sees: fifteen 5u ticks displacing 55u together move
+   ~1% of the canvas per sample, where the marker hairline alone moved
+   nothing. The wrap from the seventh set back to the first is a 332u jump,
+   so it happens faded out, like the marker's. */
+.mv{{animation:mv {LOOP}s {EASE} infinite;animation-delay:{-SET}s}}
+@keyframes mv{{0%{{opacity:0;transform:translateX({-6*BPITCH:.1f}px)}}
+  1.8%{{opacity:1;transform:translateX({-6*BPITCH:.1f}px)}}
+  {"".join(f"{D[j]:g}%{{transform:translateX({-(6-j)*BPITCH:.1f}px)}}"
+           f"{A[j+1]:g}%{{transform:translateX({-(5-j)*BPITCH:.1f}px)}}" for j in range(6))}
+  97.5%{{opacity:1;transform:translateX(0)}}100%{{opacity:0;transform:translateX(0)}}}}
 /* The marker is the claim: it steps through the seven sets one at a time and
    is never over more than one, because that is what phase-aware routing does.
    Seven holds of ~1.6s each — under the 2.4s ceiling on a dead run, and the
@@ -1124,11 +1314,22 @@ def plate_automl() -> str:
     s.append(f'<text x="{L}" y="160" class="hero">{TICKS}</text>')
     s.append(f'<text x="270" y="136" class="key">TOOL DEFINITIONS</text>')
     s.append(f'<text x="270" y="160" class="fine">one MCP server over a LangGraph state machine</text>')
+    # The 15 core ticks keep their staggered arrival. The 29 routed ones no
+    # longer share it: their arrival IS the phase — each lights (WIRE→INDIGO)
+    # in the window of the set that routes it, assigned by position: the slice
+    # of strip standing over set bar j lights when j is active, so the lit
+    # block in the registry tracks the marker and the cluster below it.
+    # Authored lit for the LAST set — the still frame shows the final phase,
+    # which is where the marker and cluster are authored to rest.
     for i in range(TICKS):
         x = L + i * PITCH
-        col = INDIGO if i < GEN else WIRE
-        s.append(f'<rect class="tk" x="{x:.1f}" y="190" width="5" height="22" fill="{col}" '
-                 f'style="animation-delay:{round(-SET + i*0.045,3)}s"/>')
+        if i < GEN:
+            s.append(f'<rect class="tk" x="{x:.1f}" y="190" width="5" height="22" fill="{INDIGO}" '
+                     f'style="animation-delay:{round(-SET + i*0.045,3)}s"/>')
+        else:
+            j = min(BARS - 1, int((x + 2.5 - BX) // BPITCH))
+            s.append(f'<rect class="p{j}" x="{x:.1f}" y="190" width="5" height="22" '
+                     f'style="fill:{INDIGO if j == BARS - 1 else WIRE}"/>')
     # brackets naming the two halves. The labels sit at the two OUTER edges —
     # left under the 15, right-anchored under the far end of the 29 — because
     # putting both flush-left made them collide, and the gate said so.
@@ -1137,44 +1338,60 @@ def plate_automl() -> str:
     s.append(f'<path d="M{BX:.1f} 220V226H{L+(TICKS-1)*PITCH+5:.1f}V220" fill="none" stroke="{WIRE}"/>')
     s.append(f'<text x="{R}" y="244" class="kick" text-anchor="end">{TICKS-GEN} ARRIVE WITH THE PHASE</text>')
 
+    # ── the model's carried cluster, in its own lane between the registry and
+    # the sets. Fifteen ticks at the registry's own pitch inside a thin frame:
+    # what the model holds, where the model currently is. Its right edge rests
+    # on R at the final set — the authored, finished pose.
+    CLW = 200
+    CLX = R - CLW
+    s.append(f'<g class="mv"><rect x="{CLX}" y="254" width="{CLW}" height="22" rx="2" '
+             f'fill="none" stroke="{INDIGO}"/>'
+             + "".join(f'<rect x="{CLX + 4 + t*PITCH:.1f}" y="258" width="5" height="14" '
+                       f'style="fill:{INDIGO}"/>' for t in range(GEN)) + '</g>')
+
     # ── the seven sets, and the marker that is only ever under one of them.
     # The marker underlines rather than overlays: an indigo rect ON the bar is
     # a collision as far as the gate is concerned, and it was right to say so —
     # two filled rects at the same coordinates is exactly what a bug looks like.
+    # The active bar also lights (.sb): four devices, one clock.
     for i in range(BARS):
         x = BX + i * BPITCH
         last = ' id="set-last"' if i == BARS - 1 else ''
-        s.append(f'<rect{last} x="{x:.1f}" y="264" width="{BPITCH-BGAP:.1f}" height="8" rx="1" fill="{ROW}"/>')
+        s.append(f'<rect{last} class="sb{i}" x="{x:.1f}" y="288" width="{BPITCH-BGAP:.1f}" height="8" rx="1" '
+                 f'style="fill:{INDIGO if i == BARS - 1 else ROW}"/>')
     s.append(f'<rect class="mk" data-rest="set-last" data-rest-within="14" '
-             f'x="{BX + (BARS-1)*BPITCH:.1f}" y="278" width="{BPITCH-BGAP:.1f}" height="3" rx="1" fill="{INDIGO}"/>')
-    s.append(f'<text x="{L}" y="276" class="lbl">SEVEN PHASE SETS</text>')
+             f'x="{BX + (BARS-1)*BPITCH:.1f}" y="302" width="{BPITCH-BGAP:.1f}" height="3" rx="1" fill="{INDIGO}"/>')
+    s.append(f'<text x="{L}" y="300" class="lbl">SEVEN PHASE SETS</text>')
 
-    s.append(f'<path d="M{L} 300H{R}" stroke="{RULE}"/>')
+    s.append(f'<path d="M{L} 316H{R}" stroke="{RULE}"/>')
 
-    # ── the sandbox, quoted from the docker run it actually builds
-    s.append(f'<text x="{L}" y="330" class="kick">WHERE THE GENERATED PYTHON RUNS</text>')
-    s.append(f'<rect x="{L}" y="344" width="330" height="124" rx="3" fill="none" stroke="{INDIGO}"/>')
-    s.append(f'<rect class="sc" x="{L+2}" y="347" width="326" height="3" fill="{INDIGO}" opacity="{op(0.6)}"/>')
+    # ── the sandbox, quoted from the docker run it actually builds. Its scan
+    # stays, in a supporting role: code executing inside the box is the one
+    # place on this plate where a sweep depicts something real, and alone it
+    # sits under the perceptual floor — the cluster above carries the plate.
+    s.append(f'<text x="{L}" y="346" class="kick">WHERE THE GENERATED PYTHON RUNS</text>')
+    s.append(f'<rect x="{L}" y="360" width="330" height="124" rx="3" fill="none" stroke="{INDIGO}"/>')
+    s.append(f'<rect class="sc" x="{L+2}" y="363" width="326" height="3" fill="{INDIGO}" opacity="{op(0.6)}"/>')
     for i, (flag, why) in enumerate([("--network none", "no egress"),
                                      ("--read-only", "immutable rootfs"),
                                      ("--user sandbox", "never root"),
                                      ("/datasets:ro", "read-only mount")]):
-        s.append(f'<text x="{L+16}" y="{374+i*26}" class="fine" style="fill:{INK}">{flag}</text>')
-        s.append(f'<text x="{L+170}" y="{374+i*26}" class="fine">{why}</text>')
+        s.append(f'<text x="{L+16}" y="{390+i*26}" class="fine" style="fill:{INK}">{flag}</text>')
+        s.append(f'<text x="{L+170}" y="{390+i*26}" class="fine">{why}</text>')
     # the five writable mounts, drawn because their count IS the blast radius
-    s.append(f'<text x="520" y="366" class="key">5 TMPFS MOUNTS</text>')
-    s.append(f'<text x="520" y="388" class="fine">the only surface it can</text>')
-    s.append(f'<text x="520" y="406" class="fine">write to, and none of it</text>')
-    s.append(f'<text x="520" y="424" class="fine">survives the container</text>')
+    s.append(f'<text x="520" y="382" class="key">5 TMPFS MOUNTS</text>')
+    s.append(f'<text x="520" y="404" class="fine">the only surface it can</text>')
+    s.append(f'<text x="520" y="422" class="fine">write to, and none of it</text>')
+    s.append(f'<text x="520" y="440" class="fine">survives the container</text>')
     for i in range(5):
-        s.append(f'<rect class="mn" x="{520+i*30}" y="440" width="20" height="14" rx="1" '
+        s.append(f'<rect class="mn" x="{520+i*30}" y="456" width="20" height="14" rx="1" '
                  f'fill="none" stroke="{INDIGO}" style="animation-delay:{round(-SET + i*0.09,3)}s"/>')
 
-    s.append(f'<path d="M{L} 500H{R}" stroke="{RULE}"/>')
-    s.append(f'<text x="{L}" y="540" class="sub">29</text>')
-    s.append(f'<text x="200" y="540" class="lbl">TABLES · POSTGRES + PGVECTOR</text>')
-    s.append(f'<text x="200" y="562" class="fine">a Jupyter kernel per project, kept alive between cells</text>')
-    s.append(f'<text x="{L}" y="592" class="fine" style="fill:{INK3}">public · GPL-3.0 · written with Shree Chaturvedi</text>')
+    s.append(f'<path d="M{L} 516H{R}" stroke="{RULE}"/>')
+    s.append(f'<text x="{L}" y="556" class="sub">29</text>')
+    s.append(f'<text x="200" y="556" class="lbl">TABLES · POSTGRES + PGVECTOR</text>')
+    s.append(f'<text x="200" y="578" class="fine">a Jupyter kernel per project, kept alive between cells</text>')
+    s.append(f'<text x="{L}" y="608" class="fine" style="fill:{INK3}">public · GPL-3.0 · written with Shree Chaturvedi</text>')
     return "".join(s) + "</svg>"
 
 
