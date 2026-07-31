@@ -87,7 +87,7 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
   const mobile = /^m-/.test(base);
   const L = mobile ? M_LEFT : LEFT, R = mobile ? M_RIGHT : RIGHT;
 
-  const found = await page.evaluate(async ({ L, R, STEPS, TOL }) => {
+  const found = await page.evaluate(async ({ L, R, STEPS, TOL, isMobile }) => {
     // The @font-face is a base64 data: URI, but it is still loaded
     // ASYNCHRONOUSLY. Measuring before it resolves measures the FALLBACK font —
     // which is how the same string came out 710u locally and 724u on Linux CI,
@@ -424,6 +424,18 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
     // collected: an interval counts as alive if any element's box or opacity
     // moved. That is cheaper than a pixel diff and it cannot be fooled by a
     // change too small to see, because sub-unit drift is excluded.
+    // A DESKTOP plate with no animations at all has dur === 0, and every motion
+    // check below is guarded on `if (dur)` — so the worst possible case for
+    // "does it move" was the one case nothing measured. Proven: stripping every
+    // `animation:` from a plate passed gate.mjs clean, and motion.mjs globs
+    // plate-* so it would have caught that one but never a mobile file.
+    //
+    // The mobile set is deliberately static: a 440 canvas carries the claim,
+    // not the mechanism. So the exemption is named here rather than falling out
+    // of an unguarded `if`, and it does not extend to the desktop plates.
+    if (!dur && !isMobile)
+      out.push(`has no animations at all — every motion check below is guarded on a loop existing, `
+             + `so a static desktop plate passes them all by having nothing to measure`);
     if (dur) {
       let alive = 0;
       for (let i = 1; i < frames.length; i++) {
@@ -600,7 +612,7 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
     }
 
     return [...new Set(out)];
-  }, { L, R, STEPS, TOL });
+  }, { L, R, STEPS, TOL, isMobile: mobile });
 
   for (const f of found) fails.push(`${file}: ${f}`);
 

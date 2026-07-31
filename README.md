@@ -3,15 +3,13 @@
   <source media="(prefers-color-scheme: light) and (max-width: 500px)" srcset="./assets/light/m-0-thesis.svg">
   <source media="(prefers-color-scheme: light)" srcset="./assets/light/plate-0-thesis.svg">
   <source media="(max-width: 500px)" srcset="./assets/m-0-thesis.svg">
-  <img src="./assets/plate-0-thesis.svg" width="100%" alt="Ayush Yadav, a computer science graduate in Cincinnati, Ohio, open to full-time engineering roles. Languages C++, TypeScript, Python, Java, Swift, Rust and SQL; systems work in SIMD, the Java Vector API, WebAssembly and OpenMP; machine learning with LangGraph, MCP, in-browser ONNX and SetFit; web and backend in React, Next.js, Tauri, SwiftUI, FastAPI and NestJS; infrastructure on GitHub Actions, Docker, Postgres, CodeQL and fuzzing. Below, the six systems this page documents: Glyph, jetpack, Cadence, Applied, LifeQuest and Agentic AutoML.">
+  <img src="./assets/plate-0-thesis.svg" width="100%" alt="Ayush Yadav, a computer science graduate in Cincinnati, Ohio, open to full-time engineering roles. Languages C++, TypeScript, Python, Java, Swift and Rust; systems work in SIMD AVX-512, Vector API, WebAssembly and OpenMP; machine learning with LangGraph, MCP, in-browser ONNX and SetFit; web and backend in React, Next.js, Tauri, SwiftUI, FastAPI and NestJS; infrastructure on GitHub Actions, Docker, Postgres and CodeQL. Below, the six systems this page documents: Glyph, jetpack, Cadence, Applied, LifeQuest and Agentic AutoML.">
 </picture>
 </div>
 
 **C++ · TypeScript · Python · Java · Swift · Rust** — B.S. Computer Science, Miami University (May 2026). Based in Cincinnati, OH; open to full-time software engineering roles: **[aesh.03.23@gmail.com](mailto:aesh.03.23@gmail.com)** · [LinkedIn](https://www.linkedin.com/in/ayush-yadav-developer)
 
 Every number below is recomputed in CI from a pinned commit, except §I, which is my word. Six systems are live, publicly reachable, and five of the six ship a **system card** — a print-format walkthrough of the architecture and the evidence behind its numbers. AutoML's equivalent is an expo booklet.
-
-Each section shows the claim, then the mechanism that would catch the claim if it were a lie.
 
 ---
 
@@ -47,7 +45,7 @@ A neural network written **from scratch in C++** — no framework — with hand-
 
 The live page and `main` diverge. `getglyph.vercel.app` **does** fetch and instantiate WebAssembly — `/wasm/fast_mnist.wasm`, 46,960 bytes, `application/wasm` — and it is a SIMD build, off [`yadava5/fix-hero-media-validation`](https://github.com/yadava5/glyph/tree/yadava5/fix-hero-media-validation), which carries real `wasm_simd128` intrinsics.
 
-Don't take that on trust. `curl -s https://getglyph.vercel.app/wasm/fast_mnist.wasm | shasum -a 256` gives `396dc0f4848ddc0b9c35420cdad5e5cc0af53f4a408024ba10f7364470d9807e` — byte-identical to that branch's blob. What `main` builds is the autovectorised one, which is not what the link serves.
+`curl -s https://getglyph.vercel.app/wasm/fast_mnist.wasm | shasum -a 256` gives `396dc0f4848ddc0b9c35420cdad5e5cc0af53f4a408024ba10f7364470d9807e` — byte-identical to that branch's blob. What `main` builds is the autovectorised one, which is not what the link serves.
 
 **97.01%** on the 10,000-image MNIST test set — 9,701 right, so **299 wrong**.
 
@@ -72,9 +70,9 @@ The checksum is hand-vectorised — so it is checked **bit-identical against `ja
 
 **422 MB/s parallel vs 66.2 MB/s single-threaded — 6.4×** on an M1 Pro (10 cores). That is a 3-fork JMH run with 99.9% confidence intervals spanning ±0.7% (single-threaded) to ±6.9% (the vectorised checksum), committed at [`benchmarks/jmh-results-rigorous.json`](https://github.com/yadava5/jetpack-compress/blob/main/benchmarks/jmh-results-rigorous.json) with the machine spec beside it, so you can re-run it and check.
 
-The ratio itself is the least stable number here: it moved **6.89× → 6.38×** between the quick run and the rigorous one — an 8% spread, *wider* than either run's own interval, and wider than the 4% spread I disclose on the SIMD result below. `benchmarks/ENVIRONMENT.md` says so too. I quote the rigorous run because it is the more careful one, not because it is the kinder one.
+The ratio itself is the least stable number here: it moved **6.89× → 6.38×** between the quick run and the rigorous one — an 8% spread, *wider* than either run's own interval, and wider than the 4% spread I disclose on the SIMD result below. `benchmarks/ENVIRONMENT.md` says so too.
 
-The hand-vectorised Adler-32 reaches **4.26 GB/s**, while the JDK's own native intrinsic does **14.06 GB/s**. I don't beat it. The SIMD result is honest against the *scalar* baseline (2.80× on the 3-fork run, 2.92× on the quick one — they disagree at the second figure, and that spread is the uncertainty), and the intrinsic is printed next to it as the reference it loses to.
+The hand-vectorised Adler-32 reaches **4.26 GB/s**, while the JDK's own native intrinsic does **14.06 GB/s**. I don't beat it. The SIMD result is measured against the *scalar* baseline (2.80× on the 3-fork run, 2.92× on the quick one — they disagree at the second figure, and that spread is the uncertainty), and the intrinsic is printed next to it as the reference it loses to.
 
 [live](https://jetpack-compress.vercel.app) · [system card](https://jetpack-compress.vercel.app/system-card) · [repo](https://github.com/yadava5/jetpack-compress)
 
@@ -89,7 +87,7 @@ The hand-vectorised Adler-32 reaches **4.26 GB/s**, while the JDK's own native i
   <img src="./assets/plate-3-cadence.svg" width="100%" alt="Cadence: the sentence 'lunch with sam friday 1pm' is labelled in place with the parser that produced each span — compromise found the person, chrono-node found both the day and the time — while the title is left unmarked because it is what remains once the spans are removed and carries no parser. It is then filed into the Friday 1pm slot of a week grid that names its hours. Its 36 API handlers are bundled into a single serverless function, because the hosting plan allows 12.">
 </picture>
 
-A sentence typed the way you would say it becomes a calendar entry. The parser runs four parsers — chrono, hashtag, priority, language — and **every extracted span records the parser that produced it** — `source` is a required field on every tag, and conflict resolution depends on it, so a wrong tag is traceable to the parser that produced it. (The title is not a parser output: it is what is left of the sentence once the spans are removed, and it carries no `source`.)
+A sentence typed the way you would say it becomes a calendar entry. Four parsers run over it: chrono-node for dates and times, compromise for people, plus hashtag and priority passes. **Every extracted span records which one produced it** — `source` is a required field on every tag and conflict resolution depends on it, so a wrong tag is traceable to its parser. The title is not a parser output: it is what is left once the spans are removed, and it carries no `source`.
 
 **36 API handlers bundled into a single serverless function**, to live inside Vercel's 12-function cap without giving up routes.
 
@@ -116,7 +114,7 @@ That score is generated with the `deterministic` profile, which switches the Set
 
 Anything under the **0.85 confidence gate** is not guessed at — it goes to a human. The model is allowed to say it doesn't know.
 
-The fine-tuned head exports to int8 ONNX (90.4 MB → 22.8 MB) and runs **in your browser**: the server ships the weights once, then classification happens in your tab and nothing you paste leaves it. `allowRemoteModels = false` keeps the model local. Be exact about where that lives: the ONNX weights and the browser build are on the **unmerged branch [`integration/web-migration`](https://github.com/yadava5/applied/tree/integration/web-migration/ml/browser)**, not on `main` — `main` has no `ml/` directory and no ONNX artifact at all, and `grep -i onnx` there returns only that repo's own README. Both byte counts above are re-derived from that branch's commit. That in-browser build is the [Hugging Face Space](https://huggingface.co/spaces/yadava5/jobtracker-classifier); the `[live]` link below runs the rules layer only.
+The fine-tuned head exports to int8 ONNX (90.4 MB → 22.8 MB) and runs **in your browser**: the server ships the weights once, then classification happens in your tab and nothing you paste leaves it. `allowRemoteModels = false` keeps the model local. the ONNX weights and the browser build are on the **unmerged branch [`integration/web-migration`](https://github.com/yadava5/applied/tree/integration/web-migration/ml/browser)**, not on `main` — `main` has no `ml/` directory and no ONNX artifact at all, and `grep -i onnx` there returns only that repo's own README. Both byte counts above are re-derived from that branch's commit. That in-browser build is the [Hugging Face Space](https://huggingface.co/spaces/yadava5/jobtracker-classifier); the `[live]` link below runs the rules layer only.
 
 [live](https://getapplied.vercel.app) · [system card](https://getapplied.vercel.app/system-card) · [repo](https://github.com/yadava5/applied)
 
@@ -156,7 +154,7 @@ Tags was missed by the first sweep entirely, and is the one worth naming: its ex
 
 One source tree in `apps/desktop` is built twice: `vite build` for the web, and the same tree wrapped as a Tauri 2 native binary. `packages/schemas` is a Zod package both builds and the NestJS API import, so a shape can only change in one place. The API is 14 REST endpoints across 6 controllers over 10 Prisma models.
 
-Quest generation asks OpenAI, falls back to Hugging Face, and returns `null` if neither key is configured rather than inventing a quest. There is no unit-test suite here; coverage is a Playwright spec, and the `test:api` script is `vitest --passWithNoTests`. Said plainly because the rest of this page is.
+Quest generation asks OpenAI, falls back to Hugging Face, and returns `null` if neither key is configured rather than inventing a quest. There is no unit-test suite here; coverage is a Playwright spec, and the `test:api` script is `vitest --passWithNoTests`.
 
 [LifeQuest](https://getlifequest.vercel.app) · [system card](https://getlifequest.vercel.app/system-card) · [repo](https://github.com/yadava5/lifequest)
 
