@@ -34,7 +34,10 @@ import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
-const ASSETS = join(dirname(fileURLToPath(import.meta.url)), '..', 'assets');
+// Honour GATE_ASSETS like gate.mjs does, so build/mutations.mjs can point
+// this file at a directory of deliberately-broken plates. Until it did, two
+// of the three gates in `npm test` had never been shown able to fail.
+const ASSETS = process.env.GATE_ASSETS || join(dirname(fileURLToPath(import.meta.url)), '..', 'assets');
 const arg = (n, d) => { const i = process.argv.indexOf(n); return i > 0 ? Number(process.argv[i + 1]) : d; };
 const STEP = arg('--step', 100);          // ms between samples
 const FLOOR = arg('--floor', 0.002);      // fraction of pixels that must change

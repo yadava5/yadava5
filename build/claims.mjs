@@ -28,7 +28,8 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const ASSETS = join(ROOT, 'assets');
+// See the note in motion.mjs: GATE_ASSETS makes this gate negative-testable.
+const ASSETS = process.env.GATE_ASSETS || join(ROOT, 'assets');
 const CACHE = join(ROOT, 'build', '.claims-cache');
 const spec = JSON.parse(readFileSync(join(ROOT, 'build', 'claims.json'), 'utf8'));
 const OFFLINE = process.argv.includes('--offline');
@@ -184,7 +185,7 @@ for (const c of [...spec.claims, ...spec.unpinnable, ...spec.external])
     if (!knownIn.has(f)) knownIn.set(f, new Set());
     knownIn.get(f).add(String(c.value));
   }
-const known = (f) => knownIn.get(f) || new Set();
+const known = (f) => knownIn.get(f) || knownIn.get(unthemed(f)) || new Set();
 // Attested facts count for coverage but never for the derived total. They are
 // the author's word; the page says so where it draws them.
 for (const a of spec.attested || [])
@@ -201,7 +202,24 @@ const exempt = new Set(Object.keys(spec.exempt).filter(k => k !== '$comment'));
 // in the prose — a byte count, cited line numbers, a confidence interval — were
 // never audited by the gate whose entire purpose is that no number goes
 // unaudited. Link targets are stripped first; a URL is an address, not a claim.
-const SWEPT = [...readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)).sort(), 'README.md'];
+// GitHub's light theme is the DEFAULT, so assets/light/ is the set MOST readers
+// see — and until now this sweep read the top level only. `grep -c 'light/'
+// claims.json` returned 0: half the shipped document was uncovered. Changing 44
+// to 88 in a light plate passed this gate.
+//
+// gate.mjs check 9 caught those two by accident, because both numbers also
+// appear in the plate's <desc>. It cannot catch a light-plate number that is
+// not in the desc — "1.52 GB/s", "3 JMH FORKS", "11E60398" — and those were
+// audited in the dark set and by nothing at all in the light one.
+//
+// The light plate draws the same numbers as its dark twin by construction, so
+// it inherits the twin's registrations rather than duplicating every row.
+const lightDir = join(ASSETS, 'light');
+const LIGHT = existsSync(lightDir)
+  ? readdirSync(lightDir).filter(f => /^(plate|m)-.*\.svg$/.test(f)).sort().map(f => `light/${f}`)
+  : [];
+const SWEPT = [...readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)).sort(), ...LIGHT, 'README.md'];
+const unthemed = (f) => f.replace(/^light\//, '');
 const numsOf = (f) => {
   // In README.md, three things are addresses rather than assertions: HTML
   // attributes (plate-0-thesis.svg, width="100%", the srcset), markdown link
@@ -228,7 +246,8 @@ const numsOf = (f) => {
 };
 for (const file of SWEPT) {
   for (const n of numsOf(file)) {
-    if (known(file).has(n) || exempt.has(n) || exempt.has(`${file}:${n}`)) continue;
+    if (known(file).has(n) || exempt.has(n)
+        || exempt.has(`${file}:${n}`) || exempt.has(`${unthemed(file)}:${n}`)) continue;
     fails.push(`${file}: draws "${n}", which claims.json neither derives nor exempts`);
   }
 }
@@ -238,6 +257,7 @@ const usedExempt = new Set();
 for (const file of SWEPT) {
   for (const n of numsOf(file)) {
     if (exempt.has(`${file}:${n}`)) usedExempt.add(`${file}:${n}`);
+    else if (exempt.has(`${unthemed(file)}:${n}`)) usedExempt.add(`${unthemed(file)}:${n}`);
     else if (exempt.has(n) && !known(file).has(n)) usedExempt.add(n);
   }
 }
