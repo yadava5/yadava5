@@ -483,17 +483,22 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
     // the constraint is absolute: long enough to be a sequence, short enough to
     // be one gesture.
     const STAGGER_MIN = 40, STAGGER_MAX = 200;   // ms
+    // Grouped by CLASS TOKEN until now, which one selector defeats. The colophon
+    // writes `.ln,.ln2{animation:ln …}` — one gesture, three elements, relative
+    // delays 0 / 150 / 1900ms. Split across two class names it became a `.ln`
+    // group of two (gap 150, passes) and a `.ln2` group of one (size < 2,
+    // skipped), so a 1750ms gap — 8.75x the stated ceiling — was invisible.
+    // A stagger is a property of the GESTURE, so group by the keyframe name
+    // that defines it.
     const byClass = new Map();
     for (const a of anims) {
       const el = a.effect?.target;
       if (!el || !el.getAttribute) continue;
-      const c = el.getAttribute('class');
-      if (!c) continue;
+      const k = a.animationName || (el.getAttribute('class') || '').split(/\s+/)[0];
+      if (!k) continue;
       const d = Math.abs(a.effect.getComputedTiming().delay || 0);
-      for (const k of c.split(/\s+/)) {
-        if (!byClass.has(k)) byClass.set(k, new Set());
-        byClass.get(k).add(Math.round(d));
-      }
+      if (!byClass.has(k)) byClass.set(k, new Set());
+      byClass.get(k).add(Math.round(d));
     }
     for (const [k, delays] of byClass) {
       if (delays.size < 2 || !dur) continue;
@@ -566,7 +571,19 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
         if (prop === 'fill' && m.tag !== 'text' && !m.el.hasAttribute('fill')) continue;
         const rgb = parse(raw);
         if (rgb.length < 3) continue;
-        const a = (rgb.length > 3 ? rgb[3] : 1) * alpha;
+        // Three independent ways to make ink transparent in SVG, and this read
+        // two of them. `opacity` (via opacityOf, ancestors included) and an
+        // alpha channel inside rgba() were composited; `fill-opacity` and
+        // `stroke-opacity` — sibling presentation attributes, the ones an
+        // exported logo actually carries — were not read at all. A <text> at
+        // fill-opacity="0.12" measured 1.4:1 and passed.
+        //
+        // Not hypothetical: build/logos.json bakes stroke-opacity into two of
+        // the six product marks on the contact sheet, and this check graded
+        // them at full strength while they rendered at 1.49:1 and 2.68:1 on
+        // the light slab.
+        const po = parseFloat(st[prop === 'fill' ? 'fillOpacity' : 'strokeOpacity']);
+        const a = (rgb.length > 3 ? rgb[3] : 1) * alpha * (Number.isFinite(po) ? po : 1);
         if (a < 0.05) continue;
         const eff = over(rgb.slice(0, 3), SLABRGB, a);
         const r = ratio(eff, SLABRGB);

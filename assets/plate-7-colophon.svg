@@ -14,7 +14,19 @@ text{font-family:'M',ui-monospace,SFMono-Regular,Menlo,monospace}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
 .rule{stroke-dasharray:1;animation:sweep 12.7s cubic-bezier(.4,0,.2,1) infinite;animation-delay:-10.0s}
 @keyframes sweep{0%{stroke-dashoffset:1}20%,100%{stroke-dashoffset:0}}
-.ln,.ln2{animation:ln 12.7s cubic-bezier(.37,0,.63,1) infinite}
+/* .ln2 arrives 1.9s after the .ln pair, which is a SECOND beat, not a wide
+   stagger inside the first one. Sharing one keyframe name said otherwise, and
+   once check 14 started grouping by keyframe instead of by class token it
+   reported the truth: a 1750ms step against a 200ms ceiling. Two gestures, two
+   names — same shape, so the visual result is unchanged and the description of
+   it is now correct. */
+.ln,.ln2{animation-duration:12.7s;animation-timing-function:cubic-bezier(.37,0,.63,1);animation-iteration-count:infinite}
+.ln{animation-name:ln}
+.ln2{animation-name:ln2}
+@keyframes ln2{0%,24%{transform:translateX(0)}32%{transform:translateX(6px)}
+  46%{transform:translateX(0)}
+  68%{transform:translateX(0)}76%{transform:translateX(3px)}
+  88%,100%{transform:translateX(0)}}
 @keyframes ln{0%,24%{transform:translateX(0)}32%{transform:translateX(6px)}
   46%{transform:translateX(0)}
   68%{transform:translateX(0)}76%{transform:translateX(3px)}

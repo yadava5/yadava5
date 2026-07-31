@@ -68,6 +68,13 @@ const MUTATIONS = [
   // reader gets, and it was the least guarded string in the repo.
   ['a description number is falsified to a prefix', /description says/,
     (s) => s.replace(/which means 299 wrong/g, 'which means 29 wrong')],
+  // Three ways to make ink transparent in SVG and check 10 read only two.
+  // fill-opacity and stroke-opacity are sibling presentation attributes, not
+  // `opacity` and not an rgba alpha, and they are exactly what an exported
+  // logo carries — two of the six product marks shipped at 1.49:1 and 2.68:1
+  // because of it.
+  ['contrast is destroyed by fill-opacity', /on the slab \(needs 4.5/,
+    (s) => s.replace(/(<text class="row lbl")/, '$1 fill-opacity="0.12"')],
   ['a plate freezes for too long', /stands completely still/,
     (s) => s.replace(/@keyframes gr\{[^}]*\}[^}]*\}/, '@keyframes gr{0%,100%{transform:translateY(0)}}')],
 ];

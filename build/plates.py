@@ -89,14 +89,32 @@ FONT = base64.b64encode((ROOT / "mono-subset.woff2").read_bytes()).decode()
 # near-black. Every stroke and fill is currentColor, so the card supplies the
 # system's legend colour and the six marks read as one family rather than six
 # pasted assets. Inlined, not linked: nothing external can load in this medium.
+import re as _re_mod
+_re_op = _re_mod.compile(r'(stroke|fill)-opacity="([0-9.]+)"')
 LOGOS = json.loads((ROOT / "logos.json").read_text())
 
 
 def logo(name: str, x: float, y: float, size: float, colour: str) -> str:
+    """One product mark, drawn at `size` in `colour`.
+
+    Tonal hierarchy inside a mark does not survive being shrunk to 28u. Two of
+    the six carried stroke-opacity straight out of their source SVG — Cadence
+    at 0.28 on three strokes, Applied at 0.65 on two — which rendered at 1.76:1
+    and 5.02:1 on the dark slab and 1.49:1 and 2.68:1 on the light one, against
+    a 3:1 floor. Both were invisible to gate.mjs until check 10 learned to read
+    the sibling opacity properties, because they are neither `opacity` nor an
+    rgba alpha.
+
+    So the floor is enforced here rather than patched into logos.json: these
+    marks are extracted from each app's own logo, and the next one extracted
+    will carry whatever its designer chose too.
+    """
     m = LOGOS[name]
     k = size / m["size"]
+    body = _re_op.sub(
+        lambda g: f'{g.group(1)}-opacity="{max(float(g.group(2)), 0.8):.2f}"', m["body"])
     return (f'<g transform="translate({x},{y}) scale({k:.4f})" '
-            f'style="color:{colour}">{m["body"]}</g>')
+            f'style="color:{colour}">{body}</g>')
 
 W = 880
 
@@ -1189,7 +1207,19 @@ def plate_colophon() -> str:
     LOOP, SET = 12.7, 10.0
     s.append(f""".rule{{stroke-dasharray:1;animation:sweep {LOOP}s {EASE} infinite;animation-delay:{-SET}s}}
 @keyframes sweep{{0%{{stroke-dashoffset:1}}20%,100%{{stroke-dashoffset:0}}}}
-.ln,.ln2{{animation:ln {LOOP}s {BREATHE} infinite}}
+/* .ln2 arrives 1.9s after the .ln pair, which is a SECOND beat, not a wide
+   stagger inside the first one. Sharing one keyframe name said otherwise, and
+   once check 14 started grouping by keyframe instead of by class token it
+   reported the truth: a 1750ms step against a 200ms ceiling. Two gestures, two
+   names — same shape, so the visual result is unchanged and the description of
+   it is now correct. */
+.ln,.ln2{{animation-duration:{LOOP}s;animation-timing-function:{BREATHE};animation-iteration-count:infinite}}
+.ln{{animation-name:ln}}
+.ln2{{animation-name:ln2}}
+@keyframes ln2{{0%,24%{{transform:translateX(0)}}32%{{transform:translateX(6px)}}
+  46%{{transform:translateX(0)}}
+  68%{{transform:translateX(0)}}76%{{transform:translateX(3px)}}
+  88%,100%{{transform:translateX(0)}}}}
 @keyframes ln{{0%,24%{{transform:translateX(0)}}32%{{transform:translateX(6px)}}
   46%{{transform:translateX(0)}}
   68%{{transform:translateX(0)}}76%{{transform:translateX(3px)}}
