@@ -325,13 +325,31 @@ def plate_thesis() -> str:
     below is optional depth.
     """
     H, LOOP, SET = 614, 11.3, 9.0
+    # what he actually works in, grouped so it can be scanned rather than read.
+    # The description below is GENERATED from this table rather than authored
+    # beside it. It used to be authored, and it drifted: it named SQL and
+    # fuzzing, neither of which this plate has ever drawn. Nothing could catch
+    # that — plates.py asserts the README alt equals ALT[fn] and the dark desc
+    # equals the light desc, both of which compare copies of one string to each
+    # other; gate.mjs check 9 compares the desc's NUMBERS to the drawing and
+    # never its words. So the accessible copy could say anything at all and
+    # still be "in agreement". Now the two cannot disagree.
+    SKILLS = [
+        ("LANGUAGES", "Languages",              "C++ · TypeScript · Python · Java · Swift · Rust"),
+        ("SYSTEMS",   "systems work in",        "SIMD AVX-512 · Vector API · WebAssembly · OpenMP"),
+        ("ML",        "machine learning with",  "LangGraph · MCP · in-browser ONNX · SetFit"),
+        ("WEB",       "web and backend in",     "React · Next.js · Tauri · SwiftUI · FastAPI · NestJS"),
+        ("INFRA",     "infrastructure on",      "GitHub Actions · Docker · Postgres · CodeQL"),
+    ]
+
+    def _prose(items: str) -> str:
+        parts = [p.strip() for p in items.split("·")]
+        return ", ".join(parts[:-1]) + " and " + parts[-1]
+
+    _bands = "; ".join(f"{lead} {_prose(items)}" for _, lead, items in SKILLS)
     s = [head(H, "Ayush Yadav — computer science graduate, Cincinnati OH",
               "Ayush Yadav, a computer science graduate in Cincinnati, Ohio, open to full-time "
-              "engineering roles. Languages C++, TypeScript, Python, Java, Swift, Rust and "
-              "SQL; systems work in SIMD, the Java Vector API, WebAssembly and OpenMP; "
-              "machine learning with LangGraph, MCP, in-browser ONNX and SetFit; web and "
-              "backend in React, Next.js, Tauri, SwiftUI, FastAPI and NestJS; infrastructure "
-              "on GitHub Actions, Docker, Postgres, CodeQL and fuzzing. Below, the six "
+              f"engineering roles. {_bands}. Below, the six "
               "systems this page documents: Glyph, jetpack, Cadence, Applied, LifeQuest and "
               "Agentic AutoML.", key="plate-0-thesis.svg")]
     s.append(f""".rule{{stroke-dasharray:1;animation:sweep {LOOP}s {EASE} infinite;animation-delay:{-SET}s}}
@@ -358,15 +376,7 @@ def plate_thesis() -> str:
         s.append(f'<text x="{L}" y="{132 + i*40}" class="ser">{ln}</text>')
     s.append(f'<text x="{L}" y="200" class="fine">Open to full-time software engineering roles · aesh.03.23@gmail.com</text>')
 
-    # what he actually works in, grouped so it can be scanned rather than read
-    SKILLS = [
-        ("LANGUAGES", "C++ · TypeScript · Python · Java · Swift · Rust"),
-        ("SYSTEMS",   "SIMD AVX-512 · Vector API · WebAssembly · OpenMP"),
-        ("ML",        "LangGraph · MCP · in-browser ONNX · SetFit"),
-        ("WEB",       "React · Next.js · Tauri · SwiftUI · FastAPI · NestJS"),
-        ("INFRA",     "GitHub Actions · Docker · Postgres · CodeQL"),
-    ]
-    for i, (dom, items) in enumerate(SKILLS):
+    for i, (dom, _lead, items) in enumerate(SKILLS):
         y = 240 + i * 22
         s.append(f'<text x="{L}" y="{y}" class="kick">{dom}</text>')
         s.append(f'<text x="262" y="{y}" class="fine">{items}</text>')
@@ -468,7 +478,7 @@ def plate_work() -> str:
     # page whose entire argument is that a drawn number must be the measured
     # number, this was the worst defect in the document.
     s.append(f'<g><rect x="330" y="204" width="300" height="26" rx="3" fill="{RULE}"/>'
-             f'<rect class="fill" x="330" y="204" width="{300*0.9672:.2f}" height="26" rx="3" fill="{LIME}" '
+             f'<rect class="fill" x="330" y="204" width="{300*0.9672:.2f}" height="26" rx="3" fill="{INK2}" '
              f'style="animation-delay:{-SET}s"/></g>')
     # the 3.28% the refactor did not reach, marked so the gap is legible
     s.append(f'<path d="M630 200V234" stroke="{WIRE}"/>')
@@ -485,7 +495,7 @@ def plate_work() -> str:
     # 0.996 and 0.32, not 1.0 and 0.321 — the bars were drawing 100% and 32.1%
     # under labels reading 99.6% and 32%. Same class of defect as the compliance
     # bar above: the geometry was authored by eye instead of from the value.
-    for j, (frac, col, tag) in enumerate([(0.996, LIME, "star"), (0.32, AMBER, "32% naive")]):
+    for j, (frac, col, tag) in enumerate([(0.996, INK2, "star"), (0.32, RULE, "32% naive")]):
         yy = 462 + j * 18
         s.append(f'<g><rect x="330" y="{yy}" width="300" height="12" rx="2" fill="{RULE}"/>'
                  f'<rect class="fill" x="330" y="{yy}" width="{300*frac:.2f}" height="12" rx="2" '
@@ -879,7 +889,7 @@ def plate_applied() -> str:
     s.append(f'<text x="150" y="122" class="hero">0.979</text>')
     s.append(rail("V", "APPLIED"))
     s.append(f'<text x="400" y="80" class="lbl">MACRO-F1 · 96-MSG EVAL SET</text>')
-    s.append(f'<text x="400" y="100" class="lbl" style="fill:{AMBER}">RULES LAYER ONLY</text>')
+    s.append(f'<text x="400" y="100" class="lbl" style="fill:{a}">RULES LAYER ONLY</text>')
     s.append(f'<text x="400" y="118" class="fine">SetFit off, embeddings emptied</text>')
     s.append(f'<text x="150" y="380" class="fine">CI fails the build below 0.95</text>')
 
@@ -913,9 +923,9 @@ def plate_applied() -> str:
     # and the authored frame — is with the human it was referred to.
     s.append(f'<rect class="div" data-rest="the-human" data-rest-within="10" '
              f'x="650" y="340" width="30" height="20" rx="2" '
-             f'style="fill:{AMBER};fill-opacity:{op(0.5)};stroke:{AMBER};stroke-width:1.6"/>')
-    s.append(f'<circle id="the-human" cx="700" cy="350" r="11" fill="none" stroke="{AMBER}" stroke-width="1.4"/>')
-    s.append(f'<text x="{R}" y="382" class="lbl" style="fill:{AMBER}" text-anchor="end">A HUMAN</text>')
+             f'style="fill:{INK2};fill-opacity:{op(0.5)};stroke:{INK2};stroke-width:1.6"/>')
+    s.append(f'<circle id="the-human" cx="700" cy="350" r="11" fill="none" stroke="{INK2}" stroke-width="1.4"/>')
+    s.append(f'<text x="{R}" y="382" class="lbl" style="fill:{INK2}" text-anchor="end">A HUMAN</text>')
     # and the ones that DO clear the gate land on a name rather than in blank space
     s.append(f'<text x="150" y="327" class="lbl">CLASSIFIED</text>')
     s.append(f'<text x="150" y="408" class="say">It is allowed to say it doesn’t know.</text>')
@@ -1561,9 +1571,16 @@ MOBILE = {
    "LifeQuest: routines as tracked quests — 10 Prisma models and 14 REST endpoints behind one source tree, built desktop and web."),
  "m-6b-automl.svg": ("AGENTIC AUTOML", "INDIGO", "44", "", "tools in the registry. The model", "only ever holds its phase's set.",
    "Agentic AutoML: dataset in, trained model out. Its registry holds 44 tool definitions, but the model only ever holds the set its phase needs."),
+ # The desktop colophon draws ANIMATED SVG and is animated. This one drew the
+ # word "Animated" at 64px and carries no @keyframes at all — the whole mobile
+ # set is static by design. Nothing could catch it: motion.mjs globs plate-*
+ # only, and gate.mjs wraps its motion checks in `if (dur)`, so a plate with no
+ # animations is exempt from every one of them. Same class of defect as
+ # m-6-release telling phone readers AutoML was private: stale prose carrying
+ # no digits passes the number check in silence.
  "m-7-colophon.svg": ("COLOPHON", "RULE", "SVG", "",
-   "Animated — no JavaScript,", "no server, no external assets.",
-   "Colophon: this page is animated SVG with no JavaScript, no server and no "
+   "No JavaScript, no server,", "no external assets.",
+   "Colophon: this page is SVG with no JavaScript, no server and no "
    "external assets."),
 }
 

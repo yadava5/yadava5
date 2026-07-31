@@ -43,8 +43,15 @@ const MUTATIONS = [
     (s) => s.replace(/animation-delay:-9(\.\d+)?s/, 'animation-delay:0s')],
   ['an element hides for most of its loop', /visible only \d+%/,
     (s) => s.replace(/@keyframes rw\{[^}]*\}[^}]*\}/, '@keyframes rw{0%,80%{opacity:0}90%,100%{opacity:1}}')],
+  // Anchored on `class="lbl" style="fill:#F5A524"` until a round reclaimed that
+  // amber for Glyph, and then it matched nothing. Third stale probe of the
+  // week, all three from keying on a literal that design work is free to
+  // change. Keys on the SHAPE now: any classed element that sets its fill
+  // through `style` — which is the whole point of the check, since a `fill`
+  // ATTRIBUTE loses to any CSS rule and paints nothing.
   ['a fill attribute is overridden by its class', /overriding the attribute/,
-    (s) => s.replace(/class="lbl" style="fill:#F5A524"/, 'class="lbl" fill="#F5A524"')],
+    (s) => s.replace(/class="([\w ]+)" style="fill:(#[0-9A-Fa-f]{6})"/,
+      (m, c, col) => `class="${c}" fill="${col}"`)],
   ['text drops below 4.5:1 on the slab', /on the slab \(needs 4.5/,
     (s) => s.replace(/\.fine\{font-size:13px;letter-spacing:0\.6px;fill:#8A8F98\}/, '.fine{font-size:13px;letter-spacing:0.6px;fill:#3A3E44}')],
   // Anchored on plate V's refused dot until round 18, when that plate stopped
@@ -75,6 +82,11 @@ const MUTATIONS = [
   // because of it.
   ['contrast is destroyed by fill-opacity', /on the slab \(needs 4.5/,
     (s) => s.replace(/(<text class="row lbl")/, '$1 fill-opacity="0.12"')],
+  // A desktop plate with no animations at all had dur === 0, and every motion
+  // check in gate.mjs is guarded on `if (dur)` — so the worst case for "does it
+  // move" was the one case nothing measured.
+  ['a desktop plate has no animations at all', /has no animations at all/,
+    (s) => s.replace(/animation:[^;}]*/g, 'animation:none')],
   ['a plate freezes for too long', /stands completely still/,
     (s) => s.replace(/@keyframes gr\{[^}]*\}[^}]*\}/, '@keyframes gr{0%,100%{transform:translateY(0)}}')],
 ];
