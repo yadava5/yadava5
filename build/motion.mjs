@@ -1,31 +1,41 @@
 /**
- * Does it move enough to SEE?
+ * Does the motion that EXISTS actually show?
  *
- * gate.mjs checks 13 and 17 count a sample interval "alive" when any element's
- * bounding box shifts 0.5 viewBox units or its opacity changes by 0.02. At a
- * 980px readme column 0.5u is 0.7 device pixels, and 0.02 opacity on a grey
- * label is nothing at all. Both thresholds sit below the threshold of vision,
- * so the gate reported plate VI 70% alive while a raster diff found it never
- * once exceeded 0.2% pixel change across its entire 13.1s loop.
+ * RE-AUTHORED, round 19, deliberately and in the same change as the design it
+ * measures. The previous version of this file enforced the opposite doctrine:
+ * every plate had to show pixel change in >=25% of sampled intervals and could
+ * never hold still for more than 2.4s. That gate got what KPI-driven design
+ * always gets — seven plates grew travelling hairlines whose own comments
+ * admitted they existed "to carry the raster gate", and four of them spent
+ * part of every loop striking through text (the colophon's crossed out the
+ * author's email; the refusal's applied the plate's own strike-symbol to the
+ * wrong nouns). Motion-as-quota produced decoration engineered for an
+ * instrument, which is the definition of unrefined.
  *
- * That is not a threshold that needs tightening — it is the wrong quantity.
- * Geometry cannot tell you whether something is visible; only pixels can. This
- * rasterises each plate every 100ms and reports the fraction of intervals in
- * which enough of the image actually changed.
+ * The design doctrine is now STILL BY DEFAULT: a plate animates only where the
+ * motion performs the claim beside it, and a plate with nothing to perform is
+ * legally, deliberately still. So the floor and the ceiling are gone — but the
+ * discovery that built this file stands: geometry cannot tell you whether
+ * motion is VISIBLE, only pixels can. gate.mjs once reported a plate 70% alive
+ * while a raster diff showed it never exceeded 0.2% pixel change. That failure
+ * mode — an animation that exists for the instruments and not for the reader —
+ * is precisely what a still-by-default page must not ship, because an
+ * invisible animation is pure cost: it burns compositor time and carries no
+ * meaning. So the check inverts:
  *
- * Was deliberately a tool and not a check, because five plates failed it and
- * wiring it into CI before the motion was re-authored would just have painted
- * main red. All nine now clear the 25% floor, so as of round 17 `--gate` makes
- * it fail the build.
+ *   · a plate with NO animations passes — stillness is a design decision
+ *   · a plate WITH animations must show its gesture: at least MIN_LIVE
+ *     sampled intervals must clear the perceptual floor, or the animation is
+ *     invisible and should be deleted rather than shipped
  *
- * It enforces the SECOND half too, and that is the point of promoting it.
- * gate.mjs check 17 already claims a 2.4s ceiling on the longest frozen run,
- * but it measures bounding boxes: a plate can hold four and a half seconds of
- * perceptually dead image while one animated label creeps 0.6u and check 17
- * calls every interval alive. That is the check-5/check-12 ruler mismatch
- * again — two checks measuring the same edge with different instruments — and
- * it is why plates II and IV shipped with 4.6s and 4.4s holes in them under a
- * green gate. Geometry cannot answer "did a reader see anything happen".
+ * Both themes still measured separately: an opacity tuned on the dark canvas
+ * can drop a gesture under the floor on the light one, and "should be
+ * identical" is exactly the assumption this file exists to stop.
+ *
+ * The plates are transparent now, so each set is rastered over the canvas it
+ * actually ships on — GitHub dark #0d1117, GitHub light #ffffff. Diffing
+ * near-white ink over a default white test page would blind this gate
+ * completely for the dark set.
  *
  * Usage: node build/motion.mjs [--step 100] [--floor 0.002] [--gate]
  */
@@ -41,8 +51,7 @@ const ASSETS = process.env.GATE_ASSETS || join(dirname(fileURLToPath(import.meta
 const arg = (n, d) => { const i = process.argv.indexOf(n); return i > 0 ? Number(process.argv[i + 1]) : d; };
 const STEP = arg('--step', 100);          // ms between samples
 const FLOOR = arg('--floor', 0.002);      // fraction of pixels that must change
-const TARGET = 0.25;                      // of intervals
-const CEILING = 2.4;                      // seconds of consecutive dead image
+const MIN_LIVE = 3;                       // intervals a declared gesture must show
 const GATE = process.argv.includes('--gate');
 
 const browser = await chromium.launch();
@@ -73,20 +82,15 @@ const decodeAndDiff = async (b64, first) => page.evaluate(async ({ b64, first })
   return changed / (W * H);
 }, { b64, first });
 
-// Both themes. The light plates are supposed to be the same document under a
-// different palette, so their motion SHOULD be identical — but 'should be' is
-// exactly the assumption this file exists to stop anyone making. An opacity
-// chosen for a light slab can drop a sweep under the 0.2% perceptual floor
-// while its dark twin sails through.
-const SETS = [{ dir: ASSETS, tag: '' }];
+const SETS = [{ dir: ASSETS, tag: '', bg: '#0d1117' }];
 const LIGHT_DIR = join(ASSETS, 'light');
-if (existsSync(LIGHT_DIR)) SETS.push({ dir: LIGHT_DIR, tag: 'light/' });
-const plates = SETS.flatMap(({ dir, tag }) =>
-  readdirSync(dir).filter(x => /^plate-.*\.svg$/.test(x)).sort().map(x => ({ dir, tag, base: x })));
+if (existsSync(LIGHT_DIR)) SETS.push({ dir: LIGHT_DIR, tag: 'light/', bg: '#ffffff' });
+const plates = SETS.flatMap(({ dir, tag, bg }) =>
+  readdirSync(dir).filter(x => /^plate-.*\.svg$/.test(x)).sort().map(x => ({ dir, tag, bg, base: x })));
 
-for (const { dir, tag, base } of plates) {
+for (const { dir, tag, bg, base } of plates) {
   const f = tag + base;
-  await page.setContent(`<body style="margin:0">${readFileSync(join(dir, base), 'utf8')}</body>`);
+  await page.setContent(`<body style="margin:0;background:${bg}">${readFileSync(join(dir, base), 'utf8')}</body>`);
   const dur = await page.evaluate(async () => {
     await document.fonts.ready;
     const a = document.getAnimations();
@@ -94,32 +98,30 @@ for (const { dir, tag, base } of plates) {
     window.__prev = null;
     return a.length ? Math.max(...a.map(x => x.effect.getComputedTiming().duration || 0)) : 0;
   });
-  if (!dur) { rows.push([f, { live: 0, worst: Infinity }]); continue; }
+  if (!dur) { rows.push([f, { still: true }]); continue; }
   const n = Math.max(2, Math.round(dur / STEP));
   const svg = page.locator('svg');
-  let live = 0, dead = 0, worst = 0;
+  let live = 0;
   for (let i = 0; i <= n; i++) {
     await page.evaluate((t) => document.getAnimations().forEach(a => { try { a.currentTime = t; } catch {} }),
       dur * i / n);
     const frac = await decodeAndDiff((await svg.screenshot()).toString('base64'), i === 0);
     if (i === 0) continue;
-    if (frac >= FLOOR) { live++; dead = 0; } else { dead++; worst = Math.max(worst, dead); }
+    if (frac >= FLOOR) live++;
   }
-  rows.push([f, { live: live / n, worst: worst * (dur / n) / 1000 }]);
+  rows.push([f, { still: false, live, n }]);
 }
 
 console.log(`  raster diff · ${STEP}ms steps · a sample counts as motion when `
           + `>=${(FLOOR * 100).toFixed(1)}% of pixels change\n`);
 const fail = [];
 for (const [f, r] of rows) {
-  const thin = r.live < TARGET;
-  const frozen = r.worst > CEILING;
-  if (thin) fail.push(`${f}: only ${(r.live * 100).toFixed(0)}% of samples change enough to see `
-                    + `(floor ${TARGET * 100}%)`);
-  if (frozen) fail.push(`${f}: the image is perceptually identical for ${r.worst.toFixed(1)}s in a row `
-                      + `(ceiling ${CEILING}s) — a hole, not a rhythm`);
-  console.log(`  ${thin || frozen ? '!!' : '..'} ${f.padEnd(24)} ${(r.live * 100).toFixed(0).padStart(3)}% of samples move`
-            + `   longest still run ${r.worst.toFixed(1)}s`);
+  if (r.still) { console.log(`  .. ${f.padEnd(24)} still by design`); continue; }
+  const invisible = r.live < MIN_LIVE;
+  if (invisible) fail.push(`${f}: declares animations but only ${r.live} of ${r.n} sampled intervals `
+                         + `show visible change (needs ${MIN_LIVE}) — an invisible animation is `
+                         + `instrument-food, not motion; make it visible or make the plate still`);
+  console.log(`  ${invisible ? '!!' : '..'} ${f.padEnd(24)} gesture visible in ${String(r.live).padStart(3)}/${r.n} samples`);
 }
 await browser.close();
 
@@ -129,6 +131,5 @@ if (!GATE) {
   console.error('\nMOTION GATE FAILED\n' + fail.map(s => '  ' + s).join('\n'));
   process.exit(1);
 } else {
-  console.log(`\nMOTION GATE PASSED — every plate moves visibly, and none of them `
-            + `stops for more than ${CEILING}s.`);
+  console.log(`\nMOTION GATE PASSED — every declared gesture is visible; stillness is legal.`);
 }

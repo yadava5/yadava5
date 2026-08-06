@@ -411,31 +411,30 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
                + `${dur ? ` at t=${(dur * at / steps / 1000).toFixed(2)}s` : ''}`);
     }
 
-    // 13 — DOES IT MOVE, AND HOW OFTEN.
+    // 13 — DECLARED MOTION MUST MOVE SOMETHING. RE-AUTHORED, round 19, in the
+    //      same change as the design it measures.
     //
-    // Nothing here ever asked whether a plate animates at all, or whether it
-    // animates for more than a moment. Measured across the desktop set: every
-    // plate was reveal-then-hold, and 55.8% of all loop-seconds showed nothing
-    // moving — plate 0 was 77% frozen and plate VII 69%, on the plate that
-    // asserts ANIMATED SVG. Both passed every check, because a frozen plate has
-    // no collisions.
+    // This check and check 17 used to enforce the opposite doctrine: a 35%
+    // alive-floor across the loop, a 2.4s dead-run ceiling, and a failure for
+    // any desktop plate with no animations at all. That regime is the
+    // documented cause of the worst decoration in the set — seven travelling
+    // hairlines whose own comments admitted they existed "to carry the raster
+    // gate", four of them spending part of every loop striking through text,
+    // including the author's own email on the colophon. A gate that demands
+    // perpetual motion gets perpetual decoration; the failure was in the
+    // doctrine, not the implementations.
     //
-    // Motion is measured between consecutive samples, on the frames already
-    // collected: an interval counts as alive if any element's box or opacity
-    // moved. That is cheaper than a pixel diff and it cannot be fooled by a
-    // change too small to see, because sub-unit drift is excluded.
-    // A DESKTOP plate with no animations at all has dur === 0, and every motion
-    // check below is guarded on `if (dur)` — so the worst possible case for
-    // "does it move" was the one case nothing measured. Proven: stripping every
-    // `animation:` from a plate passed gate.mjs clean, and motion.mjs globs
-    // plate-* so it would have caught that one but never a mobile file.
-    //
-    // The mobile set is deliberately static: a 440 canvas carries the claim,
-    // not the mechanism. So the exemption is named here rather than falling out
-    // of an unguarded `if`, and it does not extend to the desktop plates.
-    if (!dur && !isMobile)
-      out.push(`has no animations at all — every motion check below is guarded on a loop existing, `
-             + `so a static desktop plate passes them all by having nothing to measure`);
+    // The design rule is now STILL BY DEFAULT: motion only where it performs
+    // the claim beside it, and a still plate is a decision, not a defect. So
+    // the floor, the ceiling and the no-animations failure are deleted — and
+    // what remains is the one thing that is still a defect under the new
+    // doctrine: a plate that DECLARES animations none of which ever moves
+    // anything. That is not stillness; it is dead code running on the
+    // reader's compositor, and it is exactly how gate-food survives a
+    // redesign — the keyframes stay, the travel gets zeroed, nothing notices.
+    // build/motion.mjs enforces the same rule in pixels; this is the geometry
+    // side, so the two instruments now agree in direction instead of one
+    // demanding motion the other punishes.
     if (dur) {
       let alive = 0;
       for (let i = 1; i < frames.length; i++) {
@@ -447,40 +446,9 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
         });
         if (moved) alive++;
       }
-      const frac = alive / (frames.length - 1);
-      if (frac < 0.35)
-        out.push(`only ${Math.round(frac * 100)}% of this loop shows anything moving `
-               + `(floor 35%) — it reveals once and then holds for the rest`);
-
-      // 17 — a total is not a distribution. A plate can clear the 35% floor and
-      // still stand perfectly still for five consecutive seconds, which is what
-      // a reader actually notices: measured, plate VII froze for 5.08s of a
-      // 12.7s loop, plate II for 4.12s, plate 0 for 3.77s. Motion spread thinly
-      // across the loop reads as alive; motion bunched at the start reads as a
-      // still image that twitched once.
-      let dead = 0, worst = 0;
-      for (let i = 1; i < frames.length; i++) {
-        const moved = frames[i].some((c, k) => {
-          const q = frames[i - 1][k];
-          return Math.abs(c.x - q.x) > 0.5 || Math.abs(c.y - q.y) > 0.5
-              || Math.abs(c.w - q.w) > 0.5 || Math.abs(c.o - q.o) > 0.02
-              || Math.abs(c.d - q.d) > 0.002;
-        });
-        dead = moved ? 0 : dead + 1;
-        worst = Math.max(worst, dead);
-      }
-      const deadMs = worst * (dur / steps);
-      // 2.4s, not the 1.2s the audit proposed. 1.2 on a 13.1s loop needs about
-      // eleven events, and this document argues for calm rigour -- constant
-      // motion would be the wrong register and would read as decoration. What
-      // 2.4 forbids is a plate sitting dead for a QUARTER of its loop, which is
-      // the actual complaint: plate VI was still for 3.60s and plate VII, whose
-      // own label reads ANIMATED SVG, for 3.17s. Chosen deliberately, and I am
-      // recording that I chose it rather than inheriting it.
-      const CEILING_MS = 2400;
-      if (deadMs > CEILING_MS)
-        out.push(`stands completely still for ${(deadMs / 1000).toFixed(2)}s in a row `
-               + `(ceiling ${(CEILING_MS/1000).toFixed(2)}s) — the loop has a hole in it, not a rhythm`);
+      if (alive === 0)
+        out.push(`declares animations that never move anything — not stillness, `
+               + `dead code: delete the keyframes or give the gesture a visible travel`);
     }
 
     // 14 — A STAGGER IS A WAVE, NOT A QUEUE.

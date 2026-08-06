@@ -19,55 +19,58 @@
     "verified the numbers it happened to list would be the same gate-that-cannot-",
     "fail this project has already shipped twice."
   ],
+  "$repin_note": [
+    "Re-pinned 2026-08-06 to the branch heads a full six-repo audit re-derived",
+    "every claim against — 51 of 52 values held at both the old pin and the new",
+    "one, and the 52nd (glyph.msimd128_line) is a line number that moved with",
+    "its file and is corrected below. Every old pin remains an ancestor of its",
+    "new one: no force-pushes, no rewritten history. The applied-web entry is",
+    "gone because the split it named stopped existing — see the note on the",
+    "applied repo and the ONNX rows."
+  ],
   "repos": {
     "glyph": {
       "github": "yadava5/glyph",
-      "ref": "97de73634c770a35326e4366afef69a068bd079a",
+      "ref": "157ba9eac8bbe7125960a9ba45e25caffb4eabbc",
       "branch": "main",
       "public": true
     },
     "jetpack": {
       "github": "yadava5/jetpack-compress",
-      "ref": "2caacd059921b28e4b6ae04a8cba0f7131def1e5",
+      "ref": "7b75e03ddd6bb1eb6708eff6b10aacb8148a7c74",
       "branch": "main",
       "public": true
     },
     "cadence": {
       "github": "yadava5/cadence",
-      "ref": "75180a36be474c53edfd3d40c71594d00b0faef8",
+      "ref": "8a2fbbb7ab5e36f262dc8807087e0e42f536ec06",
       "branch": "main",
       "public": true
     },
     "applied": {
       "github": "yadava5/applied",
-      "ref": "9383288bd7b5c4c644faaf8b36a07f194f699853",
+      "ref": "5b895d8dd30ae6ae502d7ae29b830429a85c5c3f",
       "branch": "main",
-      "public": true
-    },
-    "applied-web": {
-      "github": "yadava5/applied",
-      "ref": "b3297089f29125d4b35e7e52191501f54b41c0b0",
-      "branch": "integration/web-migration",
       "public": true,
-      "note": "The in-browser ONNX build is NOT on main. The commit is pushed and public, so it pins and re-derives like any other — but the page must say which branch it is reading, and does."
+      "note": "This pin now carries ml/ — the web-migration branch merged into main on 2026-08-03 via merge commit d349f02f, without a PR, which is why no gate saw it coming. The separate applied-web entry that used to pin that branch is retired: both ONNX byte counts cite main now, at identical sizes."
     },
     "glyph-simd": {
       "github": "yadava5/glyph",
       "ref": "287744ef5a7aaa2655405939914c36f28ad18e18",
       "branch": "yadava5/fix-hero-media-validation",
       "public": true,
-      "note": "The branch the DEPLOYED WebAssembly came off. main's wasm has no intrinsics; this one does."
+      "note": "The branch the DEPLOYED WebAssembly came off. main's wasm has no intrinsics; this one does. Still diverged from main at the 2026-08-06 audit, so this pin stays."
     },
     "lifequest": {
       "github": "yadava5/lifequest",
-      "ref": "514908cb9c95fc50a4a959256270f291a008e7e6",
+      "ref": "5e5744c75d39762b39c7178e2fa4f72c1b6c1d43",
       "branch": "main",
       "public": true,
       "note": "apps/api is the live NestJS service. legacy/backend holds an earlier Prisma schema with 6 models; anything counted here must name apps/api explicitly or it will pick up the wrong tree."
     },
     "automl": {
       "github": "yadava5/ai-augmented-auto-ml-toolchain",
-      "ref": "e506c9168e9dc2d036697ebd90233c4fd1e735d7",
+      "ref": "5c5b7624d4ede05235fc0289975d59f401e6a4e4",
       "branch": "main",
       "public": true,
       "note": "Public since 2026-07-30. Every AutoML figure on this page was ATTESTED before that and is now DERIVED, which is the whole point of the distinction. Written with Shree Chaturvedi; the repository has disjoint histories, so main is the only branch worth pinning."
@@ -157,14 +160,14 @@
     },
     {
       "id": "glyph.msimd128_line",
-      "value": "279",
+      "value": "330",
       "drawn_on": [
         "README.md"
       ],
       "repo": "glyph",
       "path": "CMakeLists.txt",
       "extractor": "grep -n -- '-msimd128' \"$BLOB\" | head -1 | cut -d: -f1",
-      "note": "The README cites CMakeLists.txt:279 by line. Line citations drift silently as a file grows; this one now fails the build instead."
+      "note": "The README cites CMakeLists.txt:330 by line. Line citations drift silently as a file grows; this one now fails the build instead — and it earned its keep: it was 279 at the old pin, a coverage block and an eval target were inserted above it, and this row is what flagged the drift."
     },
     {
       "id": "jetpack.parallel_mbs",
@@ -462,11 +465,11 @@
         "plate-4-applied.svg",
         "README.md"
       ],
-      "repo": "applied-web",
+      "repo": "applied",
       "path": "ml/browser/artifacts/model.onnx",
       "bytes": true,
       "extractor": "awk -v b=\"$BYTES\" 'BEGIN{printf \"%.1f\", b/1e6}'",
-      "note": "The byte length of the committed artifact, read from the contents API at that SHA. Not on main — see the applied-web repo entry."
+      "note": "The byte length of the committed artifact, read from the contents API at that SHA. On main since 2026-08-03 (merge d349f02f, no PR) at byte-for-byte the size the branch pin carried — which is why the applied-web split could retire."
     },
     {
       "id": "applied.onnx_int8_mb",
@@ -476,7 +479,7 @@
         "plate-4-applied.svg",
         "README.md"
       ],
-      "repo": "applied-web",
+      "repo": "applied",
       "path": "ml/browser/artifacts/model_quantized.onnx",
       "bytes": true,
       "extractor": "awk -v b=\"$BYTES\" 'BEGIN{printf \"%.1f\", b/1e6}'"
@@ -490,7 +493,7 @@
       "repo": "applied",
       "path": "docs/ML_EXECUTION_TRACKER.md",
       "extractor": "sed -n '378p' \"$BLOB\" | grep -oE 'macro_f1=0\\.[0-9]+' | cut -d= -f2",
-      "note": "The full three-layer cascade's score, which survives in exactly one line of prose because the run that produced it was overwritten. The page says so, and now proves the line still says it."
+      "note": "The full three-layer cascade's score, which has no evaluation artifact because the run that produced it was overwritten. The page no longer says 'exactly one line of prose' — the number has since been restated in the repo's own README, and counting restatements was never the claim; the missing artifact is. This row proves the cited line still carries it."
     },
     {
       "id": "applied.hybrid_f1_line",
@@ -657,6 +660,17 @@
       "note": "auth, health, meetups, quests, rewards, users."
     },
     {
+      "id": "lifequest.schema_tests",
+      "value": "16",
+      "drawn_on": [
+        "README.md"
+      ],
+      "repo": "lifequest",
+      "path": "packages/schemas/src/index.test.ts",
+      "extractor": "grep -cE \"^\\s*it\\(\" \"$BLOB\"",
+      "note": "The suite CI does not run. The page used to say 'there is no unit-test suite here', which went false when this file landed post-pin; the sharper true sentence — a real suite exists and nothing runs it — needs the suite's size to be checkable, so here it is."
+    },
+    {
       "id": "automl.tools",
       "value": "44",
       "drawn_on": [
@@ -808,13 +822,14 @@
     "README.md:512": "AVX-512 — an instruction-set name",
     "README.md:32": "the name of the Adler-32 algorithm",
     "README.md:1": "the placeholder in the SQL literal `WHERE id = $1`",
-    "README.md:4": "'the 4% spread' — the SIMD ratio's run-to-run disagreement, rounded from the 2.92 and 2.80 rows that both derive above",
+    "README.md:4": "'the 4% spread' — the SIMD ratio's run-to-run disagreement, rounded from the 2.92 and 2.80 rows that both derive above; and 'Zod 4', a dependency major version on the same footing as JDK 25",
     "README.md:219": "the first line of the early-stopping block cited as apps/train_model.cpp:219-243. A line RANGE has no single extractor; the citation is verified by reading it, and glyph.msimd128_line pins the one line citation that a machine can check.",
     "README.md:243": "the last line of that same cited range",
     "README.md:03.23": "part of the contact address aesh.03.23@gmail.com",
     "plate-7-colophon.svg:03.23": "part of the contact address aesh.03.23@gmail.com",
     "plate-7-colophon.svg:26": "'’26' — a graduation year, on the colophon that names the degree",
-    "README.md:6": "'Six systems' — a count of this page's own contents, which the page then enumerates one per section; the reader checks it by scrolling",
+    "README.md:6": "'Six systems' — a count of this page's own contents, which the page then enumerates one per section; also 'two of the six controllers' in §VII, whose 6 is the same lifequest.controllers count the plate derives",
+    "README.md:401": "the HTTP status the unreachable Cadence handlers answered with — the name of a response code, not a measurement, on the same footing as an instruction-set name",
     "README.md:5": "'Five system cards' — likewise enumerated on the page, and the sixth is named as an expo booklet",
     "plate-7-colophon.svg:6": "'Six systems' — the colophon restating the page's own contents",
     "m-0-thesis.svg:6": "'6 systems' — the same count of this page's own contents that README.md:6 and plate-7-colophon.svg:6 exempt, drawn as the mobile thesis hero",
@@ -831,7 +846,7 @@
     "README.md:2023": "Dean's List, Fall 2023 — a date",
     "README.md:2025": "Dean's List and the two 2025 competition results — dates",
     "README.md:0": "'from 0% to 96.72%' — the compliance baseline",
-    "README.md:3": "'a three-layer cascade' and 'the full three-layer cascade' — the count of the tiers named in the same sentence (201 regex rules, e5 embeddings, SetFit), which a reader checks by reading the list; and 'quoting three decimals', which is about numeric precision rather than a measurement"
+    "README.md:3": "'a three-layer cascade' and 'the full three-layer cascade' — the count of the tiers named in the same sentence (201 regex rules, e5 embeddings, SetFit), which a reader checks by reading the list; 'quoting three decimals', which is about numeric precision rather than a measurement; 'Zod 3', a dependency major version; and §VI's 'those same three / the other three', the read-vs-delete guard split the refusal plate draws as filled and hollow marks"
   },
   "$attested_note": [
     "Facts about the AUTHOR rather than measurements of a repository.",
