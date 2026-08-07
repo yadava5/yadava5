@@ -49,7 +49,16 @@ const STEPS = 40;                   // samples across one loop
 const TOL = 1.5;                    // antialiasing slack, in viewBox units
 const fails = [];
 
-const browser = await chromium.launch();
+// FreeType rounds glyph advances to the pixel grid PER FONT SIZE: measured on
+// the runner (diag/ci-fonts, run 31143030894), the same embedded mono advanced
+// +2.6% at 13px, +4.2% at 16px, +3.2% at 21px and −2% at 34px — so no
+// single-size probe metric can normalise a document set in 13/21/34/55px, and
+// that skew was the whole of the data-frame drift. Hinting off, the ratios
+// measured 1.0000–1.0001 at every size. This measures the TYPE, not the
+// rasteriser's grid; no tolerance changes. macOS has no FreeType — inert there.
+// (The probe-metric normalisation below stays: it is the belt to this brace,
+// and it is what catches an environment where this flag stops working.)
+const browser = await chromium.launch({ args: ['--font-render-hinting=none'] });
 const page = await browser.newPage();
 // A second page with motion switched off. This is the authored attributes with
 // no animation applied, which is what every STATIC RASTERISER produces: resvg,

@@ -3,3 +3,4 @@ build/.claims-cache/
 
 # agent worktrees, not part of the page
 .claude/worktrees/
+build/__pycache__/

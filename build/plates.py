@@ -71,7 +71,19 @@ ALT: dict[str, str] = {}
 ROOT = pathlib.Path(__file__).resolve().parent
 OUT = ROOT.parent / "assets"
 OUT.mkdir(exist_ok=True)
+
+# ── the embedded faces (regenerate with build/subset-fonts.py, which says why
+# there are three). The page claims to be self-contained, so every glyph it
+# draws must come from a face it carries: a glyph missing from its subset
+# falls back to a PLATFORM font silently — the comma in the 34px "10,453"
+# shipped in Menlo on macOS and DejaVu Sans Mono on Linux, and the serif
+# voice was a different typeface per reader. charsets.py is the single source
+# of truth: subset-fonts.py builds the woff2s from it, and the build-time
+# gate below fails any plate that draws a character its face does not carry.
+from charsets import MONO_CHARS, BOLD_CHARS, SERIF_CHARS
 FONT = base64.b64encode((ROOT / "mono-subset.woff2").read_bytes()).decode()
+FONT600 = base64.b64encode((ROOT / "mono-600-subset.woff2").read_bytes()).decode()
+FONTSERIF = base64.b64encode((ROOT / "serif-subset.woff2").read_bytes()).decode()
 
 # The real product marks, extracted from each app's own logo (see logos.json).
 import re as _re_mod
@@ -196,7 +208,8 @@ DRIFT = "cubic-bezier(.45,.05,.55,.95)"
 
 def head(h: int, title: str, desc: str, key: str = "",
          col: tuple[int, int] = (150, 730),
-         frame: tuple[float, float, float] | None = None) -> str:
+         frame: tuple[float, float, float] | None = None,
+         serif: bool = False) -> str:
     """Open a plate.
 
     `col` and `frame` are this plate's DECLARED geometry, written into the SVG
@@ -205,6 +218,8 @@ def head(h: int, title: str, desc: str, key: str = "",
     must match — without forcing every plate into one frame.
     `frame` is (top, rightGap, bottomGap): measured ink extents this plate
     stands behind, in viewBox units.
+    `serif` embeds the serif face — only the two plates that speak in it pay
+    its 10KB.
     """
     if key:
         # The light pass re-authors the same key. A plate and its light twin
@@ -213,11 +228,21 @@ def head(h: int, title: str, desc: str, key: str = "",
             raise SystemExit(f"{key}: description diverged between themes")
         ALT[key] = desc
     fr = f' data-frame="{frame[0]:g},{frame[1]:g},{frame[2]:g}"' if frame else ''
+    # Two REAL weights of the mono. .hero/.sub/.vast ask for 600, and with a
+    # single 400 face every platform synthesised that bold differently —
+    # FreeType widened "96.72%" 2u past its column edge on Linux while
+    # CoreText held it inside. The serif face carries the serif voice for the
+    # same reason: ui-serif/Georgia resolved to Liberation Serif on CI and to
+    # Georgia on macOS, a different typeface per reader on a page that calls
+    # itself self-contained. (Gelasio, OFL, metric-compatible with Georgia.)
+    ser = (f"@font-face{{font-family:'S';font-weight:400;"
+           f"src:url(data:font/woff2;base64,{FONTSERIF}) format('woff2')}}\n") if serif else ''
     return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="{VB_X} 0 {VB_W} {h}" width="{VB_W}" height="{h}" role="img" aria-label="{desc}" data-col="{col[0]},{col[1]}"{fr}>
 <title>{title}</title><desc>{desc}</desc>
 <style>
-@font-face{{font-family:'M';src:url(data:font/woff2;base64,{FONT}) format('woff2')}}
-text{{font-family:'M',ui-monospace,SFMono-Regular,Menlo,monospace}}
+@font-face{{font-family:'M';font-weight:400;src:url(data:font/woff2;base64,{FONT}) format('woff2')}}
+@font-face{{font-family:'M';font-weight:600;src:url(data:font/woff2;base64,{FONT600}) format('woff2')}}
+{ser}text{{font-family:'M',ui-monospace,SFMono-Regular,Menlo,monospace}}
 .hero{{font-size:55px;letter-spacing:-1px;fill:{INK};font-weight:600}}
 .sub{{font-size:34px;letter-spacing:-0.5px;fill:{INK};font-weight:600}}
 .unit{{font-size:34px;letter-spacing:-0.5px;fill:{INK2}}}
@@ -267,8 +292,8 @@ def plate_thesis() -> str:
               "AutoML, dataset in, model out; Cadence, the database that refuses; "
               "Applied, allowed to say not sure; and VisualAssist, which needs a "
               "lidar sensor.", key="plate-0-thesis.svg",
-              col=(118, 762), frame=(43, 79.3, 34))]
-    s.append(f""".ser{{font-family:ui-serif,Georgia,'Times New Roman',serif;font-size:34px;fill:{INK}}}
+              col=(118, 762), frame=(43, 79.3, 34), serif=True)]
+    s.append(f""".ser{{font-family:'S',ui-serif,Georgia,'Times New Roman',serif;font-size:34px;fill:{INK}}}
 .orn{{transform-box:fill-box;transform-origin:center;animation:orn 27s linear infinite}}
 @keyframes orn{{from{{transform:rotate(45deg)}}to{{transform:rotate(405deg)}}}}
 /* the leaders drift toward their numerals — 75u is ten dash periods, so the
@@ -1380,8 +1405,9 @@ def plate_colophon() -> str:
                              "pinned commit, except section one, which is attested and says so. "
                              "The page itself is animated SVG with no JavaScript and no server. "
                              "If a number here is wrong, it is wrong in public.",
-              key="plate-7-colophon.svg", col=(118, 762), frame=(43, 155.7, 24))]
-    s.append(f""".ser{{font-family:ui-serif,Georgia,'Times New Roman',serif;font-size:34px;fill:{INK}}}
+              key="plate-7-colophon.svg", col=(118, 762), frame=(43, 155.7, 24),
+              serif=True)]
+    s.append(f""".ser{{font-family:'S',ui-serif,Georgia,'Times New Roman',serif;font-size:34px;fill:{INK}}}
 .dev{{animation:dev 31s linear infinite}}
 @keyframes dev{{from{{transform:rotate(0deg)}}to{{transform:rotate(360deg)}}}}
 /* each mark counter-rotates about its own centre so it ORBITS upright —
@@ -1515,7 +1541,10 @@ def plate_mobile(accent: str, kicker: str, hero: str, unit: str,
     parts = [
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {MW} {h}" width="{MW}" height="{h}" '
         f'role="img" aria-label="{desc}"><title>{kicker}</title><desc>{desc}</desc><style>'
-        f"@font-face{{font-family:'M';src:url(data:font/woff2;base64,{FONT}) format('woff2')}}"
+        # both weights: .n is 600, and .u inherits it — see head()'s note on
+        # why a synthesised bold is a per-platform rendering
+        f"@font-face{{font-family:'M';font-weight:400;src:url(data:font/woff2;base64,{FONT}) format('woff2')}}"
+        f"@font-face{{font-family:'M';font-weight:600;src:url(data:font/woff2;base64,{FONT600}) format('woff2')}}"
         f"text{{font-family:'M',ui-monospace,SFMono-Regular,Menlo,monospace}}"
         f".k{{font-size:13px;letter-spacing:2px;fill:{INK2}}}"
         f".n{{font-size:55px;letter-spacing:-1px;fill:{INK};font-weight:600}}"
@@ -1594,6 +1623,39 @@ MOBILE = {
 import re as _re, sys as _sys, xml.dom.minidom as _xml
 
 _fail = []
+
+
+def _check_coverage(fn: str, svg: str) -> None:
+    """Every character a plate draws must be in the charset of the face that
+    will render it — a glyph outside its subset falls back to a platform font
+    and NOTHING downstream can see it: the build succeeds, gate.mjs passes
+    (the geometry is still legal), and the reader gets Menlo or DejaVu mid-
+    word. font-weight INHERITS, so a <tspan class="unit"> inside a .sub text
+    renders from the 600 face; the class stack is a union for that reason.
+    """
+    _ent = {'&amp;': '&', '&lt;': '<', '&gt;': '>', '&#39;': "'", '&quot;': '"'}
+    for m in _re.finditer(r'<text([^>]*)>(.*?)</text>', svg, _re.S):
+        stack = [set(_re.search(r'class="([^"]*)"', m.group(1)).group(1).split()
+                     if _re.search(r'class="([^"]*)"', m.group(1)) else [])]
+        for part in _re.split(r'(<tspan[^>]*>|</tspan>)', m.group(2)):
+            if part.startswith('<tspan'):
+                c = _re.search(r'class="([^"]*)"', part)
+                stack.append(stack[-1] | set(c.group(1).split() if c else []))
+                continue
+            if part == '</tspan>':
+                stack.pop()
+                continue
+            for k, v in _ent.items():
+                part = part.replace(k, v)
+            cls = stack[-1]
+            face, chars = (('serif', SERIF_CHARS) if 'ser' in cls else
+                           ('600', BOLD_CHARS) if cls & {'hero', 'sub', 'vast', 'n'} else
+                           ('mono', MONO_CHARS))
+            for ch in part:
+                if ch not in chars and ch != '\n':
+                    _fail.append(f"{fn}: draws {ch!r} in the {face} face, which does not "
+                                 f"carry it — it would render in a platform font "
+                                 f"(charsets.py + build/subset-fonts.py)")
 # One build, two documents. Dark keeps every path it has always had; light
 # lands in assets/light/ under the SAME basenames (gate.mjs keys on that).
 for _theme in ("dark", "light"):
@@ -1613,9 +1675,14 @@ for _theme in ("dark", "light"):
             _xml.parseString(path.read_text())
         except Exception as e:
             _fail.append(f"{_theme}/{fn}: MALFORMED XML — {e}")
+        if _theme == "dark":                    # text is theme-invariant
+            _check_coverage(fn, path.read_text())
         print(f"{_theme:5s} {fn}: {path.stat().st_size:,} bytes")
     for _fn, (_k, _acc, _n, _u, _l1, _l2, _desc, _lay, _mo, _gl) in MOBILE.items():
-        (_out / _fn).write_text(plate_mobile(globals()[_acc], _k, _n, _u, _l1, _l2, _desc, _lay, _mo, _gl))
+        _svg = plate_mobile(globals()[_acc], _k, _n, _u, _l1, _l2, _desc, _lay, _mo, _gl)
+        (_out / _fn).write_text(_svg)
+        if _theme == "dark":
+            _check_coverage(_fn, _svg)
     print(f"{_theme:5s} mobile set: {len(MOBILE)} plates at {MW}w")
 set_theme("dark")
 
