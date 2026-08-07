@@ -1,0 +1,18 @@
+# TEMPORARY — lives only on diag/* branches, never on main.
+# Prints what Chromium on the Linux runner actually resolves and measures,
+# so the platform-dependence fix is chosen from evidence, not from theory.
+name: diag
+on:
+  push:
+    branches: ['diag/**']
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - run: |
+          npm ci --no-audit --no-fund || npm install --no-audit --no-fund
+          npx playwright install --with-deps chromium
+          node build/diag-fonts.mjs
