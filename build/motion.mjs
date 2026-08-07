@@ -1,41 +1,57 @@
 /**
- * Does the motion that EXISTS actually show?
+ * Does the page actually MOVE — all of it, all the time?
  *
- * RE-AUTHORED, round 19, deliberately and in the same change as the design it
- * measures. The previous version of this file enforced the opposite doctrine:
- * every plate had to show pixel change in >=25% of sampled intervals and could
- * never hold still for more than 2.4s. That gate got what KPI-driven design
- * always gets — seven plates grew travelling hairlines whose own comments
- * admitted they existed "to carry the raster gate", and four of them spent
- * part of every loop striking through text (the colophon's crossed out the
- * author's email; the refusal's applied the plate's own strike-symbol to the
- * wrong nouns). Motion-as-quota produced decoration engineered for an
- * instrument, which is the definition of unrefined.
+ * RE-AUTHORED, round 21, deliberately and in the same change as the design it
+ * measures. This file has now enforced three doctrines, and the history is
+ * the argument for the current one:
  *
- * The design doctrine is now STILL BY DEFAULT: a plate animates only where the
- * motion performs the claim beside it, and a plate with nothing to perform is
- * legally, deliberately still. So the floor and the ceiling are gone — but the
- * discovery that built this file stands: geometry cannot tell you whether
- * motion is VISIBLE, only pixels can. gate.mjs once reported a plate 70% alive
- * while a raster diff showed it never exceeded 0.2% pixel change. That failure
- * mode — an animation that exists for the instruments and not for the reader —
- * is precisely what a still-by-default page must not ship, because an
- * invisible animation is pure cost: it burns compositor time and carries no
- * meaning. So the check inverts:
+ *   v1 (rounds ~14-18): ">=25% of intervals must move, never hold >2.4s."
+ *      A quota. It got what quotas get — seven travelling hairlines whose
+ *      own comments admitted they existed to feed this gate, four of them
+ *      striking through text. Decoration engineered for an instrument.
+ *   v2 (rounds 19-20): "stillness is legal; a declared gesture must merely
+ *      be visible." A sound correction of v1's failure — and eight of ten
+ *      plates took the permission and froze for 84-100% of their loops
+ *      (raster-measured, 100ms steps). The client's verdict on the result
+ *      was "very static feel", and the one plate he did not criticise was
+ *      the only one at 100% liveness: the rider in continuous travel.
+ *   v3 (now): the rider is the floor. Every plate carries a continuous
+ *      carrier plus its gesture, so the gate demands BOTH:
  *
- *   · a plate with NO animations passes — stillness is a design decision
- *   · a plate WITH animations must show its gesture: at least MIN_LIVE
- *     sampled intervals must clear the perceptual floor, or the animation is
- *     invisible and should be deleted rather than shipped
+ *      · a plate with NO animations fails — stillness is no longer a legal
+ *        design on this page, because the page's brief is to be alive
+ *      · SUSTAINED: >=95% of a desktop plate's sampled intervals must clear
+ *        FLOOR/10. The divisor is measured, not soft: the round-20 rider ran
+ *        0.028-0.035% per 100ms in EVERY interval and was unmissable,
+ *        because the eye tracks coherent displacement (smooth pursuit);
+ *        per-interval repaint area is the wrong model for it. FLOOR/10
+ *        still demands ~50+ real pixels changing every 100ms, which no
+ *        dead-code animation produces.
+ *      · GESTURE: >=3 intervals must clear the full FLOOR — some moment of
+ *        each loop must read at a glance, not only under pursuit. A plate
+ *        may also satisfy this clause with a carrier strong enough to BE
+ *        the glance: >=90% of intervals at FLOOR/4. Measured, not assumed:
+ *        the title page's drifting leader field clears FLOOR/4 in 270 of
+ *        270 samples — ten times the old page's median liveness — and
+ *        demanding it ALSO fire a repaint burst is exactly the quota
+ *        thinking that grew v1's travelling hairlines.
+ *
+ *      The v1 failure mode cannot return through this door: v1 punished
+ *      stillness ANYWHERE (so plates grew roving junk to keep every second
+ *      busy), while v3 asks for one honest carrier — and the carrier is a
+ *      design element chosen per section (a scan, a stream, a conveyor, a
+ *      nib, a needle, a sweep, a ring), asserted here only in pixels.
+ *
+ *   The mobile set enters the gate for the first time this round (it was
+ *   never measured before — scope-widening, not loosening). Its plates are
+ *   hero cards with one gliding highlight, so they are held to the carrier
+ *   clause at a gentler 70% and excused the gesture clause: a 440u card has
+ *   no room for a second system of motion, and demanding one is how v1
+ *   grew hairlines.
  *
  * Both themes still measured separately: an opacity tuned on the dark canvas
- * can drop a gesture under the floor on the light one, and "should be
- * identical" is exactly the assumption this file exists to stop.
- *
- * The plates are transparent now, so each set is rastered over the canvas it
- * actually ships on — GitHub dark #0d1117, GitHub light #ffffff. Diffing
- * near-white ink over a default white test page would blind this gate
- * completely for the dark set.
+ * can drop a carrier under the floor on the light one. The plates are
+ * transparent, so each set is rastered over the canvas it ships on.
  *
  * Usage: node build/motion.mjs [--step 100] [--floor 0.002] [--gate]
  */
@@ -45,24 +61,24 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 // Honour GATE_ASSETS like gate.mjs does, so build/mutations.mjs can point
-// this file at a directory of deliberately-broken plates. Until it did, two
-// of the three gates in `npm test` had never been shown able to fail.
+// this file at a directory of deliberately-broken plates.
 const ASSETS = process.env.GATE_ASSETS || join(dirname(fileURLToPath(import.meta.url)), '..', 'assets');
 const arg = (n, d) => { const i = process.argv.indexOf(n); return i > 0 ? Number(process.argv[i + 1]) : d; };
 const STEP = arg('--step', 100);          // ms between samples
 const FLOOR = arg('--floor', 0.002);      // fraction of pixels that must change
-const MIN_LIVE = 3;                       // intervals a declared gesture must show
+const SUS_DESKTOP = 0.95;                 // carrier floor, desktop
+const SUS_MOBILE = 0.70;                  // carrier floor, mobile hero cards
+const MIN_LIVE = 3;                       // intervals the gesture must clear
 const GATE = process.argv.includes('--gate');
 
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 520, height: 760 } });
 const rows = [];
 
-// Diffing has to happen on the LIVE render. My first version serialised the
-// animated SVG and re-rasterised it through an <img>, which restarts the CSS
-// clock from zero — every frame came back identical and all eight plates
-// reported 0% motion. Playwright screenshots the real compositor output; the
-// bytes go back into the page only to be decoded into pixels.
+// Diffing has to happen on the LIVE render. Serialising the animated SVG and
+// re-rasterising it through an <img> restarts the CSS clock from zero — every
+// frame comes back identical. Playwright screenshots the real compositor
+// output; the bytes go back into the page only to be decoded into pixels.
 const decodeAndDiff = async (b64, first) => page.evaluate(async ({ b64, first }) => {
   const img = new Image();
   img.src = 'data:image/png;base64,' + b64;
@@ -86,7 +102,7 @@ const SETS = [{ dir: ASSETS, tag: '', bg: '#0d1117' }];
 const LIGHT_DIR = join(ASSETS, 'light');
 if (existsSync(LIGHT_DIR)) SETS.push({ dir: LIGHT_DIR, tag: 'light/', bg: '#ffffff' });
 const plates = SETS.flatMap(({ dir, tag, bg }) =>
-  readdirSync(dir).filter(x => /^plate-.*\.svg$/.test(x)).sort().map(x => ({ dir, tag, bg, base: x })));
+  readdirSync(dir).filter(x => /^(plate|m)-.*\.svg$/.test(x)).sort().map(x => ({ dir, tag, bg, base: x })));
 
 for (const { dir, tag, bg, base } of plates) {
   const f = tag + base;
@@ -98,30 +114,40 @@ for (const { dir, tag, bg, base } of plates) {
     window.__prev = null;
     return a.length ? Math.max(...a.map(x => x.effect.getComputedTiming().duration || 0)) : 0;
   });
-  if (!dur) { rows.push([f, { still: true }]); continue; }
+  if (!dur) { rows.push([f, { still: true, mobile: /^m-/.test(base) }]); continue; }
   const n = Math.max(2, Math.round(dur / STEP));
   const svg = page.locator('svg');
-  let live = 0;
+  let live = 0, sus = 0, strong = 0;   // gesture / carrier / strong-carrier
   for (let i = 0; i <= n; i++) {
     await page.evaluate((t) => document.getAnimations().forEach(a => { try { a.currentTime = t; } catch {} }),
       dur * i / n);
     const frac = await decodeAndDiff((await svg.screenshot()).toString('base64'), i === 0);
     if (i === 0) continue;
     if (frac >= FLOOR) live++;
+    if (frac >= FLOOR / 4) strong++;
+    if (frac >= FLOOR / 10) sus++;
   }
-  rows.push([f, { still: false, live, n }]);
+  rows.push([f, { still: false, mobile: /^m-/.test(base), live, sus, strong, n }]);
 }
 
-console.log(`  raster diff · ${STEP}ms steps · a sample counts as motion when `
-          + `>=${(FLOOR * 100).toFixed(1)}% of pixels change\n`);
+console.log(`  raster diff · ${STEP}ms steps · gesture floor ${(FLOOR * 100).toFixed(1)}% · carrier floor ${(FLOOR * 10).toFixed(2)}%\n`);
 const fail = [];
 for (const [f, r] of rows) {
-  if (r.still) { console.log(`  .. ${f.padEnd(24)} still by design`); continue; }
-  const invisible = r.live < MIN_LIVE;
-  if (invisible) fail.push(`${f}: declares animations but only ${r.live} of ${r.n} sampled intervals `
-                         + `show visible change (needs ${MIN_LIVE}) — an invisible animation is `
-                         + `instrument-food, not motion; make it visible or make the plate still`);
-  console.log(`  ${invisible ? '!!' : '..'} ${f.padEnd(24)} gesture visible in ${String(r.live).padStart(3)}/${r.n} samples`);
+  if (r.still) {
+    fail.push(`${f}: declares no animations — stillness is no longer a legal design on this page`);
+    console.log(`  !! ${f.padEnd(30)} STILL`);
+    continue;
+  }
+  const susFloor = r.mobile ? SUS_MOBILE : SUS_DESKTOP;
+  const pct = r.sus / r.n;
+  const glance = r.live >= MIN_LIVE || r.strong / r.n >= 0.9;   // burst OR strong carrier
+  const bad = pct < susFloor || (!r.mobile && !glance);
+  if (pct < susFloor)
+    fail.push(`${f}: carrier alive in only ${Math.round(pct * 100)}% of intervals (floor ${susFloor * 100}%) — the plate is holding a frozen frame`);
+  if (!r.mobile && !glance)
+    fail.push(`${f}: no moment of the loop reads at a glance (${r.live} gesture samples, `
+            + `strong carrier in ${Math.round(r.strong / r.n * 100)}% — needs ${MIN_LIVE} bursts or 90%)`);
+  console.log(`  ${bad ? '!!' : '..'} ${f.padEnd(30)} alive ${String(Math.round(pct * 100)).padStart(3)}% of loop · gesture in ${String(r.live).padStart(3)}/${r.n}`);
 }
 await browser.close();
 
@@ -131,5 +157,5 @@ if (!GATE) {
   console.error('\nMOTION GATE FAILED\n' + fail.map(s => '  ' + s).join('\n'));
   process.exit(1);
 } else {
-  console.log(`\nMOTION GATE PASSED — every declared gesture is visible; stillness is legal.`);
+  console.log(`\nMOTION GATE PASSED — every plate sustains its carrier and lands its gesture.`);
 }

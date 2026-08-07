@@ -46,11 +46,12 @@ const MUTATIONS = [
   // mutating the class is a no-op because every element overrides it.
   ['a draw-on is blank at frame zero', /undrawn at frame zero/,
     (s) => s.replace(/pathLength="1" style="animation-delay:-7\.6s"/, 'pathLength="1" style="animation-delay:0s"')],
-  // Glyph's ISA tokens are visible from 5% to 96% of their loop; flipping the
-  // long hold to opacity:0 hides them for most of it. (Used to key on jetpack's
-  // .row ripple, which was deleted as decoration.)
+  // Applied's refused message rests beside the human for the first 30% of
+  // its loop; flipping that hold to opacity:0 hides it for most of the cycle.
+  // (Round 21 re-anchor: the sieve became the sifting channel and the hold
+  // moved from 52% to 30%.)
   ['an element hides for most of its loop', /visible only \d+%/,
-    (s) => s.replace(/34%,96%\{opacity:1;/, '34%,96%{opacity:0;')],
+    (s) => s.replace(/0%,30%\{opacity:1;/, '0%,30%{opacity:0;')],
   // Anchored on `class="lbl" style="fill:#F5A524"` until a round reclaimed that
   // amber for Glyph, and then it matched nothing. Third stale probe of the
   // week, all three from keying on a literal that design work is free to
@@ -61,12 +62,22 @@ const MUTATIONS = [
     (s) => s.replace(/class="([\w ]+)" style="fill:(#[0-9A-Fa-f]{6})"/,
       (m, c, col) => `class="${c}" fill="${col}"`)],
   ['text drops below 4.5:1 on the slab', /on the slab \(needs 4.5/,
-    (s) => s.replace(/\.fine\{font-size:13px;letter-spacing:0\.6px;fill:#8A8F98\}/, '.fine{font-size:13px;letter-spacing:0.6px;fill:#3A3E44}')],
-  // Keys on plate V's diverted message, which declares data-rest="the-human":
-  // pulling its authored x back 90u strands it short of the person it must
+    (s) => s.replace(/\.fine\{font-size:13px;letter-spacing:0\.4px;fill:#8A8F98\}/, '.fine{font-size:13px;letter-spacing:0.4px;fill:#3A3E44}')],
+  // Keys on Applied's refused message, which declares data-rest="the-human":
+  // pulling its authored x back 100u strands it short of the person it must
   // reach, in both the animated and the still frame.
+  //
+  // Re-anchored twice, then a third time, each because a redesign moved the
+  // message by a couple of units and the literal x stopped matching. A probe
+  // that matches nothing is worse than no probe: it reports a check as
+  // exercised when the check was never run. The pass-3 note said that if it
+  // happened again the probe should key on the attribute alone and compute
+  // the shift — it happened again (round 22 resized the token 14u -> 18u,
+  // moving 632 -> 630), so this now does exactly that: any element that
+  // declares a rest is dragged 100u left of wherever it was authored.
   ['a token rests short of its target', /should come to rest at|still frame is the START/,
-    (s) => s.replace(/data-rest-within="10" x="656"/, 'data-rest-within="10" x="566"')],
+    (s) => s.replace(/data-rest-within="12" x="(\d+)"/,
+      (m, x) => `data-rest-within="12" x="${Number(x) - 100}"`)],
   // Both of the following were dead until an audit ran them by hand. They are
   // probes now so that cannot happen twice.
   //
@@ -75,8 +86,10 @@ const MUTATIONS = [
   // 6.09:1 label in <g opacity="0.5"> takes it to 2.32:1 and the gate passed.
   // (Keys on jetpack's first benchmark-table row — the old "row lbl" class
   // token went with the table's decorative ripple.)
+  // (Round 20 re-anchor: jetpack's bench sub-header — the old benchmark-table
+  // row went with the table when the lanes became bars.)
   ['contrast is destroyed by an ancestor group opacity', /on the slab \(needs 4.5/,
-    (s) => s.replace(/(<text class="lbl" x="150" y="416">[^<]*<\/text>)/, '<g opacity="0.5">$1</g>')],
+    (s) => s.replace(/(<text x="150" y="82" class="lbl">[^<]*<\/text>)/, '<g opacity="0.5">$1</g>')],
   // Check 9 compared the accessible description to the plate with
   // String.includes, so any number that is a PREFIX of one the plate draws
   // passed: "29" is a substring of "299". The desc is the only thing a screen
@@ -88,20 +101,21 @@ const MUTATIONS = [
   // `opacity` and not an rgba alpha, and they are exactly what an exported
   // logo carries — two of the six product marks shipped at 1.49:1 and 2.68:1
   // because of it.
+  // (Round 20 re-anchor: the refusal's SIX SERVICES say-line.)
   ['contrast is destroyed by fill-opacity', /on the slab \(needs 4.5/,
-    (s) => s.replace(/(<text class="lbl" x="150" y="440")/, '$1 fill-opacity="0.12"')],
-  // RE-AUTHORED with checks 13/17: stillness is legal now, so "no animations
-  // at all" stopped being a defect and its probe retired with it. The defect
-  // that replaced it is an animation that MOVES NOTHING — dead code on the
-  // reader's compositor wearing the name of a gesture. Applied's refusal
-  // journey is the only animation on its plate; freezing its keyframes into a
-  // constant leaves a declared animation with zero geometric change across
-  // the whole loop, which the re-authored check 13 must call out. ('a plate
-  // freezes for too long' retired with the 2.4s ceiling it tested — the
-  // ceiling was the doctrine that grew the sweeps.)
+    (s) => s.replace(/(<text x="150" y="88" class="say")/, '$1 fill-opacity="0.12"')],
+  // Check 13 fires when a plate declares animations NONE of which moves
+  // anything — dead code on the reader's compositor wearing the name of a
+  // gesture. Round 21 anchored this on the title page's two carriers; round
+  // 22 gave the title page the index-read chase, so freezing those two no
+  // longer silences it and the probe moved to the colophon — the plate with
+  // the fewest declared animations — freezing all three (the turning device,
+  // the counter-rotation that keeps its marks upright, the drifting halo).
   ['a declared animation never moves anything', /never move anything/,
-    (s) => s.replace(/@keyframes dv\{[^]*?\}\}/,
-      '@keyframes dv{0%,100%{opacity:1;transform:translate(0,0)}}')],
+    (s) => s
+      .replace('to{transform:rotate(360deg)}', 'to{transform:rotate(0deg)}')
+      .replace('to{transform:rotate(-360deg)}', 'to{transform:rotate(0deg)}')
+      .replace('to{stroke-dashoffset:-44}', 'to{stroke-dashoffset:0}')],
   // Check 14 is the surviving motion-quality check (a stagger is a wave, not a
   // queue), so it keeps a probe: stretching the middle pen stroke's delay on
   // Glyph opens a 400ms hole in a 150ms wave.

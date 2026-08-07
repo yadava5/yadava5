@@ -5,93 +5,67 @@ FALSIFIABLE — figure builder.
 Every claim is followed by the mechanism that would catch it if it were a lie.
 
 Design rules encoded here (each one is a finding, not a preference):
-  * viewBox 880 wide, type column 150→730 — symmetric, 36% more legible at
-    mobile than 1200
-  * type scale 64 / 32 / 20 / 16 / 13, plus three named exceptions: the 34px
-    serif (the only voice that is not the machine's — it opens the document on
-    the thesis and closes it on the colophon, one bracket), the 26px .unit
-    suffix that hangs off a hero, and plate III's 26px sentence specimen,
-    which is set at the size a user would type.
-  * NO SLAB, NO BORDER, NO ACCENT BAR. Round 19. The plates used to be opaque
-    cards — slab fill, EDGE stroke, a 4u coloured bar at x=0 — and the client
-    read them as cards and called them unrefined. He was right for a reason
-    the build could not see: every other mark on this page earns its ink from
-    data, and the bar was a coloured flag whose only job was "cards have a
-    coloured edge now" — the one element the falsifiability conceit cannot
-    defend. In the light theme the ten 600-step bars were the heaviest ink on
-    the page: the eye went to the frame, not the content. So the figures are
-    now transparent ink drawn directly on GitHub's own canvas (#0d1117 dark,
-    #ffffff light — the set is still built twice and <picture> still picks),
-    and what ties them into one document is what ties a printed report
-    together: one repeated frontispiece rule with the chapter at its right
-    end, and a shared type column. A document, not a deck.
-  * every figure is exactly as tall as its evidence. The old set landed eight
-    of ten plates inside a 130u height band, so the page had no way to say
-    "this one matters" — the refusal weighed the same as a gzip benchmark.
-    Heights now run ~330 to ~700: Cadence pays for one filed chip, not a week
-    of empty calendar, and the refusal is the broadside.
-  * STILL BY DEFAULT; motion only where it performs the claim it sits beside.
-    The old doctrine was "never still", enforced by a raster gate demanding
-    ~0.5% pixel change per sample — and it got what KPI-driven design always
-    gets: seven plates grew travelling hairlines whose own comments admit they
-    existed "to carry the raster gate", and four of them spent part of every
-    loop striking through text (the colophon's crossed out the author's email).
-    Five gestures survive because they ARE their claims: Glyph's pen draws the
-    digits, jetpack's window is shown binding, Cadence files the chip, Applied
-    walks one message to the human, AutoML's phase clock routes the tools.
-    Everything else holds still, on purpose. motion.mjs and gate.mjs checks
-    13/17 were re-authored in the same change — see the reasoning there.
-  * near-coprime loop lengths so plates never beat into a synchronised pulse
-  * the finished frame is authored; animation supplies the START, never the end
-    (share cards and static renderers capture frame zero)
-  * nothing comes to rest on top of a label. The gate samples 40 points
-    across every loop and measures getBoundingClientRect, so this is enforced
-    rather than hoped for.
-  * long travels use cubic-bezier(.4,0,.2,1). The old expo-out covered 221u in
-    a single 0.33s step — it read as a teleport, not as motion.
-  * an element that MOVES fades out before its position resets, so the loop
-    wrap is never a visible snap-back. Elements that only fade still reset in
-    one frame; that is a blink, not a jump, and it is the cheaper trade.
-  * no animated filters — one animated blur costs more than 4000 animated rects
+  * THE STORY IS "QUESTIONS I WANTED ANSWERED". Round 21. The old arc — five
+    sections opening "I don't trust X" — is deleted; the client called it
+    cocky, and the same construction five times read as a form letter. Each
+    section now opens as a genuine question answered with evidence, including
+    the answers that went against the author (jetpack loses to the JDK
+    intrinsic; Glyph's OpenMP build is SLOWER below a size floor; Applied's
+    best score is the cheap layer's). The questions live in the README
+    headers; the plates perform the answers.
+  * PERPETUAL PERFORMANCE. Round 21, and it inverts round 19's doctrine in
+    the same change as the design it measures. "Still by default" was a sound
+    fix for gate-food decoration, but eight of ten plates took the permission
+    and froze for 84-100% of their loops (raster-measured), and the client's
+    verdict was "very static feel". The one plate he did not criticise was
+    the only one at 100% — the transit rider in continuous travel. So that is
+    the floor now: EVERY plate carries one slow continuous carrier (a scan, a
+    stream, a conveyor, a nib, a needle, a sweep, a ring — a different verb
+    per section, because ten copies of one verb is the templating the client
+    already rejected), plus its episodic gesture. Carriers are steady-state,
+    so linear is legal there and only there; gestures ease. build/motion.mjs
+    enforces the doctrine in pixels.
+  * LOOPS WRAP SEAMLESSLY. frame[first] == frame[last] for every keyframe
+    set: carriers are closed circuits, sawtooths that fade before they reset,
+    or conveyors whose blocks hand their pose to the next. Negative delays
+    start everything mid-cycle, chosen so t=0 is a full-opacity frame (gate
+    check 6 reads t=0, and it is right to). Periods inside a plate and across
+    plates are near-coprime so the page never beats into a synchronised
+    pulse and the composite loop is unfindable.
+  * ONE MODULAR SCALE: 13 / 21 / 34 / 55 on the golden ratio (Fibonacci),
+    with ONE named exception — the 89px "B only", the loudest thing on the
+    page and not a number. Round 20 shipped seven sizes plus an off-scale
+    inline 26 inside one 708-wide figure, and that is what "unpolished"
+    measured as. All small text is exactly 13, differentiated by tracking
+    and ink (lbl/key at +1.6, kick at +2.4), never by a fourth size. The
+    serif voice sits on the scale at 34.
+  * viewBox 880 wide; the type column is a per-plate declaration (data-col,
+    gate check 5), edges are per-plate declarations (data-frame, check 12).
+  * every figure is exactly as tall as its evidence.
+  * nothing comes to rest on top of a label — enforced by gate.mjs, 40
+    samples across every loop.
+  * an element that MOVES fades out before its position resets; elements
+    that only fade may reset in one frame.
+  * no animated filters — one animated blur costs more than 4000 animated
+    rects. No SMIL either: CSS is the only motion layer, so the
+    prefers-reduced-motion block can park the whole page, and every gate
+    (document.getAnimations + currentTime seeking) can see and steer it.
 """
 from __future__ import annotations
-import base64, json, pathlib, re
+import base64, json, math, pathlib, re
 
-# ── the grid, as constants rather than as eight independent judgement calls.
-# Measured across the desktop set before this existed: first ink at 19, 23, 40
-# and 56; rightmost ink 150, 164, 164.8 and 166 short of the canvas. So the
-# document's right edge visibly wandered as you scrolled it, and its top margin
-# had three values. L/R are the type column; TOP is the first baseline for a
-# label row; HERO_GAP is the space between a 64px numeral and the label that
-# explains it, which had been eyeballed at 8.2 on one plate and 23.1 on another.
+# ── the grid defaults. L/R are the DEFAULT type column; TOP is the
+# first-baseline convention for plates that open with a header line.
 L, R = 150, 730
 TOP = 56
-HERO_GAP = 16
 
-# ── the canvas window.
-# The type column is L..R = 580 units wide on an 880-unit canvas, so 34.1% of
-# every plate was margin and ink covered 7.1% of the document. That 150 was
-# chosen for one reason — legibility of a 16u label on a phone — and the phone
-# is out of scope now, so the reason is gone and the emptiness is not.
-#
-# Rather than move several hundred coordinates, tighten the WINDOW: the viewBox
-# starts at VB_X and is VB_W wide, so authored x=150 lands 64 from the left edge
-# and authored x=730 lands 64 from the right. Every relative position, every
-# travel distance and every collision is untouched.
-#
-# The second effect is the one that matters more. The plate scales to the width
-# of GitHub's readme column either way, so a narrower canvas renders everything
-# LARGER: a 16px label goes from ~17.8px to ~22px at a 980px column. The plates
-# were not only empty, they were small.
+# ── the canvas window: viewBox starts at VB_X so the authored 150/730 column
+# lands 64 from each edge, and the narrower canvas renders larger at GitHub's
+# column width.
 VB_X, VB_W = 86, 708
 
 # every plate's description is authored ONCE here and flows to three places:
-# the SVG <desc>, the SVG aria-label, and the README's <img alt>. They diverged
-# once already; the gate below now fails the build if the README drifts.
-#
-# Since <picture> allows exactly ONE alt for both the desktop and the mobile
-# source, these strings describe the CLAIM rather than the picture — so the same
-# sentence is true whichever image the browser actually chose.
+# the SVG <desc>, the SVG aria-label, and the README's <img alt>.
 ALT: dict[str, str] = {}
 
 ROOT = pathlib.Path(__file__).resolve().parent
@@ -99,12 +73,7 @@ OUT = ROOT.parent / "assets"
 OUT.mkdir(exist_ok=True)
 FONT = base64.b64encode((ROOT / "mono-subset.woff2").read_bytes()).decode()
 
-# The real product marks, extracted from each app's own logo and stripped to the
-# mark alone — the card already sets the name in type, so the wordmark would say
-# it twice, and the background tile would sit on a slab that is already the same
-# near-black. Every stroke and fill is currentColor, so the card supplies the
-# system's legend colour and the six marks read as one family rather than six
-# pasted assets. Inlined, not linked: nothing external can load in this medium.
+# The real product marks, extracted from each app's own logo (see logos.json).
 import re as _re_mod
 _re_op = _re_mod.compile(r'(stroke|fill)-opacity="([0-9.]+)"')
 LOGOS = json.loads((ROOT / "logos.json").read_text())
@@ -113,17 +82,9 @@ LOGOS = json.loads((ROOT / "logos.json").read_text())
 def logo(name: str, x: float, y: float, size: float, colour: str) -> str:
     """One product mark, drawn at `size` in `colour`.
 
-    Tonal hierarchy inside a mark does not survive being shrunk to 28u. Two of
-    the six carried stroke-opacity straight out of their source SVG — Cadence
-    at 0.28 on three strokes, Applied at 0.65 on two — which rendered at 1.76:1
-    and 5.02:1 on the dark slab and 1.49:1 and 2.68:1 on the light one, against
-    a 3:1 floor. Both were invisible to gate.mjs until check 10 learned to read
-    the sibling opacity properties, because they are neither `opacity` nor an
-    rgba alpha.
-
-    So the floor is enforced here rather than patched into logos.json: these
-    marks are extracted from each app's own logo, and the next one extracted
-    will carry whatever its designer chose too.
+    The 0.8 floor on stroke/fill-opacity is enforced here rather than patched
+    into logos.json: tonal hierarchy inside a mark does not survive 28u, and
+    two of the six marks shipped at 1.49:1 and 2.68:1 before this existed.
     """
     m = LOGOS[name]
     k = size / m["size"]
@@ -134,50 +95,36 @@ def logo(name: str, x: float, y: float, size: float, colour: str) -> str:
 
 W = 880
 
-# ── the two palettes. The figures are transparent, so the ground they are
-# measured against is GitHub's own canvas: #0d1117 dark, #ffffff light. That
-# is a REAL change of ground, not a renaming — the old dark slab was #0A0A0B
-# and the old light slab #F6F7F8, and two greys that cleared their floors on
-# those slabs fail on these: dark RULE #5A606A measured 2.99:1 on #0d1117
-# (floor 3:1) and dark INK3 #767B84 measured 4.45:1 (text floor 4.5:1). Both
-# are re-derived below; every value in this table was recomputed against its
-# own canvas in this round, never carried over on the assumption that a
-# near-black is a near-black.
-#
-# GROUND is written into each SVG as a full-size rect at fill-opacity 0: it
-# paints nothing, and it is the reference gate.mjs check 10 reads its slab
-# colour from, so every contrast in the pipeline is measured against the
-# canvas the figure actually ships on.
-#
-# The six accents are the same six identities in both palettes — dark at
-# roughly the 400 step of each family, light at the 600–700 step, because
-# #F5A524 on white is under 2:1: an accent you cannot see. All six light
-# accents clear the 4.5:1 TEXT floor, not just the 3:1 non-text one, because
-# four of them are drawn as labels; an accent legible as a bar but illegible
-# as a word would split one identity into two colours.
+# ── the two palettes. The figures are transparent; the ground they are
+# measured against is GitHub's own canvas (#0d1117 dark, #ffffff light).
+# Every value below was measured against its own canvas (round 19). PINK
+# passes from LifeQuest (cut this round — see CONTENT-PLAN) to VisualAssist,
+# so no new colour enters the document and nothing needs re-measuring;
+# gate.mjs check 10 re-measures both grounds on every build regardless.
 THEMES = {
     "dark": dict(
         GROUND="#0d1117",   # GitHub's dark canvas — the ground under the ink
-        RULE="#5D636D",     # 3.13:1 — section rules (was #5A606A: 2.99 here)
+        RULE="#5D636D",     # 3.13:1 — section rules
         WIRE="#6E737C",     # 3.86:1 — connectors, boundaries, brackets, frames
         ROW="#5D636D",      # 3.13:1 — tenant row fills
+        REDACT="#5D636D",   # 3.13:1 — a black bar on near-black would vanish
         INK="#F7F8F8", INK2="#8A8F98", INK3="#7A7F88",  # 17.79 / 5.82 / 4.70:1
         AMBER="#F5A524", LIME="#B8E62E", EMERALD="#34D399",   # 9.27/12.97/9.84
         CYAN="#22D3EE", PINK="#F472B6", INDIGO="#818CF8",     # 10.47/7.15/6.34
-        CHIP="#0E2A22",     # the filed event's fill, a tint of the accent —
-                            # 1.24:1 on its own; its accent stroke carries it
+        CHIP="#0E2A22",     # the filed event's fill; its accent stroke carries it
     ),
     "light": dict(
         GROUND="#ffffff",   # GitHub's default canvas — ink on the page itself
         RULE="#848A93",     # 3.48:1
         WIRE="#737981",     # 4.39:1
         ROW="#848A93",      # 3.48:1
+        REDACT="#1A1D21",   # 16.91:1 — on paper a redaction is black ink
         INK="#1A1D21", INK2="#555B63", INK3="#6B7178",  # 16.91 / 6.86 / 4.93:1
         AMBER="#B45309",    # 5.02:1 — Glyph
         LIME="#4D7C0F",     # 4.99:1 — jetpack
         EMERALD="#047857",  # 5.48:1 — Cadence
         CYAN="#0E7490",     # 5.36:1 — Applied
-        PINK="#BE185D",     # 6.04:1 — LifeQuest
+        PINK="#BE185D",     # 6.04:1 — VisualAssist
         INDIGO="#4F46E5",   # 6.29:1 — AutoML
         CHIP="#DEF2E8",
     ),
@@ -187,19 +134,13 @@ THEME = "dark"
 
 
 def set_theme(name: str) -> None:
-    """Point every colour global at one palette.
-
-    The plate functions read these globals at call time, so the same code
-    draws both documents — the light set is the same document in a different
-    light, not a second design.
-    """
+    """Point every colour global at one palette."""
     globals().update(THEMES[name])
     globals()["THEME"] = name
-    # one colour per system, in the order the README presents them
     t = THEMES[name]
     globals()["LEGEND"] = [
         ("GLYPH", t["AMBER"]), ("JETPACK", t["LIME"]), ("CADENCE", t["EMERALD"]),
-        ("APPLIED", t["CYAN"]), ("LIFEQUEST", t["PINK"]), ("AUTOML", t["INDIGO"]),
+        ("APPLIED", t["CYAN"]), ("VISUALASSIST", t["PINK"]), ("AUTOML", t["INDIGO"]),
     ]
 
 
@@ -207,19 +148,9 @@ set_theme("dark")
 
 
 def op(v: float) -> float:
-    """Translucent-accent opacity, per theme.
-
-    The raw values are tuned against the dark canvas, where alpha is cheap:
-    lime at .5 over #0d1117 still measures 3.99:1. The same .5 over white is
-    under 2.1:1 — compositing toward white destroys chroma contrast far
-    faster than compositing toward black, and no accent dark enough to
-    survive .5 on white exists. So light lifts every alpha through
-    0.6 + 0.4v: the tuned ordering is preserved. Re-measured this round
-    against the new grounds for every surviving translucent use — the two
-    weakest are Glyph's .wrong grid marks (amber, .72 → 5.27:1 dark, .89 →
-    4.15:1 light) and Cadence's filing lead (emerald, .7 → 5.31:1 dark,
-    .88 → 4.37:1 light); the solid uses never had alpha.
-    """
+    """Translucent-accent opacity, per theme (light lifts alpha through
+    0.6 + 0.4v — compositing toward white destroys chroma contrast faster
+    than compositing toward black; measured, round 19)."""
     return v if THEME == "dark" else round(0.6 + 0.4 * v, 2)
 
 # single-stroke digits in a 120x160 box — the same pen Glyph's landing uses
@@ -235,20 +166,9 @@ DIGITS = [
     "M88 74C86 40 54 26 40 50C26 74 44 100 66 96C80 94 88 82 88 74C88 118 78 146 44 150",
 ]
 
-# ── the pen, normalised.
-# Every DIGITS path is authored inside a nominal 120x160 box, but the INK inside
-# that box is a different width for every glyph: "1" spans x 38..64 and "4"
-# spans 28..100. Drawing them all at translate(x,y) therefore left the 299-error
-# grid with mark widths from 1.77u to 4.90u and gaps from 6.40u to 9.23u in a
-# nominal 11.4u cell — a 44% jitter, which is the visible raggedness — and hung
-# the hero "7" 34.5u to the right of the 150 column it was supposed to sit on.
-#
-# The fix is NOT to equalise widths: stretching "1" to the width of "0" would
-# distort the letterforms. It is to measure each glyph's ink and place it
-# deliberately — flush left for the hero, centred in its cell for the grid.
-# Every command in DIGITS takes coordinate PAIRS (M, L, C, Z), so the even-index
-# numbers are the x values.
+
 def ink(d: str) -> tuple[float, float]:
+    """x-extent of a DIGITS glyph's actual ink (see round 17's jitter note)."""
     n = [float(v) for v in re.findall(r'-?\d+\.?\d*', d)]
     xs = n[0::2]
     return min(xs), max(xs)
@@ -261,184 +181,190 @@ def digit(d: str, x: float, y: float, scale: float, *, centre: float | None = No
     return f'transform="translate({dx:.2f},{y:.2f}) scale({scale})"'
 
 
-def frontis(numeral: str, name: str, claim: str) -> str:
-    """The frontispiece: every figure opens the same way, like a chapter.
-
-    One 16px claim at the left edge of the column, the chapter rail at the
-    right, one hairline rule under both. This is the entire shared chrome of
-    the document now that the slab is gone — the repeated device that makes
-    ten transparent figures read as one numbered report — and it is also the
-    fix for two audit findings at once: the CLAIM armature used to be an 11px
-    kicker applied to some plates and not others (subliminal where it existed,
-    conspicuous where it was forgotten), and the first ink used to start at
-    three different heights. Now every figure's first ink is the same class at
-    the same y, which is what check 12 enforces.
-    """
-    return (f'<text x="{L}" y="{TOP}" class="lbl">{claim}</text>'
-            f'<text x="{R}" y="{TOP}" class="lbl" text-anchor="end">'
-            f'<tspan fill="{INK}">{numeral}</tspan>  {name}</text>'
-            f'<path d="M{L} 70H{R}" stroke="{WIRE}"/>')
-
-
 EASE = "cubic-bezier(.4,0,.2,1)"
-# EASE is ease-IN-out: it accelerates first, then settles. That is right for a
-# thing travelling somewhere, and wrong for a thing being STOPPED — plate V's
-# comment claimed its query "decelerates into the boundary" while easing into it
-# like a lift arriving. A refusal needs an arrest: nearly all the deceleration
-# in the last fifth of the travel.
+# ARREST: nearly all the deceleration in the last fifth — for a thing being
+# STOPPED (the work plate's stamp lands with it; a stamp is an arrest).
 ARREST = "cubic-bezier(.05,.75,.1,1)"
-
-# One curve did every job. A census of the 21 animation classes found
-# cubic-bezier(.4,0,.2,1) on 16 of them — arrivals, impacts and ambient pulses
-# all on the same symmetric ease-in-out — which is why the document had one
-# gesture performed eight times. Motion carries meaning here or it is
-# decoration, and three verbs need three curves.
-ARRIVE  = "cubic-bezier(.16,1,.3,1)"      # expo-out: fast away, long settle
-IMPACT  = "cubic-bezier(.34,1.56,.64,1)"  # overshoots slightly, then sets
-BREATHE = "cubic-bezier(.37,0,.63,1)"     # symmetric sine, for ambient loops
+# BREATHE: symmetric sine, for ambient settles and yoyo carriers that are
+# allowed a beat of rest at each end.
+BREATHE = "cubic-bezier(.37,0,.63,1)"
+# DRIFT: a near-sine whose slope never reaches zero — for yoyo carriers that
+# must NOT stall at the turn, because the raster gate (and the eye) reads a
+# stalled carrier as a freeze.
+DRIFT = "cubic-bezier(.45,.05,.55,.95)"
 
 
-def head(h: int, title: str, desc: str, key: str = "") -> str:
+def head(h: int, title: str, desc: str, key: str = "",
+         col: tuple[int, int] = (150, 730),
+         frame: tuple[float, float, float] | None = None) -> str:
+    """Open a plate.
+
+    `col` and `frame` are this plate's DECLARED geometry, written into the SVG
+    root as data-col / data-frame and asserted by gate.mjs (checks 5 and 12):
+    no edge is ever an accident — the file states its geometry and the render
+    must match — without forcing every plate into one frame.
+    `frame` is (top, rightGap, bottomGap): measured ink extents this plate
+    stands behind, in viewBox units.
+    """
     if key:
-        # The light pass re-authors the same key. The two themes are one
-        # document, so a plate and its light twin must carry byte-identical
-        # descriptions — asserted, not assumed, because a colour name drifting
-        # into a desc would silently fork the accessible text per theme.
+        # The light pass re-authors the same key. A plate and its light twin
+        # must carry byte-identical descriptions — asserted, not assumed.
         if key in ALT and ALT[key] != desc:
             raise SystemExit(f"{key}: description diverged between themes")
         ALT[key] = desc
-    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="{VB_X} 0 {VB_W} {h}" width="{VB_W}" height="{h}" role="img" aria-label="{desc}">
+    fr = f' data-frame="{frame[0]:g},{frame[1]:g},{frame[2]:g}"' if frame else ''
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="{VB_X} 0 {VB_W} {h}" width="{VB_W}" height="{h}" role="img" aria-label="{desc}" data-col="{col[0]},{col[1]}"{fr}>
 <title>{title}</title><desc>{desc}</desc>
 <style>
 @font-face{{font-family:'M';src:url(data:font/woff2;base64,{FONT}) format('woff2')}}
 text{{font-family:'M',ui-monospace,SFMono-Regular,Menlo,monospace}}
-.hero{{font-size:64px;letter-spacing:-1.5px;fill:{INK};font-weight:600}}
-.sub{{font-size:32px;letter-spacing:-0.5px;fill:{INK};font-weight:600}}
-.unit{{font-size:26px;fill:{INK2}}}
-.say{{font-size:20px;fill:{INK2}}}
-.lbl{{font-size:16px;letter-spacing:1.6px;fill:{INK2}}}
-.key{{font-size:16px;letter-spacing:1.6px;fill:{INK}}}
-.fine{{font-size:13px;letter-spacing:0.6px;fill:{INK2}}}
-.kick{{font-size:11px;letter-spacing:2.6px;fill:{INK3}}}
+.hero{{font-size:55px;letter-spacing:-1px;fill:{INK};font-weight:600}}
+.sub{{font-size:34px;letter-spacing:-0.5px;fill:{INK};font-weight:600}}
+.unit{{font-size:34px;letter-spacing:-0.5px;fill:{INK2}}}
+.say{{font-size:21px;fill:{INK2}}}
+.lbl{{font-size:13px;letter-spacing:1.6px;fill:{INK2}}}
+.key{{font-size:13px;letter-spacing:1.6px;fill:{INK}}}
+.fine{{font-size:13px;letter-spacing:0.4px;fill:{INK2}}}
+.kick{{font-size:13px;letter-spacing:2.4px;fill:{INK3}}}
 @media (prefers-reduced-motion: reduce){{*{{animation:none!important}}}}
 """
 
 
 def ground(h: int) -> str:
-    # The invisible ground. fill-opacity 0, so it paints nothing and the
-    # figure is transparent ink on GitHub's own canvas — but the rect still
-    # CARRIES the canvas colour, because gate.mjs check 10 reads its contrast
-    # ground off the plate's first <rect>. Removing it would not make the
-    # gate lenient; it would make it measure against nothing.
+    # The invisible ground: paints nothing, carries the canvas colour that
+    # gate.mjs check 10 reads its contrast ground from.
     return f'<rect x="{VB_X}" width="{VB_W}" height="{h}" fill="{GROUND}" fill-opacity="0"/>'
 
 
 # ────────────────────────────────────────────────────────────── PLATE 0
 def plate_thesis() -> str:
-    """Identity and contact sheet.
+    """The title page and index. Room: a book's opening.
 
-    This plate used to open with a thesis about falsifiability and a colour
-    legend. It was the most distinctive thing on the page and the wrong thing to
-    lead with: a reader met a sentence about numbers catching lies before
-    learning what any of this is. The proof is the payoff, not the premise, so
-    it moved to the colophon and this became the answer to "who is this and what
-    have they built" — legible in about eight seconds, after which everything
-    below is optional depth.
+    Who / what / where in twenty seconds: name, one serif sentence, contact,
+    one line of languages (the five skill bands of round 20 were the least
+    differentiated content in the best real estate — cut), and the index of
+    sections with dot leaders. The index is where the reader is taught the
+    document's system: one mark and one hue per system, and the section's
+    answer compressed to a clause.
 
-    STILL, deliberately. This is the eight-second first impression, and the
-    old version spent it with an index cursor drifting through the contact
-    sheet and the six logos bobbing on a stagger — both of which existed, by
-    their own comments' admission, to carry the raster gate. A title page that
-    fidgets reads as a banner ad; a title page that holds still reads as a
-    document that is sure of itself. The motion doctrine inverted this round
-    (see the header), so the first plate gets to be the stillest.
+    Carriers: the dot leaders DRIFT toward their numerals, and the title-page
+    ornament turns like a compositor's dingbat. Round 21 measured this plate
+    at zero gestures in 270 samples — a carrier and nothing else, ranked
+    last of nine, on the first thing anyone sees. So the index is now READ:
+    row by row, in order, each leader lights to full ink, its numeral takes
+    its section's hue and its mark swells — the reader's eye walking the
+    table of contents — and once per cycle the whole index rings together,
+    the one chord on a quiet title page. Still the arc's first bar, not its
+    climax: every event is colour and 25% scale, nothing travels.
     """
-    H = 640   # last caption baseline at H-30, like every figure in the set
-    # what he actually works in, grouped so it can be scanned rather than read.
-    # The description below is GENERATED from this table rather than authored
-    # beside it. It used to be authored, and it drifted: it named SQL and
-    # fuzzing, neither of which this plate has ever drawn. Nothing could catch
-    # that — plates.py asserts the README alt equals ALT[fn] and the dark desc
-    # equals the light desc, both of which compare copies of one string to each
-    # other; gate.mjs check 9 compares the desc's NUMBERS to the drawing and
-    # never its words. So the accessible copy could say anything at all and
-    # still be "in agreement". Now the two cannot disagree.
-    SKILLS = [
-        ("LANGUAGES", "Languages",              "C++ · TypeScript · Python · Java · Swift · Rust"),
-        ("SYSTEMS",   "systems work in",        "SIMD AVX-512 · Vector API · WebAssembly · OpenMP"),
-        ("ML",        "machine learning with",  "LangGraph · MCP · in-browser ONNX · SetFit"),
-        ("WEB",       "web and backend in",     "React · Next.js · Tauri · SwiftUI · FastAPI · NestJS"),
-        ("INFRA",     "infrastructure on",      "GitHub Actions · Docker · Postgres · CodeQL"),
-    ]
-
-    def _prose(items: str) -> str:
-        parts = [p.strip() for p in items.split("·")]
-        return ", ".join(parts[:-1]) + " and " + parts[-1]
-
-    _bands = "; ".join(f"{lead} {_prose(items)}" for _, lead, items in SKILLS)
+    H, CX = 540, 440
+    TC = 11.9                      # the read's clock — coprime with 9.4 and 27
     s = [head(H, "Ayush Yadav — computer science graduate, Cincinnati OH",
-              "Ayush Yadav, a computer science graduate in Cincinnati, Ohio, open to full-time "
-              f"engineering roles. {_bands}. Below, the six "
-              "systems this page documents: Glyph, jetpack, Cadence, Applied, LifeQuest and "
-              "Agentic AutoML.", key="plate-0-thesis.svg")]
+              "Ayush Yadav, a computer science graduate in Cincinnati, Ohio, open to "
+              "full-time engineering roles. C++, TypeScript, Python, Java, Swift and "
+              "Rust. An index of what follows: work, a year of it attested; jetpack, "
+              "parallel gzip measured; Glyph, borrowed code made faster; Agentic "
+              "AutoML, dataset in, model out; Cadence, the database that refuses; "
+              "Applied, allowed to say not sure; and VisualAssist, which needs a "
+              "lidar sensor.", key="plate-0-thesis.svg",
+              col=(118, 762), frame=(43, 79.3, 34))]
     s.append(f""".ser{{font-family:ui-serif,Georgia,'Times New Roman',serif;font-size:34px;fill:{INK}}}
-</style>{ground(H)}""")
+.orn{{transform-box:fill-box;transform-origin:center;animation:orn 27s linear infinite}}
+@keyframes orn{{from{{transform:rotate(45deg)}}to{{transform:rotate(405deg)}}}}
+/* the leaders drift toward their numerals — 75u is ten dash periods, so the
+   wrap is invisible by construction */
+@keyframes ld{{from{{stroke-dashoffset:0}}to{{stroke-dashoffset:-75}}}}
+""")
+    # the read: rows I..VII light in order across the first 90% of the clock,
+    # then the chord — every leader, numeral and mark together at 92.5-97.5%.
+    # Colour animations only, so the authored frame stays the finished frame.
+    hues = dict(LEGEND)
+    MARKS = [None, "JETPACK", "GLYPH", "AUTOML", "CADENCE", "APPLIED", "VISUALASSIST"]
+    for i, mk in enumerate(MARKS):
+        w0, w1 = i * 90 / 7 + 0.8, (i + 1) * 90 / 7 - 0.8
+        s.append(f".ldc{i}{{animation:ld 9.4s linear infinite,ldc{i} {TC}s linear infinite}}"
+                 f"@keyframes ldc{i}{{0%,{w0:.1f}%{{stroke:{RULE}}}{w0+1.2:.1f}%,{w1:.1f}%{{stroke:{INK}}}"
+                 f"{w1+1.2:.1f}%,92.5%{{stroke:{RULE}}}93.8%,96%{{stroke:{INK}}}97.5%,100%{{stroke:{RULE}}}}}")
+        if mk:  # the numeral takes its section's hue; the mark swells
+            hue = hues[mk]
+            s.append(f".nm{i}{{animation:nm{i} {TC}s linear infinite}}"
+                     f"@keyframes nm{i}{{0%,{w0:.1f}%{{fill:{INK}}}{w0+1.2:.1f}%,{w1:.1f}%{{fill:{hue}}}"
+                     f"{w1+1.2:.1f}%,92.5%{{fill:{INK}}}93.8%,96%{{fill:{hue}}}97.5%,100%{{fill:{INK}}}}}")
+            s.append(f".ix{i}{{transform-box:fill-box;transform-origin:center;"
+                     f"animation:ix{i} {TC}s {BREATHE} infinite}}"
+                     f"@keyframes ix{i}{{0%,{w0:.1f}%{{transform:scale(1)}}{(w0+w1)/2:.1f}%{{transform:scale(1.25)}}"
+                     f"{w1+1.2:.1f}%,92.5%{{transform:scale(1)}}94.5%{{transform:scale(1.15)}}"
+                     f"96.5%,100%{{transform:scale(1)}}}}")
+    s.append(f"</style>{ground(H)}")
 
-    # the title page carries its own frontispiece: the author where the claim
-    # goes, the degree where the chapter goes — same y, same rule, so the
-    # document's opening line is the same line every chapter repeats
-    s.append(f'<text x="{L}" y="{TOP}" class="key" style="letter-spacing:5px">AYUSH YADAV</text>')
-    s.append(f'<text x="{R}" y="{TOP}" class="lbl" text-anchor="end">CS GRADUATE · CINCINNATI, OH</text>')
-    s.append(f'<path d="M{L} 70H{R}" stroke="{WIRE}"/>')
+    s.append(f'<text x="{CX}" y="{TOP}" text-anchor="middle" class="key" style="letter-spacing:5px">AYUSH YADAV</text>')
+    s.append(f'<text x="{CX}" y="82" text-anchor="middle" class="lbl">CS GRADUATE · CINCINNATI, OHIO</text>')
 
-    # the one serif voice in the document, saying what the work IS. The
-    # colophon answers it in the same voice — one bracket, opened and closed.
+    # the one serif voice, opening the bracket the colophon closes
     for i, ln in enumerate(["Systems, from SIMD kernels", "to the browser they run in."]):
-        s.append(f'<text x="{L}" y="{124 + i*42}" class="ser">{ln}</text>')
-    s.append(f'<text x="{L}" y="204" class="fine">Open to full-time software engineering roles · aesh.03.23@gmail.com</text>')
+        s.append(f'<text x="{CX}" y="{138 + i*42}" text-anchor="middle" class="ser">{ln}</text>')
+    s.append(f'<text x="{CX}" y="214" text-anchor="middle" class="fine">Open to full-time software engineering roles · aesh.03.23@gmail.com</text>')
 
-    for i, (dom, _lead, items) in enumerate(SKILLS):
-        y = 244 + i * 24
-        s.append(f'<text x="{L}" y="{y}" class="kick">{dom}</text>')
-        s.append(f'<text x="262" y="{y}" class="fine">{items}</text>')
+    # a title page's ornament earns its ink by being the only one: a short
+    # rule with a set diamond — and the diamond turns, the page's first and
+    # smallest motion, so the document is alive from its first inch.
+    s.append(f'<path d="M380 244H500" stroke="{RULE}"/>')
+    s.append(f'<g transform="translate(440,244)"><rect class="orn" x="-4" y="-4" width="8" height="8" fill="{RULE}"/></g>')
 
-    # the contact sheet: every system on the page, at a glance. This is the
-    # only place the six hues appear together — the legend, taught once. The
-    # three caption lines used to sit 16u apart with one grey step between
-    # them and merged at a glance; 18/20u of leading and the stack line one
-    # step dimmer give the sheet the same anatomy as a typeset caption.
-    s.append(f'<path d="M{L} 380H{R}" stroke="{RULE}"/>')
-    CARDS = [
-        ("GLYPH",     "A neural net in C++",   "C++ · SIMD · WASM"),
-        ("JETPACK",   "Parallel gzip",         "Java · Vector API"),
-        ("CADENCE",   "NL calendar + tasks",   "TS · Postgres"),
-        ("APPLIED",   "Inbox → job pipeline",  "Python · ONNX"),
-        ("LIFEQUEST", "Routines as quests",    "Tauri · NestJS"),
-        ("AUTOML",    "Dataset → model",       "LangGraph · Docker"),
+    s.append(f'<text x="{CX}" y="286" text-anchor="middle" class="fine">C++ · TypeScript · Python · Java · Swift · Rust</text>')
+
+    # ── the index. Dot leaders run to the chapter numerals; the one place
+    # all six hues appear together, taught in the reader's first ten seconds.
+    s.append(f'<text x="{CX}" y="330" text-anchor="middle" class="kick">INDEX</text>')
+    ROWS = [
+        ("I",   None,           "WORK",           "a year of it, attested"),
+        ("II",  "JETPACK",      "JETPACK",        "parallel gzip, measured"),
+        ("III", "GLYPH",        "GLYPH",          "borrowed code, made faster"),
+        ("IV",  "AUTOML",       "AGENTIC AUTOML", "dataset in, model out"),
+        ("V",   "CADENCE",      "CADENCE",        "the database refuses"),
+        ("VI",  "APPLIED",      "APPLIED",        "allowed to say not sure"),
+        ("VII", "VISUALASSIST", "VISUALASSIST",   "needs a lidar sensor"),
     ]
-    for i, (nm, what, stack) in enumerate(CARDS):
-        col, row = i % 3, i // 3
-        x, y = L + col * 197, 408 + row * 112
-        c = LEGEND[i][1]
-        s.append(logo(nm, x, y, 28, c))
-        s.append(f'<text x="{x}" y="{y+52}" class="key">{nm}</text>')
-        s.append(f'<text x="{x}" y="{y+72}" class="fine">{what}</text>')
-        s.append(f'<text x="{x}" y="{y+90}" class="fine" style="fill:{INK3}">{stack}</text>')
+    for i, (num, mark, name, tag) in enumerate(ROWS):
+        y = 358 + i * 24
+        if mark:
+            s.append(f'<g class="ix{i}">' + logo(mark, 200, y - 13, 16, hues[mark]) + '</g>')
+        nm_fill = hues.get(mark, INK2) if mark else INK2
+        s.append(f'<text x="228" y="{y}" class="fine">'
+                 f'<tspan fill="{nm_fill}">{name}</tspan>'
+                 f'<tspan fill="{INK3}"> — {tag}</tspan></text>')
+        lx = 228 + len(f"{name} — {tag}") * 8.2 + 14   # this row's text end
+        # stroke via style, not attribute: the ldc chase animates it, and a
+        # presentation attribute would report as overridden to check 15
+        s.append(f'<path class="ldc{i}" d="M{lx:.0f} {y-4}H636" style="stroke:{RULE}" '
+                 f'stroke-width="1.5" stroke-dasharray="1.5 6"/>')
+        s.append(f'<text x="690" y="{y}" text-anchor="end" class="key{f" nm{i}" if mark else ""}">{num}</text>')
     return "".join(s) + "</svg>"
 
 
 # ────────────────────────────────────────────────────────── PLATE I — WORK
 def plate_work() -> str:
-    """A year of paid engineering, and a national competition.
+    """The ledger. Room: an account book.
 
-    Neither appears in any repository a reader can clone — the Oracle logs, the
-    Tableau inventory and the compliance dashboard belong to Miami University,
-    and the DataFest data is a competition set. Every other number on this page
-    is re-derived in CI from a pinned commit; these are the author's word, and
-    the plate says so on its face rather than borrowing the warrant of the ones
-    that are checked.
+    A year of paid engineering and a national competition, none of it in a
+    repository a reader can clone — so the warrant is testimony, and the
+    plate is the document testimony lives in: an account book. Date column
+    left, item in the middle, AMOUNTS RIGHT-ALIGNED AT THE PAGE EDGE, full-
+    width row rules, a double rule opening and closing the account.
+
+    Carrier: an auditor's rule — a bright index head on a hairline — that
+    travels down the account at reading pace, fades at the foot, returns to
+    the head. Steady-state, so linear is correct. Round 21's live pass proved
+    a scan drawn in the row rules' own grey and weight reads as a STRAY RULE,
+    so the instrument now has its own vocabulary. Gestures, all on the scan's
+    clock so the reader and the read cannot disagree: each amount PRESSES and
+    its label lifts to full ink at the moment the rule crosses its row (the
+    tally); the two linkage bars run tick-streams at rates proportional to
+    99.6 and 32 (the jetpack device — the comparison, performed); and when
+    the rule clears the closing rule, the ATTESTED stamp re-inks — a press,
+    never an absence, because the round-21 blink measured as a glitch.
     """
-    H = 584
+    H, SCAN = 696, 15.9
     s = [head(H, "Experience: a year as ITSM Data Integration Intern at Miami University, and "
                  "team lead at DataFest 2026",
               "Experience. As ITSM Data Integration Intern at Miami University from June 2025 "
@@ -450,715 +376,420 @@ def plate_work() -> str:
               "holdout AUC, over 7.7 million encounters processed with DuckDB and Polars, "
               "preserving 99.6 percent of social-determinant linkage against 32 percent under "
               "a naive join. These figures are attested by the author rather than derived "
-              "from a public repository.", key="plate-0b-work.svg")]
+              "from a public repository.", key="plate-0b-work.svg",
+              frame=(40, 63.5, 26))]
+    # The stamp rides the scan's clock: the rule reads the account top to
+    # bottom, and only once it clears the closing rule does the stamp re-ink
+    # — lifted and faded to 0.3, never absent, then pressed home (ARREST).
+    # The scan is a sawtooth: constant descent, a fade before the reset so
+    # nothing teleports while visible, and a negative delay so t=0 is
+    # mid-travel at full opacity.
+    s.append(f""".stp{{transform-box:fill-box;transform-origin:center;animation:stp {SCAN}s {ARREST} infinite;animation-delay:-4.4s}}
+@keyframes stp{{0%,94%{{opacity:1;transform:scale(1)}}95.2%{{opacity:0.3;transform:scale(1.12)}}
+  97%{{opacity:1;transform:scale(1.03)}}98.5%,100%{{opacity:1;transform:scale(1)}}}}
+.scan{{animation:scan {SCAN}s linear infinite;animation-delay:-4.4s}}
+@keyframes scan{{0%{{opacity:0;transform:translateY(0)}}3%{{opacity:1}}
+  94%{{opacity:1;transform:translateY(452px)}}97%,100%{{opacity:0;transform:translateY(452px)}}}}
+/* the linkage bars state their fractions twice — length, and the rate of the
+   tick-stream inside each: 99.6 against 32, a 3.1x flow difference the eye
+   reads without the caption (12u is one dash cycle, so wraps are seamless) */
+.bf0{{animation:bf0 {12/(0.28*99.6):.3f}s linear infinite}}
+.bf1{{animation:bf1 {12/(0.28*32):.3f}s linear infinite}}
+@keyframes bf0{{from{{stroke-dashoffset:0}}to{{stroke-dashoffset:-12}}}}
+@keyframes bf1{{from{{stroke-dashoffset:0}}to{{stroke-dashoffset:-12}}}}
+""")
+    # the tally: as the rule crosses each row, the amount presses (a 6% pulse
+    # about its fixed right edge) and its label lifts to full ink with a slow
+    # afterglow. The crossing percentages fall straight out of the scan's own
+    # keyframes — 94% of the loop maps 452u of travel from y=96 — so the
+    # reader and the thing read share one clock by construction.
+    for i, ry in enumerate((186, 248, 310, 418, 480)):
+        p = 94 * (ry - 12 - 96) / 452
+        s.append(
+            f".tly{i}{{transform-box:fill-box;transform-origin:right center;"
+            f"animation:tly{i} {SCAN}s {BREATHE} infinite;animation-delay:-4.4s}}\n"
+            f"@keyframes tly{i}{{0%,{p-2:.1f}%{{transform:scale(1)}}{p:.1f}%{{transform:scale(1.06)}}"
+            f"{p+2:.1f}%,100%{{transform:scale(1)}}}}\n"
+            f".wl{i}{{animation:wl{i} {SCAN}s linear infinite;animation-delay:-4.4s}}\n"
+            f"@keyframes wl{i}{{0%,{p-1.5:.1f}%{{fill:{INK2}}}{p+0.5:.1f}%,{p+4:.1f}%{{fill:{INK}}}"
+            f"{p+8:.1f}%,100%{{fill:{INK2}}}}}")
     s.append(f"</style>{ground(H)}")
 
-    s.append(frontis("I", "WORK", "A YEAR OF PAID WORK — NOT IN ANY REPO"))
-    s.append(f'<text x="{L}" y="98" class="kick">ITSM DATA INTEGRATION INTERN · MIAMI UNIVERSITY</text>')
-    s.append(f'<text x="{L}" y="118" class="fine">Jun 2025 – May 2026</text>')
+    s.append(f'<text x="{L}" y="{TOP}" class="lbl">ACCOUNT OF A YEAR’S PAID WORK</text>')
+    s.append(f'<text x="{R}" y="{TOP}" text-anchor="end" class="lbl">No. I — WORK</text>')
+    # a ledger opens and closes with a double rule
+    s.append(f'<path d="M{L} 68H{R}M{L} 72H{R}" stroke="{RULE}"/>')
+    # the auditor's rule, reading the account: a hairline one voice brighter
+    # than the row rules, led by a solid index head — an instrument, not a rule
+    s.append(f'<g class="scan"><path d="M{L} 96H{R}" stroke="{INK2}" stroke-width="1.6"/>'
+             f'<rect x="{L}" y="94.5" width="26" height="3" fill="{INK}"/></g>')
+    for x, t, anch in ((L, "PERIOD", ""), (290, "ITEM", ""), (R, "FIGURE", ' text-anchor="end"')):
+        s.append(f'<text x="{x}" y="96"{anch} class="kick">{t}</text>')
 
-    # ── THE BARS, third attempt, and the postmortem the first two earned.
-    # Attempt one drew every fill at the full track width — 100% under a label
-    # reading 96.72%. Attempt two fixed the widths and filled the naive bar in
-    # RULE on a track that was also RULE: 1.00:1, computed, both themes — an
-    # invisible fill, so the bar read as 100% under a label saying 32%. Same
-    # wrong picture, new cause, on the page whose whole argument is that the
-    # drawn number is the measured number.
-    #
-    # The fix is architectural, not another colour swap: the track is now a
-    # HOLLOW frame (WIRE stroke, no fill) and every fill is solid INK2, so
-    # fill-against-track can never again be a pair of similar greys — it is
-    # ink against empty canvas, 5.82:1 dark and 6.86:1 light, measured. And
-    # every width below is 300*frac from the value beside it, never a number
-    # typed by eye.
+    s.append(f'<text x="{L}" y="124" class="kick">JUN 2025 –</text>')
+    s.append(f'<text x="{L}" y="140" class="kick">MAY 2026</text>')
+    s.append(f'<text x="290" y="124" class="key">ITSM DATA INTEGRATION INTERN</text>')
+    s.append(f'<text x="290" y="144" class="fine">Miami University — OAS-to-Tableau migration</text>')
+    s.append(f'<path d="M{L} 158H{R}" stroke="{RULE}"/>')
+
     ROWS = [
-        ("57.8M",  "ROW FIELD-USAGE TABLE",     "from 1.6M Oracle Analytics query logs, 5 years"),
-        ("96.72%", "CODE COMPLIANCE ACROSS 61 PROJECTS", "from 0 — a legacy Laravel reporter, refactored"),
-        ("10,453", "ROW MASTER ASSET INVENTORY","Tableau and Workday consolidated, hash-deduped"),
+        (186, "ROW FIELD-USAGE TABLE",      "from 1.6M Oracle query logs, 5 years",  "57.8M"),
+        (248, "CODE COMPLIANCE, 61 PROJECTS","from 0 — a legacy Laravel reporter",  "96.72%"),
+        (310, "ROW MASTER ASSET INVENTORY", "Tableau + Workday, hash-deduped",  "10,453"),
     ]
-    for i, (num, lab, det) in enumerate(ROWS):
-        y = [160, 216, 292][i]
-        s.append(f'<text x="{L}" y="{y}" class="sub">{num}</text>')
-        s.append(f'<text x="330" y="{y-8}" class="lbl">{lab}</text>')
-        s.append(f'<text x="330" y="{y+12}" class="fine">{det}</text>')
-    s.append(f'<g><rect x="330" y="232" width="300" height="14" fill="none" stroke="{WIRE}"/>'
-             f'<rect x="330" y="232" width="{300*0.9672:.2f}" height="14" fill="{INK2}"/></g>')
+    for i, (y, lab, det, amt) in enumerate(ROWS):
+        s.append(f'<text x="290" y="{y}" class="lbl wl{i}">{lab}</text>')
+        s.append(f'<text x="290" y="{y+20}" class="fine">{det}</text>')
+        s.append(f'<text x="{R}" y="{y}" text-anchor="end" class="sub tly{i}">{amt}</text>')
+        s.append(f'<path d="M{L} {y+34}H{R}" stroke="{RULE}"/>')
 
-    s.append(f'<path d="M{L} 336H{R}" stroke="{RULE}"/>')
-    s.append(f'<text x="{L}" y="368" class="kick">DATAFEST 2026 · TEAM LEAD, 3-PERSON, NATIONAL ASA COMPETITION</text>')
-    s.append(f'<text x="{L}" y="414" class="sub">0.90</text>')
-    s.append(f'<text x="330" y="406" class="lbl">HOLDOUT AUC</text>')
-    s.append(f'<text x="330" y="426" class="fine">90-day care utilisation for 349K patients</text>')
-    # the linkage claim is a comparison, so draw the comparison — and after two
-    # rounds of this pair lying, the comparison is carried by LENGTH alone:
-    # both fills the same ink, both tracks the same hollow frame, 298.8 against
-    # 96. Two bars that differ only in the measured quantity cannot smuggle a
-    # colour bug back in.
-    s.append(f'<text x="{L}" y="478" class="sub">99.6%</text>')
-    s.append(f'<text x="330" y="462" class="lbl">OF LINKAGE PRESERVED</text>')
-    for j, (frac, tag) in enumerate([(0.996, "star"), (0.32, "32% naive")]):
-        yy = 470 + j * 20
-        s.append(f'<g><rect x="330" y="{yy}" width="300" height="12" fill="none" stroke="{WIRE}"/>'
-                 f'<rect x="330" y="{yy}" width="{300*frac:.2f}" height="12" fill="{INK2}"/></g>')
-        s.append(f'<text x="642" y="{yy+11}" class="fine">{tag}</text>')
-    s.append(f'<text x="330" y="526" class="fine">7.7M encounters · DuckDB + Polars star schema</text>')
+    s.append(f'<text x="{L}" y="376" class="kick">DATAFEST 2026</text>')
+    s.append(f'<text x="290" y="376" class="key">TEAM LEAD OF 3 · NATIONAL ASA</text>')
+    s.append(f'<path d="M{L} 390H{R}" stroke="{RULE}"/>')
 
-    s.append(f'<text x="{L}" y="{H-30}" class="fine" style="fill:{INK3}">ATTESTED — not derivable from a public repo</text>')
-    return "".join(s) + "</svg>"
+    s.append(f'<text x="290" y="418" class="lbl wl3">HOLDOUT AUC, 349K PATIENTS</text>')
+    s.append(f'<text x="290" y="438" class="fine">90-day care utilisation, SHAP-explained</text>')
+    s.append(f'<text x="{R}" y="418" text-anchor="end" class="sub tly3">0.90</text>')
+    s.append(f'<path d="M{L} 452H{R}" stroke="{RULE}"/>')
 
+    s.append(f'<text x="290" y="480" class="lbl wl4">OF LINKAGE PRESERVED</text>')
+    s.append(f'<text x="290" y="500" class="fine">7.7M encounters · DuckDB + Polars</text>')
+    s.append(f'<text x="{R}" y="480" text-anchor="end" class="sub tly4">99.6%</text>')
+    # the linkage claim is a comparison, so draw the comparison twice over:
+    # LENGTH (widths always 300*frac from the value beside them), full ink for
+    # the preserved fraction against half ink for the naive one (the light
+    # theme's black-bar weight, ported), and the tick-streams above flowing at
+    # the two rates — the one chart on the plate, finally its loudest
+    for j, (frac, tag, fill, cls) in enumerate([(0.996, "star", INK, "bf0"),
+                                                (0.32, "32% naive", INK2, "bf1")]):
+        yy = 512 + j * 20
+        w = 300 * frac
+        s.append(f'<g><rect x="290" y="{yy}" width="300" height="12" fill="none" stroke="{WIRE}"/>'
+                 f'<rect x="290" y="{yy}" width="{w:.2f}" height="12" fill="{fill}"/>'
+                 f'<path class="{cls}" d="M290 {yy+6}H{290+w:.1f}" stroke="{GROUND}" '
+                 f'stroke-opacity="0.55" stroke-width="4" stroke-dasharray="2 4"/></g>')
+        s.append(f'<text x="602" y="{yy+11}" class="fine">{tag}</text>')
 
-# ────────────────────────────────────────────────────────────── PLATE I
-def plate_glyph() -> str:
-    H, LOOP, SET, a = 596, 9.1, 7.6, AMBER
-    s = [head(H, "Glyph — 97.01%, and the 299 it gets wrong",
-              "Glyph: a neural network written from scratch in C++ with hand-written AVX-512, "
-              "AVX2 and NEON kernels, plus an autovectorised WebAssembly build. It scores 97.01 "
-              "percent on the 10,000-image MNIST test set, which means 299 wrong — every one of "
-              "them drawn as a grid of the labels it missed. The 79 it was most confident about "
-              "are drawn in a heavier stroke than the rest.", key="plate-1-glyph.svg")]
-    # Two gestures, both of them the claim. The pen draws the hero 299 — a net
-    # "written from scratch, by hand" introduced by handwriting — and the four
-    # ISA tokens arrive at the collector. The read head that used to pass over
-    # the error grid all loop long is gone: it was the raster gate's element,
-    # not the argument's, and the grid is stronger as a still exhibit.
-    s.append(f""".ink{{fill:none;stroke:{a};stroke-width:7;stroke-linecap:round;stroke-linejoin:round;
-  stroke-dasharray:1;stroke-dashoffset:0;animation:draw {LOOP}s linear infinite;animation-delay:{-SET}s}}
-/* 4%, not the old 17%: at 17% the pen laid ~190u² of new ink per 100ms sample,
-   under the ~660u² perceptual floor — a draw-on nobody could see drawing, and
-   measured at exactly the gate's minimum. At 4% (~0.4s a glyph, strokes
-   overlapping down the 150ms stagger) each sample lays visible ink, and the
-   gesture reads as what the claim says: a pen stroke, by hand. */
-@keyframes draw{{0%{{stroke-dashoffset:1}}4%{{stroke-dashoffset:0}}100%{{stroke-dashoffset:0}}}}
-.tok{{animation:run {LOOP}s {ARRIVE} infinite}}
-@keyframes run{{0%{{opacity:0;transform:translateX(-190px)}}5%{{opacity:1;transform:translateX(-190px)}}
-  34%,96%{{opacity:1;transform:translateX(0)}}100%{{opacity:0;transform:translateX(0)}}}}
-.wrong{{opacity:{op(0.72)}}}
-.sure{{opacity:1}}
-</style>{ground(H)}""")
+    # the account closes
+    s.append(f'<path d="M{L} 564H{R}M{L} 568H{R}" stroke="{RULE}"/>')
 
-    s.append(frontis("II", "GLYPH", "THE 299 IT GETS WRONG — ALL OF THEM"))
-    # 0.68 keeps the three glyphs clear of the mechanism column at x=330;
-    # they end at 306. Each is placed by its own ink, not its nominal box.
-    hx = 150
-    for j, d in enumerate([DIGITS[2], DIGITS[9], DIGITS[9]]):
-        s.append(f'<g {digit(d, hx, 100, 0.68)}>'
-                 f'<path class="ink" d="{d}" pathLength="1" '
-                 f'style="animation-delay:{round(-SET + j*0.15,3)}s"/></g>')
-        x0, x1 = ink(d)
-        hx += (x1 - x0) * 0.68 + 12
+    # ── the stamp. Rotated, hollow, struck over the closing rule — the whole
+    # section's warrant in one device. Its two texts share the stamp's <g>,
+    # which is what makes the composition legal to the collision checks.
+    s.append(f'<g transform="translate(600,600) rotate(-7)"><g class="stp">'
+             f'<rect x="-110" y="-31" width="220" height="62" rx="8" fill="none" stroke="{INK3}" stroke-width="2"/>'
+             f'<text x="0" y="-2" text-anchor="middle" class="say" style="fill:{INK3};letter-spacing:4px">ATTESTED</text>'
+             f'<text x="0" y="22" text-anchor="middle" class="kick">ON MY WORD</text>'
+             f'</g></g>')
 
-    # MECHANISM — four instruction sets, one compiled path
-    s.append(f'<text x="330" y="104" class="kick">3 KERNELS BY HAND, 1 AUTO</text>')
-    for i, name in enumerate(["AVX-512", "AVX2", "NEON", "wasm (auto)"]):
-        y = 128 + i * 34
-        s.append(f'<text x="330" y="{y+5}" class="key">{name}</text>')
-        s.append(f'<path d="M470 {y}H660" stroke="{WIRE}" stroke-width="1"/>')
-        # A 4u ring with a 2.2/2 dash renders as roughly six disconnected dots
-        # at 1:1 — it read as a broken glyph, not as "autovectorised". Hollow
-        # against three filled is the same distinction and survives the scale.
-        hand = i < 3
-        s.append(f'<circle class="tok" data-rest="one-answer" data-rest-within="2" '
-                 f'cx="660" cy="{y}" r="4" '
-                 + (f'fill="{a}" ' if hand else f'fill="none" stroke="{a}" stroke-width="1.8" ')
-                 + f'style="animation-delay:{round(-SET + i*0.12,3)}s"/>')
-    # four instruction sets, one answer — so all four tokens must actually
-    # arrive at the collector, not merely set off in its direction
-    s.append(f'<path id="one-answer" d="M660 124V234" stroke="{WIRE}" stroke-width="1"/>')
-    # It says "1 PATH COMPILED", not "1 ANSWER" — nothing in the repo tests
-    # that the four builds agree, and the README says so itself ("nothing
-    # cross-checks them"). The plate must not make the stronger claim the
-    # prose declines to.
-    s.append(f'<text x="330" y="264" class="lbl">4 BUILDS · 1 PATH COMPILED</text>')
-
-    # VERDICT — the hero clears the rule by 16u; at 64px its box runs from
-    # baseline-64 to baseline+19, which is 84u tall, not the 60 I first assumed.
-    s.append(f'<path d="M150 300H730" stroke="{RULE}"/>')
-    s.append(f'<text x="150" y="384" class="hero">97.01<tspan class="unit">%</tspan></text>')
-    s.append(f'<text x="470" y="384" class="lbl">MNIST TEST · n=10,000</text>')
-    s.append(f'<text x="150" y="428" class="say">299 wrong. The 79 it was sure of are bold.</text>')
-
-    # THE EXHIBIT — the REAL errors, still. Each mark is the true label of one
-    # image the model got wrong, read from benchmarks/mnist_misclassified.csv
-    # in the Glyph repo, so the picture IS the evidence. 50 per row leaves 49
-    # in the last of six rows — the honest ragged end of a list. `conf` comes
-    # from the same column of the same pinned CSV that glyph.confident_errors
-    # derives from, so the 79 drawn heavy and the 79 named above are the same
-    # 79. The rows no longer bob and no head passes over them: evidence in a
-    # display case, not on a conveyor.
-    _e = json.loads((ROOT / "errors.json").read_text())
-    errs, conf = _e["true"], _e["conf"]
-    gx, gy, cols = 150, 460, 50
-    for r in range((len(errs) + cols - 1) // cols):
-        for i in range(r * cols, min((r + 1) * cols, len(errs))):
-            x, y = gx + (i % cols) * 11.4, gy + r * 14.0
-            sure = conf[i]
-            s.append(f'<g class="{"sure" if sure else "wrong"}" {digit(DIGITS[errs[i]], x, y, 0.068, centre=10.4)}>'
-                     f'<path d="{DIGITS[errs[i]]}" fill="none" stroke="{a}" '
-                     f'stroke-width="{22 if sure else 13}" stroke-linecap="round"/></g>')
-    s.append(f'<text x="150" y="{H-30}" class="fine" style="fill:{INK3}">each mark — the true label of one missed image, from the pinned CSV</text>')
+    s.append(f'<text x="{L}" y="666" class="fine" style="fill:{INK3}">ATTESTED — not derivable from a public repo</text>')
     return "".join(s) + "</svg>"
 
 
 # ────────────────────────────────────────────────────────────── PLATE II
 def plate_jetpack() -> str:
-    H, LOOP, SET, a = 542, 10.3, 7.2, LIME
+    """The bench sheet. Room: a test-bench record.
+
+    The question is "is hand-vectorised code actually faster?", and the
+    honest answer is BOTH WAYS: 6.4x on the parallel path, and a checksum
+    that loses to the JDK's own intrinsic, printed here as the reference.
+
+    Carriers: every measured bar carries a tick-stream INSIDE it, drifting at
+    a rate proportional to the value beside it — the throughput, performed.
+    The intrinsic's bar streams fastest on the plate, which is the argument.
+    Second carrier: the bounded in-flight window runs as a true conveyor —
+    four blocks in continuous descent, drained in order at the foot, each
+    keyframe set phased in geometry so frame zero is the authored queue.
+    """
+    H, LOOP, a = 584, 11.3, LIME
+    BH, SP = 18, 26                # block height, conveyor pitch
+    WX0, WX1 = 560, 690            # the window's bracket lines
+    BY0, TRAVEL = 114, 96          # conveyor head, travel span
     s = [head(H, "jetpack — 6.4x parallel, and the intrinsic it does not beat",
               "jetpack: parallel gzip on JDK 25 reaches 422 megabytes per second against 66.2 "
               "single-threaded, a 6.4 times speedup, with blocks held in a bounded in-flight "
-              "window. Its hand-vectorised Adler-32 checksum runs at 4.26 gigabytes per second "
-              "and is verified bit-identical against java.util.zip — whose own native intrinsic "
+              "window drawn here as a running conveyor. Its hand-vectorised Adler-32 checksum "
+              "runs at 4.26 gigabytes per second, 2.80 times the scalar baseline's 1.52, and "
+              "is verified bit-identical against java.util.zip — whose own native intrinsic "
               "is faster still, at 14.06, and is printed here as the reference it loses to.",
-              key="plate-2-jetpack.svg")]
-    # ── the window, drawn DOING what its caption claims. The old form slid four
-    # blocks in once and held them for 60% of the loop, with three hairlines
-    # cycling inside the bracket to carry the raster gate — a decoration doing
-    # the work the diagram should. Now the diagram does it: the in-order writer
-    # drains the OLDEST block from the top slot, the queue advances one slot,
-    # and a fresh block enters the bottom from the left. Four blocks in
-    # rotation, one drain every quarter loop, and the count in flight never
-    # exceeds four — which is the entire claim. The drain is a shrink toward
-    # the right edge (streamed out to the file), not a slide past x=294: the
-    # window's far line is declared with data-max-x and a block visibly
-    # crossing it would be the bound failing to bind.
-    #
-    # Each block gets its OWN keyframes, one quarter-loop apart. A shared
-    # class would put four 2.6s delays in one stagger group, and check 14 is
-    # right that 2.6s siblings do not read as one gesture — these are four
-    # positions in a rotation, not a wave. The timeline is simulated once
-    # here rather than authored four times by eye.
-    BH, SP, BY0 = 18, 26, 186      # block height, slot pitch, top slot y
+              key="plate-2-jetpack.svg", frame=(35, 64, 14))]
+    # ── the conveyor. Block k is AUTHORED at slot k; its keyframes carry it
+    # to the foot, drain it (scaleX collapse, faded), re-enter it at the head
+    # and walk it back into its authored slot by 100% — so the still frame is
+    # the full queue and the phases live in geometry, not in delays. Round 22
+    # tightened the drain-to-re-entry window from ~6.75% to ~3.5% of the loop
+    # (round 21's live pass read the long hole as a dropped frame, not a
+    # bounded queue). A FIFTH block was tried first and is structurally
+    # impossible: with drains 20% apart the head has not opened a full
+    # block-height when the re-entrant is due, and any later entry must
+    # descend faster than its pursuer — the collision gate caught the 5-up
+    # schedule riding 2u inside the block ahead. Four blocks, margins
+    # re-derived per pursuer pair: 10.4 / 5.5 / 4.4 / 2.6u, all opening.
     cyc = []
     for k in range(4):
-        off = lambda j: (j - k) * SP
-        stop = lambda t, j, x=0, o=1, sx=1: seg.append(
-            (t, f"opacity:{o};transform:translate({x}px,{off(j)}px) scaleX({sx})"))
-        seg, c = [], k
-        stop(0, k)
-        for j in range(4):
-            e = 2 + 25 * j
-            if j == k:                       # this block's own drain
-                stop(e, 0); stop(e + 3.5, 0, o=0, sx=0.08)
-                stop(e + 5.5, 3, x=-88, o=0) # hidden reposition to the entry
-                stop(e + 9, 3); c = 3
-            else:                            # the queue advances one slot
-                stop(e + 1.5, c); c -= 1; stop(e + 5, c)
-        stop(100, k)
-        cyc.append(f".b{k}{{transform-box:fill-box;transform-origin:right center;"
-                   f"animation:cyc{k} {LOOP}s {EASE} infinite}}\n@keyframes cyc{k}{{"
-                   + "".join(f"{t:g}%{{{v}}}" for t, v in seg) + "}")
-    s.append("".join(cyc) + f"""
-.mt{{transform-box:fill-box;transform-origin:left center;animation:mt {LOOP}s {ARRIVE} infinite}}
-@keyframes mt{{0%,6%{{transform:scaleX(0);opacity:0}}11%{{opacity:1}}24%,100%{{transform:scaleX(1);opacity:1}}}}
-</style>{ground(H)}""")
-    s.append(frontis("III", "JETPACK", "ONE VIRTUAL THREAD PER BLOCK"))
-    s.append(f'<text x="330" y="104" class="lbl">PARALLEL vs SINGLE-THREAD GZIP</text>')
-    # NOT "CI ±5%": the 3-fork run's 99.9% intervals span ±0.7% to ±6.9%, so a
-    # single figure would be a claim the committed JSON contradicts.
-    s.append(f'<text x="330" y="126" class="lbl">JDK 25 · M1 PRO · 3 JMH FORKS</text>')
-    s.append(f'<text x="150" y="148" class="hero">6.4<tspan class="unit">×</tspan></text>')
+        r = 88 - 22 * k            # % of loop when this block reaches the foot
+        cyc.append(
+            f".b{k}{{transform-box:fill-box;transform-origin:right center;"
+            f"animation:cyc{k} {LOOP}s linear infinite}}\n@keyframes cyc{k}{{"
+            f"0%{{opacity:1;transform:translateY(0) scaleX(1)}}"
+            f"{r:g}%{{opacity:1;transform:translateY({TRAVEL - SP*k}px) scaleX(1)}}"
+            f"{r+2:g}%{{opacity:0;transform:translateY({TRAVEL - SP*k}px) scaleX(.08)}}"
+            f"{r+3.5:g}%{{opacity:0;transform:translateY({-SP*k}px) scaleX(1)}}"
+            f"{r+5.5:g}%{{opacity:1;transform:translateY({-SP*k}px) scaleX(1)}}"
+            f"100%{{opacity:1;transform:translateY(0) scaleX(1)}}}}")
+    s.append("".join(cyc))
+    # ── the tick-streams: a dash pattern drifting inside each bar at a rate
+    # proportional to the measured value. 12u is two dash periods (2 4), so
+    # every wrap is seamless; linear, because throughput is steady state. The
+    # 6u pitch is round 21's fix: at 12u the two loser bars degraded into
+    # three dots and the comparison's baseline was nearly invisible.
+    RATE = 48 / 422                # u/s per MB/s — the fastest bar sets 48u/s
+    RATEB = 48 / 14.06             # the checksum lane scales to ITS maximum
+    for i, v in enumerate([66.2, 422]):
+        s.append(f".sa{i}{{animation:sa{i} {12/(v*RATE):.3f}s linear infinite}}"
+                 f"@keyframes sa{i}{{from{{stroke-dashoffset:0}}to{{stroke-dashoffset:-12}}}}")
+    for i, v in enumerate([1.52, 4.26, 14.06]):
+        s.append(f".sb{i}{{animation:sb{i} {12/(v*RATEB):.3f}s linear infinite}}"
+                 f"@keyframes sb{i}{{from{{stroke-dashoffset:0}}to{{stroke-dashoffset:-12}}}}")
+    s.append(f"</style>{ground(H)}")
 
-    # The bounded in-flight window, drawn DOING what its caption claims — the
-    # one rotation on this plate, kept because the bound is shown binding:
-    # data-max-x declares the far line, and a block crossing it would fail the
-    # gate, not just the caption.
-    s.append(f'<text x="400" y="180" class="kick">BOUNDED IN-FLIGHT WINDOW</text>')
-    s.append(f'<path d="M174 172V288M174 172H194M174 288H194" stroke="{WIRE}" stroke-width="1"/>')
-    s.append(f'<path d="M294 172V288M294 172H274M294 288H274" stroke="{WIRE}" stroke-width="1"/>')
-    # Authored full: the finished frame shows the window holding its bound of
-    # four, which is the picture the caption describes. The keyframes above
-    # supply the rotation; block k's 0% IS its authored slot, so there is no
-    # negative delay to carry and no start pose to hide.
+    # the instrument badge — chapter identification, boxed, top right
+    s.append(f'<rect x="590" y="40" width="140" height="36" fill="none" stroke="{WIRE}"/>')
+    s.append(f'<text x="660" y="62" text-anchor="middle" class="kick">II · JETPACK</text>')
+
+    s.append(f'<text x="{L}" y="{TOP}" class="say" style="fill:{INK}">ONE VIRTUAL THREAD PER BLOCK</text>')
+    s.append(f'<text x="{L}" y="82" class="lbl">JDK 25 · M1 PRO · 3 JMH FORKS</text>')
+    s.append(f'<text x="{L}" y="170" class="hero">6.4<tspan class="unit">×</tspan></text>')
+
+    s.append(f'<text x="{WX1}" y="98" text-anchor="end" class="kick">BOUNDED IN-FLIGHT WINDOW</text>')
+    for j, ln in enumerate(["peak memory tracks", "the window,", "not the file"]):
+        s.append(f'<text x="380" y="{146 + j*18}" class="fine">{ln}</text>')
+    s.append(f'<path d="M{WX0} 106V232M{WX0} 106H{WX0+20}M{WX0} 232H{WX0+20}" stroke="{WIRE}" stroke-width="1"/>')
+    s.append(f'<path d="M{WX1} 106V232M{WX1} 106H{WX1-20}M{WX1} 232H{WX1-20}" stroke="{WIRE}" stroke-width="1"/>')
     for k in range(4):
-        s.append(f'<rect class="b{k}" data-max-x="294" x="180" y="{BY0 + k*SP}" '
+        s.append(f'<rect class="b{k}" data-max-x="{WX1}" x="{WX0+6}" y="{BY0 + k*SP}" '
                  f'width="107.8" height="{BH}" rx="2" style="fill:{a}"/>')
-    for j, ln in enumerate(["peak memory", "tracks the window,", "not the file"]):
-        s.append(f'<text x="400" y="{214 + j*20}" class="fine">{ln}</text>')
 
-    # checksum audit: the fast path checked against the reference
-    s.append(f'<text x="150" y="336" class="lbl">SIMD ADLER-32</text>')
-    s.append(f'<text x="150" y="360" class="lbl">java.util.zip</text>')
-    # the known-answer vector the repo commits: Adler32Test.java:36-37
-    # One string per row; the match is drawn as a rule that sweeps the width
-    # of the two rows it is comparing — the second surviving gesture, because
-    # "verified bit-identical" is a comparison and the sweep performs it.
-    s.append(f'<text x="330" y="336" class="key">11E60398</text>')
-    s.append(f'<text x="330" y="360" class="key">11E60398</text>')
-    s.append(f'<rect class="mt" x="330" y="342" width="90" height="2" fill="{a}" style="animation-delay:{-SET}s"/>')
-    s.append(f'<text x="556" y="352" class="lbl" style="fill:{a}">identical</text>')
+    # ── lane one: compression. Bars scale to this lane's own maximum; a
+    # shared axis would invite exactly the cross-task comparison the prose
+    # never makes, so each lane scales to its own (round 20's finding, kept).
+    def lane(y, nm, val, w, mine, cls, tag=""):
+        s.append(f'<text x="{L}" y="{y}" class="fine">{nm}</text>')
+        s.append(f'<text x="412" y="{y}" text-anchor="end" class="key">{val}</text>')
+        s.append(f'<g><rect x="470" y="{y-11}" width="{w:.1f}" height="14" fill="{a if mine else INK2}"/>'
+                 f'<path class="{cls}" d="M470 {y-4}H{470+w:.1f}" stroke="{GROUND}" '
+                 f'stroke-opacity="0.55" stroke-width="4" stroke-dasharray="2 4"/></g>')
+        if tag:
+            s.append(f'<text x="{470+w+12:.0f}" y="{y}" class="lbl" style="fill:{a}">{tag}</text>')
 
-    # the verdict — the measured table, including the reference he does NOT beat
-    s.append(f'<path d="M150 384H730" stroke="{RULE}"/>')
-    rows = [
-        ("Adler-32 scalar (pure Java)", "1.52", "GB/s", ""),
-        ("Adler-32 hand-vectorised", "4.26", "GB/s", "2.80×"),
-        ("java.util.zip intrinsic", "14.06", "GB/s", "not beaten"),
-        ("gzip, one thread", "66.2", "MB/s", ""),
-        ("parallel virtual threads", "422", "MB/s", "6.4×"),
-    ]
-    for i, (name, score, unit, note) in enumerate(rows):
-        y = 416 + i * 24
-        s.append(f'<text class="lbl" x="150" y="{y}">{name}</text>')
-        # D14 — five values left-aligned at x=470 in a monospace face, so the
-        # decimal points did not line up (14.06 pushed a column right) and GB/s
-        # sat in the same column as MB/s with nothing to say which was bigger.
-        # Numeral right-aligned, unit in its own column.
-        s.append(f'<text class="key" x="530" y="{y}" text-anchor="end">{score}</text>')
-        s.append(f'<text class="lbl" x="542" y="{y}">{unit}</text>')
-        if note:
-            fill = INK if note == "not beaten" else a
-            s.append(f'<text class="lbl" x="604" y="{y}" style="fill:{fill}">{note}</text>')
+    s.append(f'<text x="{L}" y="266" class="kick">COMPRESS — PARALLEL vs ONE THREAD · MB/s</text>')
+    lane(296, "gzip, one thread", "66.2", 260*66.2/422, False, "sa0")
+    lane(326, "parallel virtual threads", "422", 260, True, "sa1")
+
+    # ── lane two: the checksum, and the reference it loses to. The intrinsic
+    # gets the longest bar on the plate, and the fastest stream.
+    s.append(f'<text x="{L}" y="370" class="kick">CHECKSUM — ADLER-32 · GB/s</text>')
+    lane(400, "scalar, pure Java", "1.52", 260*1.52/14.06, False, "sb0")
+    lane(430, "hand-vectorised", "4.26", 260*4.26/14.06, True, "sb1", "2.80×")
+    lane(460, "java.util.zip intrinsic", "14.06", 260, False, "sb2")
+    s.append(f'<text x="{L}" y="492" class="fine" style="fill:{INK}">not beaten — the reference stands</text>')
+
+    # the verification readout: the known-answer vector the repo commits
+    # (Adler32Test.java:36-37), fast path against reference, byte for byte
+    s.append(f'<text x="{L}" y="532" class="lbl">SIMD ADLER-32</text>')
+    s.append(f'<text x="330" y="532" class="say" style="fill:{INK}">11E60398</text>')
+    s.append(f'<text x="{L}" y="564" class="lbl">java.util.zip</text>')
+    s.append(f'<text x="330" y="564" class="say" style="fill:{INK}">11E60398</text>')
+    s.append(f'<rect x="330" y="542" width="112" height="2" fill="{a}"/>')
+    s.append(f'<text x="560" y="550" class="lbl" style="fill:{a}">identical</text>')
     return "".join(s) + "</svg>"
 
 
 # ────────────────────────────────────────────────────────────── PLATE III
-def plate_cadence() -> str:
-    """The smallest system figure, on purpose.
+def plate_glyph() -> str:
+    """The copybook. Room: a handwriting practice sheet.
 
-    The old plate paid a full week grid — MON through THU permanently empty,
-    ~40% of the plate blank calendar — to file one chip, and the audit called
-    the emptiness what it was. The claim is 'filed into the Friday 1pm slot',
-    and one Friday column shows exactly that. What the plate buys with the
-    space: the 36/12 line, the best verbal-visual joke on the page, stops
-    hiding under an empty calendar. The now-line went with the week: it was
-    the one sweep with a real referent, but it spent part of every loop
-    passing through the chip — the single object the diagram exists to file —
-    and a single day column gives it no travel worth having. The one gesture
-    left is the filing itself: lead draws, chip lands.
+    The authorship is stated on the plate because round 20 overclaimed it:
+    the network was COURSE-PROVIDED (after Nielsen); the optimisation is the
+    work, with Shree Chaturvedi credited; the browser application is the
+    author's own. The question becomes "how much faster can you make code
+    you didn't write?" and the committed benchmarks answer it both ways:
+    3.5x on the 256 dot kernel, 6.9x SLOWER on the small axpy — parallelism
+    has a floor, and printing the inversion is the point of the page.
+
+    The net reads handwriting, so its 299 failures are drawn as failed
+    homework: ruled baselines edge to edge, an amber margin line, every mark
+    the true label of one missed image — the 220 in grey ink, the 79 the net
+    was SURE about in heavy amber, so the field's own hue count is the 79.
+    Carrier: the marker's nib reads the whole sheet, boustrophedon, one rule
+    at a time, and the row under it lifts from grey to full ink — the grader
+    working the field, which round 21 measured as the largest sleeping mass
+    on the page. Gesture: the pen re-draws the hero 3.5 once per loop, over
+    a half-ink ghost of itself, so the answer is NEVER absent (the round-21
+    snap-to-nothing was the worst defect of the live pass). The nib's
+    circuit is exactly two headline loops, so the two hands share a clock.
     """
-    H, LOOP, SET, a = 468, 7.9, 5.6, EMERALD
-    SENT, FS, CW = "lunch with sam friday 1pm", 26, 15.62
-    s = [head(H, "Cadence — a parser that shows its work",
-              "Cadence: the sentence 'lunch with sam friday 1pm' is labelled in place with the "
-              "parser that produced each span — compromise found the person, chrono-node found "
-              "both the day and the time — while the title is left unmarked because it is what "
-              "remains once the spans are removed and carries no parser. It is then filed into "
-              "the 1pm slot of a Friday day column that names its hours. Its 36 API handlers "
-              "are bundled into a single serverless function, because the hosting plan allows "
-              "12.", key="plate-3-cadence.svg")]
-    s.append(f""".ul{{animation:ul {LOOP}s {EASE} infinite;transform-box:fill-box;transform-origin:left center}}
-@keyframes ul{{0%,4%{{transform:scaleX(0);opacity:0}}8%{{opacity:1}}18%,100%{{transform:scaleX(1);opacity:1}}}}
-.an{{animation:an {LOOP}s linear infinite}}
-@keyframes an{{0%,6%{{opacity:0}}8%,100%{{opacity:1}}}}
-/* the filing itself, drawn: a lead from the chrono span down to the slot it
-   names, redrawn every loop just before the chip lands */
-.lead{{stroke-dasharray:1;animation:lead {LOOP}s {EASE} infinite;animation-delay:{-SET}s}}
-@keyframes lead{{0%,8%{{stroke-dashoffset:1}}26%,100%{{stroke-dashoffset:0}}}}
-/* the chip ARRIVES rather than fades — a 0.16s appearance and a 12% settle
-   pop. Tuned against the raster, not by taste alone: the old gentle fade
-   spread the chip's arrival across six samples at ~6 RGB units each, under
-   the diff threshold, so the one gesture this plate keeps was invisible. An
-   event being filed into a calendar lands with a thunk anyway. */
-.fil{{transform-box:fill-box;transform-origin:center;animation:fil {LOOP}s {BREATHE} infinite}}
-@keyframes fil{{0%,16%{{opacity:0;transform:scale(.94)}}18%{{opacity:1;transform:scale(1)}}
-  44%{{transform:scale(1)}}50%{{transform:scale(1.12)}}56%,100%{{opacity:1;transform:scale(1)}}}}
-</style>{ground(H)}""")
-    s.append(frontis("IV", "CADENCE", "EVERY SPAN CARRIES ITS PARSER"))
-    s.append(f'<text x="150" y="118" font-size="{FS}" fill="{INK}" letter-spacing="0">{SENT}</text>')
-    # This diagram used to label TITLE / WHO / DAY / TIME — field TYPES, not
-    # parsers — and underlined the title in the same green as the rest, while
-    # README §IV states the opposite: the title is what is LEFT once the spans
-    # are removed, and it carries no `source` at all.
-    #
-    # Now it names the parser that produced each span, from Cadence's own
-    # booklet/src/content.ts: chrono-node (priority 10) reads dates and times,
-    # compromise (priority 6) does the in-browser NLP pass that finds people.
-    # "friday" and "1pm" therefore share a label, which is the useful part —
-    # one parser, two spans. The title gets no underline, because it has no
-    # parser to carry.
-    for i, (start, ln) in enumerate([(11, 3), (15, 6), (22, 3)]):
-        x, w = 150 + start * CW, ln * CW
-        s.append(f'<rect class="ul" x="{x:.0f}" y="128" width="{w:.0f}" height="2" fill="{a}" '
-                 f'style="animation-delay:{round(-SET + i * 0.12, 3)}s"/>')
-    # friday and 1pm are ONE parser's output, so they get one bracket and one
-    # label. That is the fact worth drawing: a parser is not a field.
-    bx, bw = 150 + 15 * CW, 10 * CW
-    s.append(f'<path d="M{bx:.0f} 136V142H{bx+bw:.0f}V136" fill="none" stroke="{a}" opacity="{op(0.7)}"/>')
-    s.append(f'<text class="an fine" x="{150 + 11 * CW:.0f}" y="162" '
-             f'style="fill:{a};animation-delay:{round(-SET, 3)}s">compromise</text>')
-    s.append(f'<text class="an fine" x="{bx + bw / 2:.0f}" y="162" text-anchor="middle" '
-             f'style="fill:{a};animation-delay:{round(-SET + 0.12, 3)}s">chrono</text>')
-    s.append(f'<text x="150" y="188" class="kick">THE TITLE IS WHAT IS LEFT — IT CARRIES NO PARSER</text>')
+    H, LOOP, SET, a = 556, 9.1, 7.6, AMBER
+    NIB = 18.2                     # the nib's circuit — 2 x LOOP, commensurate
+    s = [head(H, "Glyph — borrowed code made 3.5x faster, same 97.01%",
+              "Glyph: a course-provided C++ MNIST network, hand-optimised — AVX-512, AVX2 and "
+              "NEON kernels over a scalar fallback, written with Shree Chaturvedi; the React "
+              "and TypeScript browser app is the author's own. The committed benchmarks "
+              "answer both ways: 3.5 times faster on the 256 dot kernel under OpenMP and "
+              "native codegen, and 6.9 times slower on the 128 axpy, because parallelism has "
+              "a floor. Accuracy is unchanged at 97.01 percent on the 10,000-image MNIST "
+              "test set, which means 299 wrong — every one of them drawn as a grid of the "
+              "labels it missed, and the 79 it was most confident about drawn in a heavier "
+              "stroke.", key="plate-1-glyph.svg",
+              col=(96, 762), frame=(55, 10, 20))]
+    s.append(f""".ink{{fill:none;stroke:{a};stroke-width:7;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:1;stroke-dashoffset:0;animation:draw {LOOP}s linear infinite;animation-delay:{-SET}s}}
+/* 4% a glyph (round 19): at 17% the pen laid ink below the perceptual floor;
+   at 4% each 100ms sample lays visible ink and the gesture reads as what the
+   claim says — a pen stroke, by hand. The reset happens FADED over a
+   half-ink ghost authored under every stroke, so the headline never blinks
+   out of existence (round 21's live pass caught the snap) and the moving
+   offset never resets while visible. */
+@keyframes draw{{0%{{stroke-dashoffset:1;opacity:0}}1%{{opacity:1}}6%{{stroke-dashoffset:0}}
+  96%{{opacity:1;stroke-dashoffset:0}}99.5%,100%{{opacity:0;stroke-dashoffset:0}}}}
+/* the settle: as the pen lifts, the fresh digit relaxes — the second beat
+   every gesture on this page owes to the .fil chip that taught it */
+.stl{{transform-box:fill-box;transform-origin:center;animation:stl {LOOP}s {BREATHE} infinite}}
+@keyframes stl{{0%,5%{{transform:scale(1)}}7.5%{{transform:scale(1.07)}}10%,100%{{transform:scale(1)}}}}
+/* the nib: one closed boustrophedon circuit of the WHOLE field — up the
+   margin, then every clear band between the ink rows, out and back. Closed
+   path, so there is no wrap to hide and no reset to fade. Constant speed;
+   the row groups below lift as it passes them. */
+.nib{{offset-path:path('M146 436V296H773V324H146V352H773V380H146V408H773V436H146');
+  offset-rotate:auto;animation:nib {NIB}s linear infinite;animation-delay:-9.3s}}
+@keyframes nib{{from{{offset-distance:0%}}to{{offset-distance:100%}}}}
+""")
+    # the read: while the nib runs the band under row r, that row's grey ink
+    # lifts to full — colour on the row group's `color`, the digits stroked
+    # currentColor, so the lift needs one rule per row. Windows fall out of
+    # the circuit's own geometry: climb 140u, band 627u, hop 28u, total 4042u.
+    for r in range(6):
+        s0 = (140 + r * 655) / 4042 * 100
+        e0 = s0 + 627 / 4042 * 100
+        if r < 5:
+            s.append(f".rd{r}{{animation:rd{r} {NIB}s linear infinite;animation-delay:-9.3s}}"
+                     f"@keyframes rd{r}{{0%,{s0-1:.1f}%{{color:{INK2}}}{s0+1:.1f}%,{e0-1:.1f}%{{color:{INK}}}"
+                     f"{e0+1:.1f}%,100%{{color:{INK2}}}}}")
+        else:  # the last band ends exactly at the wrap, so it stays lit across it
+            s.append(f".rd{r}{{animation:rd{r} {NIB}s linear infinite;animation-delay:-9.3s}}"
+                     f"@keyframes rd{r}{{0%{{color:{INK}}}1.5%,{s0-1:.1f}%{{color:{INK2}}}"
+                     f"{s0+1:.1f}%,100%{{color:{INK}}}}}")
+    s.append(f"</style>{ground(H)}")
 
-    s.append(f'<path d="M150 210H730" stroke="{RULE}"/>')
-    # ── one day, filed into. The hour gutter is right-aligned so it cannot
-    # drift into the type column; "1pm".."4pm" never strip to bare numerals,
-    # so the labels add no unaudited numbers, and the bare "12" is the same
-    # hosting-cap 12 the hero line cites — accounted for, not smuggled.
-    s.append(f'<text x="150" y="240" class="kick">FILED — INTO THE HOUR IT NAMES</text>')
-    s.append(f'<text x="560" y="240" class="lbl">FRI</text>')
-    s.append(f'<rect x="560" y="252" width="96" height="160" rx="3" fill="none" stroke="{WIRE}"/>')
-    for hy, hl in ((268, "12"), (300, "1pm"), (332, "2pm"), (364, "3pm"), (396, "4pm")):
-        s.append(f'<text x="548" y="{hy}" class="fine" text-anchor="end">{hl}</text>')
-    for hr in (284, 316, 348, 380):
-        s.append(f'<path d="M560 {hr}H656" stroke="{RULE}" stroke-width="1"/>')
-    # the lead from the parsed span to the slot it names — a hairline, so it
-    # may pass over the column frame, routed from where the chrono bracket
-    # ends so it never crosses its own label
-    s.append(f'<path class="lead" d="M540 142C600 180 604 240 604 286" pathLength="1" '
-             f'fill="none" stroke="{a}" stroke-width="1.4" opacity="{op(0.7)}"/>')
-    s.append(f'<g class="fil" style="animation-delay:{-SET}s">'
-             f'<rect x="564" y="288" width="88" height="20" rx="3" fill="{CHIP}" stroke="{a}"/>'
-             f'<text x="572" y="302" class="fine" style="fill:{a}">lunch</text></g>')
+    # the binder tab — chapter identification, rotated up the left edge
+    s.append(f'<text transform="rotate(-90 112 480)" x="112" y="480" class="kick">III · GLYPH</text>')
 
-    # the joke gets the floor it earned: nothing under it, nothing beside it
-    # but the empty afternoon it refuses to pay for
-    s.append(f'<text x="150" y="372" class="hero">36</text>')
-    s.append(f'<text x="232" y="356" class="lbl">HANDLERS IN ONE FUNCTION</text>')
-    s.append(f'<text x="232" y="380" class="lbl">THE PLAN ALLOWS 12</text>')
-    s.append(f'<text x="150" y="{H-30}" class="fine" style="fill:{INK3}">36 routes in one dispatch table — counted from api/index.ts</text>')
+    # ── the answer block: the pen DRAWS the answer — the question is about
+    # work done by hand, and the hero is laid down by one. "3.5", stroke by
+    # stroke, once per loop; the multiplier sits beside it in type.
+    hx = 150
+    for j, d in enumerate([DIGITS[3], "M60 147L61 150", DIGITS[5]]):
+        dot = ';stroke-width:14' if j == 1 else ''
+        gw = 14 if j == 1 else 7
+        # the ghost: the same stroke at half ink (op(0.55) clears 3:1 on both
+        # slabs — measured), inside the settle group so the pair moves as one
+        s.append(f'<g {digit(d, hx, 64, 0.55)}><g class="stl" style="animation-delay:{round(-SET + j*0.15,3)}s">'
+                 f'<path d="{d}" fill="none" stroke="{a}" stroke-opacity="{op(0.55)}" '
+                 f'stroke-width="{gw}" stroke-linecap="round" stroke-linejoin="round"/>'
+                 f'<path class="ink" d="{d}" pathLength="1" '
+                 f'style="animation-delay:{round(-SET + j*0.15,3)}s{dot}"/></g></g>')
+        x0, x1 = ink(d)
+        hx += (x1 - x0) * 0.55 + 10
+    # the multiplier, in the same hand as the digits it multiplies — round 21
+    # called the typeset x "pasted on", and it was: two pen strokes now,
+    # drawn fourth and fifth in the same 150ms wave, over the same ghost.
+    # One group: the two strokes of a glyph CROSS, which is composition.
+    xg = []
+    for xd, dl in (("M0 0L38 42", -7.15), ("M38 0L0 42", -7.0)):
+        xg.append(f'<path d="{xd}" fill="none" stroke="{a}" stroke-opacity="{op(0.55)}" '
+                  f'stroke-width="7" stroke-linecap="round"/>'
+                  f'<path class="ink" d="{xd}" pathLength="1" style="animation-delay:{dl}s"/>')
+    s.append(f'<g transform="translate({hx+8:.0f},124) scale(0.55)">'
+             f'<g class="stl" style="animation-delay:-7.15s">' + "".join(xg) + '</g></g>')
+    s.append(f'<text x="330" y="76" class="say" style="fill:{INK}">SOMEONE ELSE’S NET, 3.5× FASTER</text>')
+    s.append(f'<text x="330" y="100" class="fine">benchDot/256 · openmp+native vs the course baseline</text>')
+    s.append(f'<text x="330" y="120" class="fine" style="fill:{INK3}">6.9× SLOWER on benchAxpy/128 — threads have a floor</text>')
+    s.append(f'<text x="330" y="140" class="fine" style="fill:{INK3}">three committed runs agree</text>')
+
+    # the invariant: optimisation must not change the answers
+    s.append(f'<text x="150" y="206" class="sub">97.01<tspan class="unit" style="font-size:21px">%</tspan></text>')
+    s.append(f'<text x="330" y="176" class="lbl">MNIST TEST · n=10,000 — UNCHANGED</text>')
+    s.append(f'<text x="330" y="206" class="say">299 wrong — 79 of them sure.</text>')
+
+    # the kernel roll, one quiet line: what was written by hand, what was not.
+    s.append(f'<text x="150" y="240" class="fine">3 KERNELS BY HAND, 1 AUTO —</text>')
+    for cx, nm, hand in ((386, "AVX-512", True), (488, "AVX2", True),
+                         (560, "NEON", True), (632, "wasm", False)):
+        s.append(f'<circle cx="{cx}" cy="235" r="4" '
+                 + (f'fill="{a}"' if hand else f'fill="none" stroke="{a}" stroke-width="1.8"') + '/>')
+        s.append(f'<text x="{cx+12}" y="240" class="key">{nm}</text>')
+    s.append(f'<text x="150" y="262" class="fine">4 BUILDS · 1 PATH COMPILED — nothing cross-checks them</text>')
+
+    # ── the copybook field: rules edge to edge, the margin line, the errors
+    # on their baselines. Each mark is the true label of one missed image,
+    # from benchmarks/mnist_misclassified.csv; `conf` comes from the same
+    # pinned CSV, so the 79 drawn heavy are the named 79. Round 21's 28%
+    # opacity split could not carry a 500-mark field, so the split is now
+    # ink: the 220 merely-wrong in grey (currentColor, lifted by the nib's
+    # read), the 79 sure ones in heavy amber — hue AND weight, and the amber
+    # count on the field IS the 79.
+    rails = [f'<path d="M96 {288 + r*28}H784" stroke="{RULE}" stroke-width="1"/>' for r in range(6)]
+    rails.append(f'<rect x="134.5" y="274" width="1.5" height="166" fill="{a}" fill-opacity="{op(0.5)}"/>')
+    s.append('<g>' + "".join(rails) + '</g>')
+    _e = json.loads((ROOT / "errors.json").read_text())
+    errs, conf = _e["true"], _e["conf"]
+    cols, pitch, sc = 50, 12.4, 0.08
+    rowg: list[list[str]] = [[] for _ in range(6)]
+    for i in range(len(errs)):
+        r, c = i // cols, i % cols
+        x, y = 150 + c * pitch, (288 + r * 28) - 150 * sc
+        sure = conf[i]
+        stroke = f'stroke="{a}" stroke-width="22"' if sure else 'stroke="currentColor" stroke-width="13"'
+        rowg[r].append(f'<g {digit(DIGITS[errs[i]], x, y, sc, centre=11.4)}>'
+                       f'<path d="{DIGITS[errs[i]]}" fill="none" {stroke} stroke-linecap="round"/></g>')
+    for r in range(6):
+        s.append(f'<g class="rd{r}" style="color:{INK2}">' + "".join(rowg[r]) + '</g>')
+    # the nib, riding the clear bands between the ink rows — the whole field
+    s.append(f'<g class="nib"><path d="M-16 0H0" stroke="{a}" stroke-width="3" stroke-linecap="round"/>'
+             f'<circle cx="0" cy="0" r="3" fill="{a}"/></g>')
+    s.append(f'<text x="150" y="490" class="fine" style="fill:{INK3}">each mark — the true label of one missed image, from the pinned CSV</text>')
+    s.append(f'<text x="150" y="512" class="fine">course-provided net, after Nielsen — optimised with Shree Chaturvedi</text>')
+    s.append(f'<text x="150" y="532" class="fine">the browser app is mine alone</text>')
     return "".join(s) + "</svg>"
 
 
 # ────────────────────────────────────────────────────────────── PLATE IV
-def plate_applied() -> str:
-    """The cascade, redrawn from scratch.
-
-    The audit called the old composition the weakest on the page and every
-    charge held: the three layers were dashed hairlines at the far right with
-    their labels at the far left (the eye ping-ponged), the envelopes were
-    unlabelled rounded rects that said nothing about mail, and a four-slot
-    refill cycle meant the still frame was frequently a stack with a hole in
-    it — a mid-refill snapshot that read as a bug. Underneath all of it, three
-    of the four moving parts existed to feed the raster gate.
-
-    Now the three layers are drawn as what they are — a stack the mail falls
-    through, labels inside — and exactly ONE thing moves: a single message
-    that descends the cascade, fails the 0.85 gate, is visibly held there
-    (the pause is the refusal), and is walked to the human. That journey is
-    the entire claim of the system, performed once per loop; the plate is
-    still the rest of the time, and its rest pose is the message with the
-    person it was referred to.
-    """
-    H, LOOP, a = 554, 11.7, CYAN
-    s = [head(H, "Applied — a classifier allowed to say it doesn't know",
-              "Applied: a three-layer email classifier — 201 regex rules, then e5 embeddings, "
-              "then a fine-tuned SetFit head, cheapest first. It scores 0.979 macro-F1 on a "
-              "96-message evaluation set, measured with the rules layer alone; anything that "
-              "fails to clear the 0.85 confidence gate is referred to a human rather than "
-              "guessed at. Inference runs inside your browser.", key="plate-4-applied.svg")]
-    # One keyframes, no delay: 0% IS the authored rest, so the still frame and
-    # frame zero are both the finished pose. The hidden reposition at 56-58%
-    # happens at opacity 0; the fall lane sits to the RIGHT of the layer
-    # boxes, so the message never straddles a frame edge in flight.
-    s.append(f""".div{{animation:dv {LOOP}s {EASE} infinite}}
-@keyframes dv{{0%,54%{{opacity:1;transform:translate(0,0)}}
-  56%{{opacity:0;transform:translate(0,0)}}
-  58%{{opacity:0;transform:translate(-46px,-238px)}}
-  60%{{opacity:1;transform:translate(-46px,-238px)}}
-  74%{{transform:translate(-46px,-76px)}}
-  80%{{transform:translate(-46px,-76px)}}
-  88%,100%{{opacity:1;transform:translate(0,0)}}}}
-</style>{ground(H)}""")
-    s.append(frontis("V", "APPLIED", "ALLOWED TO SAY IT DOESN’T KNOW"))
-    # 0.979 is the number with artifacts behind it. 0.9583 — the full
-    # cascade — has none: the run that produced it was overwritten by the
-    # deterministic re-run. So the hero is the number I can hand you,
-    # labelled for what it actually measures, and the gap is stated rather
-    # than papered over.
-    s.append(f'<text x="150" y="148" class="hero">0.979</text>')
-    s.append(f'<text x="400" y="104" class="lbl">MACRO-F1 · 96-MSG EVAL SET</text>')
-    s.append(f'<text x="400" y="126" class="lbl" style="fill:{a}">RULES LAYER ONLY</text>')
-    s.append(f'<text x="400" y="146" class="fine">SetFit off, embeddings emptied</text>')
-    s.append(f'<text x="400" y="166" class="fine">CI fails the build below 0.95</text>')
-
-    # the cascade: labels INSIDE the layers they name
-    s.append(f'<text x="330" y="192" class="kick">THE CASCADE — CHEAPEST FIRST</text>')
-    for i, label in enumerate(["201 REGEX RULES", "e5 EMBEDDINGS", "SETFIT HEAD"]):
-        y = 200 + i * 48
-        s.append(f'<rect x="330" y="{y}" width="260" height="36" fill="none" stroke="{WIRE}"/>')
-        s.append(f'<text x="346" y="{y+23}" class="lbl">{label}</text>')
-
-    # the gate that is allowed to decline
-    s.append(f'<text x="150" y="360" class="lbl" style="fill:{a}">0.85 CONFIDENCE GATE</text>')
-    s.append(f'<path d="M390 356H640" stroke="{a}" stroke-width="1"/>')
-
-    # outcomes. The envelopes carry a flap now, so they read as mail rather
-    # than as anonymous rounded rects — the audit's exact words.
-    def envelope(x, y, col):
-        return (f'<g><rect x="{x}" y="{y}" width="30" height="20" rx="2" '
-                f'style="fill:{col};fill-opacity:{op(0.5)};stroke:{col};stroke-width:1.6"/>'
-                f'<path d="M{x} {y}L{x+15} {y+9}L{x+30} {y}" fill="none" stroke="{col}" stroke-width="1.2"/></g>')
-    s.append(f'<text x="150" y="424" class="lbl">CLASSIFIED</text>')
-    for i in range(4):
-        s.append(envelope(330 + i * 44, 410, a))
-    # the one that does not clear the gate reaches a PERSON — if it merely
-    # left the stack, the plate would say nothing
-    s.append(f'<g class="div">'
-             f'<rect data-rest="the-human" data-rest-within="10" x="656" y="410" width="30" height="20" rx="2" '
-             f'style="fill:{INK2};fill-opacity:{op(0.5)};stroke:{INK2};stroke-width:1.6"/>'
-             f'<path d="M656 410L671 419L686 410" fill="none" stroke="{INK2}" stroke-width="1.2"/></g>')
-    s.append(f'<circle id="the-human" cx="700" cy="446" r="11" fill="none" stroke="{INK2}" stroke-width="1.4"/>')
-    s.append(f'<text x="{R}" y="478" class="lbl" style="fill:{INK2}" text-anchor="end">A HUMAN</text>')
-
-    s.append(f'<path d="M150 496H730" stroke="{RULE}"/>')
-    s.append(f'<text x="150" y="515" class="lbl">YOUR BROWSER</text>')
-    s.append(f'<text x="330" y="504" class="fine">int8 ONNX · 90.4 MB → 22.8 MB</text>')
-    s.append(f'<text x="330" y="{H-30}" class="fine">nothing you paste leaves the tab</text>')
-    return "".join(s) + "</svg>"
-
-
-# ────────────────────────────────────────────────────────────── PLATE V
-def plate_refusal() -> str:
-    """The Cadence isolation audit, drawn service by service.
-
-    Two defects this layout replaces. The plate said IDOR IN SIX SERVICES and
-    then drew four anonymous grey bars per tenant — an assertion where the page
-    promises evidence, on the one plate whose whole subject is what happens
-    when you take an assertion at its word. And its mechanism was a recolour of
-    the AutoML approval gate: a token travels, meets a line, is held. Two
-    consecutive plates drew "something is stopped" with the same object.
-
-    So the six services are NAMED, and the refusal happens to the ROWS. Each
-    service row carries its owner-scoped read and delete marks — the property
-    claims.mjs re-derives from the guard in the query, not from a commit
-    message — and tenant A's row is struck out of a read run as B while B's
-    row returns. The two asterisks are the most interesting thing the audit
-    found and they stay on the plate: the tags test asserted the vulnerable
-    query, so it would have reported green forever, and task-lists still has
-    no regression test. A drawn caveat is worth more than a drawn trophy.
-    """
-    H, a = 700, EMERALD
-    s = [head(H, "The refusal — six services named, and the database that declines",
-              "The IDOR found auditing Cadence, drawn service by service: in six services — "
-              "attachments, calendars, events, task-lists, tasks and tags — any authenticated "
-              "user could read or delete another user's records by id. Each service row "
-              "carries its owner-guard marks: on read, all six carry the guard in the query "
-              "itself; on delete, three do, and the other three check ownership first and "
-              "then delete by id. Tenant A's rows are struck out of a read run as tenant B, "
-              "and only B's return. Two caveats stay on the plate: the tags test asserted "
-              "the vulnerable query, and task-lists still has no regression test. Below, the "
-              "layer that does not depend on remembering: an unfiltered SELECT count(*) FROM "
-              "tasks, run as B, comes back B only, because PostgreSQL row-level security "
-              "refused the rest.", key="plate-5-refusal.svg")]
-    # ── THE BROADSIDE. This is the best story on the page — the audit's words —
-    # and the old set gave it the same slab as a gzip benchmark: eight of ten
-    # plates inside a 130u band, so nothing could say "this one matters". Now
-    # the heights say it: the refusal is the tallest figure in the document and
-    # the only place the 64px hero face is spent on a WORD.
-    #
-    # STILL, and the stillness was earned the honest way: the first draft of
-    # this round animated the strikes — a redraw wave down A's column, 80ms a
-    # row, once per loop — and the re-authored motion gate measured it at 0 of
-    # 67 samples visible. Six 102x2 hairlines are simply below what a reader
-    # can see at readme scale, and a gesture nobody can see is instrument-food
-    # by this build's own definition. The old read-head sweep is gone for the
-    # worse crime: on a plate where a strike MEANS "withheld", it spent part
-    # of every loop applying the plate's own symbol to the wrong nouns. So the
-    # table stands as a finished exhibit — struck, guarded, footnoted — which
-    # is what an audit that is OVER should look like.
-    s.append(f"</style>{ground(H)}")
-
-    s.append(frontis("VI", "THE REFUSAL", "SIX SERVICES, SELF-AUDITED"))
-    s.append(f'<text x="{L}" y="98" class="kick">ANY USER COULD READ OR DELETE ANOTHER’S ROWS BY ID</text>')
-    s.append(f'<text x="{L}" y="118" class="kick">THE MARKS SHOW WHERE EACH GUARD NOW SITS</text>')
-
-    # ── the table: six services, named. Column headers in the same 11px voice.
-    # B's header names it the CALLER, because that is the entire scene: B asks,
-    # and what B gets back is the last column.
-    for x, t in ((340, "READ"), (404, "DELETE"), (480, "TENANT A")):
-        s.append(f'<text x="{x}" y="152" class="kick">{t}</text>')
-    s.append(f'<text x="{R}" y="152" class="kick" text-anchor="end">TENANT B — CALLER</text>')
-    # README order, which is the audit's order — not alphabetical, and not
-    # anonymised. The footnote markers are resolved at the bottom of the plate.
-    #
-    # The DELETE column tells the truth the 2026-08 audit sharpened: all six
-    # services carry the owner predicate in the READ query, but only events,
-    # tasks and tags carry it in the DELETE itself — attachments, calendars
-    # and task-lists check ownership first and then run DELETE WHERE id. A
-    # hollow mark is not a missing mark; it is a different mechanism, and the
-    # legend says which. The plate used to draw all twelve marks identical,
-    # which overstated what claims.mjs actually derives.
-    SVCS = [("attachments", False), ("calendars", False), ("events", True),
-            ("task-lists*", False), ("tasks", True), ("tags**", True)]
-    for i, (name, in_query) in enumerate(SVCS):
-        y = 182 + i * 34
-        s.append(f'<text x="{L}" y="{y}" class="lbl">{name}</text>')
-        # read: the guard is in the query, all six — the fact claims.mjs
-        # counts from AND "userId" = $ in the six service files
-        s.append(f'<rect x="354" y="{y-10}" width="8" height="8" fill="{a}"/>')
-        # delete: in the query for three; checked-then-deleted for the rest
-        if in_query:
-            s.append(f'<rect x="427" y="{y-10}" width="8" height="8" fill="{a}"/>')
-        else:
-            s.append(f'<rect x="427" y="{y-10}" width="8" height="8" fill="none" stroke="{a}" stroke-width="1.4"/>')
-        # tenant A's row EXISTS — grey, framed like any stored row — and is
-        # struck out of the result. Withheld is not deleted.
-        s.append(f'<rect x="480" y="{y-12}" width="110" height="16" rx="2" fill="{ROW}" stroke="{WIRE}"/>')
-        s.append(f'<rect x="484" y="{y-5}" width="102" height="2" fill="{a}"/>')
-        # tenant B's row is the one that comes back
-        s.append(f'<rect x="620" y="{y-12}" width="110" height="16" rx="2" fill="{ROW}" stroke="{a}"/>')
-
-    # the legend, in drawn marks rather than glyphs the font subset may not carry
-    s.append(f'<rect x="{L}" y="380" width="8" height="8" fill="{a}"/>')
-    s.append(f'<text x="166" y="388" class="fine">the guard is in the query</text>')
-    s.append(f'<rect x="390" y="380" width="8" height="8" fill="none" stroke="{a}" stroke-width="1.4"/>')
-    s.append(f'<text x="406" y="388" class="fine">checked first, then DELETE WHERE id</text>')
-
-    # the footnotes ARE the finding. A table of six green rows is a trophy;
-    # these two lines are what an audit that means it looks like.
-    s.append(f'<text x="{L}" y="420" class="fine" style="fill:{INK3}">*  task-lists — still has no regression test</text>')
-    s.append(f'<text x="{L}" y="440" class="fine" style="fill:{INK3}">** tags — its test asserted the vulnerable query. Green forever.</text>')
-
-    s.append(f'<path d="M{L} 472H{R}" stroke="{RULE}"/>')
-    # unfiltered on purpose: a predicate that names B and returns B proves nothing
-    s.append(f'<text x="{L}" y="512" class="key">SELECT count(*) FROM tasks</text>')
-    s.append(f'<text x="470" y="512" class="fine">as B — unfiltered on purpose</text>')
-    # the payoff, at the size the page reserves for its biggest numbers —
-    # except it is not a number
-    s.append(f'<text x="{L}" y="600" class="hero">B only</text>')
-    s.append(f'<text x="470" y="600" class="lbl">ROW-LEVEL SECURITY</text>')
-    s.append(f'<text x="{L}" y="640" class="say">The app didn’t remember to filter.</text>')
-    s.append(f'<text x="{L}" y="{H-32}" class="say">The database refused.</text>')
-    return "".join(s) + "</svg>"
-
-
-# ────────────────────────────────────────────────────────────── PLATE VI
-def plate_release() -> str:
-    H, LOOP, SET = 660, 13.1, 9.8
-    BEAT = round(LOOP / 4, 2)
-    s = [head(H, "LifeQuest",
-              "LifeQuest turns real-world routines into tracked quests, for people rebuilding "
-              "structure after a layoff or in retirement. One source tree in apps/desktop is "
-              "built twice — as a Tauri 2 native binary and as a web app — with a shared Zod "
-              "schema package meant to hold both builds and the API to one contract. Behind "
-              "it: 10 Prisma models and 14 REST endpoints across 6 NestJS controllers. When "
-              "it generates a quest it asks OpenAI, falls back to Hugging Face, and if "
-              "neither is configured it returns nothing rather than inventing one. Licensed "
-              "MIT; a real schema test suite exists, and CI does not run it.",
-              key="plate-6-release.svg")]
-    # ── the quest list, run as a rotation — kept, because it IS the claim.
-    # LifeQuest's claim is that ROUTINES become quests, and a routine is a
-    # thing that recurs: the top quest completes (its ring fills), files away,
-    # the list advances one slot, and the completed quest re-enters at the
-    # bottom to come around again. Four quests, one completion every quarter
-    # loop. Everything else this plate used to animate — the source box's
-    # knock, the endpoint shoves, the interior washes, the label flips — was
-    # tuned, by its own comments' admission, to what the raster gate could
-    # see, and the doctrine that demanded that is gone. The chain holds still
-    # now; RETURNS NOTHING never moved, and now it is in good company.
-    #
-    # One keyframes per quest: four 3.2s siblings in one class would be a
-    # queue, not a wave, and check 14's 200ms ceiling is right to refuse it.
-    QP, QY = 28, 104                   # quest pitch, first circle centre
-    E = [2 + 24.5 * j for j in range(4)]
-    quests = []
-    for k in range(4):
-        off = lambda j: (j - k) * QP
-        stop = lambda t, j, x=0, o=1: seg.append(
-            (round(t, 1), f"opacity:{o};transform:translate({x}px,{off(j)}px)"))
-        seg, c = [], k
-        stop(0, k)
-        for j, e in enumerate(E):
-            if j == k:                 # complete: nudge, fill (see .c{k}), file away
-                stop(e, 0); stop(e + 1.2, 0, x=6); stop(e + 2.6, 0)
-                stop(e + 3.5, 0); stop(e + 5.8, 0, o=0)
-                stop(e + 6.8, 3, x=-16, o=0)   # hidden reposition below the list
-                stop(e + 8.5, 3, x=-16, o=0)
-                stop(e + 11, 3); c = 3         # …and the routine comes around again
-            else:                      # the list advances one slot — unhurried:
-                stop(e + 4, c); c -= 1         # ~4u per 100ms reads as the list
-                stop(e + 9.5, c)               # breathing, not twitching
-        stop(100, k)
-        quests.append(
-            f".q{k}{{animation:qst{k} {LOOP}s {EASE} infinite}}\n@keyframes qst{k}{{"
-            + "".join(f"{t:g}%{{{v}}}" for t, v in seg) + "}\n"
-            f".c{k}{{animation:cir{k} {LOOP}s linear infinite}}\n@keyframes cir{k}{{"
-            f"0%,{E[k]:g}%{{fill-opacity:0}}{E[k]+1.5:g}%,{E[k]+5:g}%{{fill-opacity:1}}"
-            f"{E[k]+6.5:g}%,100%{{fill-opacity:0}}}}\n"
-            # the completing quest's label brightens for exactly as long as it
-            # is the one being completed, and files away bright
-            f".t{k}{{animation:tq{k} {LOOP}s linear infinite}}\n@keyframes tq{k}{{"
-            f"0%,{E[k]:g}%{{fill:{INK2}}}{E[k]+1:g}%,{E[k]+5.5:g}%{{fill:{INK}}}"
-            f"{E[k]+7:g}%,100%{{fill:{INK2}}}}}")
-    s.append("".join(quests) + f"""
-/* One build leaves the shared tree down each branch, four times a loop. */
-.bd{{animation:bd {BEAT}s {EASE} infinite}}
-@keyframes bd{{0%{{opacity:0;transform:translateX(-42px)}}
-  16%{{opacity:1}}84%{{opacity:1}}
-  100%{{opacity:0;transform:translateX(0)}}}}
-</style>{ground(H)}""")
-    s.append(frontis("VII", "LIFEQUEST", "WHAT YOU MEANT TO DO, AS QUESTS"))
-    # circle and label move as one quest, so they share a <g>; the rail of
-    # connectors stays put — it belongs to the LIST, not to any quest on it
-    QUESTS = ["Reconnect with a mentor", "Document a new routine",
-              "Share a win", "Take the morning walk"]
-    for i, txt in enumerate(QUESTS):
-        s.append(f'<g class="q{i}">'
-                 f'<circle class="c{i}" cx="158" cy="{QY+i*QP}" r="7" '
-                 f'style="fill:{PINK};fill-opacity:0;stroke:{PINK};stroke-width:1.6"/>'
-                 f'<text x="178" y="{QY+5+i*QP}" class="lbl t{i}">{txt}</text></g>')
-        if i < 3:
-            s.append(f'<path d="M158 {QY+8+i*QP}V{QY+20+i*QP}" stroke="{WIRE}" stroke-width="1"/>')
-    s.append(f'<text x="150" y="240" class="say">For people rebuilding structure —</text>')
-    s.append(f'<text x="150" y="268" class="say">after a layoff, or in retirement.</text>')
-
-    s.append(f'<path d="M150 296H730" stroke="{RULE}"/>')
-    s.append(f'<text x="150" y="326" class="kick">ONE SOURCE TREE, BUILT TWICE</text>')
-
-    # the fork: the same apps/desktop tree is a Vite web build and a Tauri
-    # native binary, and packages/schemas is the Zod contract meant to keep
-    # both of them honest against the NestJS API ("meant to": the README
-    # carries the two precisions — controller uptake and a Zod major skew).
-    s.append(f'<rect x="150" y="336" width="240" height="70" rx="3" fill="none" stroke="{WIRE}"/>')
-    s.append(f'<text x="166" y="366" class="fine" style="fill:{INK}">apps/desktop</text>')
-    s.append(f'<text x="166" y="388" class="fine">React · Vite</text>')
-    s.append(f'<path d="M390 371H420M420 353V389" fill="none" stroke="{WIRE}"/>')
-    for i, (dy, txt) in enumerate([(-18, "TAURI 2 · NATIVE BINARY"), (18, "VITE BUILD · WEB APP")]):
-        s.append(f'<path d="M420 {371+dy}H462" fill="none" stroke="{WIRE}"/>')
-        # a build leaving down each branch, four times a loop — so the fork is
-        # shown, not asserted
-        s.append(f'<circle class="bd" cx="462" cy="{371+dy}" r="3.5" fill="{PINK}" '
-                 f'style="animation-delay:{round(-BEAT*0.5 + i*0.12, 3)}s"/>')
-        s.append(f'<text x="{R}" y="{376+dy}" class="lbl" text-anchor="end" style="fill:{PINK}">{txt}</text>')
-    s.append(f'<text x="150" y="430" class="fine">packages/schemas — one Zod contract for both builds</text>')
-
-    s.append(f'<path d="M150 454H730" stroke="{RULE}"/>')
-    # one ledger row, not two 62u stat blocks — the numbers matter, the
-    # ceremony around them did not
-    s.append(f'<text x="150" y="496" class="sub">10</text>')
-    s.append(f'<text x="230" y="496" class="lbl">PRISMA MODELS</text>')
-    s.append(f'<text x="430" y="496" class="sub">14</text>')
-    s.append(f'<text x="510" y="496" class="lbl">REST ENDPOINTS</text>')
-    s.append(f'<text x="150" y="520" class="fine">quests, rewards, meetups, rituals · across 6 NestJS controllers</text>')
-
-    # The quest generator asks OpenAI, then Hugging Face, and if neither is
-    # configured it returns null rather than inventing a quest. Drawn as a
-    # chain because that is the shape of the code (ai-content.service.ts:49-56)
-    # and because the last link is the honest one. Still, all three: the box
-    # that never answers no longer needs neighbours that fidget to make its
-    # stillness legible.
-    s.append(f'<text x="150" y="556" class="kick">QUEST GENERATION — ASKS, THEN FALLS BACK, THEN DECLINES</text>')
-    for i, (txt, col) in enumerate([("OPENAI", PINK), ("HUGGING FACE", PINK), ("RETURNS NOTHING", INK3)]):
-        x = 150 + i * 204
-        s.append(f'<rect x="{x}" y="570" width="172" height="30" rx="3" fill="none" stroke="{WIRE}"/>')
-        s.append(f'<text x="{x+14}" y="590" class="fine" style="fill:{col}">{txt}</text>')
-        if i < 2:
-            s.append(f'<path d="M{x+172} 585H{x+204}" stroke="{WIRE}"/>')
-    s.append(f'<text x="150" y="{H-30}" class="fine" style="fill:{INK3}">MIT · a real schema test suite exists — CI does not run it</text>')
-    return "".join(s) + "</svg>"
-
-
-# ────────────────────────────────────────────────────────────── PLATE VII
 def plate_automl() -> str:
-    """AutoML's own plate.
+    """The phase dial. Room: a rotary instrument, and its sealed vessel.
 
-    It shared plate VII with LifeQuest until now — a quest tracker and a
-    multi-agent ML pipeline on one slab, which the audit called two plates in
-    one and measured as the least dense in the set. It also carried the line
-    "the one section you cannot check", because the repository was private.
-    That stopped being true on 2026-07-30, so every figure here is DERIVED from
-    a pinned commit like the other five systems, and the plate is built around
-    the one mechanism that is genuinely unusual: the model is never handed the
-    whole tool registry.
+    "One phase, one tool set" is a rotary fact — position selects capability,
+    like a microscope turret — so the seven sets are sectors of a dial. The
+    model's 15 carried tools live in the hub and NEVER move: they travel
+    with the model, so they are simply always there. The 29 phase tools are
+    ticks on the rim, lit only while their sector is active.
+
+    Carrier: the needle CREEPS across the live sector and swings to the
+    next — it is never still, because routing is never parked. Second
+    carrier: a dashed feed drifts from the dial into the sandbox vessel —
+    the Python the model writes, flowing into the only place allowed to run
+    it. Sector windows, ticks and needle share one clock so they can never
+    disagree about which phase is live, and 15/44 is set at headline weight
+    because it is the claim.
     """
-    H, LOOP, SET = 638, 13.3, 9.9
-    TICKS, GEN = 44, 15
-    # pitch is set so the LAST tick's right edge lands on R, not so the first
-    # 44 pitches span the column — the old form left the strip 8.3u short.
-    PITCH = (R - L - 5) / (TICKS - 1)
-    BARS, BX = 7, L + GEN * PITCH           # the seven sets sit under the routed 29
-    BGAP = 8
-    BPITCH = (R - BX + BGAP) / BARS   # last bar's right edge lands on R
+    H, LOOP, SET = 764, 13.3, 9.9
+    a = INDIGO
+    CXD, CYD = 440, 296          # dial centre
+    N = 7
+    SPAN = 360 / N
+    A = [round(100 / N * j + 2.25, 2) for j in range(N)]           # arrive at set j
+    D = [round(100 / N * (j + 1) - 2.25, 2) for j in range(N)]     # depart set j
+    pol = lambda deg, r: (CXD + r * math.sin(math.radians(deg)),
+                          CYD - r * math.cos(math.radians(deg)))
     s = [head(H, "Agentic AutoML",
               "Agentic AutoML takes a dataset and a sentence and returns a trained model. "
               "Its tool registry holds 44 definitions, but the model never carries all of "
@@ -1171,317 +802,804 @@ def plate_automl() -> str:
               "tmpfs mounts as the only writable surface. Behind it sits a 29-table Postgres "
               "schema with pgvector. Written with Shree Chaturvedi; the repository is public "
               "and licensed GPL-3.0.",
-              key="plate-6b-automl.svg")]
-    # ── the phase clock. Everything that claims "one phase, one tool set" is
-    # keyed to one set of seven windows: the marker (.mk) steps to set j, the
-    # model's carried cluster (.mv) travels there, the slice of the 29 that
-    # routes to that phase lights (.p0-.p6), and the set's own bar lights with
-    # it (.sb0-.sb6). Windows are ~1.6s holds with 0.6s transits, all on the
-    # same -9.9s clock, so the four devices can never disagree about which
-    # phase is active.
-    A = [round(100 / 7 * j + 2.25, 2) for j in range(7)]           # arrive at set j
-    D = [round(100 / 7 * (j + 1) - 2.25, 2) for j in range(7)]     # depart set j
+              key="plate-6b-automl.svg", frame=(40, 64, 26))]
+    # sector windows and rim ticks on one shared clock
     phase = []
-    for j in range(7):
+    for j in range(N):
         phase.append(
-            f".p{j}{{animation:p{j} {LOOP}s linear infinite;animation-delay:{-SET}s}}\n"
-            f"@keyframes p{j}{{0%,{A[j]-1.5:g}%{{fill:{WIRE}}}{A[j]:g}%,{D[j]:g}%{{fill:{INDIGO}}}"
-            f"{min(D[j]+1.5, 99.9):g}%,100%{{fill:{WIRE}}}}}\n"
-            f".sb{j}{{animation:kb{j} {LOOP}s linear infinite;animation-delay:{-SET}s}}\n"
-            f"@keyframes kb{j}{{0%,{A[j]-1.5:g}%{{fill:{ROW}}}{A[j]:g}%,{D[j]:g}%{{fill:{INDIGO}}}"
-            f"{min(D[j]+1.5, 99.9):g}%,100%{{fill:{ROW}}}}}")
-    s.append(f"""{"".join(phase)}
-/* THE 15 TRAVEL WITH THE MODEL — so they travel. The cluster is the model's
-   carried registry: a frame of fifteen ticks that physically steps from set
-   to set under the strip, arriving as each phase's slice lights above it.
-   This is the plate's claim performed instead of captioned, and it is also
-   what the raster gate sees: fifteen 5u ticks displacing 55u together move
-   ~1% of the canvas per sample, where the marker hairline alone moved
-   nothing. The wrap from the seventh set back to the first is a 332u jump,
-   so it happens faded out, like the marker's. */
-.mv{{animation:mv {LOOP}s {EASE} infinite;animation-delay:{-SET}s}}
-@keyframes mv{{0%{{opacity:0;transform:translateX({-6*BPITCH:.1f}px)}}
-  1.8%{{opacity:1;transform:translateX({-6*BPITCH:.1f}px)}}
-  {"".join(f"{D[j]:g}%{{transform:translateX({-(6-j)*BPITCH:.1f}px)}}"
-           f"{A[j+1]:g}%{{transform:translateX({-(5-j)*BPITCH:.1f}px)}}" for j in range(6))}
-  97.5%{{opacity:1;transform:translateX(0)}}100%{{opacity:0;transform:translateX(0)}}}}
-/* The marker is the claim: it steps through the seven sets one at a time and
-   is never over more than one, because that is what phase-aware routing does.
-   Seven holds of ~1.6s each — under the 2.4s ceiling on a dead run, and the
-   sandbox scan runs underneath it the whole time so the plate is never still. */
-/* The wrap from the seventh set back to the first is a 328u jump, which the
-   gate calls a teleport and is right to. So it happens with the marker faded
-   out, the same way plate VII's token resets — a cycle that visibly snaps
-   backwards reads as a glitch, not as a new run starting. */
-.mk{{animation:mk {LOOP}s steps(1,end) infinite;animation-delay:{-SET}s}}
-@keyframes mk{{0%{{opacity:0;transform:translateX({-6*BPITCH:.1f}px)}}
-  2%,12%{{opacity:1;transform:translateX({-6*BPITCH:.1f}px)}}
-  14.3%,26%{{transform:translateX({-5*BPITCH:.1f}px)}}
-  28.6%,40%{{transform:translateX({-4*BPITCH:.1f}px)}}
-  42.9%,55%{{transform:translateX({-3*BPITCH:.1f}px)}}
-  57.1%,69%{{transform:translateX({-2*BPITCH:.1f}px)}}
-  71.4%,83%{{transform:translateX({-1*BPITCH:.1f}px)}}
-  85.7%,97%{{opacity:1;transform:translateX(0)}}
-  100%{{opacity:0;transform:translateX(0)}}}}
+            f".sa{j}{{animation:sa{j} {LOOP}s linear infinite;animation-delay:{-SET}s}}\n"
+            f"@keyframes sa{j}{{0%,{A[j]-1.5:g}%{{stroke:{ROW}}}{A[j]:g}%,{D[j]:g}%{{stroke:{a}}}"
+            f"{min(D[j]+1.5, 99.9):g}%,100%{{stroke:{ROW}}}}}\n"
+            f".tk{j}{{animation:tk{j} {LOOP}s linear infinite;animation-delay:{-SET}s}}\n"
+            f"@keyframes tk{j}{{0%,{A[j]-1.5:g}%{{fill:{WIRE}}}{A[j]:g}%,{D[j]:g}%{{fill:{a}}}"
+            f"{min(D[j]+1.5, 99.9):g}%,100%{{fill:{WIRE}}}}}")
+    # ── the needle: creep + swing, never still. Within sector j it creeps
+    # from centre-6° to centre+6° (the dwell is a slow read, not a hold);
+    # between sectors it swings. The wrap from the last sector to the first
+    # happens faded out, like every loop wrap on this page.
+    ang = lambda j: -(N - 1 - j) * SPAN
+    ndl = [f"0%{{opacity:0;transform:rotate({ang(0)-6:.2f}deg)}}",
+           f"2%{{opacity:1;transform:rotate({ang(0)-6:.2f}deg)}}"]
+    for j in range(N):
+        if j:
+            ndl.append(f"{A[j]:g}%{{transform:rotate({ang(j)-6:.2f}deg)}}")
+        ndl.append(f"{D[j]:g}%{{transform:rotate({ang(j)+6:.2f}deg)}}")
+    ndl.append(f"97%{{opacity:1;transform:rotate({ang(N-1)+6:.2f}deg)}}")
+    ndl.append(f"100%{{opacity:0;transform:rotate({ang(N-1)+6:.2f}deg)}}")
+    s.append("".join(phase) + f"""
+/* the needle IS the routing. Round 21's live pass caught it parked for 9.3
+   of every 13.3s while the sector chase ran on: without transform-box, its
+   CSS rotation origin was left to the renderer's legacy SVG default, not
+   the dial. So it now uses the same idiom as every other rotating element
+   here — fill-box + origin:center — with a zero-ink balance path in its
+   group pinning the fill-box's centre exactly on the dial's axis. */
+.ndl{{transform-box:fill-box;transform-origin:center;animation:ndl {LOOP}s {EASE} infinite;animation-delay:{-SET}s}}
+@keyframes ndl{{{"".join(ndl)}}}
+/* the feed: what the model writes, flowing into the vessel. 12u per period,
+   so the wrap is seamless; linear, because a pipe is steady state. */
+.feed{{animation:feed 1.9s linear infinite}}
+@keyframes feed{{from{{stroke-dashoffset:0}}to{{stroke-dashoffset:-12}}}}
 </style>{ground(H)}""")
-    s.append(frontis("VIII", "AGENTIC AUTOML", "ONE PHASE, ONE TOOL SET"))
 
-    # ── the registry, drawn at its real size
-    s.append(f'<text x="{L}" y="160" class="hero">{TICKS}</text>')
-    s.append(f'<text x="270" y="136" class="key">TOOL DEFINITIONS</text>')
-    s.append(f'<text x="270" y="160" class="fine">one MCP server over a LangGraph state machine</text>')
-    # The 15 core ticks are static now — their staggered arrival was a reveal,
-    # not a claim. The 29 routed ones stay animated because their lighting IS
-    # the claim: each lights (WIRE→INDIGO) in the window of the set that
-    # routes it, assigned by position, so the lit block in the registry tracks
-    # the marker and the cluster below it. Authored lit for the LAST set — the
-    # still frame shows the final phase, where the marker and cluster rest.
-    for i in range(TICKS):
-        x = L + i * PITCH
-        if i < GEN:
-            s.append(f'<rect x="{x:.1f}" y="190" width="5" height="22" fill="{INDIGO}"/>')
+    s.append(f'<text x="{L}" y="{TOP}" class="kick">IV · AGENTIC AUTOML</text>')
+    s.append(f'<text x="{L}" y="84" class="say" style="fill:{INK}">ONE PHASE, ONE TOOL SET</text>')
+    s.append(f'<text x="{R}" y="{TOP}" text-anchor="end" class="key">44 TOOL DEFINITIONS</text>')
+    s.append(f'<text x="{R}" y="104" text-anchor="end" class="fine">one MCP server over a LangGraph state machine</text>')
+    # the headline the plate never had: every other section leads with its
+    # number (6.4x, 3.5x, 0.979, B only) and this one buried 15-of-44 in
+    # 11px small caps. The fraction is the claim; set it at the claim's size.
+    s.append(f'<text x="{L}" y="176" class="hero">15<tspan class="unit">/44</tspan></text>')
+    s.append(f'<text x="{L}" y="212" class="lbl">TRAVEL WITH THE MODEL</text>')
+
+    # ── the dial. Arcs share one <g> — adjacent 51° arcs necessarily overlap
+    # as bounding boxes, and the dial is one composed instrument.
+    arcs = []
+    for j in range(N):
+        a0, a1 = j * SPAN + 3, (j + 1) * SPAN - 3
+        x0, y0 = pol(a0, 92); x1, y1 = pol(a1, 92)
+        arcs.append(f'<path class="sa{j}" d="M{x0:.1f} {y0:.1f}A92 92 0 0 1 {x1:.1f} {y1:.1f}" '
+                    f'fill="none" stroke-width="13" style="stroke:{a if j == N-1 else ROW}"/>')
+    ticks = []
+    for j in range(N):
+        n = 5 if j == N - 1 else 4
+        for i in range(n):
+            tang = j * SPAN + 8 + i * (SPAN - 16) / (n - 1)
+            tx, ty = pol(tang, 112)
+            ticks.append(f'<rect class="tk{j}" x="{tx-1.5:.1f}" y="{ty-5:.1f}" width="3" height="10" '
+                         f'transform="rotate({tang:.1f} {tx:.1f} {ty:.1f})" '
+                         f'style="fill:{a if j == N-1 else WIRE}"/>')
+    # the needle, authored at its rest (the last sector's creep end). A RIM
+    # index now — 84u to 106u, riding across the sector band — because with
+    # the rotation origin actually on the dial's axis, a hub needle would
+    # cross the 150u hub box every time it pointed near-horizontal. Drawn in
+    # INK so it reads over the grey ring and the lit sector alike, at the
+    # structural 2u. The zero-ink two-dot path spans +-110 so the group's
+    # fill-box stays centred exactly on the axis whatever the needle's angle.
+    th = (N - 1) * SPAN + SPAN / 2 + 6
+    nx0, ny0 = math.sin(math.radians(th)) * 84, -math.cos(math.radians(th)) * 84
+    nx1, ny1 = math.sin(math.radians(th)) * 106, -math.cos(math.radians(th)) * 106
+    s.append('<g>' + "".join(arcs) + "".join(ticks)
+             + f'<g transform="translate({CXD},{CYD})"><g class="ndl">'
+             f'<path d="M-110 -110h0.01M110 110h0.01" fill="none"/>'
+             f'<path d="M{nx0:.1f} {ny0:.1f}L{nx1:.1f} {ny1:.1f}" stroke="{INK}" stroke-width="2"/>'
+             f'</g></g></g>')
+    # the hub: what the model always holds. It does not move, because the 15
+    # travel WITH the model — they are simply always there.
+    s.append(f'<rect x="365" y="270" width="150" height="52" rx="6" fill="none" stroke="{a}"/>')
+    s.append(f'<text x="{CXD}" y="292" text-anchor="middle" class="key">15 TRAVEL</text>')
+    s.append(f'<text x="{CXD}" y="312" text-anchor="middle" class="kick">WITH THE MODEL</text>')
+    # the seven sets, named around the rim
+    NAMES = ["ONBOARD", "PREPROC", "PROPOSE", "CONTINUE", "ENGINEER", "LIFECYCLE", "TRAINING"]
+    for j, nm in enumerate(NAMES):
+        tang = j * SPAN + SPAN / 2
+        lx, ly = pol(tang, 132)
+        sn, cs = math.sin(math.radians(tang)), math.cos(math.radians(tang))
+        if abs(sn) < 0.35:
+            anch, lx, ly = 'middle', lx, ly + (14 if cs < 0 else -6)
+        elif sn > 0:
+            anch, lx, ly = 'start', lx + 6, ly + 4
         else:
-            j = min(BARS - 1, int((x + 2.5 - BX) // BPITCH))
-            s.append(f'<rect class="p{j}" x="{x:.1f}" y="190" width="5" height="22" '
-                     f'style="fill:{INDIGO if j == BARS - 1 else WIRE}"/>')
-    # brackets naming the two halves. The labels sit at the two OUTER edges —
-    # left under the 15, right-anchored under the far end of the 29 — because
-    # putting both flush-left made them collide, and the gate said so.
-    s.append(f'<path d="M{L} 220V226H{L+(GEN-1)*PITCH+5:.1f}V220" fill="none" stroke="{WIRE}"/>')
-    s.append(f'<text x="{L}" y="244" class="kick" style="fill:{INDIGO}">{GEN} TRAVEL WITH THE MODEL</text>')
-    s.append(f'<path d="M{BX:.1f} 220V226H{L+(TICKS-1)*PITCH+5:.1f}V220" fill="none" stroke="{WIRE}"/>')
-    s.append(f'<text x="{R}" y="244" class="kick" text-anchor="end">{TICKS-GEN} ARRIVE WITH THE PHASE</text>')
+            anch, lx, ly = 'end', lx - 6, ly + 4
+        s.append(f'<text x="{lx:.0f}" y="{ly:.0f}" text-anchor="{anch}" class="kick">{nm}</text>')
 
-    # ── the model's carried cluster, in its own lane between the registry and
-    # the sets. Fifteen ticks at the registry's own pitch inside a thin frame:
-    # what the model holds, where the model currently is. Its right edge rests
-    # on R at the final set — the authored, finished pose.
-    CLW = 200
-    CLX = R - CLW
-    s.append(f'<g class="mv"><rect x="{CLX}" y="254" width="{CLW}" height="22" rx="2" '
-             f'fill="none" stroke="{INDIGO}"/>'
-             + "".join(f'<rect x="{CLX + 4 + t*PITCH:.1f}" y="258" width="5" height="14" '
-                       f'style="fill:{INDIGO}"/>' for t in range(GEN)) + '</g>')
+    s.append(f'<text x="{R}" y="462" text-anchor="end" class="kick">29 ARRIVE WITH THE PHASE</text>')
+    s.append(f'<text x="{R}" y="484" text-anchor="end" class="kick">SEVEN PHASE SETS</text>')
 
-    # ── the seven sets, and the marker that is only ever under one of them.
-    # The marker underlines rather than overlays: an indigo rect ON the bar is
-    # a collision as far as the gate is concerned, and it was right to say so —
-    # two filled rects at the same coordinates is exactly what a bug looks like.
-    # The active bar also lights (.sb): four devices, one clock.
-    for i in range(BARS):
-        x = BX + i * BPITCH
-        last = ' id="set-last"' if i == BARS - 1 else ''
-        s.append(f'<rect{last} class="sb{i}" x="{x:.1f}" y="288" width="{BPITCH-BGAP:.1f}" height="8" rx="1" '
-                 f'style="fill:{INDIGO if i == BARS - 1 else ROW}"/>')
-    s.append(f'<rect class="mk" data-rest="set-last" data-rest-within="14" '
-             f'x="{BX + (BARS-1)*BPITCH:.1f}" y="302" width="{BPITCH-BGAP:.1f}" height="3" rx="1" fill="{INDIGO}"/>')
-    s.append(f'<text x="{L}" y="300" class="lbl">SEVEN PHASE SETS</text>')
-
-    s.append(f'<path d="M{L} 316H{R}" stroke="{RULE}"/>')
-
-    # ── the sandbox, quoted from the container it actually builds. Named
-    # honestly this round: the page said `--network none` since the plate
-    # existed, and it was never true — dockerBuilder.ts passes the configured
-    # network, which defaults to `automl-sandbox`, created with
-    # `docker network create --internal` (networkManager.ts). An --internal
-    # network has no gateway: nothing inside can route out, which is the
-    # isolation the sentence was reaching for. The repo's own comment still
-    # says "default: none"; the repo's own test asserts the configured
-    # network. This page sides with the test.
-    s.append(f'<text x="{L}" y="346" class="kick">WHERE THE GENERATED PYTHON RUNS</text>')
-    s.append(f'<rect x="{L}" y="360" width="330" height="124" rx="3" fill="none" stroke="{INDIGO}"/>')
-    for i, (flag, why) in enumerate([("--internal network", "no route out"),
-                                     ("--read-only", "immutable rootfs"),
-                                     ("--user sandbox", "never root"),
-                                     ("/datasets:ro", "read-only mount")]):
-        s.append(f'<text x="{L+16}" y="{390+i*26}" class="fine" style="fill:{INK}">{flag}</text>')
-        s.append(f'<text x="{L+186}" y="{390+i*26}" class="fine">{why}</text>')
-    # the five writable mounts, drawn because their count IS the blast radius
-    s.append(f'<text x="520" y="382" class="key">5 TMPFS MOUNTS</text>')
-    s.append(f'<text x="520" y="404" class="fine">the only surface it can</text>')
-    s.append(f'<text x="520" y="422" class="fine">write to, and none of it</text>')
-    s.append(f'<text x="520" y="440" class="fine">survives the container</text>')
+    # ── the feed, and the vessel it fills: where the generated Python runs.
+    # Isometric, exploded — the five tmpfs trays lifted out on leaders,
+    # because the count of writable surfaces IS the blast radius.
+    s.append(f'<path class="feed" d="M382 388C330 442 290 470 262 522" fill="none" '
+             f'stroke="{a}" stroke-width="1.6" stroke-dasharray="5 7" opacity="{op(0.7)}"/>')
+    s.append(f'<text x="418" y="524" class="kick">WHERE GENERATED PYTHON RUNS</text>')
+    s.append(f'<path d="M183 568L258 532L333 568L258 604Z" fill="none" stroke="{a}" stroke-width="1.6"/>')
+    s.append(f'<path d="M183 568V614L258 650L333 614V568" fill="none" stroke="{a}" stroke-width="1.6"/>')
+    s.append(f'<path d="M258 604V650" stroke="{a}" stroke-width="1" opacity="{op(0.6)}"/>')
     for i in range(5):
-        s.append(f'<rect x="{520+i*30}" y="456" width="20" height="14" rx="1" '
-                 f'fill="none" stroke="{INDIGO}"/>')
+        ty = 548 + i * 22
+        s.append(f'<g><path d="M352 {ty}L366 {ty-7}L380 {ty}L366 {ty+7}Z" fill="none" stroke="{a}" stroke-width="1.4"/>'
+                 f'<path d="M352 {ty}H338" stroke="{WIRE}" stroke-width="1"/></g>')
+    # The trays no longer "breathe": round 21's live pass measured that
+    # motion at under two rendered pixels — below the threshold of vision,
+    # five animations buying nothing on the reader's compositor. An exploded
+    # drawing is allowed to hold still; the dial and the feed carry the plate.
+    FLAGS = ["--internal network — no route out",
+             "--read-only — immutable rootfs",
+             "--user sandbox — never root",
+             "/datasets:ro — read-only mount",
+             "5 tmpfs mounts — writable, transient"]
+    for i, flag in enumerate(FLAGS):
+        s.append(f'<text x="418" y="{548 + i*26}" class="fine" style="fill:{INK}">{flag}</text>')
 
-    s.append(f'<path d="M{L} 516H{R}" stroke="{RULE}"/>')
-    s.append(f'<text x="{L}" y="556" class="sub">29</text>')
-    s.append(f'<text x="200" y="556" class="lbl">TABLES · POSTGRES + PGVECTOR</text>')
-    s.append(f'<text x="200" y="578" class="fine">a Jupyter kernel per project, kept alive between cells</text>')
+    s.append(f'<text x="{L}" y="692" class="sub">29</text>')
+    s.append(f'<text x="206" y="684" class="lbl">TABLES · POSTGRES + PGVECTOR</text>')
+    s.append(f'<text x="206" y="706" class="fine">a Jupyter kernel per project, kept alive between cells</text>')
     s.append(f'<text x="{L}" y="{H-30}" class="fine" style="fill:{INK3}">public · GPL-3.0 · written with Shree Chaturvedi</text>')
     return "".join(s) + "</svg>"
 
 
-# ────────────────────────────────────────────────────────────── PLATE IX
-def plate_colophon() -> str:
-    """The closing plate, and the serif's second and last appearance.
+# ────────────────────────────────────────────────────────────── PLATE V
+def plate_cadence() -> str:
+    """The redacted disclosure. Room: a FOIA response. Section: CADENCE.
 
-    The thesis opens in the author's voice — the one serif in a monospace
-    document — and until now that voice never spoke again, so the device read
-    as a one-off effect. The colophon is the other place the author speaks,
-    and what he has to say here is the page's actual thesis, so it closes the
-    bracket: same face, same size, stating what every figure above submits to.
+    Round 21 merges the old refusal section into Cadence, because this IS
+    Cadence's engineering: the old parser plate is retired and this plate
+    carries the section. The system's actual product is a redacted document:
+    you asked for everything, you received what you were entitled to. Tenant
+    A's column comes back as redaction bars — blacked out by row-level
+    security, not by the app — while B's rows return intact. The audit table
+    keeps its named services and its guard marks, the caveats keep their
+    asterisks, and the response to the unfiltered request is the loudest
+    thing on the whole page: an 89px word that is not a number.
 
-    STILL, like the plate it answers. The first draft of this round kept one
-    gesture — the header rule drawing itself once per loop — and the
-    re-authored motion gate measured it at 1 of 127 samples visible: a 580x1
-    hairline drawn over two and a half seconds moves ~23 square units per
-    sample against a ~660 floor, so the gesture existed only for the
-    instrument that used to demand it. The plate's ANIMATED SVG line describes
-    the page, which remains true — five figures above perform their claims —
-    and the raster pass that used to descend this plate (spending about a
-    second of every loop lying across the author's degree and email — a
-    strikethrough on the one actionable line of the document) is gone with the
-    doctrine that demanded it, as are the two nudging text lines that fed the
-    same gate.
+    Round 21's live pass found the two defects that undid the figure: at
+    rest, A's and B's bars were near-identical grey slabs (the refusal only
+    existed for 0.77s of a 9.7s loop), and in dark the redaction fill was
+    one value off the returned rows. So the rest state now STATES the claim:
+    tenant A's rows are redaction — black ink in light, a void held by a
+    wire edge in dark, since a black bar on near-black paper vanishes —
+    while tenant B's rows carry visible record-lines with a continuous
+    emerald stream running through them: B's data flowing back, A's not,
+    always. Carrier: that stream, plus the auditor's scan (the same
+    instrument as plate I, turned inward, with the same bright index head).
+    Gesture: the redactions are RE-STRUCK once per loop — each bar lifts
+    faded, leaves its row blank for half a second (the void the database
+    returned), then wipes back across left-to-right in a tight 60ms cascade
+    down the column: the door slamming, and staying shut.
     """
-    H = 356
-    s = [head(H, "Colophon", "Six systems, five system cards and one expo booklet. Every number "
-                             "here is traceable to the repository it came from, and the page "
-                             "itself is animated SVG "
-                             "with no JavaScript and no server.", key="plate-7-colophon.svg")]
-    s.append(f""".ser{{font-family:ui-serif,Georgia,'Times New Roman',serif;font-size:34px;fill:{INK}}}
+    H, LOOP, a = 776, 9.7, EMERALD
+    SCAN = 17.1
+    # the redaction's material is per-theme: ink on paper, void on the dark slab
+    if THEME == "dark":
+        rbar = f'fill="#161B22" stroke="{WIRE}" stroke-width="1.4"'
+    else:
+        rbar = f'fill="{REDACT}"'
+    s = [head(H, "Cadence — six services audited, and the database that refuses",
+              "Cadence, a calendar that files plain sentences, audited by its own author and "
+              "drawn as a redacted disclosure. The IDOR: in six services — attachments, "
+              "calendars, events, task-lists, tasks and tags — any authenticated user could "
+              "read or delete another user's records by id. The guard marks per service: on "
+              "read, all six carry the guard in the query itself; on delete, three do and "
+              "three check ownership first. Tenant A's rows come back redacted — withheld "
+              "by the database, not by the app — while tenant B's rows return. Two caveats "
+              "stay on the plate: the tags test asserted the vulnerable query, and "
+              "task-lists still has no regression test. Below, an unfiltered SELECT "
+              "count(*) FROM tasks, run as B, comes back B only: PostgreSQL row-level "
+              "security refused the rest.", key="plate-5-refusal.svg",
+              frame=(45, 64, 28))]
+    # the re-strike: 0% is the finished frame (redacted), held for 84% of the
+    # loop; the bar lifts FADED (no visible retraction — the row is simply
+    # blank, which is what the database sent), then wipes back left-to-right.
+    # Round 21's bars returned to full width from a visible retraction, so
+    # the resting figure showed A and B identical — the opposite of the claim.
+    s.append(f""".vast{{font-size:89px;letter-spacing:-2px;fill:{INK};font-weight:600}}
+.red{{transform-box:fill-box;transform-origin:left center;animation:red {LOOP}s {EASE} infinite}}
+@keyframes red{{0%,84%{{opacity:1;transform:scaleX(1)}}85.5%{{opacity:0;transform:scaleX(1)}}
+  86.5%{{opacity:0;transform:scaleX(.02)}}90.5%{{opacity:1;transform:scaleX(.02)}}
+  95%,100%{{opacity:1;transform:scaleX(1)}}}}
+/* B's stream: the record-lines inside every returned row drift toward the
+   tenant — data coming back, continuously, on the side the guard allows.
+   8u is one dash cycle, so the wrap is seamless. */
+.bfl{{animation:bfl 1.7s linear infinite}}
+@keyframes bfl{{from{{stroke-dashoffset:0}}to{{stroke-dashoffset:-8}}}}
+.scan{{animation:scan {SCAN}s linear infinite;animation-delay:-6.1s}}
+@keyframes scan{{0%{{opacity:0;transform:translateY(0)}}3%{{opacity:1}}
+  94%{{opacity:1;transform:translateY(340px)}}97%,100%{{opacity:0;transform:translateY(340px)}}}}
 </style>{ground(H)}""")
-    s.append(f'<text x="{L}" y="{TOP}" class="lbl">EVERY NUMBER CHECKED IN CI</text>')
-    s.append(f'<text x="{R}" y="{TOP}" class="lbl" text-anchor="end">'
-             f'<tspan fill="{INK}">IX</tspan>  COLOPHON</text>')
-    s.append(f'<path d="M{L} 70H{R}" stroke="{WIRE}"/>')
 
-    # the serif answers the thesis plate — the only two sentences on this page
-    # the machine did not derive, in the only face the machine does not use
+    s.append(f'<text x="{L}" y="{TOP}" class="kick">V · CADENCE — THE ISOLATION AUDIT</text>')
+    s.append(f'<text x="{L}" y="88" class="say" style="fill:{INK}">SIX SERVICES, SELF-AUDITED</text>')
+    s.append(f'<text x="{L}" y="116" class="kick">ANY USER COULD READ OR DELETE ANOTHER’S ROWS BY ID</text>')
+    s.append(f'<text x="{L}" y="136" class="kick">THE MARKS SHOW WHERE EACH GUARD NOW SITS</text>')
+
+    # the auditor's scan, turned on the author's own code — the plate-I
+    # instrument, its index head in this section's emerald
+    s.append(f'<g class="scan"><path d="M{L} 158H{R}" stroke="{INK2}" stroke-width="1.6"/>'
+             f'<rect x="{L}" y="156.5" width="26" height="3" fill="{a}"/></g>')
+
+    for x, t in ((340, "READ"), (396, "DELETE"), (492, "TENANT A")):
+        s.append(f'<text x="{x}" y="170" class="kick">{t}</text>')
+    s.append(f'<text x="{R}" y="170" text-anchor="end" class="kick">TENANT B</text>')
+    # README order, which is the audit's order. The DELETE column tells the
+    # 2026-08 sharpening: three services carry the owner predicate in the
+    # DELETE itself, three check ownership first — a hollow mark is a
+    # different mechanism, not a missing one.
+    SVCS = [("attachments", False), ("calendars", False), ("events", True),
+            ("task-lists*", False), ("tasks", True), ("tags**", True)]
+    for i, (name, in_query) in enumerate(SVCS):
+        y = 200 + i * 34
+        s.append(f'<text x="{L}" y="{y}" class="lbl">{name}</text>')
+        s.append(f'<rect x="354" y="{y-10}" width="8" height="8" fill="{a}"/>')
+        if in_query:
+            s.append(f'<rect x="427" y="{y-10}" width="8" height="8" fill="{a}"/>')
+        else:
+            s.append(f'<rect x="427" y="{y-10}" width="8" height="8" fill="none" stroke="{a}" stroke-width="1.4"/>')
+        # A's row comes back REDACTED — there is nothing under the bar,
+        # because the database never sent the row
+        s.append(f'<rect class="red" x="480" y="{y-12}" width="110" height="16" rx="2" {rbar} '
+                 f'style="animation-delay:{round(i*0.06,2)}s"/>')
+        # B's row is the one that returns: record-lines inside, streaming
+        s.append(f'<g><rect x="620" y="{y-12}" width="110" height="16" rx="2" fill="{ROW}" stroke="{a}"/>'
+                 f'<path class="bfl" d="M626 {y-7}H724M626 {y-1}H724" stroke="{a}" '
+                 f'stroke-width="1.5" stroke-dasharray="4 4"/></g>')
+
+    # legends, in drawn marks rather than glyphs the font subset may not carry
+    s.append(f'<rect x="{L}" y="398" width="8" height="8" fill="{a}"/>')
+    s.append(f'<text x="166" y="406" class="fine">the guard is in the query</text>')
+    s.append(f'<rect x="390" y="398" width="8" height="8" fill="none" stroke="{a}" stroke-width="1.4"/>')
+    s.append(f'<text x="406" y="406" class="fine">checked first, then DELETE WHERE id</text>')
+    s.append(f'<rect x="{L}" y="426" width="24" height="10" {rbar}/>')
+    s.append(f'<text x="182" y="435" class="fine">withheld by row-level security, not by the app</text>')
+
+    # the footnotes ARE the finding — an audit that means it keeps its asterisks
+    s.append(f'<text x="{L}" y="466" class="fine" style="fill:{INK3}">*  task-lists — still has no regression test</text>')
+    s.append(f'<text x="{L}" y="486" class="fine" style="fill:{INK3}">** tags — its test asserted the vulnerable query. Green forever.</text>')
+
+    s.append(f'<path d="M{L} 518H{R}" stroke="{RULE}"/>')
+    # the records request, unfiltered on purpose
+    s.append(f'<text x="{L}" y="544" class="key">SELECT count(*) FROM tasks</text>')
+    s.append(f'<text x="470" y="544" class="fine">as B — unfiltered on purpose</text>')
+    # the response, at the largest type on the page — and it is not a number
+    s.append(f'<text x="{L}" y="660" class="vast">B only</text>')
+    s.append(f'<text x="520" y="660" class="lbl">ROW-LEVEL SECURITY</text>')
+    s.append(f'<text x="{L}" y="712" class="say">The app didn’t remember to filter.</text>')
+    s.append(f'<text x="{L}" y="{H-32}" class="say">The database refused.</text>')
+    return "".join(s) + "</svg>"
+
+
+# ────────────────────────────────────────────────────────────── PLATE VI
+def plate_applied() -> str:
+    """The sifting channel. Room: a sorting instrument in section.
+
+    Rebuilt from zero this round: the old plate drew the funnel as two stray
+    strokes, clip-art envelopes, three floating boxes and a dead bottom
+    third, and the client's word for it was exact. The argument — a model
+    allowed to say it doesn't know — is the best on the page, so the drawing
+    now performs it end to end.
+
+    A tapered channel with real walls. Three screens span the channel wall
+    to wall — 201 regex rules, then e5 embeddings, then the SetFit head,
+    cheapest first — labelled outside on level leaders. A continuous stream
+    of messages falls in at the mouth; most are decided at a screen and ride
+    a chute out to CLASSIFIED. The one message no layer is sure of lands on
+    the 0.85 gate — a solid member drawn across the foot, the one edge in
+    the channel nothing passes — pauses there, and is walked sideways to a
+    human, where it rests. Below the gate, nothing is guessed.
+
+    Carrier: the stream — five phased messages on three routes; at every
+    instant something is falling, being tested, or being handed over. The
+    still frame is honest: queued messages at the mouth, and the referred
+    one resting beside the human it was handed to (data-rest, check 11/16).
+    """
+    H, a = 712, CYAN
+    T1, T2, T3 = 8.6, 12.9, 15.5   # route periods — near-coprime, unfindable
+    s = [head(H, "Applied — a classifier allowed to say it doesn't know",
+              "Applied: a three-layer email classifier — 201 regex rules, then e5 embeddings, "
+              "then a fine-tuned SetFit head, cheapest first — drawn as a sifting channel a "
+              "stream of messages falls through. A message no layer is sure of stops at the "
+              "0.85 confidence gate and is walked to a human instead of guessed at. It "
+              "scores 0.979 macro-F1 — 2 mistakes on a 96-message evaluation set — measured "
+              "with the rules layer alone; CI fails the build below 0.95. Inference runs in "
+              "your browser: the int8 ONNX build is 22.8 megabytes, down from 90.4.",
+              key="plate-4-applied.svg", col=(110, 762), frame=(41, 37.6, 26))]
+
+    # ── the routes. Authored once here so the drawing and the motion cannot
+    # disagree: the chutes the messages ride are the chutes the plate draws.
+    P1 = "M440 104 C440 148 438 166 436 186 C434 208 420 224 342 232 C300 237 246 248 218 258"
+    P2 = ("M440 104 C440 148 438 166 436 186 C434 214 436 250 438 276 "
+          "C436 300 420 314 360 322 C316 328 250 340 222 348")
+    # the walk to the human happens in translate keyframes (dv below), so the
+    # refused message can be AUTHORED at its rest beside the human — with
+    # motion off, the still frame shows the handover already made.
+    s.append(f""".msg{{offset-rotate:0deg}}
+.pa0{{offset-path:path('{P1}');animation:pa0 {T1}s {EASE} infinite;animation-delay:-3.1s}}
+.pa1{{offset-path:path('{P1}');animation:pa1 {T1}s {EASE} infinite;animation-delay:-6.4s}}
+@keyframes pa0{{0%{{offset-distance:0%;opacity:0}}5%{{opacity:1}}24%{{offset-distance:27%}}
+  32%{{offset-distance:30%}}60%{{offset-distance:64%}}86%{{offset-distance:98%;opacity:1}}
+  91%{{opacity:0;offset-distance:100%}}100%{{opacity:0;offset-distance:100%}}}}
+@keyframes pa1{{0%{{offset-distance:0%;opacity:0}}5%{{opacity:1}}24%{{offset-distance:27%}}
+  32%{{offset-distance:30%}}60%{{offset-distance:64%}}86%{{offset-distance:98%;opacity:1}}
+  91%{{opacity:0;offset-distance:100%}}100%{{opacity:0;offset-distance:100%}}}}
+.pb0{{offset-path:path('{P2}');animation:pb0 {T2}s {EASE} infinite;animation-delay:-5.2s}}
+.pb1{{offset-path:path('{P2}');animation:pb1 {T2}s {EASE} infinite;animation-delay:-9.3s}}
+@keyframes pb0{{0%{{offset-distance:0%;opacity:0}}4%{{opacity:1}}18%{{offset-distance:18%}}
+  24%{{offset-distance:20%}}40%{{offset-distance:44%}}46%{{offset-distance:46%}}
+  70%{{offset-distance:74%}}88%{{offset-distance:98%;opacity:1}}92%{{opacity:0;offset-distance:100%}}
+  100%{{opacity:0;offset-distance:100%}}}}
+@keyframes pb1{{0%{{offset-distance:0%;opacity:0}}4%{{opacity:1}}18%{{offset-distance:18%}}
+  24%{{offset-distance:20%}}40%{{offset-distance:44%}}46%{{offset-distance:46%}}
+  70%{{offset-distance:74%}}88%{{offset-distance:98%;opacity:1}}92%{{opacity:0;offset-distance:100%}}
+  100%{{opacity:0;offset-distance:100%}}}}
+/* the refused message: authored at rest beside the human; the loop replays
+   its journey — inlet, three screens, the pause at the gate, the handover */
+.dv{{animation:dv {T3}s {EASE} infinite}}
+@keyframes dv{{0%,30%{{opacity:1;transform:translate(0,0)}}
+  32%{{opacity:0;transform:translate(0,0)}}
+  33%{{opacity:0;transform:translate(-208px,-385px)}}
+  35%{{opacity:1;transform:translate(-208px,-385px)}}
+  40%,43%{{transform:translate(-208px,-315px)}}
+  47%,50%{{transform:translate(-208px,-225px)}}
+  54%,57%{{transform:translate(-208px,-135px)}}
+  61%,70%{{transform:translate(-208px,-44px)}}
+  75%{{transform:translate(-146px,-32px)}}
+  80%{{transform:translate(-66px,-11px)}}
+  84%,100%{{opacity:1;transform:translate(0,0)}}}}
+/* the human reacts: a small rise to receive, the moment the refused message
+   arrives — same clock as the walk, so the nod can never miss the handover */
+.hum{{animation:hum {T3}s {EASE} infinite}}
+@keyframes hum{{0%,80%{{transform:translateY(0)}}84%{{transform:translateY(-3.5px)}}
+  90%,100%{{transform:translateY(0)}}}}
+</style>{ground(H)}""")
+
+    s.append(f'<text x="440" y="54" text-anchor="middle" class="kick">VI · APPLIED</text>')
+    s.append(f'<text x="440" y="84" text-anchor="middle" class="say" style="fill:{INK}">ALLOWED TO SAY IT DOESN’T KNOW</text>')
+
+    # ── the channel: one composed instrument — walls, screens, chute guides,
+    # gate, stream and the human, in a single <g> so the stream may pass
+    # through the screens (which is the diagram's whole point).
+    ch = []
+    # walls — the left one drawn in three lengths, because the chutes leave
+    # through real openings at their crossing heights; the right one stops
+    # short of the foot, and that opening is the door to the human
+    # walls at 3u — a full weight above the 2u screens, because a wall is the
+    # thing the stream cannot pass and the drawing should say so (round 21
+    # called the 1-2u channel "the most timid drawing in the set")
+    wx = lambda y: 320 + 70 * (y - 120) / 348
+    ch.append(f'<path d="M320 120L{wx(220):.1f} 220M{wx(244):.1f} 244L{wx(310):.1f} 310'
+              f'M{wx(334):.1f} 334L390 468" stroke="{WIRE}" stroke-width="3"/>')
+    ch.append(f'<path d="M560 120L{560 - 70 * 330 / 348:.1f} 450" stroke="{WIRE}" stroke-width="3"/>')
+    # screens: wall-to-wall at their depth, perforated
+    for sy in (186, 276, 366):
+        wl = 320 + 70 * (sy - 120) / 348
+        wr = 560 - 70 * (sy - 120) / 348
+        ch.append(f'<path d="M{wl:.0f} {sy}H{wr:.0f}" stroke="{WIRE}" stroke-width="2" stroke-dasharray="7 5"/>')
+        # level leader out to the label — perpendicular, never at an angle
+        ch.append(f'<path d="M{wr:.0f} {sy}H586" stroke="{WIRE}" stroke-width="1"/>')
+    # chute guides — the routes, drawn quietly so the still frame shows
+    # them. RULE at full strength: the contrast gate is right that a
+    # dimmed WIRE lands at 2.2:1, and 3:1 is the floor for marks that mean
+    for d in (P1, P2):
+        ch.append(f'<path d="{d}" fill="none" stroke="{RULE}" stroke-width="1" stroke-dasharray="2 6"/>')
+    # each chute ends at a TERMINUS — a bar the exiting message visibly
+    # arrives against before it fades. Round 21: "paths to nowhere, a third
+    # of the plate's width spent fading into empty space."
+    ch.append(f'<path d="M212 246V270M216 336V360" stroke="{WIRE}" stroke-width="2"/>')
+    # the gate: a solid member across the foot — the one edge nothing passes
+    ch.append(f'<rect x="390" y="468" width="100" height="4" fill="{a}"/>')
+    ch.append(f'<path d="M490 470H586" stroke="{WIRE}" stroke-width="1"/>')
+    # the walk to the human, drawn as the same faint guide
+    ch.append(f'<path d="M446 458C500 462 560 476 620 494" fill="none" stroke="{RULE}" stroke-width="1" stroke-dasharray="2 6"/>')
+    # the human: head and shoulders, on the plate, at the end of the walk —
+    # and it REACTS (the .hum rise) when the refused message reaches it
+    ch.append(f'<g class="hum"><g id="the-human"><circle cx="660" cy="497" r="8" fill="none" stroke="{INK2}" stroke-width="1.6"/>'
+              f'<path d="M644 526C644 512 676 512 676 526" fill="none" stroke="{INK2}" stroke-width="1.6"/></g></g>')
+    # the stream: four messages on the two decided routes, at 18u — round 21
+    # measured the 14u tokens as too small to track on the dark slab...
+    for cls in ("pa0", "pa1", "pb0", "pb1"):
+        ch.append(f'<rect class="msg {cls}" x="-9" y="-9" width="18" height="18" rx="3.5" '
+                  f'style="fill:{a};fill-opacity:{op(0.55)};stroke:{a};stroke-width:1.6"/>')
+    # ...and the refused one, authored at rest beside the human
+    ch.append(f'<rect class="dv" data-rest="the-human" data-rest-within="12" x="630" y="487" '
+              f'width="18" height="18" rx="3.5" '
+              f'style="fill:{INK2};fill-opacity:{op(0.7)};stroke:{INK2};stroke-width:1.6"/>')
+    s.append('<g>' + "".join(ch) + '</g>')
+
+    # the screen labels, on their level leaders
+    s.append(f'<text x="594" y="191" class="key">201 REGEX RULES</text>')
+    s.append(f'<text x="594" y="281" class="key">e5 EMBEDDINGS</text>')
+    s.append(f'<text x="594" y="371" class="key">SETFIT HEAD</text>')
+    s.append(f'<text x="594" y="213" class="fine">cheapest first —</text>')
+    s.append(f'<text x="594" y="231" class="fine">most mail stops</text>')
+    s.append(f'<text x="594" y="475" class="key" style="fill:{a}">0.85 GATE</text>')
+
+    # what leaves the channel decided — a rotated tab at the left edge,
+    # the one strip the stream can never enter
+    s.append(f'<text transform="rotate(-90 128 300)" x="128" y="300" text-anchor="middle" class="kick">CLASSIFIED — DECIDED AT A SCREEN</text>')
+
+    # the human's name, under the figure
+    s.append(f'<text x="660" y="556" text-anchor="middle" class="lbl">A HUMAN</text>')
+    s.append(f'<text x="400" y="510" text-anchor="middle" class="fine" style="fill:{INK3}">below the gate, nothing is guessed</text>')
+
+    # ── the verdict. 0.979 is the number with an artifact behind it,
+    # labelled for what it measures; the cascade's 0.9583 has none.
+    s.append(f'<path d="M{L} 580H{R}" stroke="{RULE}"/>')
+    s.append(f'<text x="{L}" y="628" class="hero">0.979</text>')
+    s.append(f'<text x="330" y="606" class="lbl">MACRO-F1 · 96-MSG EVAL SET · 2 MISTAKES</text>')
+    s.append(f'<text x="330" y="628" class="key" style="fill:{a}">RULES LAYER ONLY</text>')
+    s.append(f'<text x="330" y="650" class="fine">SetFit off, embeddings emptied · CI fails below 0.95</text>')
+    s.append(f'<text x="{L}" y="{H-30}" class="lbl">YOUR BROWSER</text>')
+    s.append(f'<text x="300" y="{H-30}" class="fine">int8 ONNX · 90.4 MB → 22.8 MB</text>')
+    s.append(f'<text x="{R}" y="{H-30}" text-anchor="end" class="fine" style="fill:{INK3}">never leaves your tab</text>')
+    return "".join(s) + "</svg>"
+
+
+# ────────────────────────────────────────────────────────────── PLATE VII
+def plate_visualassist() -> str:
+    """The depth sweep. Room: an instrument's field of view.
+
+    NEW this round, at the client's choice. The skills banner has sold Swift
+    since round one without a single Swift system on the page; this is the
+    system — an iPhone app that turns ARKit LiDAR depth into spatial audio,
+    haptics and speech for low-vision users. It is also the one system here
+    with no live link, and the plate says why in plain words: it needs an
+    iPhone with a lidar sensor. That is a reason, not an excuse.
+
+    Carrier: the sweep — the phone's field of view oscillating across the
+    obstacle field, on a curve that never stalls at the turn. The range
+    rings drift outward continuously. Gesture: each obstacle blinks the
+    moment the sweep crosses its bearing — and the crossing times are solved
+    against the ACTUAL easing the sweep runs on. Round 21 solved them
+    against a pure sine while the sweep ran the DRIFT bezier, and the live
+    pass caught the consequence: points pulsing with the beam visibly
+    elsewhere, causality broken at exactly the extreme bearings. The answer
+    half of the claim is drawn too: audio arcs at the phone's ear flash with
+    every detection — depth in, sound out.
+    """
+    H, a = 500, PINK
+    T, AMP = 8.9, 13.0             # sweep period and half-angle, degrees
+    EX, EY = 238, 227              # the emitter — the phone's sensor
+
+    # invert the DRIFT bezier: e(u) is progress through one half-sweep, so a
+    # bearing phi is crossed at u with e(u) = (phi+AMP)/(2AMP). Bisection on
+    # the y-polynomial, then the x-polynomial maps parameter to time.
+    def _cross(q: float) -> float:
+        p1x, p1y, p2x, p2y = .45, .05, .55, .95
+        bez = lambda c1, c2, t: 3*(1-t)**2*t*c1 + 3*(1-t)*t**2*c2 + t**3
+        lo, hi = 0.0, 1.0
+        for _ in range(60):
+            mid = (lo + hi) / 2
+            if bez(p1y, p2y, mid) < q: lo = mid
+            else: hi = mid
+        return bez(p1x, p2x, (lo + hi) / 2)
+    s = [head(H, "VisualAssist — LiDAR depth to spatial audio, in Swift",
+              "VisualAssist: an iPhone app for low-vision users, written in Swift — ARKit "
+              "LiDAR depth becomes spatial audio, haptics and speech, so the phone tells "
+              "you what is in front of you. 7,177 lines across 38 Swift files, 5 CI "
+              "workflows. It is the one system on this page you cannot click into, because "
+              "it needs an iPhone with a lidar sensor.",
+              key="plate-8-visualassist.svg", col=(118, 762), frame=(42, 64, 28))]
+    # obstacle bearings (degrees off axis) and ranges — the field the sweep
+    # reads. Pulse times fall where the sweep's sine crosses each bearing.
+    PTS = [(-11.5, 196), (-6, 262), (-1.5, 152), (2.5, 236), (7, 180), (11, 272)]
+    css = [f""".swp{{animation:swp {T}s {DRIFT} infinite;animation-delay:{-T/4}s}}
+@keyframes swp{{0%{{transform:rotate({-AMP}deg)}}50%{{transform:rotate({AMP}deg)}}100%{{transform:rotate({-AMP}deg)}}}}
+.ring{{animation:ring 11.7s linear infinite}}
+@keyframes ring{{from{{stroke-dashoffset:0}}to{{stroke-dashoffset:-11}}}}"""]
+    crossings = []
+    for i, (phi, _r) in enumerate(PTS):
+        # the sweep runs -AMP -> +AMP over 0-50% and back over 50-100%, DRIFT
+        # eased per segment; solve each segment's bezier for this bearing
+        q = max(0.0, min(1.0, (phi + AMP) / (2 * AMP)))
+        t1 = 50 * _cross(q)
+        t2 = 50 + 50 * _cross(1 - q)
+        t1, t2 = sorted((t1, t2))
+        crossings += [t1, t2]
+        seg = "".join(
+            f"{max(t-2.2,0):.1f}%{{transform:scale(1)}}{t:.1f}%{{transform:scale(1.7)}}"
+            f"{min(t+2.2,100):.1f}%{{transform:scale(1)}}" for t in (t1, t2))
+        css.append(f".pt{i}{{transform-box:fill-box;transform-origin:center;"
+                   f"animation:pt{i} {T}s {BREATHE} infinite;animation-delay:{-T/4}s}}\n"
+                   f"@keyframes pt{i}{{0%{{transform:scale(1)}}{seg}100%{{transform:scale(1)}}}}")
+    # the output: audio arcs at the phone's left edge flash pink at EVERY
+    # crossing — one detection, one utterance. Colour, not opacity, so the
+    # authored frame stays the finished frame. Overlapping windows merge so
+    # the keyframe percentages stay strictly increasing.
+    ev: list[list[float]] = []
+    for t in sorted(crossings):
+        if ev and t - 1.7 <= ev[-1][1]: ev[-1][1] = min(t + 1.7, 100.0)
+        else: ev.append([max(t - 1.7, 0.0), min(t + 1.7, 100.0)])
+    aud = "".join(f"{a0:.1f}%{{stroke:{WIRE}}}{(a0+a1)/2:.1f}%{{stroke:{a}}}{a1:.1f}%{{stroke:{WIRE}}}"
+                  for a0, a1 in ev)
+    css.append(f".aud{{animation:aud {T}s linear infinite;animation-delay:{-T/4}s}}\n"
+               f"@keyframes aud{{0%{{stroke:{WIRE}}}{aud}100%{{stroke:{WIRE}}}}}")
+    s.append("\n".join(css) + f"</style>{ground(H)}")
+    # the cone's falloff: dense at the sensor, thin where the points live —
+    # authored per theme (light's old flat 0.64 wash drowned its own points)
+    fo0, fo1 = (0.26, 0.05) if THEME == "dark" else (0.32, 0.07)
+    s.append(f'<radialGradient id="fov" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="290">'
+             f'<stop offset="0" stop-color="{a}" stop-opacity="{fo0}"/>'
+             f'<stop offset="1" stop-color="{a}" stop-opacity="{fo1}"/></radialGradient>')
+
+    s.append(f'<text x="{L}" y="{TOP}" class="kick">VII · VISUALASSIST</text>')
+    s.append(f'<text x="{R}" y="{TOP}" text-anchor="end" class="key">SWIFT · ARKIT · LIDAR</text>')
+    s.append(f'<text x="{L}" y="88" class="say" style="fill:{INK}">CAN A PHONE TELL YOU WHAT IS IN FRONT OF YOU?</text>')
+
+    # ── the scene: phone, sweep, range rings, obstacles. One composed
+    # instrument — the sweep legitimately passes over everything in it.
+    sc = []
+    # the phone, drawn as a phone: body, screen line, the sensor it sweeps from
+    sc.append(f'<rect x="176" y="168" width="58" height="118" rx="9" fill="none" stroke="{a}" stroke-width="2"/>')
+    sc.append(f'<path d="M196 178H214" stroke="{a}" stroke-width="1.5" stroke-linecap="round"/>')
+    sc.append(f'<circle cx="{EX}" cy="{EY}" r="3.5" fill="{a}"/>')
+    # the audio out: two arcs at the phone's ear, flashing with each detection
+    sc.append(f'<path class="aud" d="M170 220A8 8 0 0 0 170 234" fill="none" '
+              f'style="stroke:{WIRE}" stroke-width="2" stroke-linecap="round"/>')
+    sc.append(f'<path class="aud" d="M164 214A14 14 0 0 0 164 240" fill="none" '
+              f'style="stroke:{WIRE}" stroke-width="2" stroke-linecap="round"/>')
+    # the sweep: a wedge rotating about the sensor, filled with the radial
+    # falloff and stroked at full accent so its edge stays legible (WCAG:
+    # the component, not every channel of it).
+    wr = 290
+    wy = wr * math.tan(math.radians(10.4))
+    sc.append(f'<g transform="translate({EX},{EY})"><path class="swp" '
+              f'd="M0 0L{wr} {-wy:.0f}A{wr} {wr} 0 0 1 {wr} {wy:.0f}Z" '
+              f'style="fill:url(#fov)" stroke="{a}" stroke-width="1.4"/></g>')
+    # range rings, drifting outward — the depth field being read continuously
+    for rr in (210, 280):
+        y0 = rr * math.sin(math.radians(19))
+        x0 = rr * math.cos(math.radians(19))
+        sc.append(f'<path class="ring" d="M{EX+x0:.0f} {EY-y0:.0f}A{rr} {rr} 0 0 1 {EX+x0:.0f} {EY+y0:.0f}" '
+                  f'fill="none" stroke="{WIRE}" stroke-width="1" stroke-dasharray="3 8"/>')
+    # the obstacles: what the sweep finds, blinking as it crosses them
+    for i, (phi, rr) in enumerate(PTS):
+        px = EX + rr * math.cos(math.radians(phi))
+        py = EY + rr * math.sin(math.radians(phi))
+        sc.append(f'<circle class="pt{i}" cx="{px:.0f}" cy="{py:.0f}" r="4.5" fill="{a}"/>')
+    s.append('<g>' + "".join(sc) + '</g>')
+
+    # what the reading becomes
+    s.append(f'<text x="{L}" y="400" class="fine">LIDAR DEPTH → SPATIAL AUDIO + HAPTICS + SPEECH</text>')
+    s.append(f'<text x="{L}" y="424" class="key">7,177 LINES · 38 SWIFT FILES · 5 CI WORKFLOWS</text>')
+    # the honest close: the only system here without a link, and why
+    s.append(f'<text x="{L}" y="452" class="say" style="fill:{INK}">THE ONE SYSTEM HERE YOU CANNOT CLICK INTO</text>')
+    s.append(f'<text x="{L}" y="{H-28}" class="fine" style="fill:{INK3}">no live link — it needs an iPhone with a lidar sensor</text>')
+    return "".join(s) + "</svg>"
+
+
+# ────────────────────────────────────────────────────────────── FOOTER
+def plate_colophon() -> str:
+    """The imprint. Room: a printer's colophon, shrunk to a footer.
+
+    Centered, like the title page it answers — the serif's bracket made
+    spatial, closing where it opened. The six product marks turn as a
+    printer's device inside a drifting ring: the page's quietest motion,
+    the arc's landing. One line of mechanism under it; the README's own
+    footer carries the contact.
+    """
+    H, CX = 312, 440
+    s = [head(H, "Colophon", "Colophon: every number on this page is re-derived in CI from a "
+                             "pinned commit, except section one, which is attested and says so. "
+                             "The page itself is animated SVG with no JavaScript and no server. "
+                             "If a number here is wrong, it is wrong in public.",
+              key="plate-7-colophon.svg", col=(118, 762), frame=(43, 155.7, 24))]
+    s.append(f""".ser{{font-family:ui-serif,Georgia,'Times New Roman',serif;font-size:34px;fill:{INK}}}
+.dev{{animation:dev 31s linear infinite}}
+@keyframes dev{{from{{transform:rotate(0deg)}}to{{transform:rotate(360deg)}}}}
+/* each mark counter-rotates about its own centre so it ORBITS upright —
+   round 21's live pass caught the seven glyphs upside down for half of
+   every 31s cycle, in both themes */
+.cnt{{transform-box:fill-box;transform-origin:center;animation:cnt 31s linear infinite}}
+@keyframes cnt{{from{{transform:rotate(0deg)}}to{{transform:rotate(-360deg)}}}}
+.hal{{animation:hal 13.9s linear infinite}}
+@keyframes hal{{from{{stroke-dashoffset:0}}to{{stroke-dashoffset:-44}}}}
+</style>{ground(H)}""")
+    s.append(f'<text x="{CX}" y="{TOP}" text-anchor="middle" class="kick">COLOPHON — EVERY NUMBER CHECKED IN CI</text>')
+
+    # the serif answers the thesis — the only two sentences on this page the
+    # machine did not derive, in the only face the machine does not use
     for i, ln in enumerate(["If a number here is wrong,", "it is wrong in public."]):
-        s.append(f'<text x="{L}" y="{124 + i*42}" class="ser">{ln}</text>')
+        s.append(f'<text x="{CX}" y="{110 + i*42}" text-anchor="middle" class="ser">{ln}</text>')
 
-    for i, ln in enumerate(["Six systems. Five system cards, one booklet.",
-                            "Every number traces to its repo, except §I."]):
-        s.append(f'<text class="say" x="150" y="{214 + i*28}">{ln}</text>')
-    s.append(f'<text x="150" y="270" class="fine" style="fill:{INK3}">§I is my employment and DataFest work — attested, not derivable</text>')
-    s.append(f'<text x="150" y="298" class="lbl">ANIMATED SVG · NO JAVASCRIPT · NO SERVER</text>')
-    s.append(f'<text x="150" y="{H-30}" class="lbl">B.S. CS · MIAMI UNIVERSITY ’26</text>')
-    s.append(f'<text x="{R}" y="{H-30}" class="lbl" text-anchor="end">aesh.03.23@gmail.com</text>')
+    # the printer's device: six marks turning slowly inside a drifting ring
+    dev = [f'<path class="hal" d="M-52 0A52 52 0 1 1 52 0A52 52 0 1 1 -52 0" fill="none" stroke="{RULE}" stroke-width="1" stroke-dasharray="2 9"/>']
+    dev.append('<g class="dev">')
+    for k, (nm, c) in enumerate(LEGEND):
+        ang = math.radians(k * 60)
+        x, y = 30 * math.sin(ang), -30 * math.cos(ang)
+        dev.append('<g class="cnt">' + logo(nm, x - 8, y - 8, 16, c) + '</g>')
+    dev.append('</g>')
+    s.append(f'<g transform="translate({CX},218)">' + "".join(dev) + '</g>')
+
+    s.append(f'<text x="{CX}" y="{H-28}" text-anchor="middle" class="lbl">ANIMATED SVG · NO JAVASCRIPT · NO SERVER</text>')
     return "".join(s) + "</svg>"
 
 
 PLATES = {
     "plate-0-thesis.svg": plate_thesis, "plate-0b-work.svg": plate_work,
     "plate-1-glyph.svg": plate_glyph,
-    "plate-2-jetpack.svg": plate_jetpack, "plate-3-cadence.svg": plate_cadence,
-    "plate-4-applied.svg": plate_applied, "plate-5-refusal.svg": plate_refusal,
-    "plate-6-release.svg": plate_release, "plate-6b-automl.svg": plate_automl,
+    "plate-2-jetpack.svg": plate_jetpack,
+    "plate-4-applied.svg": plate_applied, "plate-5-refusal.svg": plate_cadence,
+    "plate-6b-automl.svg": plate_automl,
+    "plate-8-visualassist.svg": plate_visualassist,
     "plate-7-colophon.svg": plate_colophon,
 }
 
 # ────────────────────────────────────────────────── mobile set
-# At GitHub's real 324px column a 16-unit label on an 880 canvas renders at
-# 5.9px — unreadable. So the phone gets its own plates: a 440 canvas at the SAME
-# absolute type sizes (≈11.8px rendered), carrying the hero and one line. The
-# argument itself is already in the markdown, which is selectable, searchable
-# and theme-native. Served via <picture media="(max-width:500px)">.
-#
-# The <desc> here used to be the desktop plate's string verbatim, and it
-# described a picture the mobile file does not draw: m-5's said six services
-# are "drawn service by service" over three text nodes, m-3's said a sentence
-# "is labelled in place" over a plate that draws one number. The README's
-# single <img> alt stays the desktop description — <picture> permits one alt,
-# and that string describes the CLAIM, true whichever source loaded — but the
-# file's own <desc>/aria-label is what a reader gets when the SVG is opened
-# directly, so each mobile plate now carries a description of ITSELF. gate.mjs
-# check 9 holds the pair honest in the direction that matters here: every
-# number a mobile plate DRAWS must appear in its own description.
+# At GitHub's real 324px column a label on an 880 canvas renders unreadable,
+# so the phone gets its own plates: a 440 canvas on the SAME 13/21/34/55
+# scale, carrying the hero and one thought. Each m-plate keeps a MOTIF of its
+# section's room (the stamp, the copybook rules with real error labels, the
+# bench bars, the sieve, the redaction bars, the dial arc, the sweep); the
+# motifs are graphics only — no text, so no desc/claims churn. Round 21:
+# every mobile plate also carries the page's smallest carrier, a highlight
+# gliding along its accent rule, so the phone reader's page breathes too.
 MW = 440
 
 
+def _digits_row(y: float, n: int, x0: float, pitch: float, sc: float,
+                start: int = 0) -> str:
+    """A copybook rule with real error labels sitting on it (from the same
+    pinned CSV the desktop field uses)."""
+    _e = json.loads((ROOT / "errors.json").read_text())
+    out = [f'<path d="M16 {y}H424" stroke="{RULE}" stroke-width="1"/>']
+    for i in range(start, start + n):
+        d = DIGITS[_e["true"][i]]
+        out.append(f'<g opacity="{op(0.72)}" {digit(d, x0 + (i - start) * pitch, y - 150 * sc, sc, centre=pitch - 2)}>'
+                   f'<path d="{d}" fill="none" stroke="{AMBER}" stroke-width="14" stroke-linecap="round"/></g>')
+    return "".join(out)
+
+
+def _motif(name: str) -> str:
+    if name == "copybook":
+        return _digits_row(212, 24, 34, 15.5, 0.055)
+    if name == "bench":
+        return (f'<path d="M300 84V148" stroke="{WIRE}" stroke-width="1"/>'
+                f'<rect x="300" y="92" width="18.5" height="12" fill="{INK2}"/>'
+                f'<rect x="300" y="118" width="118" height="12" fill="{LIME}"/>')
+    if name == "sieve":
+        # compact and held above the body lines — the desktop channel owns
+        # the full drawing; this is its monogram
+        return (f'<g><path d="M330 70L348 132" stroke="{WIRE}" stroke-width="1.6"/>'
+                f'<path d="M410 70L392 132" stroke="{WIRE}" stroke-width="1.6"/>'
+                f'<path d="M334 86H406" stroke="{WIRE}" stroke-width="1.4" stroke-dasharray="5 4"/>'
+                f'<path d="M338 102H402" stroke="{WIRE}" stroke-width="1.4" stroke-dasharray="5 4"/>'
+                f'<path d="M342 118H398" stroke="{WIRE}" stroke-width="1.4" stroke-dasharray="5 4"/>'
+                f'<rect x="348" y="138" width="44" height="3" fill="{CYAN}"/>'
+                f'<circle cx="416" cy="156" r="6" fill="none" stroke="{INK2}" stroke-width="1.4"/></g>')
+    if name == "redact":
+        return (f'<rect x="300" y="84" width="110" height="12" rx="2" fill="{REDACT}"/>'
+                f'<rect x="300" y="104" width="110" height="12" rx="2" fill="{REDACT}"/>'
+                f'<rect x="300" y="124" width="110" height="12" rx="2" fill="{ROW}" stroke="{EMERALD}"/>')
+    if name == "dial":
+        out = ['<g>']
+        for j in range(7):
+            a0, a1 = j * 51.43 + 4, (j + 1) * 51.43 - 4
+            p = lambda deg, r=34: (390 + r * math.sin(math.radians(deg)),
+                                   104 - r * math.cos(math.radians(deg)))
+            x0, y0 = p(a0); x1, y1 = p(a1)
+            col = INDIGO if j == 6 else ROW
+            out.append(f'<path d="M{x0:.1f} {y0:.1f}A34 34 0 0 1 {x1:.1f} {y1:.1f}" '
+                       f'fill="none" stroke="{col}" stroke-width="6"/>')
+        th = math.radians(6 * 51.43 + 25.7)
+        out.append(f'<path d="M{390 + 10*math.sin(th):.1f} {104 - 10*math.cos(th):.1f}'
+                   f'L{390 + 26*math.sin(th):.1f} {104 - 26*math.cos(th):.1f}" '
+                   f'stroke="{INDIGO}" stroke-width="1.5"/></g>')
+        return "".join(out)
+    if name == "sweep":
+        return (f'<g><circle cx="316" cy="116" r="3" fill="{PINK}"/>'
+                f'<path d="M338 92A34 34 0 0 1 338 140" fill="none" stroke="{PINK}" stroke-width="2" stroke-linecap="round"/>'
+                f'<path d="M352 78A54 54 0 0 1 352 154" fill="none" stroke="{PINK}" stroke-width="2" stroke-linecap="round" stroke-opacity="0.8"/>'
+                f'<circle cx="398" cy="104" r="4" fill="{PINK}"/>'
+                f'<circle cx="408" cy="132" r="4" fill="{PINK}"/></g>')
+    if name == "stamp":
+        return (f'<g transform="translate(80,84) rotate(-8)">'
+                f'<rect x="-52" y="-16" width="104" height="32" rx="5" fill="none" stroke="{INK3}" stroke-width="1.6"/>'
+                f'<text x="0" y="4" text-anchor="middle" class="k" style="fill:{INK3};font-size:12px;letter-spacing:2px">ATTESTED</text></g>')
+    return ""
+
+
 def plate_mobile(accent: str, kicker: str, hero: str, unit: str,
-                 line1: str, line2: str, desc: str) -> str:
-    h = 224   # a 64px hero's glyph box is 84u tall; 208 could not hold it
-    # Same dissolution as the desktop set: no slab, no border, no accent bar
-    # at x=0 — the client's "cards" complaint named the mobile device by
-    # description, since the 4u bar was borrowed FROM this set. The system's
-    # hue survives as the header rule under the kicker: one accent mark with a
-    # referent (this system's colour, taught by the thesis sheet), not a frame.
-    # The first rect carries the canvas colour at fill-opacity 0 for the same
-    # reason as ground() above.
-    return "".join([
+                 line1: str, line2: str, desc: str,
+                 layout: str = "left", motif: str = "", glide: float = 9.7) -> str:
+    h = 224
+    mid = layout == "center"
+    ax = 'text-anchor="middle" ' if mid else ''
+    tx = 220 if mid else 34
+    hx, ha = (220, 'text-anchor="middle" ') if mid else ((406, 'text-anchor="end" ') if layout == "ledger" else (34, ''))
+    rx, rw = (130, 180) if mid else (34, MW - 68)
+    parts = [
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {MW} {h}" width="{MW}" height="{h}" '
         f'role="img" aria-label="{desc}"><title>{kicker}</title><desc>{desc}</desc><style>'
         f"@font-face{{font-family:'M';src:url(data:font/woff2;base64,{FONT}) format('woff2')}}"
         f"text{{font-family:'M',ui-monospace,SFMono-Regular,Menlo,monospace}}"
-        f".k{{font-size:16px;letter-spacing:1.8px;fill:{INK2}}}"
-        f".n{{font-size:64px;letter-spacing:-1.5px;fill:{INK};font-weight:600}}"
-        f".u{{font-size:26px;fill:{INK2}}}"
-        f".t{{font-size:16px;fill:{INK2}}}"
+        f".k{{font-size:13px;letter-spacing:2px;fill:{INK2}}}"
+        f".n{{font-size:55px;letter-spacing:-1px;fill:{INK};font-weight:600}}"
+        f".u{{font-size:34px;letter-spacing:-0.5px;fill:{INK2}}}"
+        f".t{{font-size:21px;fill:{INK2}}}"
+        # the glide: a light running the accent rule — constant speed (a
+        # runner, not a pendulum: the pendulum's turns measured as stalls),
+        # fading out at the far end and back in at the head
+        f".gl{{animation:gl {glide}s linear infinite}}"
+        f"@keyframes gl{{0%{{transform:translateX(0);opacity:1}}86%{{transform:translateX({rw-46}px);opacity:1}}"
+        f"90%{{opacity:0}}91%{{transform:translateX(0);opacity:0}}95%{{opacity:1}}100%{{transform:translateX(0);opacity:1}}}}"
+        f"@media (prefers-reduced-motion: reduce){{*{{animation:none!important}}}}"
         f"</style>"
         f'<rect width="{MW}" height="{h}" fill="{GROUND}" fill-opacity="0"/>',
-        f'<text x="34" y="40" class="k">{kicker}</text>',
-        f'<rect x="34" y="52" width="{MW-68}" height="2" fill="{accent}"/>',
-        f'<text x="34" y="124" class="n">{hero}<tspan class="u">{unit}</tspan></text>',
-        f'<text x="34" y="168" class="t">{line1}</text>',
-        f'<text x="34" y="194" class="t">{line2}</text>',
-        "</svg>"])
+        f'<text x="{tx}" y="40" {ax}class="k">{kicker}</text>']
+    if layout == "ledger":
+        # the account book opens with a double rule, and the figure sits at
+        # the right edge — the desktop ledger's two signatures
+        parts.append(f'<g><path d="M34 50H406M34 54H406" stroke="{accent}"/>'
+                     f'<rect class="gl" x="34" y="49" width="46" height="6" fill="{INK}"/></g>')
+    else:
+        parts.append(f'<g><rect x="{rx}" y="52" width="{rw}" height="2" fill="{accent}"/>'
+                     f'<rect class="gl" x="{rx}" y="51" width="46" height="4" fill="{INK}"/></g>')
+    hero_y = 124
+    parts.append(f'<text x="{hx}" y="{hero_y}" {ha}class="n">{hero}<tspan class="u">{unit}</tspan></text>')
+    l_y = (168, 194)
+    parts.append(f'<text x="{tx}" y="{l_y[0]}" {ax}class="t">{line1}</text>')
+    parts.append(f'<text x="{tx}" y="{l_y[1]}" {ax}class="t">{line2}</text>')
+    if motif:
+        parts.append(_motif(motif))
+    return "".join(parts) + "</svg>"
 
 
-# The accent is the COLOUR'S NAME, resolved per theme at write time — a hex
-# baked into this dict would hand the light pass the dark palette.
+# (kicker, accent name, hero, unit, line1, line2, desc, layout, motif, glide s)
+# The accent is the COLOUR'S NAME, resolved per theme at write time. Glide
+# periods are all different, so no two plates on the phone breathe together.
 MOBILE = {
  "m-0-thesis.svg": ("AYUSH YADAV · CINCINNATI, OH", "INK2", "6", " systems",
    "From SIMD kernels to the", "browser they run in.",
    "Ayush Yadav, a computer science graduate in Cincinnati, Ohio, open to "
    "full-time engineering roles: 6 systems, from SIMD kernels to the browser "
-   "they run in."),
+   "they run in.", "center", "", 8.1),
  "m-0b-work.svg": ("WORK · MIAMI UNIVERSITY", "INK2", "57.8", "M rows",
-   "from 1.6M Oracle query logs —", "a year of paid work, attested.",
+   "from 1.6M Oracle query logs —", "a year of it, attested.",
    "Experience, attested by the author rather than derived from a public "
    "repository: as ITSM Data Integration Intern at Miami University, a Python "
    "pipeline turned 1.6 million Oracle Analytics query logs into a 57.8 "
-   "million-row field-usage table."),
- "m-1-glyph.svg": ("GLYPH", "AMBER", "97.01", "%", "A neural net written from", "scratch in C++. 299 wrong.",
-   "Glyph: a neural network written from scratch in C++. It scores 97.01 percent on the MNIST test set — 299 wrong."),
+   "million-row field-usage table.", "ledger", "stamp", 10.9),
+ "m-1-glyph.svg": ("GLYPH", "AMBER", "3.5", "×", "Someone else’s net, made", "faster by hand. 97.01% held.",
+   "Glyph: a course-provided neural network, hand-optimised — 3.5 times faster on the committed dot benchmark, accuracy unchanged at 97.01 percent.",
+   "left", "copybook", 12.3),
  "m-2-jetpack.svg": ("JETPACK", "LIME", "6.4", "×", "Parallel gzip on JDK 25.", "The JDK intrinsic still wins.",
-   "jetpack: parallel gzip on JDK 25, a 6.4 times speedup over one thread — and the JDK's own checksum intrinsic still wins."),
- "m-3-cadence.svg": ("CADENCE", "EMERALD", "36", "", "handlers bundled into one", "function. The plan allows 12.",
-   "Cadence: 36 API handlers bundled into one serverless function, because the hosting plan allows 12."),
+   "jetpack: parallel gzip on JDK 25, a 6.4 times speedup over one thread — and the JDK's own checksum intrinsic still wins.",
+   "left", "bench", 9.1),
  "m-4-applied.svg": ("APPLIED", "CYAN", "0.979", "", "macro-F1, rules layer only.", "Below 0.85 it asks a human.",
-   "Applied: an email classifier scoring 0.979 macro-F1 with the rules layer alone. Below the 0.85 confidence gate it asks a human rather than guessing."),
- "m-5-refusal.svg": ("THE REFUSAL", "EMERALD", "B", " only", "The app didn't remember", "to filter. The database refused.",
-   "The refusal: a query run as tenant B returns B only. The app didn't remember to filter; PostgreSQL row-level security refused."),
- # This entry once described a plate that no longer exists and asserted "Not
- # public" after the repository went public. It survived because stale prose
- # carrying no digits passes the number check silently. Parked is not a
- # licence to serve a false sentence.
- "m-6-release.svg": ("LIFEQUEST", "PINK", "10", "", "Prisma models, 14 endpoints.", "One tree, built desktop and web.",
-   "LifeQuest: routines as tracked quests — 10 Prisma models and 14 REST endpoints behind one source tree, built desktop and web."),
- "m-6b-automl.svg": ("AGENTIC AUTOML", "INDIGO", "44", "", "tools in the registry. The model", "only ever holds its phase's set.",
-   "Agentic AutoML: dataset in, trained model out. Its registry holds 44 tool definitions, but the model only ever holds the set its phase needs."),
- # The desktop colophon draws ANIMATED SVG and is animated. This one drew the
- # word "Animated" at 64px and carries no @keyframes at all — the whole mobile
- # set is static by design. Nothing could catch it: motion.mjs globs plate-*
- # only, and gate.mjs wraps its motion checks in `if (dur)`, so a plate with no
- # animations is exempt from every one of them. Same class of defect as
- # m-6-release telling phone readers AutoML was private: stale prose carrying
- # no digits passes the number check in silence.
+   "Applied: an email classifier scoring 0.979 macro-F1 with the rules layer alone. Below the 0.85 confidence gate it asks a human rather than guessing.",
+   "left", "sieve", 11.3),
+ "m-5-refusal.svg": ("CADENCE", "EMERALD", "B", " only", "The app didn’t remember to", "filter. The database refused.",
+   "Cadence: an unfiltered query run as tenant B returns B only. The app didn't remember to filter; PostgreSQL row-level security refused.",
+   "left", "redact", 8.9),
+ "m-6b-automl.svg": ("AGENTIC AUTOML", "INDIGO", "44", "", "tools in the registry. The", "model holds its phase’s set.",
+   "Agentic AutoML: dataset in, trained model out. Its registry holds 44 tool definitions, but the model only ever holds the set its phase needs.",
+   "left", "dial", 12.9),
+ "m-8-visualassist.svg": ("VISUALASSIST", "PINK", "LiDAR", "", "Depth in, spatial audio out.", "Needs an iPhone’s sensor.",
+   "VisualAssist: LiDAR depth in, spatial audio out — an iPhone app for "
+   "low-vision users, in Swift. The one system here with no live link, "
+   "because it needs an iPhone with a lidar sensor.", "left", "sweep", 10.1),
  "m-7-colophon.svg": ("COLOPHON", "RULE", "SVG", "",
    "No JavaScript, no server,", "no external assets.",
    "Colophon: this page is SVG with no JavaScript, no server and no "
-   "external assets."),
+   "external assets.", "center", "", 7.9),
 }
 
 # ────────────────────────────────────────────────── the build-time gate
-# Cheap structural checks only. The REAL layout gate is build/gate.mjs, which
-# renders every plate in Chromium and measures 40 samples across each loop —
-# arithmetic here cannot see a transform, and pretending otherwise is how nine
-# collisions once shipped under a PASS.
+# Cheap structural checks only. The REAL layout gate is build/gate.mjs.
 import re as _re, sys as _sys, xml.dom.minidom as _xml
 
 _fail = []
-# One build, two documents. Dark keeps every path it has always had — it is
-# the README's <img> fallback and the thing every external pin points at.
-# Light lands in assets/light/ under the SAME basenames: build/gate.mjs keys
-# its second measuring pass on that directory, so the naming is load-bearing.
+# One build, two documents. Dark keeps every path it has always had; light
+# lands in assets/light/ under the SAME basenames (gate.mjs keys on that).
 for _theme in ("dark", "light"):
     set_theme(_theme)
     _out = OUT if _theme == "dark" else OUT / "light"
     _out.mkdir(exist_ok=True)
+    # a plate this build no longer authors must not survive on disk: the
+    # gates sweep the DIRECTORY, so a stale file is a stale claim surface
+    for _stale in _out.glob("*.svg"):
+        if _stale.name not in PLATES and _stale.name not in MOBILE:
+            _stale.unlink()
+            print(f"{_theme:5s} {_stale.name}: removed (no longer authored)")
     for fn, gen in PLATES.items():
         path = _out / fn
         path.write_text(gen())
@@ -1490,15 +1608,13 @@ for _theme in ("dark", "light"):
         except Exception as e:
             _fail.append(f"{_theme}/{fn}: MALFORMED XML — {e}")
         print(f"{_theme:5s} {fn}: {path.stat().st_size:,} bytes")
-    for _fn, (_k, _acc, _n, _u, _l1, _l2, _desc) in MOBILE.items():
-        (_out / _fn).write_text(plate_mobile(globals()[_acc], _k, _n, _u, _l1, _l2, _desc))
+    for _fn, (_k, _acc, _n, _u, _l1, _l2, _desc, _lay, _mo, _gl) in MOBILE.items():
+        (_out / _fn).write_text(plate_mobile(globals()[_acc], _k, _n, _u, _l1, _l2, _desc, _lay, _mo, _gl))
     print(f"{_theme:5s} mobile set: {len(MOBILE)} plates at {MW}w")
 set_theme("dark")
 
 # ────────────────────────────────────────────────── alt/desc/README agreement
-# Every description is authored once in ALT and must reach the README verbatim —
-# three surfaces drifted apart once and left a retracted claim alive in the
-# accessible text.
+# Every description is authored once in ALT and must reach the README verbatim.
 (OUT / "alt.json").write_text(json.dumps(ALT, indent=2, sort_keys=True))
 _readme = ROOT.parent / "README.md"
 if _readme.exists():
@@ -1515,4 +1631,3 @@ if _fail:
     for f in _fail:
         print(f"  · {f}")
     _sys.exit(1)
-print("\nBUILD OK — all plates parse, alts agree. Run `node build/gate.mjs` to measure them.")

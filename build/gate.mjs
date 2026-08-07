@@ -33,14 +33,21 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 // of deliberately-broken plates. A check nobody has tried to break is a check
 // nobody knows is connected.
 const ASSETS = process.env.GATE_ASSETS || join(ROOT, 'assets');
-// screen-space bounds of the type column. The plates author at x=150..730 but
-// the viewBox starts at 86, so the column lands 64..644 in rendered units.
+// DEFAULT screen-space bounds of the type column (authored 150..730 minus the
+// viewBox offset 86). RE-AUTHORED, round 20: the column is now a PER-PLATE
+// DECLARATION — each desktop plate carries data-col="left,right" in authored
+// units and check 5 holds its text to that. One fixed column for all ten
+// figures was the frontispiece armature wearing a gate's uniform: the client
+// rejected the sameness it enforced, and the redesign gives each section its
+// own spatial system (a centered title page, a full-bleed copybook, a radial
+// dial — none of which fit one column). The check itself survives untouched
+// in spirit: text still may not drift past its plate's declared frame, and a
+// declaration is a decision a reviewer can read in the file.
 const LEFT = 64, RIGHT = 644;
 const M_LEFT = 30, M_RIGHT = 412;   // the 440-wide mobile canvas
 const STEPS = 40;                   // samples across one loop
 const TOL = 1.5;                    // antialiasing slack, in viewBox units
 const fails = [];
-const frame = [];   // desktop-only: first ink and right edge, for check 12 (carries its theme tag)
 
 const browser = await chromium.launch();
 const page = await browser.newPage();
@@ -100,6 +107,13 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
 
     const svgEl = document.querySelector('svg');
     const H = svgEl.viewBox.baseVal.height, W = svgEl.viewBox.baseVal.width;
+    // the plate's own declared column, if it carries one (see the note at the
+    // top of the file). Authored units; the viewBox offset converts to screen.
+    const colDecl = (svgEl.getAttribute('data-col') || '').split(',').map(Number);
+    if (colDecl.length === 2 && colDecl.every(Number.isFinite)) {
+      L = colDecl[0] - svgEl.viewBox.baseVal.x;
+      R = colDecl[1] - svgEl.viewBox.baseVal.x;
+    }
     // Chromium on Linux advances ~4% wider than on macOS for this same embedded
     // woff2, and the error accumulates per character — so a label that fits the
     // column on one machine overruns it on the other, and a gate whose verdict
@@ -109,7 +123,12 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
     // normalised: if type actually touches on a real platform, that is real.
     const REF = 448;
     const probe = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    probe.setAttribute('class', 'lbl'); probe.setAttribute('x', '0'); probe.setAttribute('y', '0');
+    // styled EXPLICITLY, not via class="lbl": the mobile plates never define
+    // .lbl, so the probe there rendered at letter-spacing 0, the metric came
+    // out 0.857, and every mobile column width was inflated ~17% — a latent
+    // gate bug that surfaced the first time a mobile line was centered.
+    probe.setAttribute('style', 'font-size:16px;letter-spacing:1.6px');
+    probe.setAttribute('x', '0'); probe.setAttribute('y', '0');
     probe.textContent = 'M'.repeat(40);
     svgEl.appendChild(probe);
     const metric = probe.getBoundingClientRect().width / REF || 1;
@@ -602,7 +621,12 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
       // rulers is worse than either ruler being wrong.
       const REF = 448;
       const probe = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      probe.setAttribute('class', 'lbl'); probe.setAttribute('x', '0'); probe.setAttribute('y', '0');
+      // styled EXPLICITLY, not via class="lbl": the mobile plates never define
+    // .lbl, so the probe there rendered at letter-spacing 0, the metric came
+    // out 0.857, and every mobile column width was inflated ~17% — a latent
+    // gate bug that surfaced the first time a mobile line was centered.
+    probe.setAttribute('style', 'font-size:16px;letter-spacing:1.6px');
+    probe.setAttribute('x', '0'); probe.setAttribute('y', '0');
       probe.textContent = 'M'.repeat(40);
       svg.appendChild(probe);
       const metric = probe.getBoundingClientRect().width / REF || 1;
@@ -617,7 +641,32 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
       }
       return { top, rightGap: W - right, bottomGap: H - bottom };
     });
-    frame.push({ ...g, tag });
+    // 12 — EVERY EDGE IS A DECLARATION. RE-AUTHORED, round 20, in the same
+    // change as the design it measures. This check used to assert first-ink /
+    // right-edge / bottom-margin EQUALITY across the whole document — which
+    // was the right instrument for round 18's finding (edges wandering by
+    // accident) and the wrong doctrine once the client rejected the sameness:
+    // a gate that fails any page whose sections differ is the frontispiece
+    // armature, mechanised. What survives is the original virtue with the
+    // uniformity removed: no edge may be an ACCIDENT. Each desktop plate now
+    // declares its frame (data-frame="top,rightGap,bottomGap", viewBox
+    // units), and the render must match the declaration within tolerance —
+    // so a margin is still a decision with a machine behind it, it is just no
+    // longer the same decision ten times. A plate with no declaration fails,
+    // with the measured values printed so authoring is one round trip.
+    // Tolerance 4: check 5's font-metric normalisation absorbs the Linux/mac
+    // advance-width skew, but ascent rounding still moves first ink ~1-2u.
+    const decl = (svg.match(/data-frame="([^"]+)"/) || [])[1];
+    const measured = [g.top, g.rightGap, g.bottomGap].map(v => Math.round(v * 10) / 10);
+    if (!decl) {
+      fails.push(`${file}: declares no data-frame — measured top/right/bottom = ${measured.join('/')}`);
+    } else {
+      const want = decl.split(',').map(Number);
+      const off = want.map((w, i) => Math.abs(w - measured[i]));
+      if (want.length !== 3 || off.some(d => !(d <= 4)))
+        fails.push(`${file}: data-frame says ${decl} but the render measures ${measured.join('/')} `
+                 + `— the declared edge and the drawn edge disagree`);
+    }
   }
 
   // 9 — every number the description claims must be drawn on the plate.
@@ -660,33 +709,11 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
   console.log(`  measured ${file}`);
 }
 
-// 12 — THE DOCUMENT, not the plate.
-//
-// Everything above measures one plate at a time, and a multi-plate document
-// lives in the relationship between them. Measured before this existed: first
-// ink at 19, 23, 40 and 56; rightmost ink 150, 164, 164.8 and 166 short of the
-// canvas — so the right edge visibly wandered as you scrolled and the top
-// margin had three values. Neither gate could see it, because neither ever
-// compared two plates.
-// Run PER THEME. The light plates are geometrically identical to their dark
-// twins, so pooling them would still pass — but a message interleaving twenty
-// numbers from two sets would be unreadable the day it does fail, and "these
-// two sets agree with each other" is not the property being asserted here.
-const spread = (xs) => Math.max(...xs) - Math.min(...xs);
-for (const { tag } of SETS) {
-const themed = frame.filter(f => f.tag === tag);
-if (!themed.length) continue;
-const where = tag ? `the ${tag.replace('/', '')} plates` : 'the desktop plates';
-const tops = themed.map(f => f.top), rights = themed.map(f => f.rightGap);
-if (spread(tops) > 2)
-  fails.push(`${where} start at ${tops.map(t => Math.round(t)).join('/')} — the first ink must sit on one line across the document`);
-if (spread(rights) > 2)
-  fails.push(`${where} end ${rights.map(r => Math.round(r)).join('/')} short of the canvas — the right edge wanders as you scroll`);
-// three edges were enforced and the fourth wandered 12.8u
-const bottoms = themed.map(f => f.bottomGap);
-if (spread(bottoms) > 2)
-  fails.push(`${where} leave ${bottoms.map(b => Math.round(b)).join('/')} below their last ink — the bottom edge is the one margin nothing was checking`);
-}
+// (check 12 now runs per plate, inside the loop above — see its re-authoring
+// note there. The cross-plate uniformity it used to assert was deliberately
+// retired with the frontispiece: the document's coherence is carried by
+// material, not by identical margins, and each plate's edges are asserted
+// against its own declaration instead.)
 
 // 16 — THE STILL FRAME MUST BE THE FINISHED FRAME.
 //
