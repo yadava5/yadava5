@@ -1404,7 +1404,13 @@ def plate_colophon() -> str:
     dev.append('<g class="dev">')
     for k, (nm, c) in enumerate(LEGEND):
         ang = math.radians(k * 60)
-        x, y = 30 * math.sin(ang), -30 * math.cos(ang)
+        # ROUNDED, and it has to be. Unrounded these went into the file as the
+        # full float repr, and libm does not agree to the last bit across
+        # platforms: this machine emitted translate(...,6.999999999999995) and
+        # CI's Linux emitted ...993, so the "assets match their generator"
+        # check failed on a push whose build was byte-idempotent locally.
+        # Trig output is not reproducible; its rounding is.
+        x, y = round(30 * math.sin(ang), 3), round(-30 * math.cos(ang), 3)
         dev.append('<g class="cnt">' + logo(nm, x - 8, y - 8, 16, c) + '</g>')
     dev.append('</g>')
     s.append(f'<g transform="translate({CX},218)">' + "".join(dev) + '</g>')
