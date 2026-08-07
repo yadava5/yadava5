@@ -9,7 +9,7 @@
     "of audits found exactly that.",
     "",
     "A row is a derivation, not a citation. `extractor` is a shell command run",
-    "against $BLOB \u2014 the file fetched from raw.githubusercontent.com at `ref`,",
+    "against $BLOB — the file fetched from raw.githubusercontent.com at `ref`,",
     "which is a COMMIT SHA, never a branch name. Its stdout must equal `value`",
     "exactly. Nobody has to trust the number; they run the command.",
     "",
@@ -21,17 +21,17 @@
   ],
   "$repin_note": [
     "Re-pinned 2026-08-06 to the branch heads a full six-repo audit re-derived",
-    "every claim against \u2014 51 of 52 values held at both the old pin and the new",
+    "every claim against — 51 of 52 values held at both the old pin and the new",
     "one, and the 52nd (glyph.msimd128_line) is a line number that moved with",
     "its file and is corrected below. Every old pin remains an ancestor of its",
     "new one: no force-pushes, no rewritten history. The applied-web entry is",
-    "gone because the split it named stopped existing \u2014 see the note on the",
+    "gone because the split it named stopped existing — see the note on the",
     "applied repo and the ONNX rows."
   ],
   "repos": {
     "glyph": {
       "github": "yadava5/glyph",
-      "ref": "157ba9eac8bbe7125960a9ba45e25caffb4eabbc",
+      "ref": "de7f24ac18451a810f5c7244ea6933fbf9e7ad8d",
       "branch": "main",
       "public": true
     },
@@ -52,14 +52,7 @@
       "ref": "5b895d8dd30ae6ae502d7ae29b830429a85c5c3f",
       "branch": "main",
       "public": true,
-      "note": "This pin now carries ml/ \u2014 the web-migration branch merged into main on 2026-08-03 via merge commit d349f02f, without a PR, which is why no gate saw it coming. The separate applied-web entry that used to pin that branch is retired: both ONNX byte counts cite main now, at identical sizes."
-    },
-    "glyph-simd": {
-      "github": "yadava5/glyph",
-      "ref": "287744ef5a7aaa2655405939914c36f28ad18e18",
-      "branch": "yadava5/fix-hero-media-validation",
-      "public": true,
-      "note": "The branch the DEPLOYED WebAssembly came off. main's wasm has no intrinsics; this one does. Still diverged from main at the 2026-08-06 audit, so this pin stays."
+      "note": "This pin now carries ml/ — the web-migration branch merged into main on 2026-08-03 via merge commit d349f02f, without a PR, which is why no gate saw it coming. The separate applied-web entry that used to pin that branch is retired: both ONNX byte counts cite main now, at identical sizes."
     },
     "automl": {
       "github": "yadava5/ai-augmented-auto-ml-toolchain",
@@ -73,7 +66,7 @@
       "ref": "b0e6203369a829e2174ea263be53be0287675af9",
       "branch": "main",
       "public": true,
-      "note": "New in round 21, at the client's choice. Swift/ARKit/LiDAR; no deployment exists, and the page says why instead of faking a link. The MUCAT placement and the $2,500 grant it is the artifact for stay ATTESTED \u2014 placements are not derivable from a repository."
+      "note": "New in round 21, at the client's choice. Swift/ARKit/LiDAR; no deployment exists, and the page says why instead of faking a link. The MUCAT placement and the $2,500 grant it is the artifact for stay ATTESTED — placements are not derivable from a repository."
     }
   },
   "claims": [
@@ -111,7 +104,7 @@
       "repo": "glyph",
       "path": "benchmarks/mnist_misclassified.csv",
       "extractor": "tail -n +2 \"$BLOB\" | grep -c .",
-      "note": "Counted from the error list itself, not from 10000-9701 \u2014 so the 299 marks the plate draws and the number beside them come from one artifact."
+      "note": "Counted from the error list itself, not from 10000-9701 — so the 299 marks the plate draws and the number beside them come from one artifact."
     },
     {
       "id": "glyph.confident_errors",
@@ -123,11 +116,11 @@
       "repo": "glyph",
       "path": "benchmarks/mnist_misclassified.csv",
       "extractor": "tail -n +2 \"$BLOB\" | awk -F, '$4>0.9' | grep -c .",
-      "note": "Column 4 is pred_activation \u2014 the softmax mass on the label it wrongly chose."
+      "note": "Column 4 is pred_activation — the softmax mass on the label it wrongly chose."
     },
     {
       "id": "glyph.deployed_wasm_bytes",
-      "value": "46960",
+      "value": "46517",
       "unit": "bytes",
       "drawn_on": [
         "README.md"
@@ -135,7 +128,7 @@
       "live": "https://getglyph.vercel.app/wasm/fast_mnist.wasm",
       "header": "content-length",
       "extractor": "echo \"$HEADER\"",
-      "note": "A claim about the DEPLOYED artifact, not a committed one \u2014 so it is checked against the deployment, with curl, exactly as the sentence describes. It is deliberately not cached and will break if the live build changes, which is the point: the README says the live page and the repo diverge here, and this is what keeps that sentence honest."
+      "note": "A claim about the DEPLOYED artifact, not a committed one — checked against the deployment with curl, exactly as the sentence describes. Deliberately uncached, and it broke the build the day the SIMD work landed on main and Vercel began serving a different binary. That is the point of it."
     },
     {
       "id": "glyph.deployed_wasm_type",
@@ -149,14 +142,14 @@
     },
     {
       "id": "glyph.msimd128_line",
-      "value": "330",
+      "value": "332",
       "drawn_on": [
         "README.md"
       ],
       "repo": "glyph",
       "path": "CMakeLists.txt",
       "extractor": "grep -n -- '-msimd128' \"$BLOB\" | head -1 | cut -d: -f1",
-      "note": "The README cites CMakeLists.txt:330 by line. Line citations drift silently as a file grows; this one now fails the build instead \u2014 and it earned its keep: it was 279 at the old pin, a coverage block and an eval target were inserted above it, and this row is what flagged the drift."
+      "note": "The README cites CMakeLists.txt:330 by line. Line citations drift silently as a file grows; this one now fails the build instead — and it earned its keep: it was 279 at the old pin, a coverage block and an eval target were inserted above it, and this row is what flagged the drift."
     },
     {
       "id": "jetpack.parallel_mbs",
@@ -194,7 +187,7 @@
       "repo": "jetpack",
       "path": "benchmarks/jmh-results-rigorous.json",
       "extractor": "jq -r '(([.[]|select(.benchmark|endswith(\"parallelVirtualThreads\")).primaryMetric.score][0]/[.[]|select(.benchmark|endswith(\"singleThreadedJdk\")).primaryMetric.score][0])*10|round)/10' \"$BLOB\"",
-      "note": "Derived from the two scores, not stored \u2014 so it cannot drift from them."
+      "note": "Derived from the two scores, not stored — so it cannot drift from them."
     },
     {
       "id": "jetpack.adler_scalar_gbs",
@@ -280,7 +273,7 @@
       "anchors": {
         "README.md": [
           "a 3-fork JMH run",
-          "2.80\u00d7 on the 3-fork run"
+          "2.80× on the 3-fork run"
         ]
       }
     },
@@ -328,7 +321,7 @@
       "repo": "jetpack",
       "path": "benchmarks/jmh-results.json",
       "extractor": "jq -r '([.[]|select(.benchmark|endswith(\"parallelVirtualThreads\")).primaryMetric.score][0]/[.[]|select(.benchmark|endswith(\"singleThreadedJdk\")).primaryMetric.score][0]*100|round)/100' \"$BLOB\"",
-      "note": "The number the page was suppressing. The parallel ratio moved 6.89x -> 6.38x between the quick and the rigorous run \u2014 an 8% spread, WIDER than the 4% spread on the SIMD ratio that the page already discloses. jetpack's own ENVIRONMENT.md warns about it. Publishing the smaller disagreement and hiding the larger one is the only place this page let the flattering number win, so the README now states it."
+      "note": "The number the page was suppressing. The parallel ratio moved 6.89x -> 6.38x between the quick and the rigorous run — an 8% spread, WIDER than the 4% spread on the SIMD ratio that the page already discloses. jetpack's own ENVIRONMENT.md warns about it. Publishing the smaller disagreement and hiding the larger one is the only place this page let the flattering number win, so the README now states it."
     },
     {
       "id": "jetpack.parallel_speedup_rigorous_2dp",
@@ -362,7 +355,7 @@
       "repo": "cadence",
       "path": "api/index.ts",
       "extractor": "awk '/^const ROUTES/,/^\\];/' \"$BLOB\" | grep -cE '^\\s*\\[\\['",
-      "note": "The dispatch table itself, not the import list \u2014 the import list agrees at 36, but routes are what the function actually serves. Round 21: the parser plate is retired (the section merged into the refusal plate), so this is prose-only now."
+      "note": "The dispatch table itself, not the import list — the import list agrees at 36, but routes are what the function actually serves. Round 21: the parser plate is retired (the section merged into the refusal plate), so this is prose-only now."
     },
     {
       "id": "applied.macro_f1",
@@ -419,7 +412,7 @@
       "repo": "applied",
       "path": "backend/jobtracker/classifier/rules.py",
       "extractor": "python3 -c \"import ast,sys;t=ast.parse(open(sys.argv[1]).read());print(sum(1 for n in ast.walk(t) if isinstance(n,ast.AnnAssign) and getattr(n.target,'id','')=='PATTERNS' for s in ast.walk(n.value) if isinstance(s,ast.Constant) and isinstance(s.value,str)))\" \"$BLOB\"",
-      "note": "Parsed, not grepped. A second method \u2014 counting r-string lines inside the PATTERNS block \u2014 also gives 201."
+      "note": "Parsed, not grepped. A second method — counting r-string lines inside the PATTERNS block — also gives 201."
     },
     {
       "id": "applied.confidence_gate",
@@ -457,7 +450,7 @@
       "path": "ml/browser/artifacts/model.onnx",
       "bytes": true,
       "extractor": "awk -v b=\"$BYTES\" 'BEGIN{printf \"%.1f\", b/1e6}'",
-      "note": "The byte length of the committed artifact, read from the contents API at that SHA. On main since 2026-08-03 (merge d349f02f, no PR) at byte-for-byte the size the branch pin carried \u2014 which is why the applied-web split could retire."
+      "note": "The byte length of the committed artifact, read from the contents API at that SHA. On main since 2026-08-03 (merge d349f02f, no PR) at byte-for-byte the size the branch pin carried — which is why the applied-web split could retire."
     },
     {
       "id": "applied.onnx_int8_mb",
@@ -481,7 +474,7 @@
       "repo": "applied",
       "path": "docs/ML_EXECUTION_TRACKER.md",
       "extractor": "sed -n '378p' \"$BLOB\" | grep -oE 'macro_f1=0\\.[0-9]+' | cut -d= -f2",
-      "note": "The full three-layer cascade's score, which has no evaluation artifact because the run that produced it was overwritten. The page no longer says 'exactly one line of prose' \u2014 the number has since been restated in the repo's own README, and counting restatements was never the claim; the missing artifact is. This row proves the cited line still carries it."
+      "note": "The full three-layer cascade's score, which has no evaluation artifact because the run that produced it was overwritten. The page no longer says 'exactly one line of prose' — the number has since been restated in the repo's own README, and counting restatements was never the claim; the missing artifact is. This row proves the cited line still carries it."
     },
     {
       "id": "applied.hybrid_f1_line",
@@ -503,7 +496,7 @@
       "repo": "cadence",
       "path": "lib/config/migrations/0002_enable_rls.sql",
       "extractor": "grep -cE '^ALTER TABLE .* FORCE ROW LEVEL SECURITY' \"$BLOB\"",
-      "note": "Anchored to ^ALTER TABLE on purpose. A bare `grep -c 'FORCE ROW LEVEL SECURITY'` returns 8, because the file's own header comment explains what FORCE does \u2014 the same prose-counting mistake as the row above, in a file where it would have inflated the claim. user_profiles is deliberately excluded from RLS (0002_enable_rls.sql:21-22), so 'every tenant table' is seven, and the README now says seven.",
+      "note": "Anchored to ^ALTER TABLE on purpose. A bare `grep -c 'FORCE ROW LEVEL SECURITY'` returns 8, because the file's own header comment explains what FORCE does — the same prose-counting mistake as the row above, in a file where it would have inflated the claim. user_profiles is deliberately excluded from RLS (0002_enable_rls.sql:21-22), so 'every tenant table' is seven, and the README now says seven.",
       "anchors": {
         "README.md": [
           "`FORCE`d on all **seven** tenant tables"
@@ -519,7 +512,7 @@
       "repo": "jetpack",
       "path": "src/test/java/com/ayush/jetpack/Adler32Test.java",
       "extractor": "grep -oE '0x[0-9A-F]{8}L' \"$BLOB\" | sort -u | head -1 | sed 's/^0x//; s/L$//'",
-      "note": "The canonical Adler-32 vector for the input \"Wikipedia\", asserted for both the scalar and the vectorised path (Adler32Test.java:36-37). It is now drawn as one string per row rather than eight <text> elements, so it appears whole in the plate and needs no per-glyph exemptions. The stronger claim on the plate \u2014 bit-identical to java.util.zip \u2014 is the separate matchesJdkAcrossSizes test, which compares both paths across 26 input sizes."
+      "note": "The canonical Adler-32 vector for the input \"Wikipedia\", asserted for both the scalar and the vectorised path (Adler32Test.java:36-37). It is now drawn as one string per row rather than eight <text> elements, so it appears whole in the plate and needs no per-glyph exemptions. The stronger claim on the plate — bit-identical to java.util.zip — is the separate matchesJdkAcrossSizes test, which compares both paths across 26 input sizes."
     },
     {
       "id": "cadence.idor_services",
@@ -542,14 +535,14 @@
     },
     {
       "id": "glyph.deployed_wasm_sha256",
-      "value": "396dc0f4848ddc0b9c35420cdad5e5cc0af53f4a408024ba10f7364470d9807e",
+      "value": "f02610638120decf30587ff9115f97836dd51d391d790d0af26ac942bad5af2a",
       "drawn_on": [
         "README.md"
       ],
-      "repo": "glyph-simd",
+      "repo": "glyph",
       "path": "web/public/wasm/fast_mnist.wasm",
       "extractor": "shasum -a 256 \"$BLOB\" | cut -d' ' -f1",
-      "note": "The page's strongest single piece of evidence, and it was uncited. The binary getglyph.vercel.app serves is byte-identical to this blob, so 'it came off a branch carrying real wasm_simd128 intrinsics' stops being testimony: curl the URL, hash it, compare."
+      "note": "The page's strongest single piece of evidence. The binary getglyph.vercel.app serves is byte-identical to this blob on main, so 'the deployment is what the repository builds' stops being testimony: curl the URL, hash it, compare. It used to point at an unmerged branch, because that was where the SIMD build lived; it merged, so this reads main."
     },
     {
       "id": "applied.eval_misclassified",
@@ -561,7 +554,7 @@
       "repo": "applied",
       "path": "backend/data/evaluation/baseline_rules_v3.json",
       "extractor": "jq -r '.overall.misclassified' \"$BLOB\"",
-      "note": "0.979 with no uncertainty beside it was the page's one remaining asymmetry: jetpack's numbers all carry an interval and Applied's did not. The honest statement of a 96-row result is the error count. Round 21: the rebuilt plate prints it too \u2014 '2 MISTAKES' beside the hero."
+      "note": "0.979 with no uncertainty beside it was the page's one remaining asymmetry: jetpack's numbers all carry an interval and Applied's did not. The honest statement of a 96-row result is the error count. Round 21: the rebuilt plate prints it too — '2 MISTAKES' beside the hero."
     },
     {
       "id": "applied.eval_per_class",
@@ -827,11 +820,11 @@
         ".github/workflows/scorecard.yml"
       ],
       "extractor": "grep -lE '^(on|name):' $BLOBS | grep -c .",
-      "note": "Five real workflow files at the pin \u2014 build, CodeQL, gitleaks, release, scorecard \u2014 each verified to be a workflow (a top-level on:/name: key), not just a file that exists."
+      "note": "Five real workflow files at the pin — build, CodeQL, gitleaks, release, scorecard — each verified to be a workflow (a top-level on:/name: key), not just a file that exists."
     }
   ],
   "$unpinnable_note": [
-    "This list held exactly one row \u2014 AutoML's '2 approval gates' \u2014 filed under",
+    "This list held exactly one row — AutoML's '2 approval gates' — filed under",
     "the reason 'the repo is private'. That diagnosis was wrong, and the way it",
     "was wrong matters more than the number.",
     "",
@@ -856,51 +849,51 @@
         "README.md"
       ],
       "source": "https://vercel.com/docs/functions/runtimes#functions-created-per-deployment",
-      "why": "Vercel's Hobby-tier cap of 12 Vercel Functions per deployment is a platform fact (the docs moved: /docs/limits now says 'framework-dependent', and the 12 lives at the runtimes page cited above), not a measurement of this repository. The previous extractor grepped `caps deployments at 12` out of api/index.ts \u2014 the author's own comment \u2014 so the page was citing itself and calling it derivation. What the repo genuinely proves is the consequence: one function serving 36 routes, which cadence.handlers derives."
+      "why": "Vercel's Hobby-tier cap of 12 Vercel Functions per deployment is a platform fact (the docs moved: /docs/limits now says 'framework-dependent', and the 12 lives at the runtimes page cited above), not a measurement of this repository. The previous extractor grepped `caps deployments at 12` out of api/index.ts — the author's own comment — so the page was citing itself and calling it derivation. What the repo genuinely proves is the consequence: one function serving 36 routes, which cadence.handlers derives."
     }
   ],
   "exempt": {
     "$comment": [
-      "Numbers a plate draws that are not measurements of a repository \u2014 names,",
+      "Numbers a plate draws that are not measurements of a repository — names,",
       "versions, viewBox geometry, and the glyphs of a hex constant. Each needs a",
       "reason. Prefer a file-scoped key ('plate-2-jetpack.svg:6') over a bare one:",
       "a global exemption for '6' would wave through an unsourced 6 anywhere in",
       "the document. claims.mjs also fails on an exemption no plate uses, so this",
       "list cannot quietly accumulate excuses for numbers that are already gone."
     ],
-    "plate-1-glyph.svg:512": "AVX-512 \u2014 an instruction-set name. (AVX2, e5, int8 and 1pm need no entry: there is no word boundary before those digits, so they are never read as numbers.)",
-    "plate-1-glyph.svg:4": "'4 BUILDS \u00b7 1 PATH COMPILED', counting the four build targets drawn directly above it",
-    "plate-1-glyph.svg:1": "'4 BUILDS \u00b7 1 PATH COMPILED' and '3 BY HAND, 1 AUTO' \u2014 the same four targets, counted",
+    "plate-1-glyph.svg:512": "AVX-512 — an instruction-set name. (AVX2, e5, int8 and 1pm need no entry: there is no word boundary before those digits, so they are never read as numbers.)",
+    "plate-1-glyph.svg:4": "'4 BUILDS · 1 PATH COMPILED', counting the four build targets drawn directly above it",
+    "plate-1-glyph.svg:1": "'4 BUILDS · 1 PATH COMPILED' and '3 BY HAND, 1 AUTO' — the same four targets, counted",
     "plate-1-glyph.svg:3": "'3 BY HAND, 1 AUTO'",
     "plate-2-jetpack.svg:32": "the name of the Adler-32 algorithm",
-    "plate-2-jetpack.svg:25": "JDK 25 \u2014 a toolchain version, not a measurement",
+    "plate-2-jetpack.svg:25": "JDK 25 — a toolchain version, not a measurement",
     "plate-6b-automl.svg:3.0": "the version field of the licence identifier GPL-3.0, which automl.license derives whole from the pinned LICENSE file",
     "README.md:3.0": "the version field of the licence identifier GPL-3.0 (see automl.license)",
-    "m-2-jetpack.svg:25": "JDK 25 \u2014 a toolchain version, not a measurement",
-    "plate-2-jetpack.svg:3": "'3 JMH FORKS' \u2014 the fork count of the run, recorded in the same JSON the scores come from",
-    "README.md:512": "AVX-512 \u2014 an instruction-set name",
+    "m-2-jetpack.svg:25": "JDK 25 — a toolchain version, not a measurement",
+    "plate-2-jetpack.svg:3": "'3 JMH FORKS' — the fork count of the run, recorded in the same JSON the scores come from",
+    "README.md:512": "AVX-512 — an instruction-set name",
     "README.md:32": "the name of the Adler-32 algorithm",
     "README.md:1": "the placeholder in the SQL literal `WHERE id = $1`",
-    "README.md:4": "'four ship a system card' \u2014 enumerated on the page (Glyph, jetpack, Cadence, Applied); the fifth and sixth are named as a booklet and a no-link app",
+    "README.md:4": "'four ship a system card' — enumerated on the page (Glyph, jetpack, Cadence, Applied); the fifth and sixth are named as a booklet and a no-link app",
     "README.md:219": "the first line of the early-stopping block cited as apps/train_model.cpp:219-243. A line RANGE has no single extractor; the citation is verified by reading it, and glyph.msimd128_line pins the one line citation that a machine can check.",
     "README.md:243": "the last line of that same cited range",
     "README.md:03.23": "part of the contact address aesh.03.23@gmail.com",
-    "README.md:6": "'Six systems' \u2014 a count of this page's own contents, which the page then enumerates one per section",
-    "m-0-thesis.svg:6": "'6 systems' \u2014 the same count of this page's own contents that README.md:6 and plate-7-colophon.svg:6 exempt, drawn as the mobile thesis hero",
-    "README.md:256": "the '256' in `shasum -a 256` \u2014 the name of the hash algorithm in a command the reader is invited to run \u2014 and the benchDot/256 case name",
+    "README.md:6": "'Six systems' — a count of this page's own contents, which the page then enumerates one per section",
+    "m-0-thesis.svg:6": "'6 systems' — the same count of this page's own contents that README.md:6 and plate-7-colophon.svg:6 exempt, drawn as the mobile thesis hero",
+    "README.md:256": "the '256' in `shasum -a 256` — the name of the hash algorithm in a command the reader is invited to run — and the benchDot/256 case name",
     "plate-0-thesis.svg:03.23": "part of the contact address aesh.03.23@gmail.com",
-    "README.md:2026": "the graduation date, May 2026 \u2014 a fact about the author, not a measurement of a repository",
-    "plate-0b-work.svg:2025": "'Jun 2025 \u2013 May 2026' \u2014 the dates of the role",
-    "plate-0b-work.svg:2026": "'Jun 2025 \u2013 May 2026', and 'DATAFEST 2026'",
-    "plate-0b-work.svg:5": "'5 years' \u2014 the span of query logs ingested",
-    "plate-0b-work.svg:0": "'FROM 0' \u2014 the compliance baseline the 96.72% is measured against",
-    "plate-0b-work.svg:3": "'3-PERSON' \u2014 the DataFest team size",
-    "README.md:2025": "'June 2025 to May 2026' \u2014 the dates of the role",
-    "README.md:0": "'from 0% to 96.72%' \u2014 the compliance baseline",
-    "README.md:3": "'a three-layer cascade' \u2014 the count of the tiers named in the same sentence; 'three committed runs' in section III, which BENCHMARKS.md documents; and section V's 'three carry it in the query and the other three check ownership first', the guard split the plate draws as filled and hollow marks",
-    "plate-1-glyph.svg:256": "benchDot/256 \u2014 the benchmark case's size parameter, part of its name in bench_summary.csv (glyph.dot256_speedup derives the ratio itself)",
-    "plate-1-glyph.svg:128": "benchAxpy/128 \u2014 likewise the case's size parameter (glyph.axpy128_slowdown derives the ratio)",
-    "README.md:128": "benchAxpy/128 \u2014 the benchmark case name (see plate-1-glyph.svg:128)"
+    "README.md:2026": "the graduation date, May 2026 — a fact about the author, not a measurement of a repository",
+    "plate-0b-work.svg:2025": "'Jun 2025 – May 2026' — the dates of the role",
+    "plate-0b-work.svg:2026": "'Jun 2025 – May 2026', and 'DATAFEST 2026'",
+    "plate-0b-work.svg:5": "'5 years' — the span of query logs ingested",
+    "plate-0b-work.svg:0": "'FROM 0' — the compliance baseline the 96.72% is measured against",
+    "plate-0b-work.svg:3": "'3-PERSON' — the DataFest team size",
+    "README.md:2025": "'June 2025 to May 2026' — the dates of the role",
+    "README.md:0": "'from 0% to 96.72%' — the compliance baseline",
+    "README.md:3": "'a three-layer cascade' — the count of the tiers named in the same sentence; 'three committed runs' in section III, which BENCHMARKS.md documents; and section V's 'three carry it in the query and the other three check ownership first', the guard split the plate draws as filled and hollow marks",
+    "plate-1-glyph.svg:256": "benchDot/256 — the benchmark case's size parameter, part of its name in bench_summary.csv (glyph.dot256_speedup derives the ratio itself)",
+    "plate-1-glyph.svg:128": "benchAxpy/128 — likewise the case's size parameter (glyph.axpy128_slowdown derives the ratio)",
+    "README.md:128": "benchAxpy/128 — the benchmark case name (see plate-1-glyph.svg:128)"
   },
   "$attested_note": [
     "Facts about the AUTHOR rather than measurements of a repository.",
@@ -1072,7 +1065,7 @@
         ]
       },
       "source": "Ayush Yadav CV, July 2026",
-      "why": "Team size at DataFest 2026. Attested like the rest of \u00a7I, and anchored to its own sentence so the number cannot be changed under cover of another row's 3."
+      "why": "Team size at DataFest 2026. Attested like the rest of §I, and anchored to its own sentence so the number cannot be changed under cover of another row's 3."
     }
   ]
 }
