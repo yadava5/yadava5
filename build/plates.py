@@ -1764,8 +1764,13 @@ def _motif(name: str) -> str:
         return (f'<g><circle cx="316" cy="116" r="3" fill="{CLAY_G}"/>'
                 f'<path d="M338 92A34 34 0 0 1 338 140" fill="none" stroke="{CLAY_G}" stroke-width="2" stroke-linecap="round"/>'
                 f'<path d="M352 78A54 54 0 0 1 352 154" fill="none" stroke="{CLAY_G}" stroke-width="2" stroke-linecap="round"/>'
-                f'<circle cx="398" cy="104" r="4" fill="{CLAY_G}"/>'
-                f'<circle cx="408" cy="132" r="4" fill="{CLAY_G}"/></g>')
+                # the two obstacles are INK, as they now are on the desktop
+                # plate: the sensor and the arcs are mine, what the sweep
+                # FINDS is the world. Drawn in the accent, a phone reader was
+                # told the obstacles were my act while a desktop reader was
+                # told they were not.
+                f'<circle cx="398" cy="104" r="4" fill="{INK}"/>'
+                f'<circle cx="408" cy="132" r="4" fill="{INK}"/></g>')
     if name == "stamp":
         return (f'<g transform="translate(80,84) rotate(-8)">'
                 f'<rect x="-52" y="-16" width="104" height="32" rx="5" fill="none" stroke="{INK3}" stroke-width="1.6"/>'
