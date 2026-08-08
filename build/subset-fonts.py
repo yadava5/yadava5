@@ -42,7 +42,18 @@ def build(src: pathlib.Path, wght: int, chars: str, out: pathlib.Path,
           metrics: tuple[int, int] | None = None) -> None:
     font = TTFont(src)
     if "fvar" in font:
-        font = instancer.instantiateVariableFont(font, {"wght": wght})
+        # Pin EVERY axis, not just weight. Fraunces declares four — wght, opsz,
+        # SOFT and WONK — and instancing one of them leaves a variable font
+        # whose remaining axes resolve to a default the SVG never states. opsz
+        # goes to the display end (these are 34-89px heroes, not body copy),
+        # SOFT to 0 and WONK to 0: the plates are drawings, and a wonky leg on
+        # a figure that sits beside a hairline rule reads as a misprint.
+        axes = {a.axisTag: a.defaultValue for a in font["fvar"].axes}
+        axes.update({"wght": wght})
+        for tag, v in (("opsz", 144), ("SOFT", 0), ("WONK", 0)):
+            if tag in axes:
+                axes[tag] = v
+        font = instancer.instantiateVariableFont(font, axes)
     if metrics:
         # Gelasio matches Georgia's ADVANCES but not its vertical metrics
         # (hhea 1900/-700 vs Georgia's 1878/-449, a 1.27em line box against
@@ -71,7 +82,37 @@ def build(src: pathlib.Path, wght: int, chars: str, out: pathlib.Path,
     print(f"{out.name}: {out.stat().st_size:,} bytes, {len(chars)} chars at wght {wght}")
 
 
-build(SRC / "JetBrainsMono[wght].ttf", 400, MONO_CHARS, ROOT / "mono-subset.woff2", [])
-build(SRC / "JetBrainsMono[wght].ttf", 600, BOLD_CHARS, ROOT / "mono-600-subset.woff2", [])
-build(SRC / "Gelasio[wght].ttf", 400, SERIF_CHARS, ROOT / "serif-subset.woff2",
-      metrics=(1878, -449))   # Georgia's, at the shared 2048 upem
+# ── 2026-08-08: the faces are the PORTFOLIO's now.
+#
+# This page and Portfolio-2.0 are one body of work and were set in two
+# different typefaces. They are not any more: the profile takes the Daylight
+# Study's own faces, subset through this same pipeline.
+#
+#   mono 400  Fragment Mono — still registered as family 'M', because
+#             gate.mjs:115 checks the family BY NAME. Its advance is 618/1000,
+#             not JetBrains' 600/1000, so gate.mjs's REF moved 448 -> 459.52
+#             in the same commit; see the derivation written there.
+#   bold 600  Fraunces — replaces the mono-600 hero face outright. The heroes
+#             (6.4x, 3.5x, 97.01%, 0.979, 15/44, 57.8M, the 89px "B only") are
+#             the emotional centre of every plate, and in Fraunces on paper
+#             they ARE the portfolio. Registered as family 'S' weight 600.
+#   serif 400 Fraunces — the serif voice, same family at 400.
+#
+# Gelasio and both JetBrains subsets are retired. Georgia's vertical metrics
+# went with Gelasio: Fraunces is the authored face now, not a stand-in for a
+# platform font, so there is nothing to be metric-compatible WITH. The
+# `metrics` parameter above is kept because it is the record of why that
+# override ever existed.
+#
+# Source: Portfolio-2.0/public/fonts — already latin-subset woff2s, which
+# fontTools re-subsets happily. Measured result: every plate got SMALLER
+# (Fragment Mono's subset is half JetBrains', and Fraunces' beats Gelasio's).
+FONTS = SRC if len(sys.argv) > 1 else \
+    pathlib.Path.home() / "Documents/Projects/Portfolio-2.0/out/fonts"
+
+build(FONTS / "fragment-mono-latin.woff2", 400, MONO_CHARS,
+      ROOT / "mono-subset.woff2", [])
+build(FONTS / "fraunces-latin-var.woff2", 600, BOLD_CHARS,
+      ROOT / "serif-600-subset.woff2")
+build(FONTS / "fraunces-latin-var.woff2", 400, SERIF_CHARS,
+      ROOT / "serif-subset.woff2")

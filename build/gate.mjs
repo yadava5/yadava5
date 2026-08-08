@@ -130,7 +130,15 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
     // glyphs, compare against the authored baseline, and normalise every
     // column measurement by the ratio. Collisions are deliberately NOT
     // normalised: if type actually touches on a real platform, that is real.
-    const REF = 448;
+    // 40 x "M" at font-size 16 with letter-spacing 1.6, in the embedded mono.
+    // WRITTEN AS ITS DERIVATION, not as a number: 448 was JetBrains Mono's
+    // 600/1000 advance and it shipped as a bare literal, so when the face
+    // changed there was nothing in the file to say what it had been measured
+    // from. Fragment Mono (the portfolio's mono, adopted 2026-08-08) advances
+    // 618/1000 — read from its hmtx — so every column and edge would have
+    // mis-normalised by 2.6% against the old constant, silently and in the
+    // direction that HIDES overflow.
+    const REF = 40 * (16 * 618 / 1000 + 1.6);   // = 459.52
     const probe = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     // styled EXPLICITLY, not via class="lbl": the mobile plates never define
     // .lbl, so the probe there rendered at letter-spacing 0, the metric came
@@ -628,7 +636,7 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
       // 5u further out on CI — and check 12 was failing a plate that check 5
       // had already passed. Two checks measuring the same edge with different
       // rulers is worse than either ruler being wrong.
-      const REF = 448;
+      const REF = 40 * (16 * 618 / 1000 + 1.6);   // = 459.52, see check 5
       const probe = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       // styled EXPLICITLY, not via class="lbl": the mobile plates never define
     // .lbl, so the probe there rendered at letter-spacing 0, the metric came

@@ -82,8 +82,14 @@ OUT.mkdir(exist_ok=True)
 # gate below fails any plate that draws a character its face does not carry.
 from charsets import MONO_CHARS, BOLD_CHARS, SERIF_CHARS
 FONT = base64.b64encode((ROOT / "mono-subset.woff2").read_bytes()).decode()
-FONT600 = base64.b64encode((ROOT / "mono-600-subset.woff2").read_bytes()).decode()
+SERIF600 = base64.b64encode((ROOT / "serif-600-subset.woff2").read_bytes()).decode()
 FONTSERIF = base64.b64encode((ROOT / "serif-subset.woff2").read_bytes()).decode()
+
+# The mono cell, in px, at the size and tracking every label is set in. The
+# arrow below advances exactly one of these so a line containing it measures
+# the same as a line of type — which is what keeps checks 5, 12 and 19 honest
+# about a mark that is a path rather than a glyph.
+CELL_13 = 13 * 618 / 1000 + 0.4      # .fine / .lbl / .kick — 8.434px
 
 # The real product marks, extracted from each app's own logo (see logos.json).
 import re as _re_mod
@@ -277,16 +283,21 @@ def head(h: int, title: str, desc: str, key: str = "",
     # same reason: ui-serif/Georgia resolved to Liberation Serif on CI and to
     # Georgia on macOS, a different typeface per reader on a page that calls
     # itself self-contained. (Gelasio, OFL, metric-compatible with Georgia.)
+    # 'S' 600 rides in EVERY plate now: the heroes are set in it, and they are
+    # the emotional centre of each one. 'S' 400 — the serif voice proper — is
+    # still only embedded where a plate speaks in it. Measured, this made every
+    # file smaller rather than larger: Fragment Mono's subset is half
+    # JetBrains', and Fraunces' two beat Gelasio's one.
     ser = (f"@font-face{{font-family:'S';font-weight:400;"
            f"src:url(data:font/woff2;base64,{FONTSERIF}) format('woff2')}}\n") if serif else ''
     return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="{VB_X} 0 {VB_W} {h}" width="{VB_W}" height="{h}" role="img" aria-label="{desc}" data-col="{col[0]},{col[1]}"{fr}>
 <title>{title}</title><desc>{desc}</desc>
 <style>
 @font-face{{font-family:'M';font-weight:400;src:url(data:font/woff2;base64,{FONT}) format('woff2')}}
-@font-face{{font-family:'M';font-weight:600;src:url(data:font/woff2;base64,{FONT600}) format('woff2')}}
+@font-face{{font-family:'S';font-weight:600;src:url(data:font/woff2;base64,{SERIF600}) format('woff2')}}
 {ser}text{{font-family:'M',ui-monospace,SFMono-Regular,Menlo,monospace}}
-.hero{{font-size:55px;letter-spacing:-1px;fill:{INK};font-weight:600}}
-.sub{{font-size:34px;letter-spacing:-0.5px;fill:{INK};font-weight:600}}
+.hero{{font-size:55px;letter-spacing:-1px;fill:{INK};font-weight:600;font-family:'S',Georgia,serif}}
+.sub{{font-size:34px;letter-spacing:-0.5px;fill:{INK};font-weight:600;font-family:'S',Georgia,serif}}
 .unit{{font-size:34px;letter-spacing:-0.5px;fill:{INK2}}}
 .say{{font-size:21px;fill:{INK2}}}
 .lbl{{font-size:13px;letter-spacing:1.6px;fill:{INK2}}}
@@ -322,6 +333,51 @@ def ground(h: int) -> str:
     return (f'<rect x="{VB_X}" width="{VB_W}" height="{h}" fill="{GROUND}"/>'
             f'<rect x="{VB_X + 0.5}" y="0.5" width="{VB_W - 1}" height="{h - 1}" '
             f'fill="none" stroke="{WIRE}" stroke-width="1"/>')
+
+
+def arrow(x: float, y: float, w: float = CELL_13, ink: str | None = None) -> str:
+    """A rightwards arrow, drawn. Never the character U+2192.
+
+    Fragment Mono does not carry →, and a glyph outside the embedded subset
+    falls back to a PLATFORM font silently. That is not hypothetical: the
+    sibling property does exactly this today — its ⟶ renders at 17px inside a
+    9.891px monospaced cell, 72% over, in a different typeface per reader,
+    across 91 occurrences. charsets.py therefore omits the character so the
+    coverage gate fails loudly on anyone who types it, and labels call this.
+
+    The shaft plus head occupy one tracked mono cell, so a run of type with an
+    arrow in it advances exactly as if the arrow were a glyph. Stroke 1.2 keeps
+    it inside gate.mjs's hairline rule (`stroke-width <= 2`), which is what
+    lets it sit on the same baseline as type without reading as a collision.
+    """
+    c = ink or INK2
+    x0, x1 = x + 1.5, x + w - 1.6      # side bearings, as a real glyph carries
+    return (f'<path d="M{x0:.2f} {y - 4:.2f}H{x1:.2f}M{x1 - 2.6:.2f} {y - 6.1:.2f}'
+            f'L{x1:.2f} {y - 4:.2f}L{x1 - 2.6:.2f} {y - 1.9:.2f}" fill="none" '
+            f'stroke="{c}" stroke-width="1.2" stroke-linecap="round" '
+            f'stroke-linejoin="round"/>')
+
+
+def arrowed(x: float, y: float, cls: str, before: str, after: str,
+            ink: str | None = None) -> str:
+    """One label reading `before → after`, with the arrow drawn as a path.
+
+    Pass the two halves WITHOUT padding spaces; the gaps are placed
+    geometrically. They have to be — the first version padded the strings and
+    the arrow came out flush against the following word, because SVG collapses
+    leading whitespace in a <text> run by default. Spacing that depends on a
+    space character surviving XML whitespace handling is spacing you have not
+    actually specified.
+
+    The layout is exactly "before␣→␣after" on the mono grid — the arrow takes
+    the cell at len(before)+1 and the second run starts at len(before)+3 — so
+    the line measures the same as if the mark were a glyph, which is what
+    keeps checks 5, 12 and 19 telling the truth about it.
+    """
+    xa = x + (len(before) + 1) * CELL_13
+    return (f'<text x="{x}" y="{y}" class="{cls}">{before}</text>'
+            + arrow(xa, y, ink=ink)
+            + f'<text x="{x + (len(before) + 3) * CELL_13:.2f}" y="{y}" class="{cls}">{after}</text>')
 
 
 def redact() -> str:
@@ -374,7 +430,7 @@ def plate_thesis() -> str:
               "AutoML, dataset in, model out; Cadence, the database that refuses; "
               "Applied, allowed to say not sure; and VisualAssist, which needs a "
               "lidar sensor.", key="plate-0-thesis.svg",
-              col=(118, 762), frame=(43, 79.3, 34), serif=True)]
+              col=(118, 762), frame=(44, 71.5, 35), serif=True)]
     s.append(f""".ser{{font-family:'S',ui-serif,Georgia,'Times New Roman',serif;font-size:34px;fill:{INK}}}
 .orn{{transform-box:fill-box;transform-origin:center;animation:orn 27s linear infinite}}
 @keyframes orn{{from{{transform:rotate(45deg)}}to{{transform:rotate(405deg)}}}}
@@ -750,7 +806,7 @@ def plate_glyph() -> str:
               "test set, which means 299 wrong — every one of them drawn as a grid of the "
               "labels it missed, and the 79 it was most confident about drawn in a heavier "
               "stroke.", key="plate-1-glyph.svg",
-              col=(96, 762), frame=(55, 10, 20))]
+              col=(96, 770), frame=(55, 10, 20))]
     s.append(f""".ink{{fill:none;stroke:{a};stroke-width:7;stroke-linecap:round;stroke-linejoin:round;
   stroke-dasharray:1;stroke-dashoffset:0;animation:draw {LOOP}s linear infinite;animation-delay:{-SET}s}}
 /* 4% a glyph (round 19): at 17% the pen laid ink below the perceptual floor;
@@ -1102,7 +1158,7 @@ def plate_cadence() -> str:
     # blank, which is what the database sent), then wipes back left-to-right.
     # Round 21's bars returned to full width from a visible retraction, so
     # the resting figure showed A and B identical — the opposite of the claim.
-    s.append(f""".vast{{font-size:89px;letter-spacing:-2px;fill:{INK};font-weight:600}}
+    s.append(f""".vast{{font-size:89px;letter-spacing:-2px;fill:{INK};font-weight:600;font-family:'S',Georgia,serif}}
 .red{{transform-box:fill-box;transform-origin:left center;animation:red {LOOP}s {EASE} infinite}}
 @keyframes red{{0%,84%{{opacity:1;transform:scaleX(1)}}85.5%{{opacity:0;transform:scaleX(1)}}
   86.5%{{opacity:0;transform:scaleX(.02)}}90.5%{{opacity:1;transform:scaleX(.02)}}
@@ -1211,7 +1267,7 @@ def plate_applied() -> str:
               "scores 0.979 macro-F1 — 2 mistakes on a 96-message evaluation set — measured "
               "with the rules layer alone; CI fails the build below 0.95. Inference runs in "
               "your browser: the int8 ONNX build is 22.8 megabytes, down from 90.4.",
-              key="plate-4-applied.svg", col=(110, 762), frame=(41, 37.6, 26))]
+              key="plate-4-applied.svg", col=(110, 776), frame=(42, 25.4, 27))]
 
     # ── the routes. Authored once here so the drawing and the motion cannot
     # disagree: the chutes the messages ride are the chutes the plate draws.
@@ -1338,7 +1394,7 @@ def plate_applied() -> str:
     s.append(f'<text x="330" y="628" class="key" style="fill:{PINE}">RULES LAYER ONLY</text>')
     s.append(f'<text x="330" y="650" class="fine">SetFit off, embeddings emptied · CI fails below 0.95</text>')
     s.append(f'<text x="{L}" y="{H-30}" class="lbl">YOUR BROWSER</text>')
-    s.append(f'<text x="300" y="{H-30}" class="fine">int8 ONNX · 90.4 MB → 22.8 MB</text>')
+    s.append(arrowed(300, H - 30, "fine", "int8 ONNX · 90.4 MB", "22.8 MB"))
     s.append(f'<text x="{R}" y="{H-30}" text-anchor="end" class="fine" style="fill:{INK3}">never leaves your tab</text>')
     return "".join(s) + "</svg>"
 
@@ -1468,7 +1524,7 @@ def plate_visualassist() -> str:
     s.append('<g>' + "".join(sc) + '</g>')
 
     # what the reading becomes
-    s.append(f'<text x="{L}" y="400" class="fine">LIDAR DEPTH → SPATIAL AUDIO + HAPTICS + SPEECH</text>')
+    s.append(arrowed(L, 400, "fine", "LIDAR DEPTH", "SPATIAL AUDIO + HAPTICS + SPEECH"))
     s.append(f'<text x="{L}" y="424" class="key">7,177 LINES · 38 SWIFT FILES · 5 CI WORKFLOWS</text>')
     # the honest close: the only system here without a link, and why
     s.append(f'<text x="{L}" y="452" class="say" style="fill:{INK}">THE ONE SYSTEM HERE YOU CANNOT CLICK INTO</text>')
@@ -1491,7 +1547,7 @@ def plate_colophon() -> str:
                              "pinned commit, except section one, which is attested and says so. "
                              "The page itself is animated SVG with no JavaScript and no server. "
                              "If a number here is wrong, it is wrong in public.",
-              key="plate-7-colophon.svg", col=(118, 762), frame=(43, 155.7, 24),
+              key="plate-7-colophon.svg", col=(118, 762), frame=(44, 161, 25),
               serif=True)]
     s.append(f""".ser{{font-family:'S',ui-serif,Georgia,'Times New Roman',serif;font-size:34px;fill:{INK}}}
 .dev{{animation:dev 31s linear infinite}}
@@ -1630,10 +1686,10 @@ def plate_mobile(accent: str, kicker: str, hero: str, unit: str,
         # both weights: .n is 600, and .u inherits it — see head()'s note on
         # why a synthesised bold is a per-platform rendering
         f"@font-face{{font-family:'M';font-weight:400;src:url(data:font/woff2;base64,{FONT}) format('woff2')}}"
-        f"@font-face{{font-family:'M';font-weight:600;src:url(data:font/woff2;base64,{FONT600}) format('woff2')}}"
+        f"@font-face{{font-family:'S';font-weight:600;src:url(data:font/woff2;base64,{SERIF600}) format('woff2')}}"
         f"text{{font-family:'M',ui-monospace,SFMono-Regular,Menlo,monospace}}"
         f".k{{font-size:13px;letter-spacing:2px;fill:{INK2}}}"
-        f".n{{font-size:55px;letter-spacing:-1px;fill:{INK};font-weight:600}}"
+        f".n{{font-size:55px;letter-spacing:-1px;fill:{INK};font-weight:600;font-family:'S',Georgia,serif}}"
         f".u{{font-size:34px;letter-spacing:-0.5px;fill:{INK2}}}"
         f".t{{font-size:21px;fill:{INK2}}}"
         # the glide: a light running the accent rule — constant speed (a
@@ -1674,7 +1730,7 @@ MOBILE = {
    "full-time engineering roles: 6 systems, from SIMD kernels to the browser "
    "they run in.", "center", "", 8.1),
  "m-0b-work.svg": ("WORK · MIAMI UNIVERSITY", "INK2", "57.8", "M rows",
-   "from 1.6M Oracle query logs —", "a year of it, attested.",
+   "from 1.6M Oracle query logs", "a year of it, attested.",
    "Experience, attested by the author rather than derived from a public "
    "repository: as ITSM Data Integration Intern at Miami University, a Python "
    "pipeline turned 1.6 million Oracle Analytics query logs into a 57.8 "
@@ -1682,13 +1738,13 @@ MOBILE = {
  "m-1-glyph.svg": ("GLYPH", "CLAY_G", "3.5", "×", "Someone else’s net, made", "faster by hand. 97.01% held.",
    "Glyph: a course-provided neural network, hand-optimised — 3.5 times faster on the committed dot benchmark, accuracy unchanged at 97.01 percent.",
    "left", "copybook", 12.3),
- "m-2-jetpack.svg": ("JETPACK", "CLAY_G", "6.4", "×", "Parallel gzip on JDK 25.", "The JDK intrinsic still wins.",
+ "m-2-jetpack.svg": ("JETPACK", "CLAY_G", "6.4", "×", "Parallel gzip on JDK 25.", "The JDK intrinsic beats it.",
    "jetpack: parallel gzip on JDK 25, a 6.4 times speedup over one thread — and the JDK's own checksum intrinsic still wins.",
    "left", "bench", 9.1),
  "m-4-applied.svg": ("APPLIED", "CLAY_G", "0.979", "", "macro-F1, rules layer only.", "Below 0.85 it asks a human.",
    "Applied: an email classifier scoring 0.979 macro-F1 with the rules layer alone. Below the 0.85 confidence gate it asks a human rather than guessing.",
    "left", "sieve", 11.3),
- "m-5-refusal.svg": ("CADENCE", "PINE", "B", " only", "The app didn’t remember to", "filter. The database refused.",
+ "m-5-refusal.svg": ("CADENCE", "PINE", "B", " only", "The app didn’t remember to", "filter — the database did.",
    "Cadence: an unfiltered query run as tenant B returns B only. The app didn't remember to filter; PostgreSQL row-level security refused.",
    "left", "redact", 8.9),
  "m-6b-automl.svg": ("AGENTIC AUTOML", "CLAY_G", "44", "", "tools in the registry. The", "model holds its phase’s set.",
