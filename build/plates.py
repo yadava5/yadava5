@@ -310,7 +310,7 @@ def head(h: int, title: str, desc: str, key: str = "",
 """
 
 
-def ground(h: int) -> str:
+def ground(h: int, x: float = VB_X, w: float = VB_W) -> str:
     """The sheet. THIS RECT MUST BE FIRST IN DOCUMENT ORDER — see below.
 
     It used to paint nothing (fill-opacity 0) and exist only so gate.mjs could
@@ -319,7 +319,12 @@ def ground(h: int) -> str:
     that property already uses, and it means every ratio the gate computes is
     against paper this design owns rather than a canvas it borrows.
 
-    ORDER IS LOad-BEARING. gate.mjs:548 takes its contrast ground from the
+    `x`/`w` default to the desktop viewBox. The mobile set passes its own
+    (0, 440): all EIGHTEEN files are one sheet of the same paper, and until
+    2026-08-08 only the nine desktop ones were, because this function closed
+    over VB_X/VB_W and the phone had a hand-written rect next door.
+
+    ORDER IS LOad-BEARING. gate.mjs:556 takes its contrast ground from the
     computed fill of the FIRST <rect> in document order, ignoring fill-opacity.
     Emit anything before this — including the frame below — and all 36 files
     grade every colour against the wrong ground, and they do it quietly.
@@ -328,12 +333,37 @@ def ground(h: int) -> str:
     white and night paper 1.65:1 against its dark canvas: perceptible as a
     tint, invisible as an object. The WIRE edge (4.14 day / 4.21 night) is
     what makes it read as a sheet. It is a full-canvas rect, so gate.mjs
-    filters it out of both `drawables` and check 12's element list by the same
-    bbox rule that drops the slab — it cannot straddle anything, and its own
-    contrast is not graded, which is why WIRE is measured here in the comment.
+    filters it out of both `drawables` (gate.mjs:156-161) and check 12's
+    element list by the same bbox rule that drops the slab — it cannot
+    straddle anything, and its own contrast is not graded, which is why WIRE
+    is measured here in the comment. That rule is `bbox >= canvas - 2` in BOTH
+    axes, so it holds on the 440x224 phone canvas too, where the frame's bbox
+    is 439x223 — one unit of margin, not the desktop's comfortable slack.
+
+    THE EDGE IS 1u ON BOTH SHEETS, AND THAT IS A RULING, NOT AN OVERSIGHT.
+    One authored unit buys `column / viewBox_width * dpr` device pixels. Below
+    1, the browser composites the stroke with the paper behind it and the
+    RENDERED contrast is not the authored 4.21 / 4.14. Measured, worst cases,
+    dpr 1 only: desktop day 2.91:1 in a 560px column, mobile day 2.35:1 in a
+    288px column. At dpr 2 or 3 — every phone anyone actually holds — all
+    eighteen files measure 4.08-4.21, i.e. essentially the authored ratio.
+
+    A heavier mobile frame was measured and declined. 1.5u is the only weight
+    that clears 3.0 at every dpr-1 column down to 288 (day 3.07 / 4.02 / 4.14
+    at 288 / 343 / 390), but 1.5u of 440 is 0.341% of the phone sheet against
+    1u of 708 = 0.141% of the desktop one: 2.4x the relative weight, for every
+    reader at every dpr, to serve resized desktop windows. Two sets drawn by
+    two different hands is a worse defect than the one it fixes.
+
+    The failing quantity is sub-pixel rendering, not this colour. Every 1u
+    mark in the system — grid rules, connectors, axis hairlines — dilutes
+    identically at the same threshold; the frame is only the mark that got
+    measured. The 3.0 floor is a floor on AUTHORED colour at AUTHORED
+    geometry. Written down so the next audit does not rediscover it and ship
+    the heavier frame this ruling declined.
     """
-    return (f'<rect x="{VB_X}" width="{VB_W}" height="{h}" fill="{GROUND}"/>'
-            f'<rect x="{VB_X + 0.5}" y="0.5" width="{VB_W - 1}" height="{h - 1}" '
+    return (f'<rect x="{x:g}" width="{w:g}" height="{h}" fill="{GROUND}"/>'
+            f'<rect x="{x + 0.5:g}" y="0.5" width="{w - 1:g}" height="{h - 1}" '
             f'fill="none" stroke="{WIRE}" stroke-width="1"/>')
 
 
@@ -397,6 +427,18 @@ def redact() -> str:
     template serves both themes: on day paper the bar is solid ink (12.48:1)
     and takes the same edge, so the markup stays theme-symmetric and reads as
     an applied object rather than a hole.
+
+    THE ESCAPE'S UNSTATED PREMISE, now stated: it assumes the fill is DARKER
+    THAN THE GROUND. A contrast ratio is unsigned, so 1.29 says a bar is mute
+    and says nothing about which side of the paper it is mute on — and this
+    bar's whole meaning is its polarity. Darker than the sheet is removal;
+    lighter is a highlight. The gate is structurally blind to that flip, which
+    is exactly how the phone shipped one; see the note in _motif().
+
+    The 1.29 is not a number to fix. On paper, a mute fill whose boundary
+    carries the object is what a redaction looks like; a high-contrast bar is
+    a blackout that shouts, which inverts the motif's tone as surely as the
+    sign flip inverted its meaning. Do not darken REDACT to raise it.
     """
     return f'fill="{REDACT}" stroke="{WIRE}" stroke-width="1.4"'
 
@@ -1742,6 +1784,35 @@ def _motif(name: str) -> str:
                 f'<rect x="348" y="138" width="44" height="3" fill="{CLAY_G}"/>'
                 f'<circle cx="416" cy="156" r="6" fill="none" stroke="{INK2}" stroke-width="1.4"/></g>')
     if name == "redact":
+        # THE ONE PLACE THE PHONE WAS ACTUALLY WORSE OFF, and the reason the
+        # ground above stopped being transparent. Every other token gains
+        # contrast on GitHub's canvas over the paper the gate measures — the
+        # smallest gain is day RULE at +0.82 — so for nineteen of the twenty
+        # token/theme pairs a borrowed ground was an error of MAGNITUDE, and
+        # in the safe direction. Night REDACT was an error of SIGN.
+        #
+        # 1.29:1 on night paper, 1.27:1 on #0d1117 — nearly the same number
+        # describing opposite objects, because #2e2620 sits BETWEEN them:
+        # Y(#0d1117)=0.0055 < Y(#2e2620)=0.0207 < Y(#43372f)=0.0413.
+        #
+        # This motif is an OPPOSITION: two bars withheld, one row returned.
+        # Measured at the three bar centres, signed against the surround:
+        #
+        #   rented #0d1117   withheld +0.0152  withheld +0.0152  returned +0.2548
+        #   own paper        withheld -0.0206  withheld -0.0206  returned +0.2190
+        #
+        # So the defect is not that the voids were invisible — 1.27 is as mute
+        # as 1.29. It is that ALL THREE MARKS POINTED THE SAME WAY. Withheld
+        # and returned both read as light added to the ground, and the only
+        # thing left telling them apart was how much. On paper the withheld
+        # bars go negative and the opposition is the drawing again.
+        #
+        # Night only. Day was never wrong: #26231c is darker than #ffffff and
+        # darker than #f2e4c9, so that theme read as applied ink on both
+        # grounds (15.68 -> 12.48), which is the reading redact() intends.
+        #
+        # No numeric floor could have caught it: a contrast ratio is unsigned.
+        # That is why the fix is opaque paper and not a different REDACT hex.
         return (f'<rect x="300" y="84" width="110" height="12" rx="2" {redact()}/>'
                 f'<rect x="300" y="104" width="110" height="12" rx="2" {redact()}/>'
                 f'<rect x="300" y="124" width="110" height="12" rx="2" fill="{ROW}" stroke="{PINE}"/>')
@@ -1807,7 +1878,15 @@ def plate_mobile(accent: str, kicker: str, hero: str, unit: str,
         f"90%{{opacity:0}}91%{{transform:translateX(0);opacity:0}}95%{{opacity:1}}100%{{transform:translateX(0);opacity:1}}}}"
         f"@media (prefers-reduced-motion: reduce){{*{{animation:none!important}}}}"
         f"</style>"
-        f'<rect width="{MW}" height="{h}" fill="{GROUND}" fill-opacity="0"/>',
+        # The phone gets the same sheet the desktop does. It used to get a
+        # DECLARED ground at zero alpha — the colour was right, the paint was
+        # missing — so a phone reader was handed the marks on GitHub's canvas
+        # while gate.mjs graded them against paper (it reads the first rect's
+        # fill and ignores fill-opacity). Nineteen of the twenty token/theme
+        # ratios are more forgiving on the real canvas than on the paper, so
+        # that was survivable; see the redaction note in _motif() for the one
+        # that is not, and which this rect actually fixes.
+        + ground(h, 0, MW),
         f'<text x="{tx}" y="40" {ax}class="k">{kicker}</text>']
     if layout == "ledger":
         # the account book opens with a double rule, and the figure sits at
