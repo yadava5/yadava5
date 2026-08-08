@@ -107,40 +107,67 @@ def logo(name: str, x: float, y: float, size: float, colour: str) -> str:
 
 W = 880
 
-# ── the two palettes. The figures are transparent; the ground they are
-# measured against is GitHub's own canvas (#0d1117 dark, #ffffff light).
-# Every value below was measured against its own canvas (round 19). PINK
-# passes from LifeQuest (cut this round — see CONTENT-PLAN) to VisualAssist,
-# so no new colour enters the document and nothing needs re-measuring;
-# gate.mjs check 10 re-measures both grounds on every build regardless.
+# ── the two palettes. THE PLATES OWN THEIR GROUND.
+#
+# Until 2026-08-08 the figures were transparent and every colour was measured
+# against GitHub's canvas (#0d1117 / #ffffff) — which meant the single most
+# identity-carrying decision a page makes was RENTED. It also meant this page
+# and the portfolio it belongs to were two different designs: cold blue-greys
+# and six saturated accents here, warm paper and one ink family there. A
+# reader clicking between them met two different people.
+#
+# So the first <rect> is now opaque paper, and these are the Daylight Study's
+# own tokens on their own grounds: #f2e4c9 (day) and #43372f (night), the two
+# waypoints Portfolio-2.0 measures its inks against. Every ratio below was
+# recomputed on this paper with the portfolio's own instrument
+# (Portfolio-2.0/scripts/qa/check-palette.mjs:86-101 — the same WCAG 2.x
+# formula gate.mjs:544-545 runs here) and reproduced 19/19.
+#
+# THE SIX-ACCENT BRAND SYSTEM IS RETIRED. Hue-per-project taught a lookup
+# table that paid off nowhere: EXPLORATION.md's own test is "identify a
+# section from a 200px crop with the words blurred", and what passes it is
+# the ARMATURE — ledger, bench sheet, copybook, dial, disclosure, channel,
+# sweep — not the hue. Two accents replace six, and they carry a semantic
+# rather than an index: CLAY is my act (the thing I built, the claim), PINE
+# is the check (the reference that stands, the gate, the database's refusal).
+#
+# Floors gate.mjs enforces (gate.mjs:603): 4.5:1 text, 3.0:1 non-text.
+# NO UNMEASURED ALPHA, AND NO ALPHA UNDER ITS FLOOR. A rest-state alpha may
+# ship only with its per-theme composited hex and ratio in the comment beside
+# it — the page's two hair tokens (1.36 and 2.01 on day paper) and half-ink
+# used as text (3.82, under the 4.5 text floor) are retired for failing that.
 THEMES = {
-    "dark": dict(
-        GROUND="#0d1117",   # GitHub's dark canvas — the ground under the ink
-        RULE="#5D636D",     # 3.13:1 — section rules
-        WIRE="#6E737C",     # 3.86:1 — connectors, boundaries, brackets, frames
-        ROW="#5D636D",      # 3.13:1 — tenant row fills
-        REDACT="#5D636D",   # 3.13:1 — a black bar on near-black would vanish
-        INK="#F7F8F8", INK2="#8A8F98", INK3="#7A7F88",  # 17.79 / 5.82 / 4.70:1
-        AMBER="#F5A524", LIME="#B8E62E", EMERALD="#34D399",   # 9.27/12.97/9.84
-        CYAN="#22D3EE", PINK="#F472B6", INDIGO="#818CF8",     # 10.47/7.15/6.34
-        CHIP="#0E2A22",     # the filed event's fill; its accent stroke carries it
+    "dark": dict(                # night paper — the settled field
+        GROUND="#43372f",   # the sheet itself; 1.65:1 against GitHub's dark canvas,
+                            #   which is why every plate also draws a WIRE frame
+        RULE="#948a80",     # 3.40:1 — hairlines, baselines, row rules
+        WIRE="#a59b90",     # 4.21:1 — frames, brackets, boundaries, the sheet edge
+        ROW="#948a80",      # 3.40:1 — tenant row fills
+        REDACT="#2e2620",   # 1.29:1 — THE VOID. Legal only through the stroke
+                            #   escape at gate.mjs:566-572, so redact() bakes a
+                            #   mandatory WIRE edge in; never draw a bare bar.
+        INK="#f6efe2", INK2="#d9d0c3", INK3="#c9c0b2",   # 10.06 / 7.54 / 6.39:1
+        CLAY="#f4b090",     # 6.28:1 — accent TEXT, the stamp
+        CLAY_G="#e08a5f",   # 4.36:1 — accent graphics: bars, scans, cones
+        PINE="#aecfc0",     # 6.84:1 — the check. Text-grade on both papers.
     ),
-    "light": dict(
-        GROUND="#ffffff",   # GitHub's default canvas — ink on the page itself
-        RULE="#848A93",     # 3.48:1
-        WIRE="#737981",     # 4.39:1
-        ROW="#848A93",      # 3.48:1
-        REDACT="#1A1D21",   # 16.91:1 — on paper a redaction is black ink
-        INK="#1A1D21", INK2="#555B63", INK3="#6B7178",  # 16.91 / 6.86 / 4.93:1
-        AMBER="#B45309",    # 5.02:1 — Glyph
-        LIME="#4D7C0F",     # 4.99:1 — jetpack
-        EMERALD="#047857",  # 5.48:1 — Cadence
-        CYAN="#0E7490",     # 5.36:1 — Applied
-        PINK="#BE185D",     # 6.04:1 — VisualAssist
-        INDIGO="#4F46E5",   # 6.29:1 — AutoML
-        CHIP="#DEF2E8",
+    "light": dict(               # day paper — the golden waypoint
+        GROUND="#f2e4c9",   # 1.26:1 against GitHub's white: a tint, not an object,
+                            #   until the WIRE frame makes it a sheet
+        RULE="#877e6d",     # 3.19:1
+        WIRE="#746c5c",     # 4.14:1
+        ROW="#877e6d",      # 3.19:1
+        REDACT="#26231c",   # 12.48:1 — on paper a redaction is black ink; it takes
+                            #   the same WIRE edge so the markup stays symmetric
+        INK="#26231c", INK2="#5c564a", INK3="#6a6355",   # 12.48 / 5.79 / 4.74:1
+        CLAY="#a03f20",     # 5.18:1
+        CLAY_G="#c4532e",   # 3.62:1
+        PINE="#2f5d50",     # 5.96:1
     ),
 }
+# Ember (#f57a3e) stays home: 2.16:1 on day paper. The portfolio reserves it
+# for one stamp on its own dark plates; it never boards these. CHIP is gone —
+# it had zero users in any shipped plate.
 
 THEME = "dark"
 
@@ -150,19 +177,34 @@ def set_theme(name: str) -> None:
     globals().update(THEMES[name])
     globals()["THEME"] = name
     t = THEMES[name]
-    globals()["LEGEND"] = [
-        ("GLYPH", t["AMBER"]), ("JETPACK", t["LIME"]), ("CADENCE", t["EMERALD"]),
-        ("APPLIED", t["CYAN"]), ("VISUALASSIST", t["PINK"]), ("AUTOML", t["INDIGO"]),
-    ]
+    # The six project hues are gone, so the legend is no longer a colour key —
+    # it is a list of marks. They draw in INK2 and take CLAY only when READ:
+    # the index's read-chase and the colophon ring now say "this one" with
+    # ink state and one accent instead of with six competing hues.
+    globals()["LEGEND"] = [(n, t["INK2"]) for n in
+                           ("GLYPH", "JETPACK", "CADENCE",
+                            "APPLIED", "VISUALASSIST", "AUTOML")]
+    globals()["LEGEND_READ"] = t["CLAY"]
 
 
 set_theme("dark")
 
 
 def op(v: float) -> float:
-    """Translucent-accent opacity, per theme (light lifts alpha through
-    0.6 + 0.4v — compositing toward white destroys chroma contrast faster
-    than compositing toward black; measured, round 19)."""
+    """Translucent-accent opacity, per theme.
+
+    The light lift (0.6 + 0.4v) was measured when the light ground was WHITE,
+    where compositing destroys chroma contrast faster than compositing toward
+    black. Both grounds are paper now — #f2e4c9 and #43372f — which are far
+    closer in luminance, so the lift is no longer strictly required. It is
+    kept because it is CONSERVATIVE in the direction that matters and because
+    removing it would restate every translucent mark on the page in one
+    unrelated commit. Re-measured on the new grounds for the one rest-state
+    alpha the page still ships, Glyph's pen ghost: INK at 0.55 composites to
+    #a59c91 = 4.25:1 on night paper, and the light lift takes it to 0.82,
+    #3f3a2f-ward = well past 3.0 (the un-lifted 0.55 would be #827a6a =
+    3.38:1, which also clears). Both sides of the branch are measured.
+    """
     return v if THEME == "dark" else round(0.6 + 0.4 * v, 2)
 
 # single-stroke digits in a 120x160 box — the same pen Glyph's landing uses
@@ -256,9 +298,49 @@ def head(h: int, title: str, desc: str, key: str = "",
 
 
 def ground(h: int) -> str:
-    # The invisible ground: paints nothing, carries the canvas colour that
-    # gate.mjs check 10 reads its contrast ground from.
-    return f'<rect x="{VB_X}" width="{VB_W}" height="{h}" fill="{GROUND}" fill-opacity="0"/>'
+    """The sheet. THIS RECT MUST BE FIRST IN DOCUMENT ORDER — see below.
+
+    It used to paint nothing (fill-opacity 0) and exist only so gate.mjs could
+    read a contrast ground off it. Now it paints: the plate is a sheet of the
+    portfolio's own paper laid on GitHub's page, which is the case-file idiom
+    that property already uses, and it means every ratio the gate computes is
+    against paper this design owns rather than a canvas it borrows.
+
+    ORDER IS LOad-BEARING. gate.mjs:548 takes its contrast ground from the
+    computed fill of the FIRST <rect> in document order, ignoring fill-opacity.
+    Emit anything before this — including the frame below — and all 36 files
+    grade every colour against the wrong ground, and they do it quietly.
+
+    The frame is not decoration. Day paper measures 1.26:1 against GitHub's
+    white and night paper 1.65:1 against its dark canvas: perceptible as a
+    tint, invisible as an object. The WIRE edge (4.14 day / 4.21 night) is
+    what makes it read as a sheet. It is a full-canvas rect, so gate.mjs
+    filters it out of both `drawables` and check 12's element list by the same
+    bbox rule that drops the slab — it cannot straddle anything, and its own
+    contrast is not graded, which is why WIRE is measured here in the comment.
+    """
+    return (f'<rect x="{VB_X}" width="{VB_W}" height="{h}" fill="{GROUND}"/>'
+            f'<rect x="{VB_X + 0.5}" y="0.5" width="{VB_W - 1}" height="{h - 1}" '
+            f'fill="none" stroke="{WIRE}" stroke-width="1"/>')
+
+
+def redact() -> str:
+    """A redaction bar's paint — THE EDGE IS NOT OPTIONAL.
+
+    Night REDACT (#2e2620) measures 1.29:1 on night paper, far under the 3.0
+    non-text floor. It is legal only through the stroke escape at
+    gate.mjs:566-572, which lets a non-text fill pass when its stroke already
+    clears 3.0. So the edge is baked in here rather than left to the call
+    site: no future plate can draw a bare void and discover the gate later.
+
+    WIRE, not RULE. Both clear the floor, but WIRE carries the margin — 4.21
+    night / 4.14 day against RULE's 3.40 / 3.19 — and a stroke that exists to
+    make a fill LEGAL must not ride the palette's thinnest margin. One
+    template serves both themes: on day paper the bar is solid ink (12.48:1)
+    and takes the same edge, so the markup stays theme-symmetric and reads as
+    an applied object rather than a hole.
+    """
+    return f'fill="{REDACT}" stroke="{WIRE}" stroke-width="1.4"'
 
 
 # ────────────────────────────────────────────────────────────── PLATE 0
@@ -526,7 +608,7 @@ def plate_jetpack() -> str:
     four blocks in continuous descent, drained in order at the foot, each
     keyframe set phased in geometry so frame zero is the authored queue.
     """
-    H, LOOP, a = 584, 11.3, LIME
+    H, LOOP, a = 584, 11.3, CLAY_G
     BH, SP = 18, 26                # block height, conveyor pitch
     WX0, WX1 = 560, 690            # the window's bracket lines
     BY0, TRAVEL = 114, 96          # conveyor head, travel span
@@ -605,7 +687,9 @@ def plate_jetpack() -> str:
                  f'<path class="{cls}" d="M470 {y-4}H{470+w:.1f}" stroke="{GROUND}" '
                  f'stroke-opacity="0.55" stroke-width="4" stroke-dasharray="2 4"/></g>')
         if tag:
-            s.append(f'<text x="{470+w+12:.0f}" y="{y}" class="lbl" style="fill:{a}">{tag}</text>')
+            # CLAY text-grade (5.18 day / 6.28 night) — the graphic token is 3.62/4.36
+            # and this is type, so it must clear 4.5 rather than 3.0.
+            s.append(f'<text x="{470+w+12:.0f}" y="{y}" class="lbl" style="fill:{CLAY}">{tag}</text>')
 
     s.append(f'<text x="{L}" y="266" class="kick">COMPRESS — PARALLEL vs ONE THREAD · MB/s</text>')
     lane(296, "gzip, one thread", "66.2", 260*66.2/422, False, "sa0")
@@ -626,7 +710,7 @@ def plate_jetpack() -> str:
     s.append(f'<text x="{L}" y="564" class="lbl">java.util.zip</text>')
     s.append(f'<text x="330" y="564" class="say" style="fill:{INK}">11E60398</text>')
     s.append(f'<rect x="330" y="542" width="112" height="2" fill="{a}"/>')
-    s.append(f'<text x="560" y="550" class="lbl" style="fill:{a}">identical</text>')
+    s.append(f'<text x="560" y="550" class="lbl" style="fill:{PINE}">identical</text>')
     return "".join(s) + "</svg>"
 
 
@@ -654,7 +738,7 @@ def plate_glyph() -> str:
     snap-to-nothing was the worst defect of the live pass). The nib's
     circuit is exactly two headline loops, so the two hands share a clock.
     """
-    H, LOOP, SET, a = 556, 9.1, 7.6, AMBER
+    H, LOOP, SET, a = 556, 9.1, 7.6, CLAY_G
     NIB = 18.2                     # the nib's circuit — 2 x LOOP, commensurate
     s = [head(H, "Glyph — borrowed code made 3.5x faster, same 97.01%",
               "Glyph: a course-provided C++ MNIST network, hand-optimised — AVX-512, AVX2 and "
@@ -716,10 +800,14 @@ def plate_glyph() -> str:
     for j, d in enumerate([DIGITS[3], "M60 147L61 150", DIGITS[5]]):
         dot = ';stroke-width:14' if j == 1 else ''
         gw = 14 if j == 1 else 7
-        # the ghost: the same stroke at half ink (op(0.55) clears 3:1 on both
-        # slabs — measured), inside the settle group so the pair moves as one
+        # the ghost: the same stroke at half ink, inside the settle group so
+        # the pair moves as one. INK, not the accent: measured on paper,
+        # INK at 0.55 composites to #a59c91 = 4.25:1 on night and #827a6a =
+        # 3.38:1 on day (the light lift raises it to 0.82, higher again),
+        # while the accent at the same alpha is 2.36 / 2.85 and fails the
+        # 3.0 floor. It is faded handwriting, so it stays in the ink family.
         s.append(f'<g {digit(d, hx, 64, 0.55)}><g class="stl" style="animation-delay:{round(-SET + j*0.15,3)}s">'
-                 f'<path d="{d}" fill="none" stroke="{a}" stroke-opacity="{op(0.55)}" '
+                 f'<path d="{d}" fill="none" stroke="{INK}" stroke-opacity="{op(0.55)}" '
                  f'stroke-width="{gw}" stroke-linecap="round" stroke-linejoin="round"/>'
                  f'<path class="ink" d="{d}" pathLength="1" '
                  f'style="animation-delay:{round(-SET + j*0.15,3)}s{dot}"/></g></g>')
@@ -731,7 +819,7 @@ def plate_glyph() -> str:
     # One group: the two strokes of a glyph CROSS, which is composition.
     xg = []
     for xd, dl in (("M0 0L38 42", -7.15), ("M38 0L0 42", -7.0)):
-        xg.append(f'<path d="{xd}" fill="none" stroke="{a}" stroke-opacity="{op(0.55)}" '
+        xg.append(f'<path d="{xd}" fill="none" stroke="{INK}" stroke-opacity="{op(0.55)}" '
                   f'stroke-width="7" stroke-linecap="round"/>'
                   f'<path class="ink" d="{xd}" pathLength="1" style="animation-delay:{dl}s"/>')
     s.append(f'<g transform="translate({hx+8:.0f},124) scale(0.55)">'
@@ -764,7 +852,7 @@ def plate_glyph() -> str:
     # read), the 79 sure ones in heavy amber — hue AND weight, and the amber
     # count on the field IS the 79.
     rails = [f'<path d="M96 {288 + r*28}H784" stroke="{RULE}" stroke-width="1"/>' for r in range(6)]
-    rails.append(f'<rect x="134.5" y="274" width="1.5" height="166" fill="{a}" fill-opacity="{op(0.5)}"/>')
+    rails.append(f'<rect x="134.5" y="274" width="1.5" height="166" fill="{a}"/>')
     s.append('<g>' + "".join(rails) + '</g>')
     _e = json.loads((ROOT / "errors.json").read_text())
     errs, conf = _e["true"], _e["conf"]
@@ -807,7 +895,7 @@ def plate_automl() -> str:
     because it is the claim.
     """
     H, LOOP, SET = 764, 13.3, 9.9
-    a = INDIGO
+    a = CLAY_G
     CXD, CYD = 440, 296          # dial centre
     N = 7
     SPAN = 360 / N
@@ -934,11 +1022,11 @@ def plate_automl() -> str:
     # Isometric, exploded — the five tmpfs trays lifted out on leaders,
     # because the count of writable surfaces IS the blast radius.
     s.append(f'<path class="feed" d="M382 388C330 442 290 470 262 522" fill="none" '
-             f'stroke="{a}" stroke-width="1.6" stroke-dasharray="5 7" opacity="{op(0.7)}"/>')
+             f'stroke="{a}" stroke-width="1.6" stroke-dasharray="5 7"/>')
     s.append(f'<text x="418" y="524" class="kick">WHERE GENERATED PYTHON RUNS</text>')
     s.append(f'<path d="M183 568L258 532L333 568L258 604Z" fill="none" stroke="{a}" stroke-width="1.6"/>')
     s.append(f'<path d="M183 568V614L258 650L333 614V568" fill="none" stroke="{a}" stroke-width="1.6"/>')
-    s.append(f'<path d="M258 604V650" stroke="{a}" stroke-width="1" opacity="{op(0.6)}"/>')
+    s.append(f'<path d="M258 604V650" stroke="{WIRE}" stroke-width="1"/>')
     for i in range(5):
         ty = 548 + i * 22
         s.append(f'<g><path d="M352 {ty}L366 {ty-7}L380 {ty}L366 {ty+7}Z" fill="none" stroke="{a}" stroke-width="1.4"/>'
@@ -991,13 +1079,11 @@ def plate_cadence() -> str:
     returned), then wipes back across left-to-right in a tight 60ms cascade
     down the column: the door slamming, and staying shut.
     """
-    H, LOOP, a = 776, 9.7, EMERALD
+    # PINE, not an arbitrary hue: this whole plate is the database refusing,
+    # and the refusal is a CHECK. The accent says so.
+    H, LOOP, a = 776, 9.7, PINE
     SCAN = 17.1
-    # the redaction's material is per-theme: ink on paper, void on the dark slab
-    if THEME == "dark":
-        rbar = f'fill="#161B22" stroke="{WIRE}" stroke-width="1.4"'
-    else:
-        rbar = f'fill="{REDACT}"'
+    rbar = redact()
     s = [head(H, "Cadence — six services audited, and the database that refuses",
               "Cadence, a calendar that files plain sentences, audited by its own author and "
               "drawn as a redacted disclosure. The IDOR: in six services — attachments, "
@@ -1115,7 +1201,7 @@ def plate_applied() -> str:
     still frame is honest: queued messages at the mouth, and the referred
     one resting beside the human it was handed to (data-rest, check 11/16).
     """
-    H, a = 712, CYAN
+    H, a = 712, CLAY_G
     T1, T2, T3 = 8.6, 12.9, 15.5   # route periods — near-coprime, unfindable
     s = [head(H, "Applied — a classifier allowed to say it doesn't know",
               "Applied: a three-layer email classifier — 201 regex rules, then e5 embeddings, "
@@ -1234,7 +1320,7 @@ def plate_applied() -> str:
     s.append(f'<text x="594" y="371" class="key">SETFIT HEAD</text>')
     s.append(f'<text x="594" y="213" class="fine">cheapest first —</text>')
     s.append(f'<text x="594" y="231" class="fine">most mail stops</text>')
-    s.append(f'<text x="594" y="475" class="key" style="fill:{a}">0.85 GATE</text>')
+    s.append(f'<text x="594" y="475" class="key" style="fill:{PINE}">0.85 GATE</text>')
 
     # what leaves the channel decided — a rotated tab at the left edge,
     # the one strip the stream can never enter
@@ -1249,7 +1335,7 @@ def plate_applied() -> str:
     s.append(f'<path d="M{L} 580H{R}" stroke="{RULE}"/>')
     s.append(f'<text x="{L}" y="628" class="hero">0.979</text>')
     s.append(f'<text x="330" y="606" class="lbl">MACRO-F1 · 96-MSG EVAL SET · 2 MISTAKES</text>')
-    s.append(f'<text x="330" y="628" class="key" style="fill:{a}">RULES LAYER ONLY</text>')
+    s.append(f'<text x="330" y="628" class="key" style="fill:{PINE}">RULES LAYER ONLY</text>')
     s.append(f'<text x="330" y="650" class="fine">SetFit off, embeddings emptied · CI fails below 0.95</text>')
     s.append(f'<text x="{L}" y="{H-30}" class="lbl">YOUR BROWSER</text>')
     s.append(f'<text x="300" y="{H-30}" class="fine">int8 ONNX · 90.4 MB → 22.8 MB</text>')
@@ -1279,7 +1365,7 @@ def plate_visualassist() -> str:
     half of the claim is drawn too: audio arcs at the phone's ear flash with
     every detection — depth in, sound out.
     """
-    H, a = 500, PINK
+    H, a = 500, CLAY_G
     T, AMP = 8.9, 13.0             # sweep period and half-angle, degrees
     EX, EY = 238, 227              # the emitter — the phone's sensor
 
@@ -1476,7 +1562,7 @@ def _digits_row(y: float, n: int, x0: float, pitch: float, sc: float,
     for i in range(start, start + n):
         d = DIGITS[_e["true"][i]]
         out.append(f'<g opacity="{op(0.72)}" {digit(d, x0 + (i - start) * pitch, y - 150 * sc, sc, centre=pitch - 2)}>'
-                   f'<path d="{d}" fill="none" stroke="{AMBER}" stroke-width="14" stroke-linecap="round"/></g>')
+                   f'<path d="{d}" fill="none" stroke="{CLAY_G}" stroke-width="14" stroke-linecap="round"/></g>')
     return "".join(out)
 
 
@@ -1486,7 +1572,7 @@ def _motif(name: str) -> str:
     if name == "bench":
         return (f'<path d="M300 84V148" stroke="{WIRE}" stroke-width="1"/>'
                 f'<rect x="300" y="92" width="18.5" height="12" fill="{INK2}"/>'
-                f'<rect x="300" y="118" width="118" height="12" fill="{LIME}"/>')
+                f'<rect x="300" y="118" width="118" height="12" fill="{CLAY_G}"/>')
     if name == "sieve":
         # compact and held above the body lines — the desktop channel owns
         # the full drawing; this is its monogram
@@ -1495,12 +1581,12 @@ def _motif(name: str) -> str:
                 f'<path d="M334 86H406" stroke="{WIRE}" stroke-width="1.4" stroke-dasharray="5 4"/>'
                 f'<path d="M338 102H402" stroke="{WIRE}" stroke-width="1.4" stroke-dasharray="5 4"/>'
                 f'<path d="M342 118H398" stroke="{WIRE}" stroke-width="1.4" stroke-dasharray="5 4"/>'
-                f'<rect x="348" y="138" width="44" height="3" fill="{CYAN}"/>'
+                f'<rect x="348" y="138" width="44" height="3" fill="{CLAY_G}"/>'
                 f'<circle cx="416" cy="156" r="6" fill="none" stroke="{INK2}" stroke-width="1.4"/></g>')
     if name == "redact":
-        return (f'<rect x="300" y="84" width="110" height="12" rx="2" fill="{REDACT}"/>'
-                f'<rect x="300" y="104" width="110" height="12" rx="2" fill="{REDACT}"/>'
-                f'<rect x="300" y="124" width="110" height="12" rx="2" fill="{ROW}" stroke="{EMERALD}"/>')
+        return (f'<rect x="300" y="84" width="110" height="12" rx="2" {redact()}/>'
+                f'<rect x="300" y="104" width="110" height="12" rx="2" {redact()}/>'
+                f'<rect x="300" y="124" width="110" height="12" rx="2" fill="{ROW}" stroke="{PINE}"/>')
     if name == "dial":
         out = ['<g>']
         for j in range(7):
@@ -1508,20 +1594,20 @@ def _motif(name: str) -> str:
             p = lambda deg, r=34: (390 + r * math.sin(math.radians(deg)),
                                    104 - r * math.cos(math.radians(deg)))
             x0, y0 = p(a0); x1, y1 = p(a1)
-            col = INDIGO if j == 6 else ROW
+            col = CLAY_G if j == 6 else ROW
             out.append(f'<path d="M{x0:.1f} {y0:.1f}A34 34 0 0 1 {x1:.1f} {y1:.1f}" '
                        f'fill="none" stroke="{col}" stroke-width="6"/>')
         th = math.radians(6 * 51.43 + 25.7)
         out.append(f'<path d="M{390 + 10*math.sin(th):.1f} {104 - 10*math.cos(th):.1f}'
                    f'L{390 + 26*math.sin(th):.1f} {104 - 26*math.cos(th):.1f}" '
-                   f'stroke="{INDIGO}" stroke-width="1.5"/></g>')
+                   f'stroke="{CLAY_G}" stroke-width="1.5"/></g>')
         return "".join(out)
     if name == "sweep":
-        return (f'<g><circle cx="316" cy="116" r="3" fill="{PINK}"/>'
-                f'<path d="M338 92A34 34 0 0 1 338 140" fill="none" stroke="{PINK}" stroke-width="2" stroke-linecap="round"/>'
-                f'<path d="M352 78A54 54 0 0 1 352 154" fill="none" stroke="{PINK}" stroke-width="2" stroke-linecap="round" stroke-opacity="0.8"/>'
-                f'<circle cx="398" cy="104" r="4" fill="{PINK}"/>'
-                f'<circle cx="408" cy="132" r="4" fill="{PINK}"/></g>')
+        return (f'<g><circle cx="316" cy="116" r="3" fill="{CLAY_G}"/>'
+                f'<path d="M338 92A34 34 0 0 1 338 140" fill="none" stroke="{CLAY_G}" stroke-width="2" stroke-linecap="round"/>'
+                f'<path d="M352 78A54 54 0 0 1 352 154" fill="none" stroke="{CLAY_G}" stroke-width="2" stroke-linecap="round"/>'
+                f'<circle cx="398" cy="104" r="4" fill="{CLAY_G}"/>'
+                f'<circle cx="408" cy="132" r="4" fill="{CLAY_G}"/></g>')
     if name == "stamp":
         return (f'<g transform="translate(80,84) rotate(-8)">'
                 f'<rect x="-52" y="-16" width="104" height="32" rx="5" fill="none" stroke="{INK3}" stroke-width="1.6"/>'
@@ -1593,22 +1679,22 @@ MOBILE = {
    "repository: as ITSM Data Integration Intern at Miami University, a Python "
    "pipeline turned 1.6 million Oracle Analytics query logs into a 57.8 "
    "million-row field-usage table.", "ledger", "stamp", 10.9),
- "m-1-glyph.svg": ("GLYPH", "AMBER", "3.5", "×", "Someone else’s net, made", "faster by hand. 97.01% held.",
+ "m-1-glyph.svg": ("GLYPH", "CLAY_G", "3.5", "×", "Someone else’s net, made", "faster by hand. 97.01% held.",
    "Glyph: a course-provided neural network, hand-optimised — 3.5 times faster on the committed dot benchmark, accuracy unchanged at 97.01 percent.",
    "left", "copybook", 12.3),
- "m-2-jetpack.svg": ("JETPACK", "LIME", "6.4", "×", "Parallel gzip on JDK 25.", "The JDK intrinsic still wins.",
+ "m-2-jetpack.svg": ("JETPACK", "CLAY_G", "6.4", "×", "Parallel gzip on JDK 25.", "The JDK intrinsic still wins.",
    "jetpack: parallel gzip on JDK 25, a 6.4 times speedup over one thread — and the JDK's own checksum intrinsic still wins.",
    "left", "bench", 9.1),
- "m-4-applied.svg": ("APPLIED", "CYAN", "0.979", "", "macro-F1, rules layer only.", "Below 0.85 it asks a human.",
+ "m-4-applied.svg": ("APPLIED", "CLAY_G", "0.979", "", "macro-F1, rules layer only.", "Below 0.85 it asks a human.",
    "Applied: an email classifier scoring 0.979 macro-F1 with the rules layer alone. Below the 0.85 confidence gate it asks a human rather than guessing.",
    "left", "sieve", 11.3),
- "m-5-refusal.svg": ("CADENCE", "EMERALD", "B", " only", "The app didn’t remember to", "filter. The database refused.",
+ "m-5-refusal.svg": ("CADENCE", "PINE", "B", " only", "The app didn’t remember to", "filter. The database refused.",
    "Cadence: an unfiltered query run as tenant B returns B only. The app didn't remember to filter; PostgreSQL row-level security refused.",
    "left", "redact", 8.9),
- "m-6b-automl.svg": ("AGENTIC AUTOML", "INDIGO", "44", "", "tools in the registry. The", "model holds its phase’s set.",
+ "m-6b-automl.svg": ("AGENTIC AUTOML", "CLAY_G", "44", "", "tools in the registry. The", "model holds its phase’s set.",
    "Agentic AutoML: dataset in, trained model out. Its registry holds 44 tool definitions, but the model only ever holds the set its phase needs.",
    "left", "dial", 12.9),
- "m-8-visualassist.svg": ("VISUALASSIST", "PINK", "LiDAR", "", "Depth in, spatial audio out.", "Needs an iPhone’s sensor.",
+ "m-8-visualassist.svg": ("VISUALASSIST", "CLAY_G", "LiDAR", "", "Depth in, spatial audio out.", "Needs an iPhone’s sensor.",
    "VisualAssist: LiDAR depth in, spatial audio out — an iPhone app for "
    "low-vision users, in Swift. The one system here with no live link, "
    "because it needs an iPhone with a lidar sensor.", "left", "sweep", 10.1),

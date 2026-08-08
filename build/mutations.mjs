@@ -61,8 +61,21 @@ const MUTATIONS = [
   ['a fill attribute is overridden by its class', /overriding the attribute/,
     (s) => s.replace(/class="([\w ]+)" style="fill:(#[0-9A-Fa-f]{6})"/,
       (m, c, col) => `class="${c}" fill="${col}"`)],
+  // Re-anchored 2026-08-08 with the paper palette: this keyed on the literal
+  // dark INK2 #8A8F98, which the Daylight Study replaced with #D9D0C3. The
+  // probe went stale in the same commit that changed the colour — which is
+  // the design, but a probe pinned to ONE hex rots on every palette move. So
+  // it now keys on the .fine rule's SHAPE and rewrites whatever fill it finds
+  // to #8a8175 — a warm mid tone that fails the 4.5:1 text floor against
+  // BOTH papers (3.00:1 on night #43372f, 3.05:1 on day #f2e4c9, measured).
+  // The loop only ever reads the dark set, so failing night alone would be
+  // enough today; failing both means the probe still fires the day someone
+  // points it at assets/light, which is the cheaper thing to be right about.
+  // The rule's geometry — 13px / 0.4px — stays pinned: that is authored
+  // typography, not palette, and it should rot loudly if a redesign moves it.
   ['text drops below 4.5:1 on the slab', /on the slab \(needs 4.5/,
-    (s) => s.replace(/\.fine\{font-size:13px;letter-spacing:0\.4px;fill:#8A8F98\}/, '.fine{font-size:13px;letter-spacing:0.4px;fill:#3A3E44}')],
+    (s) => s.replace(/\.fine\{font-size:13px;letter-spacing:0\.4px;fill:#[0-9A-Fa-f]{6}\}/,
+      '.fine{font-size:13px;letter-spacing:0.4px;fill:#8a8175}')],
   // Keys on Applied's refused message, which declares data-rest="the-human":
   // pulling its authored x back 100u strands it short of the person it must
   // reach, in both the animated and the still frame.
