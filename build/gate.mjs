@@ -589,6 +589,22 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
         out.push(`the ground rect declares ${slabStyle.fill} but paints it at alpha ${alpha.toFixed(3)} `
                + `(fill-opacity ${slabStyle.fillOpacity}, opacity ${ao}) — every contrast ratio on this `
                + `plate is measured against a colour the reader never sees`);
+      // ...and it must be the SHEET, not merely the first thing that paints.
+      // The line above grades the paint of whatever `querySelector` returns,
+      // which is document order — the ordering plates.py's ground() docstring
+      // calls load-bearing and which, until this line, nothing enforced. A
+      // 30x10 rect emitted one position early is enough: it becomes the
+      // contrast ground for the entire plate, and if its tone is near the
+      // paper's, check 10 does not fire either. Demonstrated on a temp copy,
+      // #4a3e35 ahead of #43372f — the gate passed while every ratio on the
+      // plate was measured against the decoy. Same full-canvas bbox rule the
+      // drawables filter uses to drop the slab, so the two agree by
+      // construction.
+      const sb = slabEl.getBBox();
+      if (!(sb.width >= W - 2 && sb.height >= H - 2))
+        out.push(`the first <rect> is ${Math.round(sb.width)}x${Math.round(sb.height)} on a ${W}x${H} `
+               + `canvas — it is a mark, not the sheet, and every contrast ratio on this plate is `
+               + `being measured against it`);
     }
     const SLABRGB = parse(slabStyle ? slabStyle.fill : 'rgb(0, 0, 0)');
     const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
