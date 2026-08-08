@@ -553,7 +553,44 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
     const lum = ([r, g, b]) => 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
     const parse = s => (s.match(/[\d.]+/g) || []).map(Number);
     const over = (fg, bg, al) => fg.map((c, i) => c * al + bg[i] * (1 - al));
-    const SLABRGB = parse(getComputedStyle(svgEl.querySelector('rect')).fill);
+
+    // 20 — THE GROUND MUST PAINT WHAT IT DECLARES.
+    //
+    //      Every ratio below is computed against the first <rect>'s fill. That
+    //      makes the ground a DECLARATION, and until it is checked, a
+    //      declaration is not a fact. The nine mobile plates carried
+    //      `fill="#43372f" fill-opacity="0"` from the day they were written
+    //      until 2026-08-08: the colour was right, the paint was missing, and
+    //      the whole check below graded a phone's marks against paper the
+    //      phone did not have. Nothing failed, because this line reads `fill`
+    //      and `fill-opacity` is a different attribute — the same two-
+    //      attributes-one-colour hole the loop below has its own note about.
+    //
+    //      It was survivable there only by luck: 19 of the 20 token/theme
+    //      pairs measure HIGHER on GitHub's real canvas than on the paper, so
+    //      the lie ran in the safe direction. The twentieth did not, and it
+    //      was not even a magnitude error — night REDACT is lighter than
+    //      #0d1117 and darker than #43372f, so a redaction rendered as a
+    //      highlight. Luck is not a floor, and a ratio is unsigned, so
+    //      neither this check nor any other could have caught the sign.
+    //
+    //      Three ways to make the ground a phantom, all three closed here:
+    //      an alpha channel in the fill, a fill-opacity beside it, and an
+    //      opacity on the rect or any ancestor of it.
+    const slabEl = svgEl.querySelector('rect');
+    if (!slabEl) out.push('no <rect> to take a contrast ground from — every ratio below would be meaningless');
+    const slabStyle = slabEl ? getComputedStyle(slabEl) : null;
+    if (slabStyle) {
+      const fo = parseFloat(slabStyle.fillOpacity);
+      const ao = opacityOf(slabEl);
+      const chan = parse(slabStyle.fill);
+      const alpha = (chan.length > 3 ? chan[3] : 1) * (Number.isFinite(fo) ? fo : 1) * ao;
+      if (slabStyle.fill === 'none' || slabStyle.fill.startsWith('url') || !(alpha >= 1))
+        out.push(`the ground rect declares ${slabStyle.fill} but paints it at alpha ${alpha.toFixed(3)} `
+               + `(fill-opacity ${slabStyle.fillOpacity}, opacity ${ao}) — every contrast ratio on this `
+               + `plate is measured against a colour the reader never sees`);
+    }
+    const SLABRGB = parse(slabStyle ? slabStyle.fill : 'rgb(0, 0, 0)');
     const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
 
     for (const m of meta) {
