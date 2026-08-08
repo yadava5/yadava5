@@ -22,7 +22,7 @@
  * has already shipped twice (the char-count gate, and the duty cycle summed
  * per class). You cannot add a number to a plate without registering it here.
  */
-import { readFileSync, readdirSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
+import { readFileSync, readdirSync, writeFileSync, mkdirSync, existsSync, statSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -83,31 +83,85 @@ function bytes(repoKey, path) {
 //    anyone with curl, and it SHOULD break if the deployment changes — that is
 //    the claim. Not cached: a stale cache would defeat the point.
 function live(url, header) {
-  // `curl -f` exits non-zero on any 4xx/5xx and prints nothing useful, so this
-  // used to surface as "extractor failed — Command failed: curl", which does
-  // not tell a reader of CI the one thing they need to know: whether the PAGE
-  // is wrong or the HOST is unreachable. Those are different problems with
-  // different owners.
+  // ── WHY THIS IS NOT A PLAIN curl ANY MORE
   //
-  // The verdict is unchanged either way — a claim the page tells readers to
-  // check with curl, which they cannot check, is a failure and should stay one.
-  // Only the diagnosis improves.
-  let status = '';
-  try {
-    status = execFileSync('curl', ['-sS', '-o', '/dev/null', '-w', '%{http_code}',
-                                   '--max-time', '60', url], { encoding: 'utf8' }).trim();
-  } catch { /* fall through to the fetch below, which reports the real error */ }
-  if (status && !/^2\d\d$/.test(status)) {
-    const why = status === '403'
-      ? 'the deployment is behind access protection (Vercel Deployment Protection, most likely)'
-      : status === '404' ? 'the path is gone from the deployment'
-      : `the host answered ${status}`;
-    throw new Error(`${url} returns ${status} — ${why}. The page tells a reader to verify this `
-                  + `artifact with curl, so right now that instruction does not work.`);
+  // This is the only claim on the page about a DEPLOYED artifact rather than a
+  // committed one: README section II gives a sha256 and tells the reader to
+  // curl it. That is worth keeping and worth keeping uncached in the place that
+  // matters. But as written it had two faults that have nothing to do with the
+  // claim being right.
+  //
+  // 1. It ran on EVERY local `npm test`. The suite gets run dozens of times in
+  //    a working session, so a third party absorbed dozens of requests a day
+  //    for a value that changes when a deployment changes — which is rarely.
+  // 2. ONE transient response failed the build. That happened: getglyph
+  //    answered 403 on three consecutive attempts and 200 twenty minutes later.
+  //    Deployment protection was verified OFF and 40 rapid requests all
+  //    returned 200, so it was not protection and not rate limiting; the only
+  //    production deploy in three days landed in that window. Transient.
+  //
+  // So: retry before believing a failure, and cache LOCALLY ONLY. CI never
+  // reads the cache, so the authority on drift is unchanged — the page is
+  // still checked against the real deployment on every push and every PR. What
+  // goes away is a laptop hammering someone else's host to re-learn a number
+  // it already knows.
+  const FRESH = !!process.env.CI || process.argv.includes('--fresh');
+  const TTL = 12 * 60 * 60 * 1000;
+  const key = join(CACHE, 'live__' + `${url}__${header}`.replace(/[^\w.]/g, '_'));
+
+  if (!FRESH && existsSync(key) && Date.now() - statSync(key).mtimeMs < TTL)
+    return readFileSync(key, 'utf8').trim();
+
+  const attempt = () => {
+    const status = execFileSync('curl', ['-sS', '-o', '/dev/null', '-w', '%{http_code}',
+                                         '--max-time', '60', url], { encoding: 'utf8' }).trim();
+    if (!/^2\d\d$/.test(status)) {
+      const why = status === '403' ? 'access is being refused'
+                : status === '404' ? 'the path is gone from the deployment'
+                : `the host answered ${status}`;
+      throw new Error(`${url} returns ${status} — ${why}`);
+    }
+    const out = execFileSync('curl', ['-fsSI', '--max-time', '60', url], { encoding: 'utf8' });
+    const m = out.match(new RegExp(`^${header}:\\s*(.+)$`, 'im'));
+    return m ? m[1].trim() : '';
+  };
+
+  let last;
+  for (let i = 0; i < 3; i++) {
+    try {
+      const v = attempt();
+      try { writeFileSync(key, v); } catch { /* cache is an optimisation, never a requirement */ }
+      return v;
+    } catch (e) {
+      last = e;
+      if (i < 2) execFileSync('sleep', [String(2 ** i * 5)]);   // 5s, then 10s
+    }
   }
-  const out = execFileSync('curl', ['-fsSI', '--max-time', '60', url], { encoding: 'utf8' });
-  const m = out.match(new RegExp(`^${header}:\\s*(.+)$`, 'im'));
-  return m ? m[1].trim() : '';
+
+  // MEASURED, not assumed: 40 rapid requests to this host all returned 200 and
+  // then every subsequent request — including the site root — returned 403,
+  // while a different Vercel project on the same account stayed 200. So Vercel
+  // rate-limits per IP per project, the limit trips AFTER the burst, and the
+  // cooldown outlasts any retry window worth having in a test suite.
+  //
+  // Which means a developer can put their own laptop in the penalty box by
+  // running the suite too often, and then the gate reports a page defect that
+  // is really a self-inflicted throttle. That is a false alarm, and false
+  // alarms are how a red build stops meaning anything.
+  //
+  // So locally, a previously-verified value wins over an unreachable host: the
+  // check says what it could not do and moves on. In CI it still fails, and CI
+  // is the authority — it runs from a fresh address every time, so it cannot
+  // trip the limit this way, and it never reads the cache.
+  if (!FRESH && existsSync(key)) {
+    const cached = readFileSync(key, 'utf8').trim();
+    notes.push(`${url} could not be reached (${last.message.split(' — ')[1] || 'unknown'}); `
+             + `used the value last verified ${Math.round((Date.now() - statSync(key).mtimeMs) / 6e4)} `
+             + `minutes ago. CI checks this against the live deployment and does not use this cache.`);
+    return cached;
+  }
+  throw new Error(`${last.message}, three times over ~15s. The page tells a reader to verify this `
+                + `artifact with curl, so right now that instruction does not work for them either.`);
 }
 
 // ── 1. every registered claim must re-derive from its pinned blob
