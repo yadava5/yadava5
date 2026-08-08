@@ -745,10 +745,16 @@ def plate_jetpack() -> str:
     # ── lane one: compression. Bars scale to this lane's own maximum; a
     # shared axis would invite exactly the cross-task comparison the prose
     # never makes, so each lane scales to its own (round 20's finding, kept).
-    def lane(y, nm, val, w, mine, cls, tag=""):
+    def lane(y, nm, val, w, mine, cls, tag="", ref=False):
+        # three tones, three standings: CLAY_G is mine, PINE is the reference
+        # that stands, INK2 is a baseline I merely measured. Before this the
+        # intrinsic wore the same INK2 as the two things it beats, so the
+        # longest bar on the plate — the whole argument of the second lane —
+        # was drawn in the losers' colour.
+        fill = PINE if ref else (a if mine else INK2)
         s.append(f'<text x="{L}" y="{y}" class="fine">{nm}</text>')
         s.append(f'<text x="412" y="{y}" text-anchor="end" class="key">{val}</text>')
-        s.append(f'<g><rect x="470" y="{y-11}" width="{w:.1f}" height="14" fill="{a if mine else INK2}"/>'
+        s.append(f'<g><rect x="470" y="{y-11}" width="{w:.1f}" height="14" fill="{fill}"/>'
                  f'<path class="{cls}" d="M470 {y-4}H{470+w:.1f}" stroke="{GROUND}" '
                  f'stroke-opacity="0.55" stroke-width="4" stroke-dasharray="2 4"/></g>')
         if tag:
@@ -765,7 +771,7 @@ def plate_jetpack() -> str:
     s.append(f'<text x="{L}" y="370" class="kick">CHECKSUM — ADLER-32 · GB/s</text>')
     lane(400, "scalar, pure Java", "1.52", 260*1.52/14.06, False, "sb0")
     lane(430, "hand-vectorised", "4.26", 260*4.26/14.06, True, "sb1", "2.80×")
-    lane(460, "java.util.zip intrinsic", "14.06", 260, False, "sb2")
+    lane(460, "java.util.zip intrinsic", "14.06", 260, False, "sb2", ref=True)
     s.append(f'<text x="{L}" y="492" class="fine" style="fill:{INK}">not beaten — the reference stands</text>')
 
     # the verification readout: the known-answer vector the repo commits
@@ -1089,12 +1095,19 @@ def plate_automl() -> str:
     s.append(f'<path class="feed" d="M382 388C330 442 290 470 262 522" fill="none" '
              f'stroke="{a}" stroke-width="1.6" stroke-dasharray="5 7"/>')
     s.append(f'<text x="418" y="524" class="kick">WHERE GENERATED PYTHON RUNS</text>')
-    s.append(f'<path d="M183 568L258 532L333 568L258 604Z" fill="none" stroke="{a}" stroke-width="1.6"/>')
-    s.append(f'<path d="M183 568V614L258 650L333 614V568" fill="none" stroke="{a}" stroke-width="1.6"/>')
+    # the vessel itself is PINE, not the accent that feeds it: the sandbox is
+    # a guarantee, and a guarantee speaks in the check's colour. Drawn in
+    # CLAY_G it said "the vessel is my act", which is the one thing about it
+    # that is not true — its walls are the container runtime's, not mine.
+    s.append(f'<path d="M183 568L258 532L333 568L258 604Z" fill="none" stroke="{PINE}" stroke-width="1.6"/>')
+    s.append(f'<path d="M183 568V614L258 650L333 614V568" fill="none" stroke="{PINE}" stroke-width="1.6"/>')
     s.append(f'<path d="M258 604V650" stroke="{WIRE}" stroke-width="1"/>')
     for i in range(5):
         ty = 548 + i * 22
-        s.append(f'<g><path d="M352 {ty}L366 {ty-7}L380 {ty}L366 {ty+7}Z" fill="none" stroke="{a}" stroke-width="1.4"/>'
+        # WIRE, not the accent: a tmpfs mount is structure the sandbox grants,
+        # not Python I wrote. Only the feed stays CLAY_G, because the feed is
+        # the one thing on this half of the plate that is mine.
+        s.append(f'<g><path d="M352 {ty}L366 {ty-7}L380 {ty}L366 {ty+7}Z" fill="none" stroke="{WIRE}" stroke-width="1.4"/>'
                  f'<path d="M352 {ty}H338" stroke="{WIRE}" stroke-width="1"/></g>')
     # The trays no longer "breathe": round 21's live pass measured that
     # motion at under two rendered pixels — below the threshold of vision,
@@ -1347,7 +1360,12 @@ def plate_applied() -> str:
     for sy in (186, 276, 366):
         wl = 320 + 70 * (sy - 120) / 348
         wr = 560 - 70 * (sy - 120) / 348
-        ch.append(f'<path d="M{wl:.0f} {sy}H{wr:.0f}" stroke="{WIRE}" stroke-width="2" stroke-dasharray="7 5"/>')
+        # RULE, a step below the walls' WIRE: a wall is what the stream cannot
+        # pass and a screen is what it passes THROUGH, and the drawing now says
+        # which is which by weight AND tone rather than weight alone. 3.40 night
+        # / 3.19 day at 2u — legal for a mark, and a full unit heavier than the
+        # RULE guides below, so the three-tier hierarchy reads.
+        ch.append(f'<path d="M{wl:.0f} {sy}H{wr:.0f}" stroke="{RULE}" stroke-width="2" stroke-dasharray="7 5"/>')
         # level leader out to the label — perpendicular, never at an angle
         ch.append(f'<path d="M{wr:.0f} {sy}H586" stroke="{WIRE}" stroke-width="1"/>')
     # chute guides — the routes, drawn quietly so the still frame shows
@@ -1359,15 +1377,21 @@ def plate_applied() -> str:
     # arrives against before it fades. Round 21: "paths to nowhere, a third
     # of the plate's width spent fading into empty space."
     ch.append(f'<path d="M212 246V270M216 336V360" stroke="{WIRE}" stroke-width="2"/>')
-    # the gate: a solid member across the foot — the one edge nothing passes
-    ch.append(f'<rect x="390" y="468" width="100" height="4" fill="{a}"/>')
+    # the gate: a solid member across the foot — the one edge nothing passes.
+    # PINE, because the gate is the check, and its two labels ("0.85 GATE",
+    # "RULES LAYER ONLY") already are. Drawn in the accent it was the only
+    # pine claim on the plate whose subject was painted in my own colour.
+    ch.append(f'<rect x="390" y="468" width="100" height="4" fill="{PINE}"/>')
     ch.append(f'<path d="M490 470H586" stroke="{WIRE}" stroke-width="1"/>')
     # the walk to the human, drawn as the same faint guide
     ch.append(f'<path d="M446 458C500 462 560 476 620 494" fill="none" stroke="{RULE}" stroke-width="1" stroke-dasharray="2 6"/>')
     # the human: head and shoulders, on the plate, at the end of the walk —
     # and it REACTS (the .hum rise) when the refused message reaches it
-    ch.append(f'<g class="hum"><g id="the-human"><circle cx="660" cy="497" r="8" fill="none" stroke="{INK2}" stroke-width="1.6"/>'
-              f'<path d="M644 526C644 512 676 512 676 526" fill="none" stroke="{INK2}" stroke-width="1.6"/></g></g>')
+    # INK, a step above the refused message that arrives beside them. At INK2
+    # the person and the packet were the same tone, so the end of the walk read
+    # as two objects rather than a subject receiving one.
+    ch.append(f'<g class="hum"><g id="the-human"><circle cx="660" cy="497" r="8" fill="none" stroke="{INK}" stroke-width="1.6"/>'
+              f'<path d="M644 526C644 512 676 512 676 526" fill="none" stroke="{INK}" stroke-width="1.6"/></g></g>')
     # the stream: four messages on the two decided routes, at 18u — round 21
     # measured the 14u tokens as too small to track on the dark slab...
     for cls in ("pa0", "pa1", "pb0", "pb1"):
