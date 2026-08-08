@@ -408,17 +408,19 @@ def plate_thesis() -> str:
     Who / what / where in twenty seconds: name, one serif sentence, contact,
     one line of languages (the five skill bands of round 20 were the least
     differentiated content in the best real estate — cut), and the index of
-    sections with dot leaders. The index is where the reader is taught the
-    document's system: one mark and one hue per system, and the section's
-    answer compressed to a clause.
+    sections with dot leaders, framed as the portfolio's manifest card. The
+    index is where the reader is taught the document's system: one mark per
+    system, one accent that means BEING READ, and the section's answer
+    compressed to a clause.
 
     Carriers: the dot leaders DRIFT toward their numerals, and the title-page
     ornament turns like a compositor's dingbat. Round 21 measured this plate
     at zero gestures in 270 samples — a carrier and nothing else, ranked
     last of nine, on the first thing anyone sees. So the index is now READ:
-    row by row, in order, each leader lights to full ink, its numeral takes
-    its section's hue and its mark swells — the reader's eye walking the
-    table of contents — and once per cycle the whole index rings together,
+    row by row, in order, each leader lights to full ink, its name lifts to
+    full ink, its numeral takes clay and its mark swells — the reader's eye
+    walking the table of contents — and once per cycle the whole index rings
+    together,
     the one chord on a quiet title page. Still the arc's first bar, not its
     climax: every event is colour and 25% scale, nothing travels.
     """
@@ -432,7 +434,7 @@ def plate_thesis() -> str:
               "AutoML, dataset in, model out; Cadence, the database that refuses; "
               "Applied, allowed to say not sure; and VisualAssist, which needs a "
               "lidar sensor.", key="plate-0-thesis.svg",
-              col=(118, 762), frame=(44, 71.5, 35), serif=True)]
+              col=(118, 762), frame=(44, 71.5, 26), serif=True)]
     s.append(f""".ser{{font-family:'S',ui-serif,Georgia,'Times New Roman',serif;font-size:34px;fill:{INK}}}
 .orn{{transform-box:fill-box;transform-origin:center;animation:orn 27s linear infinite}}
 @keyframes orn{{from{{transform:rotate(45deg)}}to{{transform:rotate(405deg)}}}}
@@ -441,27 +443,40 @@ def plate_thesis() -> str:
 @keyframes ld{{from{{stroke-dashoffset:0}}to{{stroke-dashoffset:-75}}}}
 """)
     # the read: rows I..VII light in order across the first 90% of the clock,
-    # then the chord — every leader, numeral and mark together at 92.5-97.5%.
-    # Colour animations only, so the authored frame stays the finished frame.
-    hues = dict(LEGEND)
+    # then the chord — every leader, name, numeral and mark together at
+    # 92.5-97.5%. Colour animations only, so the authored frame stays the
+    # finished frame.
     MARKS = [None, "JETPACK", "GLYPH", "AUTOML", "CADENCE", "APPLIED", "VISUALASSIST"]
     for i, mk in enumerate(MARKS):
         w0, w1 = i * 90 / 7 + 0.8, (i + 1) * 90 / 7 - 0.8
         s.append(f".ldc{i}{{animation:ld 9.4s linear infinite,ldc{i} {TC}s linear infinite}}"
                  f"@keyframes ldc{i}{{0%,{w0:.1f}%{{stroke:{RULE}}}{w0+1.2:.1f}%,{w1:.1f}%{{stroke:{INK}}}"
                  f"{w1+1.2:.1f}%,92.5%{{stroke:{RULE}}}93.8%,96%{{stroke:{INK}}}97.5%,100%{{stroke:{RULE}}}}}")
-        if mk:  # the numeral takes its section's hue; the mark swells
-            # CLAY, not the mark's own tone. When the six project hues
-            # collapsed into one ink family, hues[mk] started resolving to
-            # INK2 for every row — so the numeral animated INK -> INK2 and the
-            # row being READ came out DIMMER than its neighbours, which is the
-            # opposite of the gesture. No gate can see that: both tones clear
-            # their floors and the animation still moves, so checks 10 and 13
-            # are both satisfied by a backwards read. Caught by looking.
-            hue = LEGEND_READ
-            s.append(f".nm{i}{{animation:nm{i} {TC}s linear infinite}}"
-                     f"@keyframes nm{i}{{0%,{w0:.1f}%{{fill:{INK}}}{w0+1.2:.1f}%,{w1:.1f}%{{fill:{hue}}}"
-                     f"{w1+1.2:.1f}%,92.5%{{fill:{INK}}}93.8%,96%{{fill:{hue}}}97.5%,100%{{fill:{INK}}}}}")
+        # the row's name lifts INK2 -> INK while it is read: the manifest
+        # card's `.stamped b{color:var(--ink)}`, translated. The animation is
+        # ON THE TSPAN, and the tspan carries no fill of its own. A fill
+        # animated on the parent <text> never reaches a tspan that has one —
+        # the keyframe runs, check 13 sees a property animate, and nothing
+        # changes on screen. That is 6aec558 exactly, on this same plate: an
+        # instrument-satisfying no-op. Nor a presentation attribute on the
+        # tspan, which would report as overridden to check 15. So the tspan
+        # inherits .fine's INK2 and owns nothing but the animation.
+        s.append(f".rw{i}{{animation:rw{i} {TC}s linear infinite}}"
+                 f"@keyframes rw{i}{{0%,{w0:.1f}%{{fill:{INK2}}}{w0+1.2:.1f}%,{w1:.1f}%{{fill:{INK}}}"
+                 f"{w1+1.2:.1f}%,92.5%{{fill:{INK2}}}93.8%,96%{{fill:{INK}}}97.5%,100%{{fill:{INK2}}}}}")
+        # the numeral takes CLAY while its row is read. CLAY, not the mark's
+        # own tone: when the six project hues collapsed into one ink family,
+        # hues[mk] resolved to INK2 for every row, so the numeral animated
+        # INK -> INK2 and the row being READ came out DIMMER than its
+        # neighbours. No gate can see that — both tones clear their floors and
+        # the animation still moves, so checks 10 and 13 are satisfied by a
+        # backwards read. Caught by looking. No longer gated on the mark
+        # either: under the hue system row I had no section hue to take, but
+        # under ink-state CLAY means "being read", and row I is read too.
+        s.append(f".nm{i}{{animation:nm{i} {TC}s linear infinite}}"
+                 f"@keyframes nm{i}{{0%,{w0:.1f}%{{fill:{INK}}}{w0+1.2:.1f}%,{w1:.1f}%{{fill:{LEGEND_READ}}}"
+                 f"{w1+1.2:.1f}%,92.5%{{fill:{INK}}}93.8%,96%{{fill:{LEGEND_READ}}}97.5%,100%{{fill:{INK}}}}}")
+        if mk:  # the mark swells — row I has no mark, so this one stays gated
             s.append(f".ix{i}{{transform-box:fill-box;transform-origin:center;"
                      f"animation:ix{i} {TC}s {BREATHE} infinite}}"
                      f"@keyframes ix{i}{{0%,{w0:.1f}%{{transform:scale(1)}}{(w0+w1)/2:.1f}%{{transform:scale(1.25)}}"
@@ -485,8 +500,22 @@ def plate_thesis() -> str:
 
     s.append(f'<text x="{CX}" y="286" text-anchor="middle" class="fine">C++ · TypeScript · Python · Java · Swift · Rust</text>')
 
-    # ── the index. Dot leaders run to the chapter numerals; the one place
-    # all six hues appear together, taught in the reader's first ten seconds.
+    # ── the index, framed: the portfolio's `run 042 — manifest` card, verbatim
+    # idiom — bordered box, mono rows, dot leaders, numerals right, and the
+    # read-chase is that card's `.stamped` promotion. This is the handshake
+    # between the two surfaces, so it is drawn as the same object and not
+    # merely in the same palette.
+    #
+    # The frame is a DRAWN rect: fill="none", which is the gate's frame
+    # exemption, and never box-drawing glyphs — the charset gate refuses any
+    # codepoint outside the embedded subset, which is the point of it. It is
+    # also not the FIRST rect. The sheet is, and check 10 grades every contrast
+    # ratio against the first rect in document order, so a frame emitted early
+    # would silently re-ground the whole plate. Its bottom edge at y=514 is the
+    # plate's new deepest ink, which is why data-frame above declares 26 where
+    # it declared 35.
+    s.append(f'<rect x="188.5" y="312.5" width="513" height="201" '
+             f'fill="none" stroke="{WIRE}" stroke-width="1"/>')
     s.append(f'<text x="{CX}" y="330" text-anchor="middle" class="kick">INDEX</text>')
     ROWS = [
         ("I",   None,           "WORK",           "a year of it, attested"),
@@ -500,17 +529,16 @@ def plate_thesis() -> str:
     for i, (num, mark, name, tag) in enumerate(ROWS):
         y = 358 + i * 24
         if mark:
-            s.append(f'<g class="ix{i}">' + logo(mark, 200, y - 13, 16, hues[mark]) + '</g>')
-        nm_fill = hues.get(mark, INK2) if mark else INK2
+            s.append(f'<g class="ix{i}">' + logo(mark, 200, y - 13, 16, INK2) + '</g>')
         s.append(f'<text x="228" y="{y}" class="fine">'
-                 f'<tspan fill="{nm_fill}">{name}</tspan>'
+                 f'<tspan class="rw{i}">{name}</tspan>'
                  f'<tspan fill="{INK3}"> — {tag}</tspan></text>')
         lx = 228 + len(f"{name} — {tag}") * 8.2 + 14   # this row's text end
         # stroke via style, not attribute: the ldc chase animates it, and a
         # presentation attribute would report as overridden to check 15
         s.append(f'<path class="ldc{i}" d="M{lx:.0f} {y-4}H636" style="stroke:{RULE}" '
                  f'stroke-width="1.5" stroke-dasharray="1.5 6"/>')
-        s.append(f'<text x="690" y="{y}" text-anchor="end" class="key{f" nm{i}" if mark else ""}">{num}</text>')
+        s.append(f'<text x="690" y="{y}" text-anchor="end" class="key nm{i}">{num}</text>')
     return "".join(s) + "</svg>"
 
 
