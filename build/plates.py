@@ -207,9 +207,11 @@ def op(v: float) -> float:
     removing it would restate every translucent mark on the page in one
     unrelated commit. Re-measured on the new grounds for the one rest-state
     alpha the page still ships, Glyph's pen ghost: INK at 0.55 composites to
-    #a59c91 = 4.25:1 on night paper, and the light lift takes it to 0.82,
-    #3f3a2f-ward = well past 3.0 (the un-lifted 0.55 would be #827a6a =
-    3.38:1, which also clears). Both sides of the branch are measured.
+    #a59c91 = 4.25:1 on night paper; the light lift takes it to 0.82, which
+    composites to #4b463b = 7.47:1 on day paper (the un-lifted 0.55 would be
+    #827a6a = 3.38:1, which also clears). Both sides of the branch are
+    measured, as hexes rather than as a direction — a comment in a file whose
+    doctrine is "no unmeasured alpha" does not get to hedge.
     """
     return v if THEME == "dark" else round(0.6 + 0.4 * v, 2)
 
@@ -449,7 +451,14 @@ def plate_thesis() -> str:
                  f"@keyframes ldc{i}{{0%,{w0:.1f}%{{stroke:{RULE}}}{w0+1.2:.1f}%,{w1:.1f}%{{stroke:{INK}}}"
                  f"{w1+1.2:.1f}%,92.5%{{stroke:{RULE}}}93.8%,96%{{stroke:{INK}}}97.5%,100%{{stroke:{RULE}}}}}")
         if mk:  # the numeral takes its section's hue; the mark swells
-            hue = hues[mk]
+            # CLAY, not the mark's own tone. When the six project hues
+            # collapsed into one ink family, hues[mk] started resolving to
+            # INK2 for every row — so the numeral animated INK -> INK2 and the
+            # row being READ came out DIMMER than its neighbours, which is the
+            # opposite of the gesture. No gate can see that: both tones clear
+            # their floors and the animation still moves, so checks 10 and 13
+            # are both satisfied by a backwards read. Caught by looking.
+            hue = LEGEND_READ
             s.append(f".nm{i}{{animation:nm{i} {TC}s linear infinite}}"
                      f"@keyframes nm{i}{{0%,{w0:.1f}%{{fill:{INK}}}{w0+1.2:.1f}%,{w1:.1f}%{{fill:{hue}}}"
                      f"{w1+1.2:.1f}%,92.5%{{fill:{INK}}}93.8%,96%{{fill:{hue}}}97.5%,100%{{fill:{INK}}}}}")
