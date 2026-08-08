@@ -1521,13 +1521,20 @@ def plate_visualassist() -> str:
         t2 = 50 + 50 * _cross(1 - q)
         t1, t2 = sorted((t1, t2))
         crossings += [t1, t2]
+        # the crossed point takes CLAY as well as swelling. The swell alone
+        # says SOMETHING happened here; the colour says WHICH point the sweep
+        # is on, which is the only thing a still frame near a crossing can
+        # carry. Text-grade CLAY, not the graphic tone — it has to read off
+        # the CLAY_G hatch passing over it at that exact instant.
         seg = "".join(
-            f"{max(t-2.2,0):.1f}%{{transform:scale(1)}}{t:.1f}%{{transform:scale(1.7)}}"
-            f"{min(t+2.2,100):.1f}%{{transform:scale(1)}}" for t in (t1, t2))
-        css.append(f".pt{i}{{transform-box:fill-box;transform-origin:center;"
+            f"{max(t-2.2,0):.1f}%{{transform:scale(1);fill:{INK}}}"
+            f"{t:.1f}%{{transform:scale(1.7);fill:{CLAY}}}"
+            f"{min(t+2.2,100):.1f}%{{transform:scale(1);fill:{INK}}}" for t in (t1, t2))
+        css.append(f".pt{i}{{fill:{INK};transform-box:fill-box;transform-origin:center;"
                    f"animation:pt{i} {T}s {BREATHE} infinite;animation-delay:{-T/4}s}}\n"
-                   f"@keyframes pt{i}{{0%{{transform:scale(1)}}{seg}100%{{transform:scale(1)}}}}")
-    # the output: audio arcs at the phone's left edge flash pink at EVERY
+                   f"@keyframes pt{i}{{0%{{transform:scale(1);fill:{INK}}}{seg}"
+                   f"100%{{transform:scale(1);fill:{INK}}}}}")
+    # the output: audio arcs at the phone's left edge take CLAY_G at EVERY
     # crossing — one detection, one utterance. Colour, not opacity, so the
     # authored frame stays the finished frame. Overlapping windows merge so
     # the keyframe percentages stay strictly increasing.
@@ -1540,12 +1547,6 @@ def plate_visualassist() -> str:
     css.append(f".aud{{animation:aud {T}s linear infinite;animation-delay:{-T/4}s}}\n"
                f"@keyframes aud{{0%{{stroke:{WIRE}}}{aud}100%{{stroke:{WIRE}}}}}")
     s.append("\n".join(css) + f"</style>{ground(H)}")
-    # the cone's falloff: dense at the sensor, thin where the points live —
-    # authored per theme (light's old flat 0.64 wash drowned its own points)
-    fo0, fo1 = (0.26, 0.05) if THEME == "dark" else (0.32, 0.07)
-    s.append(f'<radialGradient id="fov" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="290">'
-             f'<stop offset="0" stop-color="{a}" stop-opacity="{fo0}"/>'
-             f'<stop offset="1" stop-color="{a}" stop-opacity="{fo1}"/></radialGradient>')
 
     s.append(f'<text x="{L}" y="{TOP}" class="kick">VII · VISUALASSIST</text>')
     s.append(f'<text x="{R}" y="{TOP}" text-anchor="end" class="key">SWIFT · ARKIT · LIDAR</text>')
@@ -1554,34 +1555,74 @@ def plate_visualassist() -> str:
     # ── the scene: phone, sweep, range rings, obstacles. One composed
     # instrument — the sweep legitimately passes over everything in it.
     sc = []
-    # the phone, drawn as a phone: body, screen line, the sensor it sweeps from
-    sc.append(f'<rect x="176" y="168" width="58" height="118" rx="9" fill="none" stroke="{a}" stroke-width="2"/>')
-    sc.append(f'<path d="M196 178H214" stroke="{a}" stroke-width="1.5" stroke-linecap="round"/>')
+    # the phone, drawn as a phone: body, screen line, the sensor it sweeps
+    # from. The handset is INK — it is an object in the world like the
+    # obstacles, not an act of mine. Only the SENSOR keeps the accent, because
+    # it is the apex the sweep comes out of, and that is the act.
+    sc.append(f'<rect x="176" y="168" width="58" height="118" rx="9" fill="none" stroke="{INK}" stroke-width="2"/>')
+    sc.append(f'<path d="M196 178H214" stroke="{INK}" stroke-width="1.5" stroke-linecap="round"/>')
     sc.append(f'<circle cx="{EX}" cy="{EY}" r="3.5" fill="{a}"/>')
     # the audio out: two arcs at the phone's ear, flashing with each detection
     sc.append(f'<path class="aud" d="M170 220A8 8 0 0 0 170 234" fill="none" '
               f'style="stroke:{WIRE}" stroke-width="2" stroke-linecap="round"/>')
     sc.append(f'<path class="aud" d="M164 214A14 14 0 0 0 164 240" fill="none" '
               f'style="stroke:{WIRE}" stroke-width="2" stroke-linecap="round"/>')
-    # the sweep: a wedge rotating about the sensor, filled with the radial
-    # falloff and stroked at full accent so its edge stays legible (WCAG:
-    # the component, not every channel of it).
+    # the sweep: a wedge rotating about the sensor, drawn the way an
+    # instrument drawing draws a field of view — its boundary, and its axis.
+    # The interior stays paper.
+    #
+    # TWO fills died here. First a radial gradient, which composited to
+    # 1.51:1 at its DENSEST stop (night #6c4d3b; day #e3b697 at 1.47) and
+    # 1.08:1 over most of its area — an element spent on ink that renders as
+    # nothing, while the full-accent edge carried the component all along.
+    # Then a radial hatch meant to redraw the falloff as solid geometry: its
+    # arithmetic was right (coverage w/(r*pitch), an exact 1/r decay) and its
+    # drawing was wrong. At this scale the eye counts rays instead of
+    # integrating tone, so thirteen of them read as a fan — a subject, and
+    # louder than the six discs the plate exists to show. It was built,
+    # rendered and rejected on sight. The idiom was also wrong: section
+    # hatching marks CUT SOLIDS, and a cone of air is bounded, not cut.
+    #
+    # So the falloff goes undrawn. It binds no claims row and no sentence of
+    # the description, and an element that failed invisible in one round and
+    # too loud in the next had no job. The depth reading is carried by the
+    # rings (the field), the points (what is found) and the flash (when).
+    #
+    # The axis is the read head made visible. The crossing times below are
+    # solved for the instant the sweep's ROTATION equals a point's bearing —
+    # which is the instant this centreline passes through that point — so
+    # each flash now coincides with visible contact, and causality is drawn
+    # rather than inferred. Drafting dash-dot, the only one on the plate;
+    # radial, so rotation cannot tilt it wrongly; 1.1 under the rim's 1.4, so
+    # the boundary outranks the datum. It ends ON the rim arc — the apex-to-
+    # arc distance along the axis — and starts clear of the sensor dot.
     wr = 290
     wy = wr * math.tan(math.radians(10.4))
-    sc.append(f'<g transform="translate({EX},{EY})"><path class="swp" '
-              f'd="M0 0L{wr} {-wy:.0f}A{wr} {wr} 0 0 1 {wr} {wy:.0f}Z" '
-              f'style="fill:url(#fov)" stroke="{a}" stroke-width="1.4"/></g>')
-    # range rings, drifting outward — the depth field being read continuously
+    axr = 2 * wr - math.sqrt(wr * wr - wy * wy)
+    sc.append(f'<g transform="translate({EX},{EY})"><g class="swp">'
+              f'<path d="M12 0H{axr:.1f}" fill="none" stroke="{a}" '
+              f'stroke-width="1.1" stroke-dasharray="10 4 2 4"/>'
+              f'<path d="M0 0L{wr} {-wy:.0f}A{wr} {wr} 0 0 1 {wr} {wy:.0f}Z" '
+              f'fill="none" stroke="{a}" stroke-width="1.4"/></g></g>')
+    # range rings, drifting outward — the depth field being read continuously.
+    # RULE, not WIRE: the grid the reading is plotted on sits under the things
+    # plotted on it, and WIRE put it level with the audio arcs, which are an
+    # output. Weight now ranks the whole vocabulary: rim 1.4, hatch 1.1, ring 1.0.
     for rr in (210, 280):
         y0 = rr * math.sin(math.radians(19))
         x0 = rr * math.cos(math.radians(19))
         sc.append(f'<path class="ring" d="M{EX+x0:.0f} {EY-y0:.0f}A{rr} {rr} 0 0 1 {EX+x0:.0f} {EY+y0:.0f}" '
-                  f'fill="none" stroke="{WIRE}" stroke-width="1" stroke-dasharray="3 8"/>')
-    # the obstacles: what the sweep finds, blinking as it crosses them
+                  f'fill="none" stroke="{RULE}" stroke-width="1" stroke-dasharray="3 8"/>')
+    # the obstacles: what the sweep finds, blinking as it crosses them. INK at
+    # rest — the world is not my act, and sharing CLAY_G with the hatch that
+    # sweeps over them was the one arrangement that could eat the reading.
+    # No fill ATTRIBUTE: .pt{i} animates fill, and an attribute an animation
+    # overrides is exactly what check 15 fails on, so the rest tone lives in
+    # the rule and the keyframes start from it.
     for i, (phi, rr) in enumerate(PTS):
         px = EX + rr * math.cos(math.radians(phi))
         py = EY + rr * math.sin(math.radians(phi))
-        sc.append(f'<circle class="pt{i}" cx="{px:.0f}" cy="{py:.0f}" r="4.5" fill="{a}"/>')
+        sc.append(f'<circle class="pt{i}" cx="{px:.0f}" cy="{py:.0f}" r="4.5"/>')
     s.append('<g>' + "".join(sc) + '</g>')
 
     # what the reading becomes
