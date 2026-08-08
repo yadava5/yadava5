@@ -31,9 +31,10 @@
   "repos": {
     "glyph": {
       "github": "yadava5/glyph",
-      "ref": "de7f24ac18451a810f5c7244ea6933fbf9e7ad8d",
+      "ref": "3e510d497c3ad43b390c1845864f546f0e8b1543",
       "branch": "main",
-      "public": true
+      "public": true,
+      "note": "Re-pinned 2026-08-08 because the DEPLOYMENT moved and the page's strongest claim is about the deployment. de7f24ac is an ancestor, 13 commits back, no rewritten history. The browser build was rebuilt somewhere in those 13, so the served binary changed size and hash; it is still byte-identical to this ref's blob, which is the thing the sentence actually argues."
     },
     "jetpack": {
       "github": "yadava5/jetpack-compress",
@@ -120,7 +121,7 @@
     },
     {
       "id": "glyph.deployed_wasm_bytes",
-      "value": "46517",
+      "value": "43751",
       "unit": "bytes",
       "drawn_on": [
         "README.md"
@@ -535,14 +536,14 @@
     },
     {
       "id": "glyph.deployed_wasm_sha256",
-      "value": "f02610638120decf30587ff9115f97836dd51d391d790d0af26ac942bad5af2a",
+      "value": "e681d2f76d41305aa3b8c250799f898bd1139497f60580ed59000d49cf5d6360",
       "drawn_on": [
         "README.md"
       ],
       "repo": "glyph",
       "path": "web/public/wasm/fast_mnist.wasm",
       "extractor": "shasum -a 256 \"$BLOB\" | cut -d' ' -f1",
-      "note": "The page's strongest single piece of evidence. The binary getglyph.vercel.app serves is byte-identical to this blob on main, so 'the deployment is what the repository builds' stops being testimony: curl the URL, hash it, compare. It used to point at an unmerged branch, because that was where the SIMD build lived; it merged, so this reads main."
+      "note": "The page's strongest single piece of evidence. The binary getglyph.vercel.app serves is byte-identical to this blob on main, so 'the deployment is what the repository builds' stops being testimony: curl the URL, hash it, compare. It used to point at an unmerged branch, because that was where the SIMD build lived; it merged, so this reads main. THE PAIR IS THE CLAIM AND NEITHER HALF PROVES IT: this row hashes the REPO blob and glyph.deployed_wasm_bytes reads the DEPLOYMENT's content-length, so the two are checked against different sources and can drift apart while both stay green. That is exactly what happened on 2026-08-08 — the deployment rebuilt, bytes went red, and this hash stayed green against a stale pin. Move them together, always."
     },
     {
       "id": "applied.eval_misclassified",
