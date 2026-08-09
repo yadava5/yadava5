@@ -7,7 +7,19 @@
 </picture>
 </div>
 
-**C++ · TypeScript · Python · Java · Swift · Rust** — B.S. Computer Science, Miami University (May 2026). Based in Cincinnati, OH; open to full-time software engineering roles: **[aesh.03.23@gmail.com](mailto:aesh.03.23@gmail.com)** · [LinkedIn](https://www.linkedin.com/in/ayush-yadav-developer)
+<div align="center">
+
+## &nbsp;→&nbsp; [**ayush-yadav.com**](https://ayush-yadav.com) &nbsp;←&nbsp;
+
+### [Portfolio](https://ayush-yadav.com) &nbsp;·&nbsp; [Résumé](https://ayush-yadav.com/resume.pdf) &nbsp;·&nbsp; [Email](mailto:aesh.03.23@gmail.com) &nbsp;·&nbsp; [LinkedIn](https://www.linkedin.com/in/ayush-yadav-developer)
+
+**Open to full-time software engineering roles.**
+
+</div>
+
+---
+
+**C++ · TypeScript · Python · Java · Swift · Rust** — B.S. Computer Science, Miami University (May 2026). Based in Cincinnati, OH.
 
 Every section started as a question I wanted answered, and every number in the answers is recomputed in CI from a pinned commit — except §I and the grant in §VII, which are my word and say so where they stand. Four systems ship a **system card**, a print-format walkthrough of the architecture and the evidence.
 
@@ -158,7 +170,7 @@ It is also the one system on this page you cannot click into: there is nothing t
 <div align="center">
 <sub>
 
-**[aesh.03.23@gmail.com](mailto:aesh.03.23@gmail.com)** · [LinkedIn](https://www.linkedin.com/in/ayush-yadav-developer) · [github.com/yadava5](https://github.com/yadava5)
+**[ayush-yadav.com](https://ayush-yadav.com)** · **[aesh.03.23@gmail.com](mailto:aesh.03.23@gmail.com)** · [LinkedIn](https://www.linkedin.com/in/ayush-yadav-developer) · [github.com/yadava5](https://github.com/yadava5)
 
 </sub>
 </div>
