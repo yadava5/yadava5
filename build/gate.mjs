@@ -112,7 +112,62 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
     const out = [];
     // And if it did not actually load, say so loudly. A silent fallback shifts
     // every measurement on the plate and makes the whole gate meaningless.
-    if (!document.fonts.check("16px M")) out.push('the embedded mono webfont did not load — all geometry below is the fallback font');
+    //
+    // This checked "16px M" and nothing else. 'M' is the mono, so the SERIF —
+    // family 'S', which sets every hero numeral on the page, the 89px "B only",
+    // 6.4x, 0.979, 15/44 — had no such assertion at all. A serif that failed to
+    // load would render the emotional centre of all nine plates in a platform
+    // fallback and measure it there, silently, which is the exact failure this
+    // line was written to prevent and the exact half of it that was missing.
+    //
+    // Derived from the document rather than hardcoded, so it cannot go stale
+    // the next time a face is added or renamed: every @font-face the plate
+    // DECLARES must actually be available at the weight it declares. The
+    // faces have already been swapped once wholesale (JetBrains + Gelasio ->
+    // Fragment Mono + Fraunces, 2026-08-08), and a hardcoded list would have
+    // survived that swap while measuring nothing.
+    // Two different defects hide behind one symptom, and telling them apart
+    // matters. `fonts.check` is false both when a face FAILED to load and when
+    // nothing on the plate ever asked for it — a browser will not fetch a
+    // data: URI face no glyph needs. Reporting the second as the first would be
+    // a false alarm, and false alarms are how a red build stops meaning
+    // anything. So resolve what the plate ACTUALLY renders first, and judge
+    // each declared face against that.
+    const css = [...document.querySelectorAll('style')].map(s => s.textContent).join('\n');
+    const faces = [...css.matchAll(/@font-face\{font-family:'([^']+)';font-weight:(\d+)/g)];
+    if (!faces.length) out.push('this plate declares no @font-face — every glyph on it is a platform font');
+    const rendered = new Set();
+    for (const t of document.querySelectorAll('text, tspan')) {
+      const cs = getComputedStyle(t);
+      const fam = (cs.fontFamily.split(',')[0] || '').replace(/['"]/g, '').trim();
+      rendered.add(`${fam}|${cs.fontWeight}`);
+    }
+    for (const [, fam, w] of faces) {
+      if (!rendered.has(`${fam}|${w}`)) {
+        // Dead payload. Every plate base64s its faces inline — GitHub fetches
+        // nothing external — so a declared-and-unused face is not a tidiness
+        // issue, it is kilobytes shipped to every reader on every view.
+        out.push(`declares an '${fam}' ${w} face that nothing on the plate renders `
+               + `— the base64 payload ships to every reader and is never used`);
+        continue;
+      }
+      if (!document.fonts.check(`${w} 16px ${fam}`))
+        out.push(`the embedded '${fam}' ${w} webfont did not load — every measurement that uses it is the fallback font`);
+    }
+    // And the reverse, which is the half that makes dropping a face SAFE. The
+    // loop above can only judge faces the plate declares, so "stop embedding
+    // the face nothing renders" would silently become "render in a platform
+    // fallback" the day a plate grows a hero again. getComputedStyle reports
+    // what the CSS ASKS for, not what resolved, so rendered-minus-declared is
+    // exactly the set of glyphs riding a fallback.
+    const declared = new Set(faces.map(([, f, w]) => `${f}|${w}`));
+    for (const r of rendered) {
+      const [fam, w] = r.split('|');
+      if (/^(ui-|serif|sans|monospace|Georgia|Menlo)/.test(fam)) continue;
+      if (!declared.has(r))
+        out.push(`renders '${fam}' at weight ${w}, which no @font-face on this plate embeds `
+               + `— those glyphs are a platform font and differ per reader`);
+    }
 
     const svgEl = document.querySelector('svg');
     const H = svgEl.viewBox.baseVal.height, W = svgEl.viewBox.baseVal.width;

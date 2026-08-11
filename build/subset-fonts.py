@@ -3,6 +3,16 @@
 files are committed and plates.py only base64s their bytes, so the build
 stays deterministic across platforms and needs nothing beyond stdlib.
 
+THE FACES ARE FRAGMENT MONO AND FRAUNCES. Read the note above FONTS at the
+bottom of this file before the history below, which is kept because it is
+the argument for embedding faces at all — but which names JetBrains Mono and
+Gelasio, both retired on 2026-08-08. This header cost a reader a wrong
+conclusion on 2026-08-11: a font brief went out naming the retired pair
+because the top of the file still described them in the present tense, and
+only the build() calls at the bottom said otherwise. A docstring that
+contradicts the code twenty lines below it is the same defect this page's
+whole gate exists to catch, in the one place nothing measures.
+
 Why three faces (the finding, 2026-08-06, diag/ci-fonts run 31143030894):
   * .sub/.hero/.vast/.n ask for font-weight:600 on a family that embedded
     only a 400 face. Every platform SYNTHESISES that bold differently —

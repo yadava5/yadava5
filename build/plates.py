@@ -259,7 +259,7 @@ DRIFT = "cubic-bezier(.45,.05,.55,.95)"
 def head(h: int, title: str, desc: str, key: str = "",
          col: tuple[int, int] = (150, 730),
          frame: tuple[float, float, float] | None = None,
-         serif: bool = False) -> str:
+         serif: bool = False, bold: bool = True) -> str:
     """Open a plate.
 
     `col` and `frame` are this plate's DECLARED geometry, written into the SVG
@@ -285,19 +285,29 @@ def head(h: int, title: str, desc: str, key: str = "",
     # same reason: ui-serif/Georgia resolved to Liberation Serif on CI and to
     # Georgia on macOS, a different typeface per reader on a page that calls
     # itself self-contained. (Gelasio, OFL, metric-compatible with Georgia.)
-    # 'S' 600 rides in EVERY plate now: the heroes are set in it, and they are
-    # the emotional centre of each one. 'S' 400 — the serif voice proper — is
-    # still only embedded where a plate speaks in it. Measured, this made every
-    # file smaller rather than larger: Fragment Mono's subset is half
-    # JetBrains', and Fraunces' two beat Gelasio's one.
+    # 'S' 400 — the serif voice proper — is only embedded where a plate speaks
+    # in it. Measured, the face swap made every file smaller rather than larger:
+    # Fragment Mono's subset is half JetBrains', and Fraunces' two beat
+    # Gelasio's one.
+    #
+    # 'S' 600 was documented here as riding in EVERY plate, "because the heroes
+    # are set in it and they are the emotional centre of each one". True of
+    # seven plates and false of two: the title page and the colophon have no
+    # hero and no .sub, so they shipped a ~5.4 KB base64 payload that no glyph
+    # ever requested — twice over, counting the light twins. The comment was
+    # the reason nobody looked. It is conditional now, and gate.mjs enforces
+    # BOTH directions: a declared face nothing renders is dead payload, and a
+    # rendered face nothing declares is a platform fallback. Dropping the face
+    # is only safe because the second half exists.
     ser = (f"@font-face{{font-family:'S';font-weight:400;"
            f"src:url(data:font/woff2;base64,{FONTSERIF}) format('woff2')}}\n") if serif else ''
+    ser600 = (f"@font-face{{font-family:'S';font-weight:600;"
+              f"src:url(data:font/woff2;base64,{SERIF600}) format('woff2')}}\n") if bold else ''
     return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="{VB_X} 0 {VB_W} {h}" width="{VB_W}" height="{h}" role="img" aria-label="{desc}" data-col="{col[0]},{col[1]}"{fr}>
 <title>{title}</title><desc>{desc}</desc>
 <style>
 @font-face{{font-family:'M';font-weight:400;src:url(data:font/woff2;base64,{FONT}) format('woff2')}}
-@font-face{{font-family:'S';font-weight:600;src:url(data:font/woff2;base64,{SERIF600}) format('woff2')}}
-{ser}text{{font-family:'M',ui-monospace,SFMono-Regular,Menlo,monospace}}
+{ser600}{ser}text{{font-family:'M',ui-monospace,SFMono-Regular,Menlo,monospace}}
 .hero{{font-size:55px;letter-spacing:-1px;fill:{INK};font-weight:600;font-family:'S',Georgia,serif}}
 .sub{{font-size:34px;letter-spacing:-0.5px;fill:{INK};font-weight:600;font-family:'S',Georgia,serif}}
 .unit{{font-size:34px;letter-spacing:-0.5px;fill:{INK2}}}
@@ -476,7 +486,7 @@ def plate_thesis() -> str:
               "AutoML, dataset in, model out; Cadence, the database that refuses; "
               "Applied, allowed to say not sure; and VisualAssist, which needs a "
               "lidar sensor.", key="plate-0-thesis.svg",
-              col=(118, 762), frame=(44, 71.5, 26), serif=True)]
+              col=(118, 762), frame=(44, 71.5, 26), serif=True, bold=False)]
     s.append(f""".ser{{font-family:'S',ui-serif,Georgia,'Times New Roman',serif;font-size:34px;fill:{INK}}}
 .orn{{transform-box:fill-box;transform-origin:center;animation:orn 27s linear infinite}}
 @keyframes orn{{from{{transform:rotate(45deg)}}to{{transform:rotate(405deg)}}}}
@@ -1748,7 +1758,7 @@ def plate_colophon() -> str:
                              "The page itself is animated SVG with no JavaScript and no server. "
                              "If a number here is wrong, it is wrong in public.",
               key="plate-7-colophon.svg", col=(118, 762), frame=(44, 161, 25),
-              serif=True)]
+              serif=True, bold=False)]
     # The device turns again. Cutting it read as "ambient travel means nothing
     # at an arbitrary camo frame" — but that is the argument against a GESTURE,
     # not a CARRIER. A slow orbit is identical in every frame, so there is no

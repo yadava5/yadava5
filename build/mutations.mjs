@@ -158,6 +158,20 @@ const MUTATIONS = [
   // "caught" without the mutation contributing anything — a probe that passes
   // because the tree is already broken is the precise defect this file exists
   // to prevent, and it would have been one more entry in its own history.
+  // The font-load assertion covered family 'M' and nothing else, so the SERIF
+  // — every hero numeral on the page — could have fallen back to a platform
+  // face and been measured there. This corrupts the SERIF's base64 payload
+  // specifically, so the probe exercises the half that was missing rather than
+  // the half that already worked.
+  ['an embedded webfont fails to load', /the embedded 'S' 600 webfont did not load/,
+    (s) => s.replace(/(font-family:'S';font-weight:600;src:url\(data:font\/woff2;base64,)([A-Za-z0-9+/=]{240})/,
+      (m, head) => head + 'A'.repeat(240))],
+  // The other direction. Two plates stopped embedding the serif-600 face
+  // because nothing on them renders it (~7.5 KB each, four files); that is only
+  // safe while a plate which DOES render it cannot quietly lose it. Strips the
+  // face from a plate that uses a hero and expects the fallback to be named.
+  ['a rendered face is not embedded', /renders 'S' at weight 600, which no @font-face/,
+    (s) => s.replace(/@font-face\{font-family:'S';font-weight:600;src:url\(data:font\/woff2;base64,[A-Za-z0-9+/=]+\) format\('woff2'\)\}\n?/, '')],
   ['a moving rule is drawn through type', /rect\.mutsweep[^\n]*sweeps across/,
     (s) => {
       const m = /<text x="150" y="(\d+)" class="(?:kick|lbl|fine|key)"/.exec(s);
