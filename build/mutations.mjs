@@ -82,8 +82,13 @@ const MUTATIONS = [
   // The rule's geometry — 13px / 0.4px — stays pinned: that is authored
   // typography, not palette, and it should rot loudly if a redesign moves it.
   ['text drops below 4.5:1 on the slab', /on the slab \(needs 4.5/,
-    (s) => s.replace(/\.fine\{font-size:13px;letter-spacing:0\.4px;fill:#[0-9A-Fa-f]{6}\}/,
-      '.fine{font-size:13px;letter-spacing:0.4px;fill:#8a8175}')],
+    // Round 25 moved .fine's tracking 0.4px -> 0px when the text face became
+    // Newsreader (a serif's lowercase wants no extra air; the mono's did).
+    // The probe went stale and SAID SO, which is what the note above asks for:
+    // pinning the authored typography means a redesign trips this on purpose
+    // rather than silently carrying a probe that matches nothing.
+    (s) => s.replace(/\.fine\{font-size:13px;letter-spacing:0px;fill:#[0-9A-Fa-f]{6}\}/,
+      '.fine{font-size:13px;letter-spacing:0px;fill:#8a8175}')],
   // Keys on Applied's refused message, which declares data-rest="the-human":
   // pulling its authored x back 100u strands it short of the person it must
   // reach, in both the animated and the still frame.

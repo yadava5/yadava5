@@ -80,10 +80,11 @@ OUT.mkdir(exist_ok=True)
 # voice was a different typeface per reader. charsets.py is the single source
 # of truth: subset-fonts.py builds the woff2s from it, and the build-time
 # gate below fails any plate that draws a character its face does not carry.
-from charsets import MONO_CHARS, BOLD_CHARS, SERIF_CHARS
+from charsets import MONO_CHARS, BOLD_CHARS, SERIF_CHARS, TEXT_CHARS
 FONT = base64.b64encode((ROOT / "mono-subset.woff2").read_bytes()).decode()
 SERIF600 = base64.b64encode((ROOT / "serif-600-subset.woff2").read_bytes()).decode()
 FONTSERIF = base64.b64encode((ROOT / "serif-subset.woff2").read_bytes()).decode()
+FONTTEXT = base64.b64encode((ROOT / "text-subset.woff2").read_bytes()).decode()
 
 # The mono cell, in px, at the size and tracking every label is set in. The
 # arrow below advances exactly one of these so a line containing it measures
@@ -153,8 +154,17 @@ THEMES = {
                             #   escape at gate.mjs:566-572, so redact() bakes a
                             #   mandatory WIRE edge in; never draw a bare bar.
         INK="#f6efe2", INK2="#d9d0c3", INK3="#c9c0b2",   # 10.06 / 7.54 / 6.39:1
-        CLAY="#f4b090",     # 6.28:1 — accent TEXT, the stamp
-        CLAY_G="#e08a5f",   # 4.36:1 — accent graphics: bars, scans, cones
+        # ONE accent, not two. The split was text #f4b090 6.28:1 and graphics
+        # #e08a5f 4.36:1 — and the graphics token is what carried EMPHASIS: the
+        # 79 confident misses, the 15-tool base set, the lit index numeral. So
+        # the colour meaning "look here" sat at 43% of the contrast of the
+        # ordinary ink it was meant to stand out from. Emphasis that recedes.
+        # 7.08:1 measured, against INK2's 7.54 — parity with the body ink
+        # rather than half of it, and it keeps its chroma (LCh C27.6). Parity
+        # with INK itself is unreachable: on this ground an orange cannot
+        # reach 10:1 without going pastel, so the ceiling plus chroma is the
+        # honest target. Both names kept, one hex, so no call site churns.
+        CLAY="#f7bfa2", CLAY_G="#f7bfa2",   # 7.08:1 — accent, text and graphics
         PINE="#aecfc0",     # 6.84:1 — the check. Text-grade on both papers.
     ),
     "light": dict(               # day paper — the golden waypoint
@@ -166,8 +176,9 @@ THEMES = {
         REDACT="#26231c",   # 12.48:1 — on paper a redaction is black ink; it takes
                             #   the same WIRE edge so the markup stays symmetric
         INK="#26231c", INK2="#5c564a", INK3="#6a6355",   # 12.48 / 5.79 / 4.74:1
-        CLAY="#a03f20",     # 5.18:1
-        CLAY_G="#c4532e",   # 3.62:1
+        # same merge, same reasoning: was text #a03f20 5.18 / graphics #c4532e
+        # 3.62. 5.76:1 measured against INK2's 5.79 — parity, and C51.7 chroma.
+        CLAY="#953a1d", CLAY_G="#953a1d",   # 5.76:1 — accent, text and graphics
         PINE="#2f5d50",     # 5.96:1
     ),
 }
@@ -259,7 +270,7 @@ DRIFT = "cubic-bezier(.45,.05,.55,.95)"
 def head(h: int, title: str, desc: str, key: str = "",
          col: tuple[int, int] = (150, 730),
          frame: tuple[float, float, float] | None = None,
-         serif: bool = False, bold: bool = True) -> str:
+         serif: bool = False, bold: bool = True, mono: bool = True) -> str:
     """Open a plate.
 
     `col` and `frame` are this plate's DECLARED geometry, written into the SVG
@@ -303,19 +314,26 @@ def head(h: int, title: str, desc: str, key: str = "",
            f"src:url(data:font/woff2;base64,{FONTSERIF}) format('woff2')}}\n") if serif else ''
     ser600 = (f"@font-face{{font-family:'S';font-weight:600;"
               f"src:url(data:font/woff2;base64,{SERIF600}) format('woff2')}}\n") if bold else ''
+    # 'M' is conditional for the same reason: it is the MARKED case now, not
+    # the default, so a plate that quotes no machine artifact should not carry
+    # its payload. gate.mjs fails a declared-but-unrendered face, so this is
+    # enforced rather than remembered.
+    mon = (f"@font-face{{font-family:'M';font-weight:400;"
+           f"src:url(data:font/woff2;base64,{FONT}) format('woff2')}}\n") if mono else ''
     return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="{VB_X} 0 {VB_W} {h}" width="{VB_W}" height="{h}" role="img" aria-label="{desc}" data-col="{col[0]},{col[1]}"{fr}>
 <title>{title}</title><desc>{desc}</desc>
 <style>
-@font-face{{font-family:'M';font-weight:400;src:url(data:font/woff2;base64,{FONT}) format('woff2')}}
-{ser600}{ser}text{{font-family:'M',ui-monospace,SFMono-Regular,Menlo,monospace}}
+@font-face{{font-family:'T';font-weight:400;src:url(data:font/woff2;base64,{FONTTEXT}) format('woff2')}}
+{mon}{ser600}{ser}text{{font-family:'T',Georgia,serif}}
+.mach{{font-family:'M',ui-monospace,SFMono-Regular,Menlo,monospace}}
 .hero{{font-size:55px;letter-spacing:-1px;fill:{INK};font-weight:600;font-family:'S',Georgia,serif}}
 .sub{{font-size:34px;letter-spacing:-0.5px;fill:{INK};font-weight:600;font-family:'S',Georgia,serif}}
 .unit{{font-size:34px;letter-spacing:-0.5px;fill:{INK2}}}
 .say{{font-size:21px;fill:{INK2}}}
-.lbl{{font-size:13px;letter-spacing:1.6px;fill:{INK2}}}
-.key{{font-size:13px;letter-spacing:1.6px;fill:{INK}}}
-.fine{{font-size:13px;letter-spacing:0.4px;fill:{INK2}}}
-.kick{{font-size:13px;letter-spacing:2.4px;fill:{INK3}}}
+.lbl{{font-size:13px;letter-spacing:1.2px;fill:{INK2}}}
+.key{{font-size:13px;letter-spacing:1.2px;fill:{INK}}}
+.fine{{font-size:13px;letter-spacing:0px;fill:{INK2}}}
+.kick{{font-size:13px;letter-spacing:2px;fill:{INK3}}}
 @media (prefers-reduced-motion: reduce){{*{{animation:none!important}}}}
 """
 
@@ -486,7 +504,7 @@ def plate_thesis() -> str:
               "AutoML, dataset in, model out; Cadence, the database that refuses; "
               "Applied, allowed to say not sure; and VisualAssist, which needs a "
               "lidar sensor.", key="plate-0-thesis.svg",
-              col=(118, 762), frame=(44, 71.5, 26), serif=True, bold=False)]
+              col=(118, 762), frame=(46, 104, 26), serif=True, bold=False)]
     s.append(f""".ser{{font-family:'S',ui-serif,Georgia,'Times New Roman',serif;font-size:34px;fill:{INK}}}
 .orn{{transform-box:fill-box;transform-origin:center;animation:orn 27s linear infinite}}
 @keyframes orn{{from{{transform:rotate(45deg)}}to{{transform:rotate(405deg)}}}}
@@ -604,7 +622,7 @@ def plate_thesis() -> str:
                      f'<rect x="-7.5" y="-5.5" width="15" height="11" rx="2" '
                      f'fill="none" stroke="{INK2}" stroke-width="1.3"/>'
                      f'<path d="M-4 0.5H4" stroke="{INK2}" stroke-width="1.3"/></g></g>')
-        s.append(f'<text x="228" y="{y}" class="fine">'
+        s.append(f'<text x="228" y="{y}" class="fine mach">'
                  f'<tspan class="rw{i}">{name}</tspan>'
                  f'<tspan fill="{INK3}"> — {tag}</tspan></text>')
         lx = 228 + len(f"{name} — {tag}") * 8.2 + 14   # this row's text end
@@ -612,7 +630,7 @@ def plate_thesis() -> str:
         # presentation attribute would report as overridden to check 15
         s.append(f'<path class="ldc{i}" d="M{lx:.0f} {y-4}H636" style="stroke:{RULE}" '
                  f'stroke-width="1.5" stroke-dasharray="1.5 6"/>')
-        s.append(f'<text x="690" y="{y}" text-anchor="end" class="key nm{i}">{num}</text>')
+        s.append(f'<text x="690" y="{y}" text-anchor="end" class="key mach nm{i}">{num}</text>')
     return "".join(s) + "</svg>"
 
 
@@ -733,7 +751,7 @@ def plate_work() -> str:
 
     # the source footer, in the grammar every plate now closes with — this
     # section's source is testimony, and the line says so plainly
-    s.append(f'<text x="{L}" y="652" class="fine" style="fill:{INK3}">source: my word — not derivable from a public repo</text>')
+    s.append(f'<text x="{L}" y="652" class="fine mach" style="fill:{INK3}">source: my word — not derivable from a public repo</text>')
     return "".join(s) + "</svg>"
 
 
@@ -848,12 +866,12 @@ def plate_jetpack() -> str:
     # the verification readout: the known-answer vector the repo commits
     # (Adler32Test.java:36-37), fast path against reference, byte for byte
     s.append(f'<text x="{L}" y="532" class="lbl">SIMD ADLER-32</text>')
-    s.append(f'<text x="330" y="532" class="say" style="fill:{INK}">11E60398</text>')
-    s.append(f'<text x="{L}" y="564" class="lbl">java.util.zip</text>')
-    s.append(f'<text x="330" y="564" class="say" style="fill:{INK}">11E60398</text>')
+    s.append(f'<text x="330" y="532" class="say mach" style="fill:{INK}">11E60398</text>')
+    s.append(f'<text x="{L}" y="564" class="lbl mach">java.util.zip</text>')
+    s.append(f'<text x="330" y="564" class="say mach" style="fill:{INK}">11E60398</text>')
     s.append(f'<rect x="330" y="542" width="112" height="2" fill="{a}"/>')
     s.append(f'<text x="560" y="550" class="lbl" style="fill:{PINE}">identical</text>')
-    s.append(f'<text x="{L}" y="588" class="fine" style="fill:{INK3}">source: benchmarks/jmh-results-rigorous.json</text>')
+    s.append(f'<text x="{L}" y="588" class="fine mach" style="fill:{INK3}">source: benchmarks/jmh-results-rigorous.json</text>')
     return "".join(s) + "</svg>"
 
 
@@ -898,9 +916,9 @@ def plate_glyph() -> str:
               "native codegen, and 10.7 times slower on the 128 axpy, because parallelism has "
               "a floor. Accuracy is unchanged at 97.01 percent on the 10,000-image MNIST "
               "test set, which means 299 wrong — every one of them drawn as a grid of the "
-              "labels it missed, and the 79 it was most confident about drawn in a heavier "
-              "stroke.", key="plate-1-glyph.svg",
-              col=(96, 770), frame=(56, 10, 17))]
+              "labels it missed, and the 79 it was most confident about drawn heavier and "
+              "in the accent.", key="plate-1-glyph.svg",
+              col=(96, 770), frame=(61, 10, 17))]
     s.append(f""".ink{{fill:none;stroke:{a};stroke-width:7;stroke-linecap:round;stroke-linejoin:round;
   stroke-dasharray:1;stroke-dashoffset:0;animation:draw {LOOP}s linear infinite;animation-delay:{-SET}s}}
 /* 4% a glyph (round 19): at 17% the pen laid ink below the perceptual floor;
@@ -981,7 +999,7 @@ def plate_glyph() -> str:
     s.append(f'<g transform="translate({hx+8:.0f},124) scale(0.55)">'
              f'<g class="stl" style="animation-delay:-7.15s">' + "".join(xg) + '</g></g>')
     s.append(f'<text x="330" y="76" class="say" style="fill:{INK}">SOMEONE ELSE’S NET, 3.5× FASTER</text>')
-    s.append(f'<text x="330" y="100" class="fine">benchDot/256 · openmp+native vs the course baseline</text>')
+    s.append(f'<text x="330" y="100" class="fine mach">benchDot/256 · openmp+native vs the course baseline</text>')
     # Order matters here, and it did not until round 22. The evidence line
     # belongs to the DOT ratio and sits under the dot caption; the axpy loss
     # goes last, as the kicker. Drawn the other way round, nearest-caption
@@ -990,7 +1008,15 @@ def plate_glyph() -> str:
     # exactly one committed axpy run, and the cross-machine spread on that
     # kernel is 69%. That would have misread the one number on this plate that
     # exists to argue against its own author.
-    s.append(f'<text x="330" y="120" class="fine" style="fill:{INK3}">three committed runs, spread under two percent</text>')
+    # Round 25: this drew "three committed runs, spread under two percent"
+    # after the prose had already been corrected away from it, which is the
+    # "edit the prose, leave the SVG" failure gate.yml's own header is about —
+    # and nothing gates prose against plate, so it survived a full green run.
+    # The third run is the December record on a fanless machine with half the
+    # performance cores, which Glyph's ENVIRONMENT.md calls history and which
+    # the axpy figure on this same plate already excludes. A record cannot be
+    # inadmissible where it disagrees and evidence where it agrees.
+    s.append(f'<text x="330" y="120" class="fine" style="fill:{INK3}">the two reference-machine runs — under one percent</text>')
     # Led with the case name, like the benchDot caption two lines up, because
     # this line has a hard length budget and that phrasing is the short one.
     # "10.7×" is one glyph wider than the "6.9×" it replaced, which spent the
@@ -1004,7 +1030,7 @@ def plate_glyph() -> str:
     # byte-identical 244->683 to prove it. Only the character COUNT moves this
     # measurement. The budget is 51: the benchDot caption at y100 sits exactly
     # there and passes. This line is 50.
-    s.append(f'<text x="330" y="140" class="fine" style="fill:{INK3}">benchAxpy/128 · 10.7× SLOWER, threads have a floor</text>')
+    s.append(f'<text x="330" y="140" class="fine mach" style="fill:{INK3}">benchAxpy/128 · 10.7× SLOWER, threads have a floor</text>')
 
     # the invariant: optimisation must not change the answers
     s.append(f'<text x="150" y="206" class="sub">97.01<tspan class="unit" style="font-size:21px">%</tspan></text>')
@@ -1050,7 +1076,7 @@ def plate_glyph() -> str:
     s.append(f'<text x="150" y="490" class="fine" style="fill:{INK3}">each mark — the true label of one missed image, from the pinned CSV</text>')
     s.append(f'<text x="150" y="512" class="fine">course-provided net, after Nielsen — optimised with Shree Chaturvedi</text>')
     s.append(f'<text x="150" y="532" class="fine">the browser app is mine alone</text>')
-    s.append(f'<text x="150" y="556" class="fine" style="fill:{INK3}">source: benchmarks/ — pinned runs and the misclassification CSV</text>')
+    s.append(f'<text x="150" y="556" class="fine mach" style="fill:{INK3}">source: benchmarks/ — pinned runs and the misclassification CSV</text>')
     return "".join(s) + "</svg>"
 
 
@@ -1105,7 +1131,7 @@ def plate_automl() -> str:
               "root filesystem, a non-root user, the dataset mounted read-only and 5 tmpfs "
               "mounts as the only writable surface. Behind it, a 29-table Postgres schema "
               "with pgvector. Public, GPL-3.0, written with Shree Chaturvedi.",
-              key="plate-6b-automl.svg", frame=(28, 62, 17))]
+              key="plate-6b-automl.svg", frame=(30, 78, 17))]
     # The carrier: a dim point walking the 44-mark shelf, one traverse per
     # loop. The dial this plate replaced carried a needle; a set diagram has
     # no needle, so the carrier is drawn from the diagram's own material —
@@ -1160,7 +1186,7 @@ def plate_automl() -> str:
     # count is arithmetic a reader can do from "seven declared" and the two
     # named below, so it does not need drawing. 45 chars.
     s.append(f'<text x="{L}" y="312" class="fine">each imported by the phase that names it — except</text>')
-    s.append(f'<text x="{L}" y="334" class="fine" style="fill:{INK3}">preprocessing · feature-engineering — exported, imported by nothing</text>')
+    s.append(f'<text x="{L}" y="334" class="fine mach" style="fill:{INK3}">preprocessing · feature-engineering — exported, imported by nothing</text>')
     # the strikes, measured on the mono grid: 13 chars, then a 3-char gap,
     # then 19 — static hairlines, drawn through dead names on purpose
     x1 = L + 13 * CELL_13
@@ -1178,14 +1204,14 @@ def plate_automl() -> str:
 
     # ── where the generated Python runs — the containment, stated plainly
     s.append(f'<text x="{L}" y="430" class="kick">WHERE GENERATED PYTHON RUNS — CONTAINED BY DEFAULT</text>')
-    s.append(f'<text x="{L}" y="452" class="fine" style="fill:{INK}">--internal network — no route out by default · non-root user</text>')
-    s.append(f'<text x="{L}" y="472" class="fine" style="fill:{INK}">read-only root · /datasets:ro · 5 tmpfs — the only writable surface</text>')
+    s.append(f'<text x="{L}" y="452" class="fine mach" style="fill:{INK}">--internal network — no route out by default · non-root user</text>')
+    s.append(f'<text x="{L}" y="472" class="fine mach" style="fill:{INK}">read-only root · /datasets:ro · 5 tmpfs — the only writable surface</text>')
 
     # ── the stores behind it, and the imprint
     s.append(f'<text x="{L}" y="514" class="sub">29</text>')
     s.append(f'<text x="206" y="514" class="lbl">TABLES · POSTGRES + PGVECTOR</text>')
     s.append(f'<text x="206" y="534" class="fine">public · GPL-3.0 · written with Shree Chaturvedi</text>')
-    s.append(f'<text x="{L}" y="558" class="fine" style="fill:{INK3}">source: backend/src/services/llm/tools/index.ts</text>')
+    s.append(f'<text x="{L}" y="558" class="fine mach" style="fill:{INK3}">source: backend/src/services/llm/tools/index.ts</text>')
     return "".join(s) + "</svg>"
 
 
@@ -1275,7 +1301,7 @@ def plate_cadence() -> str:
             ("task-lists*", False), ("tasks", True), ("tags**", True)]
     for i, (name, in_query) in enumerate(SVCS):
         y = 200 + i * 34
-        s.append(f'<text x="{L}" y="{y}" class="lbl">{name}</text>')
+        s.append(f'<text x="{L}" y="{y}" class="lbl mach">{name}</text>')
         s.append(f'<rect x="354" y="{y-10}" width="8" height="8" fill="{a}"/>')
         if in_query:
             s.append(f'<rect x="427" y="{y-10}" width="8" height="8" fill="{a}"/>')
@@ -1304,7 +1330,7 @@ def plate_cadence() -> str:
 
     s.append(f'<path d="M{L} 518H{R}" stroke="{RULE}"/>')
     # the records request, unfiltered on purpose
-    s.append(f'<text x="{L}" y="544" class="key">SELECT count(*) FROM tasks</text>')
+    s.append(f'<text x="{L}" y="544" class="key mach">SELECT count(*) FROM tasks</text>')
     s.append(f'<text x="470" y="544" class="fine">as B — unfiltered on purpose</text>')
     # the response, at the largest type on the page — and it is not a number
     s.append(f'<text x="{L}" y="640" class="vast">B only</text>')
@@ -1313,7 +1339,7 @@ def plate_cadence() -> str:
     s.append(f'<text x="{L}" y="712" class="say">The database refused.</text>')
     # the source footer every plate closes with: the isolation suite is the
     # artifact that makes the sentence above checkable
-    s.append(f'<text x="{L}" y="736" class="fine" style="fill:{INK3}">source: rls.postgres.test.ts — the isolation suite</text>')
+    s.append(f'<text x="{L}" y="736" class="fine mach" style="fill:{INK3}">source: rls.postgres.test.ts — the isolation suite</text>')
     return "".join(s) + "</svg>"
 
 
@@ -1355,7 +1381,7 @@ def plate_applied() -> str:
               "CI fails the build below 0.95. On the Hugging Face Space the fine-tuned head "
               "runs inside your own browser tab: the int8 ONNX build is 22.8 megabytes, "
               "down from 90.4.",
-              key="plate-4-applied.svg", col=(110, 776), frame=(42, 25.4, 23))]
+              key="plate-4-applied.svg", col=(110, 776), frame=(44, 64, 23))]
 
     # ── the chutes: static guides now — where decided mail leaves. Authored
     # here beside the walls so drawing and geometry cannot disagree.
@@ -1511,9 +1537,13 @@ def plate_applied() -> str:
     s.append(f'<text x="330" y="556" class="key" style="fill:{PINE}">RULES LAYER ONLY</text>')
     s.append(f'<text x="330" y="578" class="fine">SetFit off, embeddings emptied · CI fails below 0.95</text>')
     s.append(f'<text x="{L}" y="602" class="lbl">YOUR BROWSER</text>')
-    s.append(arrowed(300, 602, "fine", "int8 ONNX · 90.4 MB", "22.8 MB"))
+    # "fine mach": arrowed() places the arrow and the second half at
+    # (len(before)+1) and (len(before)+3) CELL_13 — mono advances. On a
+    # proportional face those offsets mean nothing and the arrow lands
+    # inside the text. This is a quoted artifact anyway (a file size pair).
+    s.append(arrowed(300, 602, "fine mach", "int8 ONNX · 90.4 MB", "22.8 MB"))
     s.append(f'<text x="{R}" y="602" text-anchor="end" class="fine" style="fill:{INK3}">never leaves your tab</text>')
-    s.append(f'<text x="{L}" y="626" class="fine" style="fill:{INK3}">source: backend/jobtracker/classifier/hybrid.py</text>')
+    s.append(f'<text x="{L}" y="626" class="fine mach" style="fill:{INK3}">source: backend/jobtracker/classifier/hybrid.py</text>')
     return "".join(s) + "</svg>"
 
 
@@ -1733,7 +1763,7 @@ def plate_visualassist() -> str:
     s.append(f'<path d="M{L} 642H{R}" stroke="{RULE}"/>')
     # the source footer, path only — line numbers are digits no claims row
     # carries, so the file is named and the range is not
-    s.append(f'<text x="{L}" y="664" class="fine" style="fill:{INK3}">source: VisualAssist/Services/LiDARService.swift · let constants</text>')
+    s.append(f'<text x="{L}" y="664" class="fine mach" style="fill:{INK3}">source: VisualAssist/Services/LiDARService.swift · let constants</text>')
 
     # the honest close: the only system here without a link, and why
     s.append(f'<text x="{L}" y="696" class="say" style="fill:{INK}">THE ONE SYSTEM HERE YOU CANNOT CLICK INTO</text>')
@@ -1757,8 +1787,8 @@ def plate_colophon() -> str:
                              "which are attested and say so. "
                              "The page itself is animated SVG with no JavaScript and no server. "
                              "If a number here is wrong, it is wrong in public.",
-              key="plate-7-colophon.svg", col=(118, 762), frame=(44, 161, 25),
-              serif=True, bold=False)]
+              key="plate-7-colophon.svg", col=(118, 762), frame=(46, 293, 25),
+              serif=True, bold=False, mono=False)]
     # The device turns again. Cutting it read as "ambient travel means nothing
     # at an arbitrary camo frame" — but that is the argument against a GESTURE,
     # not a CARRIER. A slow orbit is identical in every frame, so there is no
@@ -1969,10 +1999,15 @@ def plate_mobile(accent: str, kicker: str, hero: str, unit: str,
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {MW} {h}" width="{MW}" height="{h}" '
         f'role="img" aria-label="{desc}"><title>{kicker}</title><desc>{desc}</desc><style>'
         # both weights: .n is 600, and .u inherits it — see head()'s note on
-        # why a synthesised bold is a per-platform rendering
-        f"@font-face{{font-family:'M';font-weight:400;src:url(data:font/woff2;base64,{FONT}) format('woff2')}}"
+        # why a synthesised bold is a per-platform rendering.
+        # No 'M' here at all: the phone cards quote no machine artifact — they
+        # are a kicker, a figure and two lines of statement — so mono has
+        # nothing to mark on them and its payload would be dead weight in nine
+        # files. gate.mjs fails a declared face nothing renders, so this stays
+        # honest without anyone remembering it.
+        f"@font-face{{font-family:'T';font-weight:400;src:url(data:font/woff2;base64,{FONTTEXT}) format('woff2')}}"
         f"@font-face{{font-family:'S';font-weight:600;src:url(data:font/woff2;base64,{SERIF600}) format('woff2')}}"
-        f"text{{font-family:'M',ui-monospace,SFMono-Regular,Menlo,monospace}}"
+        f"text{{font-family:'T',Georgia,serif}}"
         f".k{{font-size:13px;letter-spacing:2px;fill:{INK2}}}"
         f".n{{font-size:55px;letter-spacing:-1px;fill:{INK};font-weight:600;font-family:'S',Georgia,serif}}"
         f".u{{font-size:34px;letter-spacing:-0.5px;fill:{INK2}}}"
@@ -2107,9 +2142,16 @@ def _check_coverage(fn: str, svg: str) -> None:
             for k, v in _ent.items():
                 part = part.replace(k, v)
             cls = stack[-1]
-            face, chars = (('serif', SERIF_CHARS) if 'ser' in cls else
+            # `mach` is tested FIRST and wins over everything: it is the opt-in
+            # that selects the mono face, so whatever else a run inherits, a
+            # .mach run is set in 'M'. The final fallback is the TEXT face now,
+            # not the mono one — that inversion is the whole redesign, and
+            # getting it backwards here would check every caption against the
+            # wrong charset while reporting success.
+            face, chars = (('mono', MONO_CHARS) if 'mach' in cls else
+                           ('serif', SERIF_CHARS) if 'ser' in cls else
                            ('600', BOLD_CHARS) if cls & {'hero', 'sub', 'vast', 'n'} else
-                           ('mono', MONO_CHARS))
+                           ('text', TEXT_CHARS))
             for ch in part:
                 if ch not in chars and ch != '\n':
                     _fail.append(f"{fn}: draws {ch!r} in the {face} face, which does not "

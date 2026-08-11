@@ -41,7 +41,7 @@ from fontTools import subset
 from fontTools.ttLib import TTFont
 from fontTools.varLib import instancer
 
-from charsets import MONO_CHARS, BOLD_CHARS, SERIF_CHARS
+from charsets import MONO_CHARS, BOLD_CHARS, SERIF_CHARS, TEXT_CHARS
 
 ROOT = pathlib.Path(__file__).resolve().parent
 SRC = pathlib.Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT
@@ -126,3 +126,14 @@ build(FONTS / "fraunces-latin-var.woff2", 600, BOLD_CHARS,
       ROOT / "serif-600-subset.woff2")
 build(FONTS / "fraunces-latin-var.woff2", 400, SERIF_CHARS,
       ROOT / "serif-subset.woff2")
+# The text voice, added round 25 — see the note over TEXT_CHARS in charsets.py.
+# No `features=[]`: kerning is part of a serif's design, the same reason Gelasio
+# kept its defaults. No `metrics` override either — that parameter exists
+# because Gelasio had to match Georgia's box, and Newsreader is the authored
+# face here, not a stand-in for a platform font. Its file is already a static
+# "Newsreader 16pt" Regular instance (no fvar), so build()'s instancing branch
+# is skipped and the optical size stays the TEXT one — which is the whole
+# point, and why Fraunces could not take this job: its opsz is pinned to 144,
+# the display end, because the heroes are 34-89px.
+build(FONTS / "newsreader-latin-var.woff2", 400, TEXT_CHARS,
+      ROOT / "text-subset.woff2")
