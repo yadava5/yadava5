@@ -861,7 +861,7 @@
       "repo": "visualassist",
       "path": "VisualAssist/Services/LiDARService.swift",
       "extractor": "sed -n 's/.*criticalDistance: Float = \\([0-9.]*\\).*/\\1/p' \"$BLOB\"",
-      "note": "The three thresholds below are the only numbers section VII draws that describe a DECISION rather than an amount of effort. Lines of code and file counts measure how much was typed; these measure what the app does to a person walking. They are `let` constants on LiDARService, which is also the honest part: the Settings sliders do not reach them, so a user cannot tune the distance at which the phone interrupts them."
+      "note": "The three thresholds below are the only numbers section VII draws that describe a DECISION rather than an amount of effort. Lines of code and file counts measure how much was typed; these measure what the app does to a person walking. They are private `let` constants on LiDARService — and round 25 found the sharper fact this note used to soften. It said 'the Settings sliders do not reach them, so a user cannot tune the distance', which reads as a design choice. It is not: SettingsView.swift draws a real Slider bound to @AppStorage('alertDistance'), with an accessibilityValue read aloud, and LiDARService never references UserSettings at all. The control exists, is reachable by a low-vision user, announces its value, and changes nothing. That is a defect in an accessibility app, not a decision, and the page now says so."
     },
     {
       "id": "visualassist.warning_m",
@@ -906,6 +906,23 @@
       ],
       "extractor": "grep -lE '^(on|name):' $BLOBS | grep -c .",
       "note": "Five real workflow files at the pin — build, CodeQL, gitleaks, release, scorecard — each verified to be a workflow (a top-level on:/name: key), not just a file that exists."
+    },
+    {
+      "id": "visualassist.spatial_audio_files",
+      "value": "3",
+      "unit": "files",
+      "drawn_on": [
+        "README.md"
+      ],
+      "anchors": {
+        "README.md": [
+          "its name occurs in exactly three files and nowhere else"
+        ]
+      },
+      "repo": "visualassist",
+      "tree": true,
+      "extractor": "n=$(grep -rl SpatialAudioManager \"$TREE\" | grep -c .); u=$(grep -rE 'SpatialAudioManager\\(|: *SpatialAudioManager' \"$TREE\" | grep -c .); printf '%s' \"$n\"; [ \"$u\" = 0 ] || printf '+%s-uses' \"$u\"",
+      "note": "The first row on this page about a WHOLE repository rather than a named file, and it has to be: 'nothing constructs this class' is falsified by any one of 38 files, so checking three named blobs proves nothing about the fourth. Fetches the pinned tarball and greps the tree. Deliberately NOT an expected-zero grep — a `| wc -l` that must print 0 also prints 0 when the pattern is typo'd or the escaping is wrong, which is the check-that-cannot-fail defect this repo has shipped four times, wearing a new uniform. Measured: breaking the class name takes the count to 0, not to 3, so the row fails when its own instrument fails. The construction count rides in the SAME value rather than a second row — if a call site ever appears the output becomes '3+1-uses' and this goes red, instead of staying quietly true about the file count while the sentence built on it turns false."
     }
   ],
   "$unpinnable_note": [

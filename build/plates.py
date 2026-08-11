@@ -1063,9 +1063,16 @@ def plate_automl() -> str:
     preprocessing and feature engineering — are exported and imported by
     NOTHING, printed and struck through, the estate's absence-as-evidence
     device (the strikes are static hairlines; the moving-hairline check
-    does not apply). The one claim that survived a three-layer audit gets
-    the verdict row: TRAINING, a route, and a pine stop before
-    PREPROCESSING — the request map carries no preprocessing name.
+    does not apply). The one claim that survived the audit gets the verdict
+    row: TRAINING, a route, and a pine stop before PREPROCESSING.
+
+    Round 25 corrected the reason on that row. It read "at any layer",
+    which repeated the section's own error: the stage allow-list, the
+    request builder and the provider call pass one array between them, so
+    that is a single mechanism counted three times. The call actually dies
+    in the executor, which resolves a tool name against training's handler
+    set and then the MCP registry — neither of which holds a preprocessing
+    name. Same verdict, real mechanism, one layer.
 
     The sandbox vessel is retired with the dial: the containment facts are
     two lines of type, "no route out BY DEFAULT" kept on its face. No
@@ -1080,9 +1087,10 @@ def plate_automl() -> str:
               "and no phase gets all 15: every request is narrowed again per stage. Of the "
               "seven declared per-phase sets, two — preprocessing and feature "
               "engineering — are exported and imported by nothing, drawn struck through; "
-              "the rest are imported by the phases that name them. What survives every layer is "
-              "that a training-phase model cannot reach a preprocessing tool: its request "
-              "map carries no preprocessing name. The Python it writes runs in a container "
+              "the rest are imported by the phases that name them. What survives is "
+              "that a training-phase model cannot reach a preprocessing tool: the executor "
+              "resolves tool names against training's own handler set and then the MCP "
+              "registry, and no preprocessing name is in either. The Python it writes runs in a container "
               "on an internal Docker network with no route out by default, a read-only "
               "root filesystem, a non-root user, the dataset mounted read-only and 5 tmpfs "
               "mounts as the only writable surface. Behind it, a 29-table Postgres schema "
@@ -1156,7 +1164,7 @@ def plate_automl() -> str:
     s.append(f'<path d="M240 365H340" stroke="{WIRE}" stroke-width="1.2"/>')
     s.append(f'<rect x="344" y="355" width="4" height="20" fill="{PINE}"/>')
     s.append(f'<text x="360" y="370" class="key" style="fill:{INK3}">PREPROCESSING</text>')
-    s.append(f'<text x="{L}" y="392" class="fine">its request map carries no preprocessing name at any layer</text>')
+    s.append(f'<text x="{L}" y="392" class="fine">no preprocessing name resolves on this path</text>')
 
     # ── where the generated Python runs — the containment, stated plainly
     s.append(f'<text x="{L}" y="430" class="kick">WHERE GENERATED PYTHON RUNS — CONTAINED BY DEFAULT</text>')
@@ -1563,12 +1571,12 @@ def plate_visualassist() -> str:
               "VisualAssist: an iPhone app for low-vision users, written in Swift — ARKit "
               "LiDAR depth becomes speech and haptics, and the plate draws its alert "
               "policy as three distance bands in front of the phone, to scale. Inside "
-              "0.5 metres: a continuous haptic at full strength and the spoken phrase "
-              "Stop, obstacle ahead. Inside 1.0 metres: a triple pulse, softer, and the "
-              "single spoken word Caution. Inside 2.0 metres nothing fires at all — the "
-              "zone turns yellow on screen and the distance is read only if you press "
-              "for it, because an aid that narrates every wall is an aid you switch "
-              "off. An obstacle drawn approaching the phone trips each band in turn. "
+              "0.5 metres: a continuous haptic at full strength, and speech. Inside "
+              "1.0 metres: a triple pulse, softer, and a shorter phrase. Both spoken "
+              "alerts name a direction as well as a distance. Inside 2.0 metres nothing "
+              "fires at all — the zone turns yellow on screen and the distance is read "
+              "only if you press for it, because an aid that narrates every wall is an "
+              "aid you switch off. An obstacle drawn approaching the phone trips each band in turn. "
               "7,177 lines across 38 Swift files, 5 CI workflows. It is the one system "
               "on this page you cannot click into, because it needs an iPhone with a "
               "lidar sensor.",
@@ -1670,21 +1678,23 @@ def plate_visualassist() -> str:
     # ── the calibration card: one row per band, ruled, no box. The header
     # carries the ruling that makes these three numbers a design decision
     s.append(f'<path d="M{L} 396H{R}" stroke="{RULE}"/>')
-    s.append(f'<text x="{L}" y="422" class="kick">THE ALERT POLICY — THE SLIDERS DO NOT REACH IT</text>')
+    s.append(f'<text x="{L}" y="422" class="kick">THE ALERT POLICY — THE SLIDER CHANGES NOTHING</text>')
     ROWS = [
         ("0.5", "rn0", "STOP — CONTINUOUS HAPTIC, FULL STRENGTH", INK,
-         # Reported, not quoted. The utterance is "Stop! Obstacle ahead at
-         # <distance>" and MONO_CHARS carries no "!", so a colon-quote here
-         # renders a paraphrase in quotation form — the plate asserting an
-         # exact string it cannot actually set. The word Stop IS spoken
-         # verbatim; the rest is described. README quotes it in full, where
-         # the character set is the reader's, not ours.
-         # 33 chars. The row's right edge is the haptic-signature track at
-         # x=628, so this line is budgeted against that, not the type column:
-         # the 45-char first attempt cleared the column and sat on the bar.
-         ["and speaks Stop, then the distance"]),
+         # Reported, not quoted. Neither utterance is a fixed string: the app
+         # interpolates "Stop! Obstacle \(nearestDirection) at \(distanceStr)"
+         # and "Caution, \(distanceStr) \(nearestDirection)". MONO_CHARS
+         # carries no "!", so a colon-quote here would render a paraphrase in
+         # quotation form — the plate asserting an exact string it cannot set.
+         # These lines name the PARTS each utterance contains, in order.
+         # Round 25 fixed a real error here: this row said "one spoken word:
+         # Caution", which the source contradicts twice over — it is three
+         # parts, and it names a direction. README quotes the format strings.
+         # 33 chars fits; the row's right edge is the haptic-signature track
+         # at x=628, not the type column, and a 45-char attempt sat on the bar.
+         ["speaks Stop, direction, distance"]),
         ("1.0", "rn1", "CAUTION — A TRIPLE PULSE, SOFTER", INK,
-         ["and one spoken word: Caution."]),
+         ["speaks Caution, distance, direction"]),
         ("2.0", "rn2", "SILENT — NO ALERT FIRES", PINE,
          ["the zone turns yellow on screen —",
           "the distance is yours if you press for it"]),
@@ -2022,8 +2032,8 @@ MOBILE = {
  "m-8-visualassist.svg": ("VISUALASSIST", "CLAY_G", "0.5", " m", "Inside it the phone says", "Stop. At 2.0 m, silence.",
    "VisualAssist: an iPhone app for low-vision users, in Swift. Inside 0.5 "
    "metres the phone interrupts — a continuous haptic at full strength and "
-   "the spoken phrase Stop, obstacle ahead; at 2.0 metres it is deliberately "
-   "silent. No live link — it needs an iPhone with a lidar sensor.",
+   "speech that names the direction and the distance; at 2.0 metres it is "
+   "deliberately silent. No live link — it needs an iPhone with a lidar sensor.",
    "left", "bands", 10.1),
  "m-7-colophon.svg": ("COLOPHON", "RULE", "SVG", "",
    "No JavaScript, no server,", "no external assets.",

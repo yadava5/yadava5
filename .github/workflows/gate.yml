@@ -12,6 +12,17 @@ on:
   push:
     branches: [main]
   pull_request:
+  # §III prints a sha256 of the DEPLOYED wasm and dares the reader to curl it,
+  # and §VI makes a claim about a live Space. Push-triggered alone, those dares
+  # are only re-checked when THIS repo changes — and a finished page stops
+  # changing, so detection latency goes to infinity exactly when nobody is
+  # watching any more. §III used to say the gate "fails the moment" the
+  # deployment stops matching; that was false with these triggers, and this is
+  # the line that makes it true rather than the weaker sentence that would have
+  # made it true. (GitHub disables a cron on a repo with no activity for 60
+  # days; the freshness note in claims.mjs is the backstop if that happens.)
+  schedule:
+    - cron: '17 6 * * *'
 
 jobs:
   gate:
@@ -47,15 +58,6 @@ jobs:
       - name: Measure every plate in motion, in pixels
         run: node build/motion.mjs --gate
 
-      # And the negative test. Four gates in this repo have shipped unable to
-      # fail; two more probes went stale as the plates they anchored on were
-      # rewritten; an audit found two further dead checks by hand. mutations.mjs
-      # breaks the plates thirteen ways and asserts each check notices. Its own
-      # header says the negative test must "stop being something you remember to
-      # do" — which it was, until this step.
-      - name: Prove every check can still fail
-        run: node build/mutations.mjs
-
       # The gate above proves the plates are internally consistent. This one
       # leaves the repository: it re-derives every drawn number from the pinned
       # commit it came from, over the network, the same way a reader would.
@@ -65,3 +67,20 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: node build/claims.mjs
+
+      # And the negative test, LAST. Four gates in this repo have shipped unable
+      # to fail; two more probes went stale as the plates they anchored on were
+      # rewritten; an audit found two further dead checks by hand. mutations.mjs
+      # breaks the plates thirteen ways and falsifies claims.json and README.md
+      # four more, and asserts each check notices. Until round 25 the whole
+      # negative test invoked gate.mjs only, so claims.mjs — the gate that
+      # leaves the repository — had never been observed to fail. Its own
+      # header says the negative test must "stop being something you remember to
+      # do" — which it was, until this step.
+      #
+      # It runs last on purpose: a negative test is the only step whose result
+      # tells you what the other steps' green MEANT, so it should be the final
+      # word, not a thing buried mid-run. The colophon says this workflow
+      # "closes with a negative test"; it now does.
+      - name: Prove every check can still fail
+        run: node build/mutations.mjs

@@ -78,6 +78,37 @@ function bytes(repoKey, path) {
   return size;
 }
 
+// ── some claims are about a WHOLE REPOSITORY rather than one file, and those
+//    are the claims a per-blob fetch structurally cannot make. "Nothing
+//    constructs this class" is a statement about every file at once: check it
+//    against three named blobs and you have proved nothing about the fourth.
+//    The tarball endpoint serves the entire tree at an immutable SHA in one
+//    request, so the claim stays pinned and a reader can reproduce it.
+//
+//    Rows using this MUST NOT be expected-zero. A `grep | wc -l` that must
+//    print 0 also prints 0 when the pattern is typo'd, when the escaping is
+//    wrong, or when the file extension filter excludes the very files that
+//    would have matched — it passes hardest exactly when it is most broken.
+//    That is the "check that cannot fail" defect wearing a new uniform, and
+//    this repository has already shipped four of those. So an absence is
+//    always stated as a positive count with an enumerated expectation, or
+//    paired with a positive control in the same extractor: if the pattern
+//    engine is working, the control is non-zero, and the row fails in BOTH
+//    directions rather than only the flattering one.
+function tree(repoKey) {
+  const r = repo(repoKey);
+  const dest = join(CACHE, `${r.github.replace('/', '__')}__${r.ref.slice(0, 12)}__tree`);
+  if (existsSync(dest)) return dest;
+  if (OFFLINE) throw new Error(`--offline and the tree for ${repoKey} is not cached`);
+  const tar = `${dest}.tar.gz`;
+  const args = ['-fsSL', '--max-time', '300'];
+  if (process.env.GITHUB_TOKEN) args.push('-H', `Authorization: Bearer ${process.env.GITHUB_TOKEN}`);
+  execFileSync('curl', [...args, `https://api.github.com/repos/${r.github}/tarball/${r.ref}`, '-o', tar]);
+  mkdirSync(dest, { recursive: true });
+  execFileSync('tar', ['-xzf', tar, '-C', dest, '--strip-components', '1']);
+  return dest;
+}
+
 // ── some claims are about the DEPLOYED artifact, not a committed one. "the
 //    live page fetches /wasm/fast_mnist.wasm, 46,960 bytes" is checkable by
 //    anyone with curl, and it SHOULD break if the deployment changes — that is
@@ -190,6 +221,7 @@ for (const c of spec.claims) {
     // asks for a byte length. $BLOB / $BLOBS / $BYTES, whichever it declared.
     const env = { ...process.env };
     if (c.live) env.HEADER = live(c.live, c.header, c.digest);
+    else if (c.tree) env.TREE = tree(c.repo);
     else if (c.bytes) env.BYTES = bytes(c.repo, c.path);
     else if (c.paths) env.BLOBS = c.paths.map(p => blob(c.repo, p)).join(' ');
     else env.BLOB = blob(c.repo, c.path);

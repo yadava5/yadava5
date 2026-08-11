@@ -9,14 +9,22 @@
  * someone ran the negative test before trusting the green.
  *
  * So the negative test stops being something you remember to do. Each entry
- * below breaks the plates in one specific way and names the check that must
+ * below breaks the page in one specific way and names the check that must
  * notice. A check that stays silent under its own mutation is dead code wearing
  * a passing grade.
+ *
+ * TWO families, because for a long time there was only one. The first mutates a
+ * plate and invokes gate.mjs. The second copies the repository, falsifies
+ * claims.json or README.md, and invokes claims.mjs — which until round 25 had
+ * no probe at all, so the gate that leaves the repository and re-derives 56
+ * numbers had never once been watched to fail. That is the same shape as the
+ * four dead gates above, and it survived precisely because this file's own
+ * name made it look like the negative test was covered.
  *
  * Usage: node build/mutations.mjs
  */
 import { execFileSync } from 'node:child_process';
-import { readFileSync, writeFileSync, mkdtempSync, readdirSync, cpSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdtempSync, readdirSync, cpSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -181,11 +189,135 @@ for (const [name, expect, breakIt] of MUTATIONS) {
     const after = breakIt(before);
     if (after !== before) { writeFileSync(join(dir, f), after); touched = true; break; }
   }
-  if (!touched) { console.log(`  ?? ${name} — mutation matched nothing; the probe is stale`); dead++; continue; }
+  if (!touched) {
+    console.log(`  ?? ${name} — mutation matched nothing; the probe is stale`);
+    dead++; rmSync(dir, { recursive: true, force: true }); continue;
+  }
   const out = gate(dir);
+  // Each probe copies assets/ into a fresh tmpdir and nothing ever removed
+  // them: 13 per run, and an audit found 1,010 orphaned `mut-*` directories
+  // holding 326 MB. Harmless to correctness, but this file now runs on every
+  // `npm test` rather than only in CI, so the leak rate went up by the
+  // frequency of the suite. Cleaned in a finally-ish position: after the gate
+  // has read the directory, before the next iteration allocates another.
+  rmSync(dir, { recursive: true, force: true });
   const caught = expect.test(out);
   console.log(`  ${caught ? '..' : '!!'} ${name}${caught ? '' : '  — NOT CAUGHT'}`);
   if (!caught) dead++;
 }
+// ── The second family: can claims.mjs fail?
+//
+// Everything above mutates a PLATE and invokes gate.mjs. That was the WHOLE
+// negative test, which means claims.mjs — the gate that leaves the repository
+// and re-derives 56 numbers from pinned commits — had no probe at all, and the
+// colophon's "fails if a check sleeps through it" was a sentence about one of
+// two gates. A gate nobody has ever watched fail is this repo's signature
+// defect; it has shipped four of them, and the fix has never been to trust the
+// newest one harder.
+//
+// These copy build/, assets/ and README.md into a tmpdir and run the COPY, so
+// claims.mjs's ROOT resolves to the temporary tree and claims.json or README.md
+// can be falsified without touching the working tree. --offline reads the warm
+// build/.claims-cache (copied along), so the negative test costs no network —
+// and in CI the cache is warm because gate.yml runs claims.mjs immediately
+// before this file. CI is unset in the child so `live()` reads the value the
+// real run just cached rather than re-fetching a third party four more times.
+const claimsGate = (root) => {
+  try {
+    execFileSync('node', [join(root, 'build', 'claims.mjs'), '--offline'], {
+      env: { ...process.env, CI: '', CLAIMS_SKIP_FRESHNESS: '1' },
+      encoding: 'utf8', stdio: 'pipe',
+    });
+    return '';
+  } catch (e) { return (e.stdout || '') + (e.stderr || ''); }
+};
+const editJson = (root, fn) => {
+  const p = join(root, 'build', 'claims.json');
+  const s = JSON.parse(readFileSync(p, 'utf8'));
+  if (fn(s) === false) return false;
+  writeFileSync(p, JSON.stringify(s, null, 2));
+  return true;
+};
+const editReadme = (root, fn) => {
+  const p = join(root, 'README.md');
+  const before = readFileSync(p, 'utf8');
+  const after = fn(before);
+  if (after === before) return false;
+  writeFileSync(p, after);
+  return true;
+};
+
+// Each entry names ONE of claims.mjs's four independent failure modes. They are
+// keyed to the mutated row by id, not to a bare phrase: while any real claim is
+// failing, a loose /the page says/ would be satisfied by the pre-existing
+// failure and report "caught" with the mutation contributing nothing.
+const CLAIM_MUTATIONS = [
+  // 1. the extractor half — a registered value that no longer re-derives
+  ['a registered number stops matching its pinned commit',
+    /cadence\.handlers: the page says "38"/,
+    (root) => editJson(root, (s) => {
+      const c = s.claims.find(x => x.id === 'cadence.handlers');
+      if (!c) return false;
+      c.value = String(Number(c.value) + 1);
+    })],
+  // 2. the drawn_on half — a row asserting the page shows what it does not.
+  //    Keyed on SHAPE, not on an id: three plate probes above went stale in one
+  //    week from pinning a literal, and `glyph.accuracy` was already the wrong
+  //    guess here (the row is `glyph.accuracy_pct`). This picks any Glyph row
+  //    whose value provably does NOT occur in the jetpack plate, so the
+  //    expectation below cannot be satisfied by coincidence.
+  ['a row claims a plate draws a number it never draws',
+    /drawn_on lists plate-2-jetpack\.svg, but "[^"]*" does not appear there/,
+    (root) => editJson(root, (s) => {
+      const other = readFileSync(join(ASSETS, 'plate-2-jetpack.svg'), 'utf8');
+      const c = s.claims.find(x => (x.drawn_on || []).includes('plate-1-glyph.svg')
+        && !other.includes(String(x.value)));
+      if (!c) return false;
+      c.drawn_on = [...c.drawn_on, 'plate-2-jetpack.svg'];
+    })],
+  // 3. the coverage half — the load-bearing one. A number on the page that no
+  //    row derives and no exemption names must be rejected.
+  ['the page grows a number nothing accounts for',
+    /README\.md: draws "8675309"/,
+    (root) => editReadme(root, (s) =>
+      s.replace('## I · Work', '## I · Work 8675309'))],
+  // 4. the anchor half — anchors exist because README.md's permitted-value pool
+  //    is nearly vacuous, so an anchored sentence must fail closed when edited.
+  ['an anchored sentence is quietly reworded',
+    /anchor .* no longer appears in README\.md/,
+    (root) => editReadme(root, (s) =>
+      s.replace('on all **seven** tenant tables', 'on all **nineteen** tenant tables'))],
+];
+
+const REPO_COPY = (dir) => cpSync(ROOT, dir, {
+  recursive: true,
+  // node_modules is ~200 MB of playwright and irrelevant to this gate; .git
+  // likewise. snapshots/ is generated art, not input.
+  filter: (src) => !/[\\/](node_modules|\.git|snapshots)([\\/]|$)/.test(src),
+});
+
+console.log('\nclaims baseline:', (() => {
+  const d = mkdtempSync(join(tmpdir(), 'mutc-'));
+  REPO_COPY(d);
+  const out = claimsGate(d);
+  rmSync(d, { recursive: true, force: true });
+  return out ? 'FAILS (fix the claims first)' : 'passes';
+})());
+
+for (const [name, expect, breakIt] of CLAIM_MUTATIONS) {
+  const dir = mkdtempSync(join(tmpdir(), 'mutc-'));
+  REPO_COPY(dir);
+  const touched = breakIt(dir);
+  if (!touched) {
+    console.log(`  ?? ${name} — mutation matched nothing; the probe is stale`);
+    dead++; rmSync(dir, { recursive: true, force: true }); continue;
+  }
+  const out = claimsGate(dir);
+  rmSync(dir, { recursive: true, force: true });
+  const caught = expect.test(out);
+  console.log(`  ${caught ? '..' : '!!'} ${name}${caught ? '' : '  — NOT CAUGHT'}`);
+  if (!caught) dead++;
+}
+
 if (dead) { console.log(`\n${dead} mutation(s) went unnoticed — those checks are not connected.`); process.exit(1); }
 console.log('\nevery mutation was caught: the checks are live.');
