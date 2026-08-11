@@ -49,18 +49,54 @@ SRC = pathlib.Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT
 
 def build(src: pathlib.Path, wght: int, chars: str, out: pathlib.Path,
           features: list[str] | None = None,
-          metrics: tuple[int, int] | None = None) -> None:
+          metrics: tuple[int, int] | None = None,
+          opsz: int | None = None) -> None:
     font = TTFont(src)
     if "fvar" in font:
         # Pin EVERY axis, not just weight. Fraunces declares four — wght, opsz,
         # SOFT and WONK — and instancing one of them leaves a variable font
-        # whose remaining axes resolve to a default the SVG never states. opsz
-        # goes to the display end (these are 34-89px heroes, not body copy),
-        # SOFT to 0 and WONK to 0: the plates are drawings, and a wonky leg on
+        # whose remaining axes resolve to a default the SVG never states. SOFT
+        # goes to 0 and WONK to 0: the plates are drawings, and a wonky leg on
         # a figure that sits beside a hairline rule reads as a misprint.
+        #
+        # opsz is the one axis whose right value is a FUNCTION OF THE RENDERED
+        # SIZE, so it cannot be a constant of this file — each call states its
+        # own, and a face that HAS the axis and states nothing is a build
+        # failure rather than a silent 144.
+        #
+        # It was 144 for both serif instances until 2026-08-11, on the argument
+        # "these are 34-89px heroes, not body copy". The argument named the
+        # right sizes and drew the wrong conclusion from them: 144 is not a
+        # weight, it is a POINT SIZE, and 89px is 67pt. Measured, the 600 face
+        # is set at 89/55/34px on a 708-wide sheet and at 55/34px on a 440-wide
+        # sheet a phone shows near 390 — a real range of 22pt to 67pt, with
+        # every one of them under half the cut they were being served.
+        #
+        # The 34px end broke visibly. Fraunces' 144pt cut draws the diagonal of
+        # a "4" as a hairline; at 34px, and at 55px on a phone, that hairline
+        # lands sub-pixel, the counter never closes, and the figure collapses
+        # to a stem with a floating crossbar. m-6b-automl's hero "44" read as
+        # two hooks in both themes, and so did every desktop numeral in the
+        # same face at 34px — plate-6b's "/44" and "29", plate-1's "97.01".
+        # Checked by rendering the shipped plates with each candidate instance
+        # swapped in, at 708 and 390 CSS px, at device-pixel-ratio 1 and 2, in
+        # both themes; not by looking at outlines.
+        #
+        # Prose survives what a figure cannot. A hairline lost inside a word is
+        # repaired by the word's shape; a hairline lost inside a numeral is the
+        # difference between 44 and something that is not a number. That is the
+        # whole reason the two serif instances now hold DIFFERENT optical sizes
+        # and neither is a compromise — see the two build() calls at the bottom.
         axes = {a.axisTag: a.defaultValue for a in font["fvar"].axes}
         axes.update({"wght": wght})
-        for tag, v in (("opsz", 144), ("SOFT", 0), ("WONK", 0)):
+        if "opsz" in axes:
+            if opsz is None:
+                raise SystemExit(
+                    f"{out.name}: {src.name} has an opsz axis and this call "
+                    f"states no optical size. Pick one from the rendered size "
+                    f"of the text it sets — see the note in build().")
+            axes["opsz"] = opsz
+        for tag, v in (("SOFT", 0), ("WONK", 0)):
             if tag in axes:
                 axes[tag] = v
         font = instancer.instantiateVariableFont(font, axes)
@@ -122,10 +158,27 @@ FONTS = SRC if len(sys.argv) > 1 else \
 
 build(FONTS / "fragment-mono-latin.woff2", 400, MONO_CHARS,
       ROOT / "mono-subset.woff2", [])
+# opsz 48 — the FIGURES. This face sets the claim figures and their units and
+# nothing else, from the 89px "B only" down to a 34px unit a phone renders near
+# 30px (22pt). 48 is the largest optical size at which the smallest of them
+# still reads: at 72 the diagonal of a "4" is faint again at 34px in the light
+# theme. It is not pushed lower because the largest use pays for it — rendered
+# side by side at 89px, opsz 28 has lost most of the modulation 48 keeps and 9
+# is plainly book weight enlarged. Both ends were checked by rendering the
+# shipped plates with the candidate instance swapped in, at 708 and 390 CSS px,
+# in both themes; neither was judged from an outline. A compromise across
+# 22-67pt, stated as one.
 build(FONTS / "fraunces-latin-var.woff2", 600, BOLD_CHARS,
-      ROOT / "serif-600-subset.woff2")
+      ROOT / "serif-600-subset.woff2", opsz=48)
+# opsz 144 — the HEADLINE, and still right. The 400 face sets one thing: the
+# 34px centred serif line on the title page and on the colophon. Both plates
+# carry NO 600 face at all (head() drops it — they have no hero and no .sub),
+# so the two optical sizes never meet on one sheet and no reader sees the
+# family speak in two voices. At 34px, as prose, the display cut is doing the
+# job a display cut exists for; the thesis is the most important sentence on
+# the page and 144 is what makes it look set rather than typed.
 build(FONTS / "fraunces-latin-var.woff2", 400, SERIF_CHARS,
-      ROOT / "serif-subset.woff2")
+      ROOT / "serif-subset.woff2", opsz=144)
 # The text voice, added round 25 — see the note over TEXT_CHARS in charsets.py.
 # No `features=[]`: kerning is part of a serif's design, the same reason Gelasio
 # kept its defaults. No `metrics` override either — that parameter exists
@@ -133,7 +186,7 @@ build(FONTS / "fraunces-latin-var.woff2", 400, SERIF_CHARS,
 # face here, not a stand-in for a platform font. Its file is already a static
 # "Newsreader 16pt" Regular instance (no fvar), so build()'s instancing branch
 # is skipped and the optical size stays the TEXT one — which is the whole
-# point, and why Fraunces could not take this job: its opsz is pinned to 144,
-# the display end, because the heroes are 34-89px.
+# point, and why Fraunces could not take this job: both its instances are
+# pinned above 48, and the text voice is set at 13-21px.
 build(FONTS / "newsreader-latin-var.woff2", 400, TEXT_CHARS,
       ROOT / "text-subset.woff2")
