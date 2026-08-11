@@ -455,11 +455,33 @@ if (!OFFLINE && !process.env.CLAIMS_SKIP_FRESHNESS) {
     try {
       const args = ['-fsSL', '--max-time', '20', '-H', 'Accept: application/vnd.github+json'];
       if (process.env.GITHUB_TOKEN) args.push('-H', `Authorization: Bearer ${process.env.GITHUB_TOKEN}`);
-      const url = `https://api.github.com/repos/${r.github}/compare/${r.ref}...${encodeURIComponent(r.branch)}`;
-      const cmp = JSON.parse(execFileSync('curl', [...args, url], { encoding: 'utf8' }));
+      // `per_page=1` bounds the commits array, which is most of the payload and
+      // none of the answer — this reads two integers off the top of the object.
+      // It does NOT bound `files`: GitHub returns those up to its own cap
+      // regardless, which is why the buffer below is still needed.
+      const url = `https://api.github.com/repos/${r.github}/compare/${r.ref}`
+        + `...${encodeURIComponent(r.branch)}?per_page=1`;
+      // execFileSync's default maxBuffer is 1 MiB, and applied's compare is
+      // 1.59 MB of file patches — so this threw ENOBUFS, the catch below ate it,
+      // and the freshness note for that repo had NEVER printed. It is pinned 65
+      // commits behind main. The size scales with the diff, so every repo here
+      // acquires this failure as it grows, silently, one at a time.
+      const cmp = JSON.parse(execFileSync('curl', [...args, url],
+        { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }));
       if (cmp.ahead_by > 0)
         notes.push(`${key} is pinned ${cmp.ahead_by} commit(s) behind ${r.branch} — still verified, but the page is citing an older ${r.github}`);
-    } catch { /* offline or rate-limited: freshness is a courtesy, not a gate */ }
+    } catch {
+      // Freshness is a courtesy and still does not fail the build. But this
+      // catch used to swallow the failure whole, so "up to date", "rate-limited"
+      // and "the network is down" produced the same output — nothing — and a
+      // courtesy that goes silent when it fails is indistinguishable from one
+      // with good news. That is this repository's own definition of a check
+      // that cannot fail, applied to something that was never meant to be a
+      // check; the honest version says it could not answer.
+      notes.push(`${key}: freshness UNKNOWN — the compare against ${r.branch} did not `
+        + `answer (offline, rate-limited, or the ref has moved). No number is in doubt: `
+        + `they are re-derived from ${r.ref}, which is pinned.`);
+    }
   }
 }
 
