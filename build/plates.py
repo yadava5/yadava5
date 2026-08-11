@@ -2286,9 +2286,18 @@ def _check_coverage(fn: str, svg: str) -> None:
             # `mach` is tested FIRST and wins over everything: it is the opt-in
             # that selects the mono face, so whatever else a run inherits, a
             # .mach run is set in 'M'. The final fallback is the TEXT face now,
-            # not the mono one — that inversion is the whole redesign, and
-            # getting it backwards here would check every caption against the
-            # wrong charset while reporting success.
+            # not the mono one — that inversion is the whole redesign.
+            #
+            # What this branch CANNOT do, stated because the comment here used
+            # to claim the opposite: it cannot catch those two arms being
+            # swapped. TEXT_CHARS is MONO_CHARS — the same object, deliberately,
+            # since the same strings are set in both faces — so exchanging them
+            # changes the word in the message and nothing else. The distinctions
+            # with teeth are 600 and serif. Nor does anything downstream close
+            # it: gate.mjs asserts that whatever face an element RENDERS in is
+            # embedded by that plate, which a wrongly-monospaced caption
+            # satisfies, because 'M' is embedded. A run wearing the wrong class
+            # is caught by reading it, not by a check.
             face, chars = (('mono', MONO_CHARS) if 'mach' in cls else
                            ('serif', SERIF_CHARS) if 'ser' in cls else
                            ('600', BOLD_CHARS) if cls & {'hero', 'sub', 'vast', 'n'} else
@@ -2333,7 +2342,15 @@ set_theme("dark")
 # Every description is authored once in ALT and must reach the README verbatim.
 (OUT / "alt.json").write_text(json.dumps(ALT, indent=2, sort_keys=True))
 _readme = ROOT.parent / "README.md"
-if _readme.exists():
+# Fails CLOSED. This was `if _readme.exists():` and skipped in silence when it
+# did not, so the one assertion that a screen reader hears the description the
+# plate authored was conditional on a filename resolving. macOS is case-
+# insensitive and the Linux runner is not: `Readme.md` passes here and asserts
+# nothing on the machine that publishes. A check allowed not to run is not one.
+if not _readme.exists():
+    _fail.append(f"{_readme}: not found — the alt/desc agreement cannot be "
+                 f"checked, and a check that cannot run must not pass")
+else:
     _md = _readme.read_text()
     for _fn, _desc in ALT.items():
         _m = _re.search(rf'<img src="\./assets/{_re.escape(_fn)}"[^>]*?alt="([^"]*)"', _md)
@@ -2341,6 +2358,24 @@ if _readme.exists():
             _fail.append(f"{_fn}: no <img> with an alt in README.md")
         elif _m.group(1).strip() != _desc.strip():
             _fail.append(f"{_fn}: README alt has drifted from the plate's own description")
+    # Both directions, over all 36 published files. The loop above reads the
+    # nine desktop-dark <img> tags; the other 27 references — every light twin
+    # and the entire mobile set — arrive through <source srcset> and had no
+    # assertion of any kind, which is the same coverage hole check 12 carried
+    # for ten rounds. A plate authored and never referenced is a file no reader
+    # can reach; a reference to a plate never authored is a broken image on the
+    # page itself, and GitHub renders that as a torn icon, not as nothing.
+    _want = {f"./assets/{_d}{_f}" for _f in set(PLATES) | set(MOBILE)
+             for _d in ("", "light/")}
+    # The trailing lookahead is load-bearing and was missing on the first
+    # draft: without it `…/m-4-applied.svgX` still matches through `.svg`, so a
+    # reference typo'd into a filename nothing publishes reads as present and
+    # the check passes. Falsifying it is what found that.
+    _have = set(_re.findall(r'\./assets/(?:light/)?[\w.-]+\.svg(?![\w.-])', _md))
+    for _p in sorted(_want - _have):
+        _fail.append(f"{_p}: this build authors it and README.md references it nowhere")
+    for _p in sorted(_have - _want):
+        _fail.append(f"{_p}: README.md references it and no build authors it — broken image")
 
 if _fail:
     print("\nGATE FAILED:")

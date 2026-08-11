@@ -13,18 +13,24 @@
  * notice. A check that stays silent under its own mutation is dead code wearing
  * a passing grade.
  *
- * TWO families, because for a long time there was only one. The first mutates a
- * plate and invokes gate.mjs. The second copies the repository, falsifies
- * claims.json or README.md, and invokes claims.mjs — which until round 25 had
- * no probe at all, so the gate that leaves the repository and re-derives 56
- * numbers had never once been watched to fail. That is the same shape as the
- * four dead gates above, and it survived precisely because this file's own
- * name made it look like the negative test was covered.
+ * THREE families, and each was added after noticing that a whole gate had no
+ * probe pointed at it. The first mutates a plate and invokes gate.mjs. The
+ * second copies the repository, falsifies claims.json or README.md, and invokes
+ * claims.mjs — the gate that leaves the repository and re-derives every drawn
+ * number from pinned commits, which had never once been watched to fail. The
+ * third copies the repository, breaks one of the generator's inputs, and runs
+ * the COPY's plates.py, whose build-time gate holds the charset coverage, the
+ * XML check, the sweep, and the alt/desc agreement that is the page's entire
+ * accessibility contract.
+ *
+ * The pattern is worth naming, because it has now repeated three times: the gap
+ * is never in the check you are looking at, it is in the gate this file does
+ * not mention. This file's own NAME is what made each of them look covered.
  *
  * Usage: node build/mutations.mjs
  */
 import { execFileSync } from 'node:child_process';
-import { readFileSync, writeFileSync, mkdtempSync, readdirSync, cpSync, rmSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdtempSync, readdirSync, cpSync, rmSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -253,6 +259,34 @@ for (const [name, expect, breakIt, only] of MUTATIONS) {
   console.log(`  ${caught ? '..' : '!!'} ${name}${caught ? '' : '  — NOT CAUGHT'}`);
   if (!caught) dead++;
 }
+// ── Still gate.mjs, but breaking the SET rather than a file in it.
+//
+// Family 1 mutates the text of one plate, so there is no way to say "the light
+// twins are not there" in its vocabulary — and that turned out to be the guard
+// worth saying it about. gate.mjs pushed the light set only `if (existsSync)`,
+// three lines under a comment asserting those files "are measured by every
+// check here", so an absent directory left the gate measuring the dark half and
+// printing GATE PASSED. Same runner, a mutator that takes the copied directory.
+const SET_MUTATIONS = [
+  ['the light twin of every plate is missing', /does not exist\. It holds the light twin/,
+    (dir) => { rmSync(join(dir, 'light'), { recursive: true, force: true }); return true; }],
+  // and the partial case, which the existsSync form could never have seen even
+  // when the directory was present: one theme holding one fewer plate than the
+  // other means a <picture> whose light <source> resolves to nothing.
+  ['one plate loses its light twin', /have no light twin: plate-1-glyph\.svg/,
+    (dir) => { rmSync(join(dir, 'light', 'plate-1-glyph.svg')); return true; }],
+];
+for (const [name, expect, breakIt] of SET_MUTATIONS) {
+  const dir = mkdtempSync(join(tmpdir(), 'mut-'));
+  cpSync(ASSETS, dir, { recursive: true });
+  breakIt(dir);
+  const out = gate(dir);
+  rmSync(dir, { recursive: true, force: true });
+  const caught = expect.test(out);
+  console.log(`  ${caught ? '..' : '!!'} ${name}${caught ? '' : '  — NOT CAUGHT'}`);
+  if (!caught) dead++;
+}
+
 // ── The second family: can claims.mjs fail?
 //
 // Everything above mutates a PLATE and invokes gate.mjs. That was the WHOLE
@@ -335,6 +369,14 @@ const CLAIM_MUTATIONS = [
     /anchor .* no longer appears in README\.md/,
     (root) => editReadme(root, (s) =>
       s.replace('on all **seven** tenant tables', 'on all **nineteen** tenant tables'))],
+  // 5. the SCOPE of the sweep, rather than anything inside it. The light plates
+  //    were added to SWEPT and made conditional on their directory in the same
+  //    breath, so a missing half of the published set dropped out in silence and
+  //    the coverage half of this gate — the one that rejects a number nothing
+  //    accounts for — passed having swept the dark set only.
+  ['half the published plates fall out of the sweep',
+    /does not exist, so half the published/,
+    (root) => { rmSync(join(root, 'assets', 'light'), { recursive: true, force: true }); return true; }],
 ];
 
 const REPO_COPY = (dir) => cpSync(ROOT, dir, {
@@ -361,6 +403,141 @@ for (const [name, expect, breakIt] of CLAIM_MUTATIONS) {
     dead++; rmSync(dir, { recursive: true, force: true }); continue;
   }
   const out = claimsGate(dir);
+  rmSync(dir, { recursive: true, force: true });
+  const caught = expect.test(out);
+  console.log(`  ${caught ? '..' : '!!'} ${name}${caught ? '' : '  — NOT CAUGHT'}`);
+  if (!caught) dead++;
+}
+
+// ── The third family: can plates.py fail?
+//
+// The two families above mutate a plate and invoke gate.mjs, or falsify a
+// number and invoke claims.mjs. Nothing in this file has ever pointed at the
+// GENERATOR, which carries a build-time gate of its own: charset coverage, XML
+// well-formedness, the MFRAME/MOBILE pairing, the sweep that deletes plates the
+// build no longer authors, and the alt/desc agreement — the only assertion
+// anywhere that the sentence a screen reader is given is the sentence the plate
+// wrote. Five checks, on the accessibility contract and on the published file
+// set, and not one of them had ever been watched to fail.
+//
+// Writing these found two. The alt/desc block was `if _readme.exists():`, so a
+// README that did not resolve skipped the whole agreement in silence and exited
+// 0 — and the case is not hypothetical, because macOS matches `Readme.md`
+// case-insensitively and the Linux runner that publishes does not. And the
+// other 27 of the 36 published files, every light twin and the entire mobile
+// set, reach the page through <source srcset>, which the alt loop never reads:
+// a plate could be authored and referenced nowhere, or referenced and authored
+// by nothing, with every gate green. Both are checks now, and both directions
+// are probed below.
+//
+// Same shape as the claims family: copy the repository, break one input, run
+// the COPY's build. platesGate returns output on success as well as failure,
+// because one of these probes asserts that a run SUCCEEDS and says something.
+const platesGate = (root) => {
+  try {
+    return execFileSync('python3', [join(root, 'build', 'plates.py')],
+      { cwd: root, encoding: 'utf8', stdio: 'pipe' });
+  } catch (e) { return (e.stdout || '') + (e.stderr || ''); }
+};
+const editFile = (root, rel, fn) => {
+  const p = join(root, rel);
+  if (!existsSync(p)) return false;
+  const before = readFileSync(p, 'utf8');
+  const after = fn(before);
+  if (after === undefined || after === before) return false;
+  writeFileSync(p, after);
+  return true;
+};
+
+const PLATE_MUTATIONS = [
+  // 1-2. the accessibility contract, in its two failure modes. Drift is the one
+  //      that was already checked; absence is the one that used to pass.
+  ['an alt drifts from the description its plate authored',
+    /plate-0-thesis\.svg: README alt has drifted/,
+    (root) => editFile(root, 'README.md', (s) => s.replace(
+      /(<img src="\.\/assets\/plate-0-thesis\.svg"[^>]*?alt=")/, '$1Not what the plate says. '))],
+  ['README.md is not there at all',
+    /README\.md: not found/,
+    (root) => { rmSync(join(root, 'README.md')); return true; }],
+  // 3-4. the published set, both directions. Probe 3 appends a character to a
+  //      filename rather than deleting the line, because that is the mistake a
+  //      person actually makes — and because the first draft of the check used
+  //      an unanchored regex that still matched `…svgX` through its `.svg` and
+  //      called the reference present.
+  ['a published plate is referenced nowhere in the README',
+    /m-4-applied\.svg: this build authors it and README\.md references it nowhere/,
+    (root) => editFile(root, 'README.md', (s) =>
+      s.replace('./assets/light/m-4-applied.svg', './assets/light/m-4-applied.svgX'))],
+  ['the README reaches for a plate no build authors',
+    /m-5-refusalZZ\.svg: README\.md references it and no build authors it/,
+    (root) => editFile(root, 'README.md', (s) =>
+      s.replace('./assets/m-5-refusal.svg"', './assets/m-5-refusalZZ.svg"'))],
+  // 5-6. charset coverage: a glyph the subset does not carry falls back to a
+  //      platform font, and nothing downstream can see it — gate.mjs measures
+  //      the geometry of the FALLBACK and passes. Only the 600 and the serif are
+  //      probed: TEXT_CHARS is MONO_CHARS, the same object, so a probe of the
+  //      mach-vs-text arm would be asserting nothing. That is a true statement
+  //      about the check, not a working probe, and it is not scored as one.
+  ['a digit leaves the display face and falls back to a platform font',
+    /draws '4' in the 600 face/,
+    (root) => editFile(root, 'build/charsets.py', (s) =>
+      s.replace(/^(BOLD_CHARS = ")([^"]*)"/m, (_m, head, set) => `${head}${set.replace('4', '')}"`))],
+  ['a letter leaves the serif face',
+    /draws 't' in the serif face/,
+    (root) => editFile(root, 'build/charsets.py', (s) =>
+      s.replace(/^(SERIF_CHARS = ")([^"]*)"/m, (_m, head, set) => `${head}${set.replace('t', '')}"`))],
+  // 7. the pairing that keeps check 12 honest on the phone canvas. Sliced from
+  //    MFRAME's own text rather than searched for globally: MOBILE is declared
+  //    first and holds a tuple under the same key, so an unscoped match would
+  //    delete the plate instead of its frame and trip the guard for the wrong
+  //    reason.
+  ['a mobile plate loses the frame declaration check 12 measures it against',
+    /MFRAME\/MOBILE disagree/,
+    (root) => editFile(root, 'build/plates.py', (s) => {
+      const i = s.indexOf('MFRAME = {');
+      if (i < 0) return undefined;
+      const head = s.slice(0, i), tail = s.slice(i);
+      const cut = tail.replace(/"m-1-glyph\.svg":\s*\([^)]*\),\s*/, '');
+      return cut === tail ? undefined : head + cut;
+    })],
+  // 8. well-formedness. A plate that is not parseable XML is not a plate;
+  //    GitHub serves it as a torn image and every other gate here reads the
+  //    file as text and never notices.
+  ['a plate emits markup that is not well-formed',
+    /plate-[\w-]+\.svg: MALFORMED XML/,
+    (root) => editFile(root, 'build/plates.py', (s) =>
+      s.replace('return "".join(s) + "</svg>"', 'return "".join(s) + "</svgg>"'))],
+  // 9. the sweep, and the only probe here that requires the build to SUCCEED.
+  //    A plate dropped from PLATES survives in assets/ unless something deletes
+  //    it, and a stale file on disk is a stale claim surface: the gates sweep
+  //    the directory, so it would go on being measured and go on being served
+  //    by any README that still points at it.
+  ['a plate this build no longer authors is left on disk',
+    /plate-zz-stale\.svg: removed \(no longer authored\)/,
+    (root) => {
+      writeFileSync(join(root, 'assets', 'plate-zz-stale.svg'),
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"/>');
+      return true;
+    }],
+];
+
+console.log('\nplates baseline:', (() => {
+  const d = mkdtempSync(join(tmpdir(), 'mutp-'));
+  REPO_COPY(d);
+  const out = platesGate(d);
+  rmSync(d, { recursive: true, force: true });
+  return /GATE FAILED/.test(out) ? 'FAILS (fix the build first)' : 'passes';
+})());
+
+for (const [name, expect, breakIt] of PLATE_MUTATIONS) {
+  const dir = mkdtempSync(join(tmpdir(), 'mutp-'));
+  REPO_COPY(dir);
+  const touched = breakIt(dir);
+  if (!touched) {
+    console.log(`  ?? ${name} — mutation matched nothing; the probe is stale`);
+    dead++; rmSync(dir, { recursive: true, force: true }); continue;
+  }
+  const out = platesGate(dir);
   rmSync(dir, { recursive: true, force: true });
   const caught = expect.test(out);
   console.log(`  ${caught ? '..' : '!!'} ${name}${caught ? '' : '  — NOT CAUGHT'}`);

@@ -78,9 +78,33 @@ const still = await browser.newPage({ reducedMotion: 'reduce' });
 // half of all readers those files ARE the page, and they are measured by every
 // check here. The contrast checks adapt on their own — they read the slab
 // colour off the plate's own first <rect> rather than assuming a dark ground.
+//
+// REQUIRED, and conditional until 2026-08-11: the line below used to read
+// `if (existsSync(LIGHT_DIR)) SETS.push(...)`, three lines under a comment
+// asserting those files "are measured by every check here". With the directory
+// absent this gate measured the dark eighteen of thirty-six, printed GATE
+// PASSED, and the sentence above it was false for exactly the readers it names.
+// The same shape as check 12's `if (!mobile)`, which cost ten rounds: a guard
+// that lets a check quietly not run. Both halves are asserted — present, and
+// holding a twin of every plate by name, so a light set that is merely
+// INCOMPLETE fails too.
 const SETS = [{ dir: ASSETS, tag: '' }];
 const LIGHT_DIR = join(ASSETS, 'light');
-if (existsSync(LIGHT_DIR)) SETS.push({ dir: LIGHT_DIR, tag: 'light/' });
+const published = (d) => readdirSync(d).filter(f => /^(plate|m)-.*\.svg$/.test(f)).sort();
+if (!existsSync(LIGHT_DIR)) {
+  console.error(`\nGATE FAILED — ${LIGHT_DIR} does not exist. It holds the light twin of `
+    + `every plate, GitHub's light theme is the DEFAULT, and this gate cannot pass `
+    + `on half a published set.`);
+  process.exit(1);
+}
+SETS.push({ dir: LIGHT_DIR, tag: 'light/' });
+const missingTwin = published(ASSETS).filter(f => !published(LIGHT_DIR).includes(f));
+if (missingTwin.length) {
+  console.error(`\nGATE FAILED — ${missingTwin.length} plate(s) have no light twin: `
+    + `${missingTwin.join(', ')}. Every plate is published in both themes or the `
+    + `<picture> that serves it resolves to nothing.`);
+  process.exit(1);
+}
 const sheet = (re) => SETS.flatMap(({ dir, tag }) =>
   readdirSync(dir).filter(f => re.test(f)).sort().map(f => ({ dir, tag, file: f })));
 

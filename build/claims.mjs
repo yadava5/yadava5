@@ -345,10 +345,20 @@ const exempt = new Set(Object.keys(spec.exempt).filter(k => k !== '$comment'));
 //
 // The light plate draws the same numbers as its dark twin by construction, so
 // it inherits the twin's registrations rather than duplicating every row.
+// REQUIRED, not conditional. The `: []` this replaced meant a missing directory
+// dropped every light plate out of SWEPT in silence — so the coverage half of
+// this gate, the one that rejects a number nothing accounts for, would have
+// swept the dark set only and passed. The comment directly above says the light
+// plates were "audited by nothing at all"; that was fixed by adding them to the
+// sweep and then made conditional on a directory in the same breath.
 const lightDir = join(ASSETS, 'light');
-const LIGHT = existsSync(lightDir)
-  ? readdirSync(lightDir).filter(f => /^(plate|m)-.*\.svg$/.test(f)).sort().map(f => `light/${f}`)
-  : [];
+if (!existsSync(lightDir)) {
+  console.log(`\nCLAIMS GATE FAILED — ${lightDir} does not exist, so half the published `
+    + `plates are outside the sweep and no number drawn on them is accounted for.`);
+  process.exit(1);
+}
+const LIGHT = readdirSync(lightDir).filter(f => /^(plate|m)-.*\.svg$/.test(f)).sort()
+  .map(f => `light/${f}`);
 const SWEPT = [...readdirSync(ASSETS).filter(f => /^(plate|m)-.*\.svg$/.test(f)).sort(), ...LIGHT, 'README.md'];
 const unthemed = (f) => f.replace(/^light\//, '');
 const numsOf = (f) => {

@@ -71,16 +71,23 @@ jobs:
       # And the negative test, LAST. Four gates in this repo have shipped unable
       # to fail; two more probes went stale as the plates they anchored on were
       # rewritten; an audit found two further dead checks by hand. mutations.mjs
-      # breaks the plates every way it knows and falsifies claims.json and
-      # README.md besides, and asserts each check notices. The count used to be
+      # breaks the plates every way it knows, falsifies claims.json and
+      # README.md besides, and corrupts the generator's own inputs, and asserts
+      # each check notices. The count used to be
       # written out here and said "thirteen" while the file held seventeen —
       # a number in a comment nothing reads is a claim with no gate behind it,
       # which is this repository's whole subject. The run prints the real
-      # figure; that one cannot go stale. Until round 25 the whole
+      # figure; that one cannot go stale.
+      #
+      # Each family was added on finding that a whole gate had none. The
       # negative test invoked gate.mjs only, so claims.mjs — the gate that
-      # leaves the repository — had never been observed to fail. Its own
-      # header says the negative test must "stop being something you remember to
-      # do" — which it was, until this step.
+      # leaves the repository — had never been observed to fail. Then plates.py,
+      # which holds the charset coverage and the alt/desc agreement that is this
+      # page's entire accessibility contract, turned out to have none either,
+      # and writing that family found the agreement skipping in silence whenever
+      # README.md did not resolve. Its own header says the negative test must
+      # "stop being something you remember to do" — which is what it keeps
+      # turning out to be, one gate at a time.
       #
       # It runs last on purpose: a negative test is the only step whose result
       # tells you what the other steps' green MEANT, so it should be the final

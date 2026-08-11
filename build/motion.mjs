@@ -98,9 +98,29 @@ const decodeAndDiff = async (b64, first) => page.evaluate(async ({ b64, first })
   return changed / (W * H);
 }, { b64, first });
 
+// The light set is REQUIRED here for the same reason it is in gate.mjs: it was
+// conditional, so a missing directory halved what this gate measured and still
+// printed MOTION GATE PASSED. Guarded in place rather than through a shared
+// helper on purpose — a shared throw only fires where it is called, so probing
+// it through one entry point would prove nothing about this one and would make
+// a single probe look like it covered three gates.
+//
+// SCOPE: this particular guard has no probe in mutations.mjs, and that is a
+// decision rather than an oversight. A motion family would cost a full
+// Playwright frame-diff of every plate per probe, which is the slowest thing in
+// the repository. gate.mjs's twin of this guard and claims.mjs's are both
+// probed there. This one was falsified by hand on 2026-08-11 — run against a
+// copied assets/ with light/ removed, it exits 1 — and it is not falsified
+// again on every push. Stated so the gap is a boundary and not a silence.
 const SETS = [{ dir: ASSETS, tag: '', bg: '#0d1117' }];
 const LIGHT_DIR = join(ASSETS, 'light');
-if (existsSync(LIGHT_DIR)) SETS.push({ dir: LIGHT_DIR, tag: 'light/', bg: '#ffffff' });
+if (!existsSync(LIGHT_DIR)) {
+  console.error(`\nMOTION GATE FAILED — ${LIGHT_DIR} does not exist. It holds the light `
+    + `twin of every plate, and half a published set cannot pass a gate about what `
+    + `readers see.`);
+  process.exit(1);
+}
+SETS.push({ dir: LIGHT_DIR, tag: 'light/', bg: '#ffffff' });
 const plates = SETS.flatMap(({ dir, tag, bg }) =>
   readdirSync(dir).filter(x => /^(plate|m)-.*\.svg$/.test(x)).sort().map(x => ({ dir, tag, bg, base: x })));
 
