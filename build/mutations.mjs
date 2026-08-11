@@ -134,6 +134,32 @@ const MUTATIONS = [
   // Glyph opens a 400ms hole in a 150ms wave.
   ['a stagger step is too wide to read as one gesture', /too slow to read as one gesture/,
     (s) => s.replace(/animation-delay:-7\.45s/, 'animation-delay:-6.9s')],
+  // Check 3 exempted every hairline from crossing type — "rules pass under
+  // type" — so a rule that TRAVELLED across a word passed 40 samples a loop
+  // while rendering it struck out. Two plates were shipping exactly that. The
+  // exemption is now narrowed to hairlines that hold still, and this is the
+  // probe that the narrowing is connected to anything.
+  //
+  // Injected at the end of the document rather than beside the text it
+  // crosses, deliberately: elements sharing a <g> are "composed on purpose"
+  // and skipped, so a probe nested next to its target would be waved through
+  // and report a false pass — the exact shape of the three stale probes above.
+  // The expectation is keyed to the INJECTED element's own name, not to the
+  // bare phrase. While a real plate is failing this check, a probe matching
+  // /sweeps across/ would be satisfied by the pre-existing failure and report
+  // "caught" without the mutation contributing anything — a probe that passes
+  // because the tree is already broken is the precise defect this file exists
+  // to prevent, and it would have been one more entry in its own history.
+  ['a moving rule is drawn through type', /rect\.mutsweep[^\n]*sweeps across/,
+    (s) => {
+      const m = /<text x="150" y="(\d+)" class="(?:kick|lbl|fine|key)"/.exec(s);
+      if (!m) return s;
+      return s.replace('</svg>',
+        '<style>@keyframes mutsweep{from{transform:translateY(-30px)}'
+        + 'to{transform:translateY(30px)}}</style>'
+        + `<rect class="mutsweep" x="150" y="${Number(m[1]) - 8}" width="360" height="2" `
+        + 'fill="#ffffff" style="animation:mutsweep 4s linear infinite"/></svg>');
+    }],
 ];
 
 const gate = (dir) => {

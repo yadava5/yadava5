@@ -177,10 +177,22 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
       return false;
     };
     const isFrame = el => el.tagName === 'rect' && el.getAttribute('fill') === 'none';
+    // Paints nothing, so it cannot cross anything. The AutoML needle carries a
+    // deliberate zero-ink path — `M-110 -110h0.01M110 110h0.01`, two 0.01u dots
+    // that pin the rotating group's fill-box onto the dial axis — whose 220x220
+    // bounding box otherwise "sweeps across" every label on the plate. A
+    // bounding box is not ink.
+    const isInkless = (el) => {
+      const cs = getComputedStyle(el);
+      const noStroke = cs.stroke === 'none' || parseFloat(cs.strokeWidth) === 0
+                    || parseFloat(cs.strokeOpacity) === 0;
+      const noFill = cs.fill === 'none' || parseFloat(cs.fillOpacity) === 0;
+      return noStroke && noFill;
+    };
 
-    const meta = drawables.map(el => ({
-      el, tag: el.tagName, nm: name(el), grp: groupOf(el),
-      hair: isHairline(el), frame: isFrame(el),
+    const meta = drawables.map((el, i) => ({
+      el, i, tag: el.tagName, nm: name(el), grp: groupOf(el),
+      hair: isHairline(el), frame: isFrame(el), inkless: isInkless(el),
       cls: el.getAttribute('class') || '',
     }));
 
@@ -202,6 +214,29 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
                       && Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y) > TOL;
 
     const steps = dur ? STEPS : 1;
+
+    // ── Which hairlines TRAVEL. Check 3 exempts every hairline from crossing
+    // type — "rules pass under type" — which is right for a table divider that
+    // holds still behind a label, and wrong for a rule that sweeps ACROSS one.
+    // A moving rule over a word renders as a strikethrough, and this gate
+    // passed 40 samples a loop while `task-lists*` on plate V and "CODE
+    // COMPLIANCE, 61 PROJECTS" on plate I were both drawn cancelled. A true
+    // claim rendered struck out is the worst thing a plate can do, and it is
+    // exactly the frame a reader is most likely to get: GitHub serves these
+    // through camo as <img>, so the loop phase anyone sees is arbitrary.
+    const travel = meta.map(() => ({ x0: Infinity, x1: -Infinity, y0: Infinity, y1: -Infinity }));
+    for (let i = 0; i < steps; i++) {
+      seek(dur ? dur * i / steps : 0);
+      snap().forEach((e, k) => {
+        const t = travel[k];
+        t.x0 = Math.min(t.x0, e.x); t.x1 = Math.max(t.x1, e.x);
+        t.y0 = Math.min(t.y0, e.y); t.y1 = Math.max(t.y1, e.y);
+      });
+    }
+    // 1 viewBox unit — under the threshold of vision, and above the sub-pixel
+    // jitter a static element picks up from getBoundingClientRect rounding.
+    const travels = travel.map(t => (t.x1 - t.x0) > 1 || (t.y1 - t.y0) > 1);
+
     const seenVis = [];                 // per-element count of samples visible
     const peak = [];                    // per-element max opacity over the loop
     const frames = [];                  // every sample, kept for the rest check
@@ -248,7 +283,13 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
           // 3 — text under a moving graphic
           if (kinds.includes('text')) {
             const T = A.tag === 'text' ? A : B, G = A.tag === 'text' ? B : A;
-            if (G.hair) continue;                          // rules pass under type
+            // A rule that HOLDS STILL passes under type; one that travels
+            // across it is a strikethrough. See the travel pass above.
+            if (G.hair && (!travels[G.i] || G.inkless)) continue;
+            if (G.hair) {
+              out.push(`${G.nm} sweeps across ${T.nm}${at} — a moving rule over type reads as a strikethrough`);
+              continue;
+            }
             if (G.frame) {                                 // a box may CONTAIN a label
               const inside = T.x >= G.x - TOL && T.x + T.w <= G.x + G.w + TOL
                           && T.y >= G.y - TOL && T.y + T.h <= G.y + G.h + TOL;
@@ -460,17 +501,25 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
     // perpetual motion gets perpetual decoration; the failure was in the
     // doctrine, not the implementations.
     //
-    // The design rule is now STILL BY DEFAULT: motion only where it performs
-    // the claim beside it, and a still plate is a decision, not a defect. So
-    // the floor, the ceiling and the no-animations failure are deleted — and
-    // what remains is the one thing that is still a defect under the new
-    // doctrine: a plate that DECLARES animations none of which ever moves
-    // anything. That is not stillness; it is dead code running on the
-    // reader's compositor, and it is exactly how gate-food survives a
-    // redesign — the keyframes stay, the travel gets zeroed, nothing notices.
-    // build/motion.mjs enforces the same rule in pixels; this is the geometry
-    // side, so the two instruments now agree in direction instead of one
-    // demanding motion the other punishes.
+    // CAUTION — the paragraph above describes v2, a doctrine this page has
+    // since abandoned, and reading it as current nearly cost a whole round.
+    // "Still by default" was tried: eight of ten plates took the permission
+    // and froze for 84-100% of their loops, and the verdict on the result was
+    // "very static feel". build/motion.mjs is now on v3 and enforces the
+    // OPPOSITE of what the text above implies — read its header before
+    // trusting any motion claim in this file. Under v3 every plate carries a
+    // continuous carrier plus its gesture, and a plate declaring no
+    // animations at all fails there.
+    //
+    // What this check asserts is true under every one of the three doctrines,
+    // which is why the code below never needed changing: a plate that
+    // DECLARES animations none of which ever moves anything is not stillness,
+    // it is dead code running on the reader's compositor — and it is exactly
+    // how gate-food survives a redesign, the keyframes staying while the
+    // travel gets zeroed and nothing notices.
+    //
+    // The division of labour: motion.mjs decides how much a plate must move,
+    // in pixels. This decides that whatever it declares must be real.
     if (dur) {
       let alive = 0;
       for (let i = 1; i < frames.length; i++) {

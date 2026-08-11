@@ -28,6 +28,31 @@
     "gone because the split it named stopped existing — see the note on the",
     "applied repo and the ONNX rows."
   ],
+  "$repin_note_2026_08_10": [
+    "Cadence re-pinned 8a2fbbb -> 771acc48, 32 commits, ancestry verified. This one",
+    "was not housekeeping. The old pin was holding section V's claim that deployed",
+    "RLS was 'staged rather than load-bearing' because production still connected as",
+    "an owner role with BYPASSRLS. True at 8a2fbbb; false since 2026-08-03, when the",
+    "DATABASE_URL swap landed and production moved to cadence_app (NOSUPERUSER",
+    "NOBYPASSRLS). Confirmed four ways before the pin moved: the 0003 migration, the",
+    "live pg_roles row, docs/RLS-CUTOVER.md, and the deployed environment itself.",
+    "",
+    "The lesson is about the gate, not the pin. claims.mjs re-derives NUMBERS and had",
+    "been green throughout -- 36 handlers was correct at 8a2fbbb. The false sentence",
+    "was PROSE, which nothing here reads. The freshness check had been printing",
+    "'cadence is pinned N commits behind main' for a week and does not fail the build,",
+    "by design. So the page understated its own strongest security result, in public,",
+    "with every gate passing. That boundary is now stated on the page itself rather",
+    "than left for a reader to discover.",
+    "",
+    "Both glyph benchmark rows re-sourced the same day -- see the notes on",
+    "glyph.dot256_speedup and glyph.axpy128_slowdown. Short version: they cited a",
+    "December CSV recorded on a different machine, which glyph's own ENVIRONMENT.md",
+    "had already retired. axpy moves 6.9 -> 10.7; dot stays 3.5 because the run that",
+    "glyph names as canonical happens to agree with the CSV to one decimal. Had the",
+    "aggregated pair been chosen instead, dot would have read 3.6, and a headline",
+    "number would have moved as a side effect of a sourcing fix nobody was watching."
+  ],
   "repos": {
     "glyph": {
       "github": "yadava5/glyph",
@@ -44,9 +69,10 @@
     },
     "cadence": {
       "github": "yadava5/cadence",
-      "ref": "8a2fbbb7ab5e36f262dc8807087e0e42f536ec06",
+      "ref": "771acc48cb4e3665b474cc73652a8e2c2cfc4322",
       "branch": "main",
-      "public": true
+      "public": true,
+      "note": "Re-pinned 2026-08-10, 32 commits on from 8a2fbbb (verified an ancestor: git merge-base --is-ancestor passes, no rewritten history). The old pin was not merely behind — it was holding a sentence that had become FALSE. At 8a2fbbb, docs/RLS-CUTOVER.md still read 'the app connects as postgres, which carries BYPASSRLS', and section V repeated it. The DATABASE_URL swap was made 2026-08-03 (b271100); production connects as cadence_app, NOSUPERUSER NOBYPASSRLS, confirmed against the live database and the deployed environment. The freshness check at claims.mjs:388 had been printing 'pinned N commits behind main' the whole time and does not fail the build, by design — which is exactly how a prose claim outlived its evidence. handlers moves 36 -> 37 with this pin."
     },
     "applied": {
       "github": "yadava5/applied",
@@ -142,6 +168,17 @@
       "extractor": "echo \"$HEADER\""
     },
     {
+      "id": "glyph.served_wasm_sha256",
+      "value": "e681d2f76d41305aa3b8c250799f898bd1139497f60580ed59000d49cf5d6360",
+      "drawn_on": [
+        "README.md"
+      ],
+      "live": "https://getglyph.vercel.app/wasm/fast_mnist.wasm",
+      "digest": "sha256",
+      "extractor": "echo \"$HEADER\"",
+      "note": "ADDED 2026-08-10, to close a hole the sibling row's own note had been documenting rather than fixing. glyph.deployed_wasm_sha256 hashes the REPO blob; glyph.deployed_wasm_bytes reads the DEPLOYMENT's content-length. Two sources, so a same-length different-bytes deploy passed both green — which is not hypothetical, it half-happened on 2026-08-08. This row runs the reader's own command against the host: curl the body, sha256 it, compare. With this and glyph.deployed_wasm_sha256 both green, the deployed bytes and the committed bytes are proven equal rather than separately plausible, and §III's 'this page's CI runs that same hash on every push' is a statement about machinery that exists."
+    },
+    {
       "id": "glyph.msimd128_line",
       "value": "332",
       "drawn_on": [
@@ -150,7 +187,7 @@
       "repo": "glyph",
       "path": "CMakeLists.txt",
       "extractor": "grep -n -- '-msimd128' \"$BLOB\" | head -1 | cut -d: -f1",
-      "note": "The README cites CMakeLists.txt:330 by line. Line citations drift silently as a file grows; this one now fails the build instead — and it earned its keep: it was 279 at the old pin, a coverage block and an eval target were inserted above it, and this row is what flagged the drift."
+      "note": "The README cites CMakeLists.txt:332 by line. Line citations drift silently as a file grows; this one now fails the build instead — and it earned its keep: it was 279 at the old pin, a coverage block and an eval target were inserted above it, and this row is what flagged the drift. The sentence you are reading said 330 until 2026-08-10, while the value beside it said 332: a note about line-citation drift, itself carrying a stale line citation."
     },
     {
       "id": "jetpack.parallel_mbs",
@@ -349,14 +386,14 @@
     },
     {
       "id": "cadence.handlers",
-      "value": "36",
+      "value": "37",
       "drawn_on": [
         "README.md"
       ],
       "repo": "cadence",
       "path": "api/index.ts",
       "extractor": "awk '/^const ROUTES/,/^\\];/' \"$BLOB\" | grep -cE '^\\s*\\[\\['",
-      "note": "The dispatch table itself, not the import list — the import list agrees at 36, but routes are what the function actually serves. Round 21: the parser plate is retired (the section merged into the refusal plate), so this is prose-only now."
+      "note": "The dispatch table itself, not the import list — at this pin both agree at 37 (an audit on 2026-08-10 confirmed 37 default handler imports, 37 ROUTES entries, 37 distinct handlers, with nothing imported-but-unrouted, nothing routed-but-unimported, no duplicate patterns and no route shadowed unreachable under api/index.ts's own match() ordering), but routes are what the function actually serves. Round 21: the parser plate is retired (the section merged into the refusal plate), so this is prose-only now."
     },
     {
       "id": "applied.macro_f1",
@@ -424,8 +461,9 @@
         "README.md"
       ],
       "repo": "applied",
-      "path": "backend/jobtracker/api/classification.py",
-      "extractor": "grep -E '^REVIEW_QUEUE_CONFIDENCE_THRESHOLD' \"$BLOB\" | grep -oE '[0-9]+\\.[0-9]+'"
+      "path": "backend/jobtracker/cloud/pipeline.py",
+      "extractor": "grep -E '^AUTO_FILE_GATE' \"$BLOB\" | grep -oE '[0-9]+\\.[0-9]+'",
+      "note": "RE-POINTED 2026-08-10. This row used to extract REVIEW_QUEUE_CONFIDENCE_THRESHOLD from backend/jobtracker/api/classification.py:25 — the same 0.85, in a file the deployed function never evaluates. api/classification.py gates two desktop-only endpoints; main_cloud.py mounts only the applications/gmail/account cloud routers, and the cloud import graph never imports jobtracker.api at all (the only two 'jobtracker.api' strings under cloud/ are RST docstring prose). So the gate was certified against a constant that is dead on Vercel. AUTO_FILE_GATE (pipeline.py:410) is the one the hosted path actually compares against, at pipeline.py:746 inside _qualifies_for_hard_row; below-gate items go to collect_review_items (:827) and are persisted as category='needs_review' rows that a human resolves through apps/web/app/api/applications/review/[messageId]/classify. A right number read from the wrong file is the failure this whole file exists to prevent."
     },
     {
       "id": "applied.ci_floor",
@@ -615,7 +653,7 @@
         "backend/src/services/llm/tools/packageTools.ts"
       ],
       "extractor": "cat $BLOBS | grep -cE \"^\\s+name: '\"",
-      "note": "LLM_TOOL_DEFINITIONS in tools/index.ts is data + cell + package only. This is the number that makes the routing claim concrete: 44 tools exist, and the general set the model carries everywhere is 15 of them."
+      "note": "LLM_TOOL_DEFINITIONS in tools/index.ts is data + cell + package only: 4 data + 8 cell + 3 package. CORRECTED 2026-08-10 — this row previously read 'the general set the model carries everywhere is 15 of them', and the README said the same. It is not carried everywhere. No phase receives all 15: training admits only FEATURE_DISCOVERY_TOOLS union NOTEBOOK_EXECUTION_TOOLS (tools/index.ts:117-119), which excludes all three package tools, and re-adds install_package at the generate_code/write_code stages only; onboarding takes four (index.ts:130-137); preprocessing takes none, building its own list instead. The array length is still exactly what this extractor gates and is still worth drawing — what changed is the sentence around it. Same failure mode as [automl.tool_sets]: the count was right and the verb was wrong."
     },
     {
       "id": "automl.tool_sets",
@@ -627,11 +665,11 @@
       "repo": "automl",
       "path": "backend/src/services/llm/tools/index.ts",
       "extractor": "grep -E '^export const LLM_[A-Z_]+_TOOLS' \"$BLOB\" | grep -vc LLM_ALL_TOOLS",
-      "note": "Seven exported phase sets: onboarding, preprocessing, feature proposal, feature continue, feature engineering, feature lifecycle, training lifecycle. LLM_ALL_TOOLS is excluded because it is the union, not a phase.",
+      "note": "Seven exported phase sets: onboarding, preprocessing, feature proposal, feature continue, feature engineering, feature lifecycle, training lifecycle. LLM_ALL_TOOLS is excluded because it is the union, not a phase. WARNING — this extractor counts EXPORTS, not ROUTES, and the two are not the same number. A source audit at this pin found LLM_PREPROCESSING_TOOLS (index.ts:124) and LLM_FEATURE_ENGINEERING_TOOLS (index.ts:61) are exported and never imported: their only other occurrence in the tree is the barrel re-export at toolRegistry.ts:18,23, there is no phase->set lookup table (BY_PHASE|PHASE_TOOLS|TOOL_SETS|toolsForPhase all return nothing repo-wide), and no `export *` or namespace import can be hiding a consumer. The preprocessing phase does receive its tools, assembled ad hoc from PREPROCESSING_ORCHESTRATION_TOOLS + CELL_TOOL_DEFINITIONS at phases/preprocessing/stageConfig.ts:21. So five of the seven names are live routes. The README said 'the other 29 arrive with the phase that needs them, through seven exported sets' — a true count describing a false mechanism, the same shape as the count-noun trap that produced AutoML's 44-vs-12 error. The prose now names the two dead exports; this row keeps gating the export count, which is all a grep of one file can honestly gate.",
       "anchors": {
         "README.md": [
-          "seven named tool sets",
-          "through seven exported sets"
+          "Of the seven declared per-phase sets",
+          "**Seven** named per-phase sets are declared"
         ]
       }
     },
@@ -686,22 +724,28 @@
         "README.md"
       ],
       "repo": "glyph",
-      "path": "docs/benchmarks/bench_summary.csv",
-      "extractor": "awk -F, '$1==\"baseline\"&&$2==\"benchDot/256\"{b=$4} $1==\"openmp+native\"&&$2==\"benchDot/256\"{o=$4} END{printf \"%.1f\", b/o}' \"$BLOB\"",
-      "note": "benchDot/256, openmp+native against the plain course baseline, derived as a ratio of the two committed rows rather than stored. The repo's own BENCHMARKS.md headlines this case because it is the sub-percent-variance one; 3.504/3.570/3.536 across three independent runs."
+      "paths": [
+        "docs/benchmarks/runs/bench-20260802-dot20x-baseline.json",
+        "docs/benchmarks/runs/bench-20260802-dot20x-openmp-native.json"
+      ],
+      "extractor": "jq -s -r '[.[]|[.benchmarks[]|select(.name==\"benchDot/256_median\")][0].real_time]|@tsv' $BLOBS | awk '{printf \"%.1f\", $1/$2}'",
+      "note": "benchDot/256, openmp+native against the plain course baseline, derived as a ratio of two committed medians rather than stored. Re-sourced 2026-08-10 from docs/benchmarks/bench_summary.csv to the 20-repetition dot20x pair, for the reason recorded on glyph.axpy128_slowdown: the CSV is the December record on a different machine, and glyph's ENVIRONMENT.md names the 2026-08-02 M1 Pro runs as the reference. This is also the pair glyph's own README calls the figure to cite -- tightest coefficient of variation on record for this kernel, 0.2% and 0.3%. Three artifact-backed readings span 3.504x (CSV), 3.536x (dot20x, 20 reps) and 3.570x (aggregated, 10 reps); the first two round to 3.5 and the third to 3.6, so WHICH artifact is canonical decides the drawn digit. That is the whole argument for retiring the CSV rather than keeping both."
     },
     {
       "id": "glyph.axpy128_slowdown",
-      "value": "6.9",
+      "value": "10.7",
       "unit": "x slower",
       "drawn_on": [
         "plate-1-glyph.svg",
         "README.md"
       ],
       "repo": "glyph",
-      "path": "docs/benchmarks/bench_summary.csv",
-      "extractor": "awk -F, '$1==\"baseline\"&&$2==\"benchAxpy/128\"{b=$4} $1==\"openmp+native\"&&$2==\"benchAxpy/128\"{o=$4} END{printf \"%.1f\", o/b}' \"$BLOB\"",
-      "note": "The answer that went against the author, printed on purpose: the same openmp+native flags that win benchDot/256 LOSE benchAxpy/128 by 6.9x. Below a size floor, threading costs more than it pays, and the page says so."
+      "paths": [
+        "docs/benchmarks/runs/bench-20260802-aggregated-baseline.json",
+        "docs/benchmarks/runs/bench-20260802-aggregated-openmp-native.json"
+      ],
+      "extractor": "jq -s -r '[.[]|[.benchmarks[]|select(.name==\"benchAxpy/128_median\")][0].real_time]|@tsv' $BLOBS | awk '{printf \"%.1f\", $2/$1}'",
+      "note": "The answer that went against the author, printed on purpose: the same openmp+native flags that win benchDot/256 LOSE benchAxpy/128. Below a size floor, threading costs more than it pays, and the page says so. This read 6.9x until 2026-08-10, sourced to docs/benchmarks/bench_summary.csv. That figure was arithmetically correct and pointed at the wrong machine: bench_summary.csv is the December record, taken on Shrees-MacBook.local, and glyph's own docs/benchmarks/ENVIRONMENT.md retires it in one line -- 'The 2026-08-02 runs on the M1 Pro are the reference. The December runs are history.' For an OpenMP scaling ratio a fanless 4-performance-core machine is a different ceiling, not a noisier reading of the same one, which is why the two baselines agree within 8% while the two parallel numbers differ by 69%. Both glyph ratios now derive from the 2026-08-02 reference machine. They come from two runs on it because only one of them measures axpy: the dot20x pair carries no benchAxpy rows at all."
     },
     {
       "id": "visualassist.swift_lines",
@@ -806,6 +850,46 @@
       "note": "Counts the fetched blobs, so on its own it proves these 38 EXIST at the pin; that no 39th exists is the tree-API check in the row above. Honest about what each half proves."
     },
     {
+      "id": "visualassist.critical_m",
+      "value": "0.5",
+      "unit": "m",
+      "drawn_on": [
+        "README.md",
+        "plate-8-visualassist.svg",
+        "m-8-visualassist.svg"
+      ],
+      "repo": "visualassist",
+      "path": "VisualAssist/Services/LiDARService.swift",
+      "extractor": "sed -n 's/.*criticalDistance: Float = \\([0-9.]*\\).*/\\1/p' \"$BLOB\"",
+      "note": "The three thresholds below are the only numbers section VII draws that describe a DECISION rather than an amount of effort. Lines of code and file counts measure how much was typed; these measure what the app does to a person walking. They are `let` constants on LiDARService, which is also the honest part: the Settings sliders do not reach them, so a user cannot tune the distance at which the phone interrupts them."
+    },
+    {
+      "id": "visualassist.warning_m",
+      "value": "1.0",
+      "unit": "m",
+      "drawn_on": [
+        "README.md",
+        "plate-8-visualassist.svg"
+      ],
+      "repo": "visualassist",
+      "path": "VisualAssist/Services/LiDARService.swift",
+      "extractor": "sed -n 's/.*warningDistance: Float = \\([0-9.]*\\).*/\\1/p' \"$BLOB\""
+    },
+    {
+      "id": "visualassist.caution_m",
+      "value": "2.0",
+      "unit": "m",
+      "drawn_on": [
+        "README.md",
+        "plate-8-visualassist.svg",
+        "m-8-visualassist.svg"
+      ],
+      "repo": "visualassist",
+      "path": "VisualAssist/Services/LiDARService.swift",
+      "extractor": "sed -n 's/.*cautionDistance: Float = \\([0-9.]*\\).*/\\1/p' \"$BLOB\"",
+      "note": "The widest ring is the one that says the most about the design: inside 2.0 m the obstacle is drawn on screen and deliberately NOT announced. An aid that narrates every wall is an aid people switch off, so silence here is a feature with a threshold attached, not an omission."
+    },
+    {
       "id": "visualassist.workflows",
       "value": "5",
       "drawn_on": [
@@ -850,7 +934,7 @@
         "README.md"
       ],
       "source": "https://vercel.com/docs/functions/runtimes#functions-created-per-deployment",
-      "why": "Vercel's Hobby-tier cap of 12 Vercel Functions per deployment is a platform fact (the docs moved: /docs/limits now says 'framework-dependent', and the 12 lives at the runtimes page cited above), not a measurement of this repository. The previous extractor grepped `caps deployments at 12` out of api/index.ts — the author's own comment — so the page was citing itself and calling it derivation. What the repo genuinely proves is the consequence: one function serving 36 routes, which cadence.handlers derives."
+      "why": "Vercel's Hobby-tier cap of 12 Vercel Functions per deployment is a platform fact (the docs moved: /docs/limits now says 'framework-dependent', and the 12 lives at the runtimes page cited above), not a measurement of this repository. The previous extractor grepped `caps deployments at 12` out of api/index.ts — the author's own comment — so the page was citing itself and calling it derivation. What the repo genuinely proves is the consequence: one function serving 37 routes, which cadence.handlers derives. (That read 36 until the 2026-08-10 re-pin moved cadence.handlers to 37 — a note inside the provenance file itself going stale, one row away from the gate that would have caught it had it been a drawn number.)"
     }
   ],
   "exempt": {
@@ -879,8 +963,7 @@
     "README.md:219": "the first line of the early-stopping block cited as apps/train_model.cpp:219-243. A line RANGE has no single extractor; the citation is verified by reading it, and glyph.msimd128_line pins the one line citation that a machine can check.",
     "README.md:243": "the last line of that same cited range",
     "README.md:03.23": "part of the contact address aesh.03.23@gmail.com",
-    "README.md:6": "'Six systems' — a count of this page's own contents, which the page then enumerates one per section",
-    "m-0-thesis.svg:6": "'6 systems' — the same count of this page's own contents that README.md:6 and plate-7-colophon.svg:6 exempt, drawn as the mobile thesis hero",
+    "m-0-thesis.svg:6": "'6 systems' — a count of this page's own contents, drawn as the mobile thesis hero. This sentence used to cite matching exemptions on README.md and plate-7-colophon.svg as though they still stood; both are gone, and it kept naming them until 2026-08-10. A justification is prose, the gate reads numbers, and so a note explaining an exemption outlived two of the three things it described — the same failure the colophon now names on the page itself.",
     "README.md:256": "the '256' in `shasum -a 256` — the name of the hash algorithm in a command the reader is invited to run — and the benchDot/256 case name",
     "plate-0-thesis.svg:03.23": "part of the contact address aesh.03.23@gmail.com",
     "README.md:2026": "the graduation date, May 2026 — a fact about the author, not a measurement of a repository",

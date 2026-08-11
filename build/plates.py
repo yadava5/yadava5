@@ -484,6 +484,17 @@ def plate_thesis() -> str:
    wrap is invisible by construction */
 @keyframes ld{{from{{stroke-dashoffset:0}}to{{stroke-dashoffset:-75}}}}
 """)
+    # The ornament and the leader drift are the CARRIER; the read below is the
+    # GESTURE. Both were cut in round 24 on the argument that camo serves an
+    # arbitrary frame, so ambient motion buys nothing — which holds for the
+    # gesture and inverts for the carrier. A drifting leader field says the
+    # same thing in every frame: it cannot be caught mid-lie, and it is alive
+    # whichever instant a reader gets. The gesture is the one that most
+    # readers miss. Cutting the carrier and keeping the gesture kept the
+    # fragile half. motion.mjs's header records that this page has already run
+    # the experiment: v2 made stillness legal, eight of ten plates froze, and
+    # the verdict was "very static feel" — the only plate spared was the one
+    # in continuous travel.
     # the read: rows I..VII light in order across the first 90% of the clock,
     # then the chord — every leader, name, numeral and mark together at
     # 92.5-97.5%. Colour animations only, so the authored frame stays the
@@ -518,12 +529,16 @@ def plate_thesis() -> str:
         s.append(f".nm{i}{{animation:nm{i} {TC}s linear infinite}}"
                  f"@keyframes nm{i}{{0%,{w0:.1f}%{{fill:{INK}}}{w0+1.2:.1f}%,{w1:.1f}%{{fill:{LEGEND_READ}}}"
                  f"{w1+1.2:.1f}%,92.5%{{fill:{INK}}}93.8%,96%{{fill:{LEGEND_READ}}}97.5%,100%{{fill:{INK}}}}}")
-        if mk:  # the mark swells — row I has no mark, so this one stays gated
-            s.append(f".ix{i}{{transform-box:fill-box;transform-origin:center;"
-                     f"animation:ix{i} {TC}s {BREATHE} infinite}}"
-                     f"@keyframes ix{i}{{0%,{w0:.1f}%{{transform:scale(1)}}{(w0+w1)/2:.1f}%{{transform:scale(1.25)}}"
-                     f"{w1+1.2:.1f}%,92.5%{{transform:scale(1)}}94.5%{{transform:scale(1.15)}}"
-                     f"96.5%,100%{{transform:scale(1)}}}}")
+        # the mark swells. Row I's mark is not a product logo — no repo, no
+        # logos.json entry — but it is no longer NO mark: round 23 gives it
+        # the section's own device, a miniature of the attested stamp, so the
+        # index teaches one rule with no exception (the one row without a
+        # glyph read as an omission, not a distinction).
+        s.append(f".ix{i}{{transform-box:fill-box;transform-origin:center;"
+                 f"animation:ix{i} {TC}s {BREATHE} infinite}}"
+                 f"@keyframes ix{i}{{0%,{w0:.1f}%{{transform:scale(1)}}{(w0+w1)/2:.1f}%{{transform:scale(1.25)}}"
+                 f"{w1+1.2:.1f}%,92.5%{{transform:scale(1)}}94.5%{{transform:scale(1.15)}}"
+                 f"96.5%,100%{{transform:scale(1)}}}}")
     s.append(f"</style>{ground(H)}")
 
     s.append(f'<text x="{CX}" y="{TOP}" text-anchor="middle" class="key" style="letter-spacing:5px">AYUSH YADAV</text>')
@@ -542,23 +557,21 @@ def plate_thesis() -> str:
 
     s.append(f'<text x="{CX}" y="286" text-anchor="middle" class="fine">C++ · TypeScript · Python · Java · Swift · Rust</text>')
 
-    # ── the index, framed: the portfolio's `run 042 — manifest` card, verbatim
-    # idiom — bordered box, mono rows, dot leaders, numerals right, and the
-    # read-chase is that card's `.stamped` promotion. This is the handshake
-    # between the two surfaces, so it is drawn as the same object and not
-    # merely in the same palette.
+    # ── the index: the portfolio's `run 042 — manifest` card idiom — mono
+    # rows, dot leaders, numerals right, and the read-chase is that card's
+    # `.stamped` promotion. This is the handshake between the two surfaces.
     #
-    # The frame is a DRAWN rect: fill="none", which is the gate's frame
-    # exemption, and never box-drawing glyphs — the charset gate refuses any
-    # codepoint outside the embedded subset, which is the point of it. It is
-    # also not the FIRST rect. The sheet is, and check 10 grades every contrast
-    # ratio against the first rect in document order, so a frame emitted early
-    # would silently re-ground the whole plate. Its bottom edge at y=514 is the
-    # plate's new deepest ink, which is why data-frame above declares 26 where
-    # it declared 35.
-    s.append(f'<rect x="188.5" y="312.5" width="513" height="201" '
-             f'fill="none" stroke="{WIRE}" stroke-width="1"/>')
+    # UNBOXED in round 23. The card was a full outlined rectangle here, and
+    # the house-style audit was blunt about the form: hairlines are the only
+    # divider in this estate — the sites contain content with hairline RULES
+    # between rows, never a surrounding stroked box. So the frame is now two
+    # hairlines, one opening the table and one closing it, spanning exactly
+    # the rows' own ink (marks at 200 to numerals at 690). The closing rule
+    # sits at y=514, within check 12's tolerance of the old box edge, so the
+    # declared frame stands.
     s.append(f'<text x="{CX}" y="330" text-anchor="middle" class="kick">INDEX</text>')
+    s.append(f'<path d="M200 340H690" stroke="{RULE}"/>')
+    s.append(f'<path d="M200 514H690" stroke="{RULE}"/>')
     ROWS = [
         ("I",   None,           "WORK",           "a year of it, attested"),
         ("II",  "JETPACK",      "JETPACK",        "parallel gzip, measured"),
@@ -572,6 +585,15 @@ def plate_thesis() -> str:
         y = 358 + i * 24
         if mark:
             s.append(f'<g class="ix{i}">' + logo(mark, 200, y - 13, 16, INK2) + '</g>')
+        elif name == "WORK":
+            # section I's own device at index scale: a miniature of the
+            # ATTESTED stamp — rotated hollow rect, one line of "text" —
+            # centred where a product mark's 16u box would put it, in the
+            # marks' INK2, swelling on the same read clock
+            s.append(f'<g class="ix{i}"><g transform="translate(208,{y-5}) rotate(-8)">'
+                     f'<rect x="-7.5" y="-5.5" width="15" height="11" rx="2" '
+                     f'fill="none" stroke="{INK2}" stroke-width="1.3"/>'
+                     f'<path d="M-4 0.5H4" stroke="{INK2}" stroke-width="1.3"/></g></g>')
         s.append(f'<text x="228" y="{y}" class="fine">'
                  f'<tspan class="rw{i}">{name}</tspan>'
                  f'<tspan fill="{INK3}"> — {tag}</tspan></text>')
@@ -594,19 +616,18 @@ def plate_work() -> str:
     left, item in the middle, AMOUNTS RIGHT-ALIGNED AT THE PAGE EDGE, full-
     width row rules, a double rule opening and closing the account.
 
-    Carrier: an auditor's rule — a bright index head on a hairline — that
-    travels down the account at reading pace, fades at the foot, returns to
-    the head. Steady-state, so linear is correct. Round 21's live pass proved
-    a scan drawn in the row rules' own grey and weight reads as a STRAY RULE,
-    so the instrument now has its own vocabulary. Gestures, all on the scan's
-    clock so the reader and the read cannot disagree: each amount PRESSES and
-    its label lifts to full ink at the moment the rule crosses its row (the
-    tally); the two linkage bars run tick-streams at rates proportional to
-    99.6 and 32 (the jetpack device — the comparison, performed); and when
-    the rule clears the closing rule, the ATTESTED stamp re-inks — a press,
-    never an absence, because the round-21 blink measured as a glitch.
+    THE LEDGER NOW HOLDS STILL. Round 24 deleted the auditor's scan, its
+    tally pulses and the stamp's re-ink — not as polish but as a retraction:
+    gate.mjs's new moving-hairline check proved the scan crossed "DATAFEST
+    2026" and both employment dates somewhere in every loop, and GitHub
+    serves these plates through camo as an <img>, so the frame a reader
+    lands on is arbitrary. A travelling rule that can render a true claim
+    struck through is worse than no motion, and an account book has no
+    reason to animate. What remains is the plate's one semantic device: the
+    two linkage bars run tick-streams at rates proportional to 99.6 and 32,
+    so the comparison performs its own fractions — and nothing else moves.
     """
-    H, SCAN = 696, 15.9
+    H = 676
     s = [head(H, "Experience: a year as ITSM Data Integration Intern at Miami University, and "
                  "team lead at DataFest 2026",
               "Experience. As ITSM Data Integration Intern at Miami University from June 2025 "
@@ -619,52 +640,22 @@ def plate_work() -> str:
               "preserving 99.6 percent of social-determinant linkage against 32 percent under "
               "a naive join. These figures are attested by the author rather than derived "
               "from a public repository.", key="plate-0b-work.svg",
-              frame=(40, 63.5, 26))]
-    # The stamp rides the scan's clock: the rule reads the account top to
-    # bottom, and only once it clears the closing rule does the stamp re-ink
-    # — lifted and faded to 0.3, never absent, then pressed home (ARREST).
-    # The scan is a sawtooth: constant descent, a fade before the reset so
-    # nothing teleports while visible, and a negative delay so t=0 is
-    # mid-travel at full opacity.
-    s.append(f""".stp{{transform-box:fill-box;transform-origin:center;animation:stp {SCAN}s {ARREST} infinite;animation-delay:-4.4s}}
-@keyframes stp{{0%,94%{{opacity:1;transform:scale(1)}}95.2%{{opacity:0.3;transform:scale(1.12)}}
-  97%{{opacity:1;transform:scale(1.03)}}98.5%,100%{{opacity:1;transform:scale(1)}}}}
-.scan{{animation:scan {SCAN}s linear infinite;animation-delay:-4.4s}}
-@keyframes scan{{0%{{opacity:0;transform:translateY(0)}}3%{{opacity:1}}
-  94%{{opacity:1;transform:translateY(452px)}}97%,100%{{opacity:0;transform:translateY(452px)}}}}
-/* the linkage bars state their fractions twice — length, and the rate of the
-   tick-stream inside each: 99.6 against 32, a 3.1x flow difference the eye
-   reads without the caption (12u is one dash cycle, so wraps are seamless) */
-.bf0{{animation:bf0 {12/(0.28*99.6):.3f}s linear infinite}}
+              frame=(44, 63.5, 21))]
+    # the linkage bars state their fractions twice — length, and the rate of
+    # the tick-stream inside each: 99.6 against 32, a 3.1x flow difference the
+    # eye reads without the caption (12u is one dash cycle, so wraps are
+    # seamless). This is the plate's ONLY motion — see the docstring.
+    s.append(f""".bf0{{animation:bf0 {12/(0.28*99.6):.3f}s linear infinite}}
 .bf1{{animation:bf1 {12/(0.28*32):.3f}s linear infinite}}
 @keyframes bf0{{from{{stroke-dashoffset:0}}to{{stroke-dashoffset:-12}}}}
 @keyframes bf1{{from{{stroke-dashoffset:0}}to{{stroke-dashoffset:-12}}}}
 """)
-    # the tally: as the rule crosses each row, the amount presses (a 6% pulse
-    # about its fixed right edge) and its label lifts to full ink with a slow
-    # afterglow. The crossing percentages fall straight out of the scan's own
-    # keyframes — 94% of the loop maps 452u of travel from y=96 — so the
-    # reader and the thing read share one clock by construction.
-    for i, ry in enumerate((186, 248, 310, 418, 480)):
-        p = 94 * (ry - 12 - 96) / 452
-        s.append(
-            f".tly{i}{{transform-box:fill-box;transform-origin:right center;"
-            f"animation:tly{i} {SCAN}s {BREATHE} infinite;animation-delay:-4.4s}}\n"
-            f"@keyframes tly{i}{{0%,{p-2:.1f}%{{transform:scale(1)}}{p:.1f}%{{transform:scale(1.06)}}"
-            f"{p+2:.1f}%,100%{{transform:scale(1)}}}}\n"
-            f".wl{i}{{animation:wl{i} {SCAN}s linear infinite;animation-delay:-4.4s}}\n"
-            f"@keyframes wl{i}{{0%,{p-1.5:.1f}%{{fill:{INK2}}}{p+0.5:.1f}%,{p+4:.1f}%{{fill:{INK}}}"
-            f"{p+8:.1f}%,100%{{fill:{INK2}}}}}")
     s.append(f"</style>{ground(H)}")
 
     s.append(f'<text x="{L}" y="{TOP}" class="lbl">ACCOUNT OF A YEAR’S PAID WORK</text>')
     s.append(f'<text x="{R}" y="{TOP}" text-anchor="end" class="lbl">No. I — WORK</text>')
     # a ledger opens and closes with a double rule
     s.append(f'<path d="M{L} 68H{R}M{L} 72H{R}" stroke="{RULE}"/>')
-    # the auditor's rule, reading the account: a hairline one voice brighter
-    # than the row rules, led by a solid index head — an instrument, not a rule
-    s.append(f'<g class="scan"><path d="M{L} 96H{R}" stroke="{INK2}" stroke-width="1.6"/>'
-             f'<rect x="{L}" y="94.5" width="26" height="3" fill="{INK}"/></g>')
     for x, t, anch in ((L, "PERIOD", ""), (290, "ITEM", ""), (R, "FIGURE", ' text-anchor="end"')):
         s.append(f'<text x="{x}" y="96"{anch} class="kick">{t}</text>')
 
@@ -680,23 +671,23 @@ def plate_work() -> str:
         (310, "ROW MASTER ASSET INVENTORY", "Tableau + Workday, hash-deduped",  "10,453"),
     ]
     for i, (y, lab, det, amt) in enumerate(ROWS):
-        s.append(f'<text x="290" y="{y}" class="lbl wl{i}">{lab}</text>')
+        s.append(f'<text x="290" y="{y}" class="lbl">{lab}</text>')
         s.append(f'<text x="290" y="{y+20}" class="fine">{det}</text>')
-        s.append(f'<text x="{R}" y="{y}" text-anchor="end" class="sub tly{i}">{amt}</text>')
+        s.append(f'<text x="{R}" y="{y}" text-anchor="end" class="sub">{amt}</text>')
         s.append(f'<path d="M{L} {y+34}H{R}" stroke="{RULE}"/>')
 
     s.append(f'<text x="{L}" y="376" class="kick">DATAFEST 2026</text>')
     s.append(f'<text x="290" y="376" class="key">TEAM LEAD OF 3 · NATIONAL ASA</text>')
     s.append(f'<path d="M{L} 390H{R}" stroke="{RULE}"/>')
 
-    s.append(f'<text x="290" y="418" class="lbl wl3">HOLDOUT AUC, 349K PATIENTS</text>')
+    s.append(f'<text x="290" y="418" class="lbl">HOLDOUT AUC, 349K PATIENTS</text>')
     s.append(f'<text x="290" y="438" class="fine">90-day care utilisation, SHAP-explained</text>')
-    s.append(f'<text x="{R}" y="418" text-anchor="end" class="sub tly3">0.90</text>')
+    s.append(f'<text x="{R}" y="418" text-anchor="end" class="sub">0.90</text>')
     s.append(f'<path d="M{L} 452H{R}" stroke="{RULE}"/>')
 
-    s.append(f'<text x="290" y="480" class="lbl wl4">OF LINKAGE PRESERVED</text>')
+    s.append(f'<text x="290" y="480" class="lbl">OF LINKAGE PRESERVED</text>')
     s.append(f'<text x="290" y="500" class="fine">7.7M encounters · DuckDB + Polars</text>')
-    s.append(f'<text x="{R}" y="480" text-anchor="end" class="sub tly4">99.6%</text>')
+    s.append(f'<text x="{R}" y="480" text-anchor="end" class="sub">99.6%</text>')
     # the linkage claim is a comparison, so draw the comparison twice over:
     # LENGTH (widths always 300*frac from the value beside them), full ink for
     # the preserved fraction against half ink for the naive one (the light
@@ -704,7 +695,13 @@ def plate_work() -> str:
     # the two rates — the one chart on the plate, finally its loudest
     for j, (frac, tag, fill, cls) in enumerate([(0.996, "star", INK, "bf0"),
                                                 (0.32, "32% naive", INK2, "bf1")]):
-        yy = 512 + j * 20
+        # 508, not 512: round 24's stamp tighten put the stamp's rotated top
+        # edge at y=543.8, which cut straight through the "32% naive" label
+        # (bbox to ~546.5) — a label half-in, half-out of a frame is neither
+        # contained nor clear, and check 3 is right to refuse it. The bars
+        # rise 4u and the stamp drops 4u; both clearances are now ~5.5u, and
+        # the stamp's foot stays ~6u clear of the source line at 652.
+        yy = 508 + j * 20
         w = 300 * frac
         s.append(f'<g><rect x="290" y="{yy}" width="300" height="12" fill="none" stroke="{WIRE}"/>'
                  f'<rect x="290" y="{yy}" width="{w:.2f}" height="12" fill="{fill}"/>'
@@ -718,13 +715,15 @@ def plate_work() -> str:
     # ── the stamp. Rotated, hollow, struck over the closing rule — the whole
     # section's warrant in one device. Its two texts share the stamp's <g>,
     # which is what makes the composition legal to the collision checks.
-    s.append(f'<g transform="translate(600,600) rotate(-7)"><g class="stp">'
+    s.append(f'<g transform="translate(600,592) rotate(-7)"><g>'
              f'<rect x="-110" y="-31" width="220" height="62" rx="8" fill="none" stroke="{INK3}" stroke-width="2"/>'
              f'<text x="0" y="-2" text-anchor="middle" class="say" style="fill:{INK3};letter-spacing:4px">ATTESTED</text>'
              f'<text x="0" y="22" text-anchor="middle" class="kick">ON MY WORD</text>'
              f'</g></g>')
 
-    s.append(f'<text x="{L}" y="666" class="fine" style="fill:{INK3}">ATTESTED — not derivable from a public repo</text>')
+    # the source footer, in the grammar every plate now closes with — this
+    # section's source is testimony, and the line says so plainly
+    s.append(f'<text x="{L}" y="652" class="fine" style="fill:{INK3}">source: my word — not derivable from a public repo</text>')
     return "".join(s) + "</svg>"
 
 
@@ -736,14 +735,14 @@ def plate_jetpack() -> str:
     honest answer is BOTH WAYS: 6.4x on the parallel path, and a checksum
     that loses to the JDK's own intrinsic, printed here as the reference.
 
-    Carriers: every measured bar carries a tick-stream INSIDE it, drifting at
-    a rate proportional to the value beside it — the throughput, performed.
-    The intrinsic's bar streams fastest on the plate, which is the argument.
-    Second carrier: the bounded in-flight window runs as a true conveyor —
-    four blocks in continuous descent, drained in order at the foot, each
-    keyframe set phased in geometry so frame zero is the authored queue.
+    The plate's one moving device (round 24's budget) is the bounded
+    in-flight window run as a true conveyor — four blocks in continuous
+    descent, drained in order at the foot, each keyframe set phased in
+    geometry so frame zero is the authored queue. The per-bar tick-streams
+    are stilled to drawn perforation: rate-as-motion read as texture at the
+    arbitrary frame camo actually serves, and the lengths already argue.
     """
-    H, LOOP, a = 584, 11.3, CLAY_G
+    H, LOOP, a = 604, 11.3, CLAY_G
     BH, SP = 18, 26                # block height, conveyor pitch
     WX0, WX1 = 560, 690            # the window's bracket lines
     BY0, TRAVEL = 114, 96          # conveyor head, travel span
@@ -754,7 +753,7 @@ def plate_jetpack() -> str:
               "runs at 4.26 gigabytes per second, 2.80 times the scalar baseline's 1.52, and "
               "is verified bit-identical against java.util.zip — whose own native intrinsic "
               "is faster still, at 14.06, and is printed here as the reference it loses to.",
-              key="plate-2-jetpack.svg", frame=(35, 64, 14))]
+              key="plate-2-jetpack.svg", frame=(36, 64, 13))]
     # ── the conveyor. Block k is AUTHORED at slot k; its keyframes carry it
     # to the foot, drain it (scaleX collapse, faded), re-enter it at the head
     # and walk it back into its authored slot by 100% — so the still frame is
@@ -780,19 +779,11 @@ def plate_jetpack() -> str:
             f"{r+5.5:g}%{{opacity:1;transform:translateY({-SP*k}px) scaleX(1)}}"
             f"100%{{opacity:1;transform:translateY(0) scaleX(1)}}}}")
     s.append("".join(cyc))
-    # ── the tick-streams: a dash pattern drifting inside each bar at a rate
-    # proportional to the measured value. 12u is two dash periods (2 4), so
-    # every wrap is seamless; linear, because throughput is steady state. The
-    # 6u pitch is round 21's fix: at 12u the two loser bars degraded into
-    # three dots and the comparison's baseline was nearly invisible.
-    RATE = 48 / 422                # u/s per MB/s — the fastest bar sets 48u/s
-    RATEB = 48 / 14.06             # the checksum lane scales to ITS maximum
-    for i, v in enumerate([66.2, 422]):
-        s.append(f".sa{i}{{animation:sa{i} {12/(v*RATE):.3f}s linear infinite}}"
-                 f"@keyframes sa{i}{{from{{stroke-dashoffset:0}}to{{stroke-dashoffset:-12}}}}")
-    for i, v in enumerate([1.52, 4.26, 14.06]):
-        s.append(f".sb{i}{{animation:sb{i} {12/(v*RATEB):.3f}s linear infinite}}"
-                 f"@keyframes sb{i}{{from{{stroke-dashoffset:0}}to{{stroke-dashoffset:-12}}}}")
+    # Round 24 stilled the five tick-streams: one semantic device per plate,
+    # and this plate's is the conveyor — the bounded in-flight window, the
+    # engineering idea the section leads with. The bars keep the perforated
+    # texture as DRAWN dashes (the comparison still reads at any frame);
+    # only the drift is gone.
     s.append(f"</style>{ground(H)}")
 
     # the instrument badge — chapter identification, boxed, top right
@@ -825,7 +816,7 @@ def plate_jetpack() -> str:
         s.append(f'<text x="{L}" y="{y}" class="fine">{nm}</text>')
         s.append(f'<text x="412" y="{y}" text-anchor="end" class="key">{val}</text>')
         s.append(f'<g><rect x="470" y="{y-11}" width="{w:.1f}" height="14" fill="{fill}"/>'
-                 f'<path class="{cls}" d="M470 {y-4}H{470+w:.1f}" stroke="{GROUND}" '
+                 f'<path d="M470 {y-4}H{470+w:.1f}" stroke="{GROUND}" '
                  f'stroke-opacity="0.55" stroke-width="4" stroke-dasharray="2 4"/></g>')
         if tag:
             # CLAY text-grade (5.18 day / 6.28 night) — the graphic token is 3.62/4.36
@@ -852,6 +843,7 @@ def plate_jetpack() -> str:
     s.append(f'<text x="330" y="564" class="say" style="fill:{INK}">11E60398</text>')
     s.append(f'<rect x="330" y="542" width="112" height="2" fill="{a}"/>')
     s.append(f'<text x="560" y="550" class="lbl" style="fill:{PINE}">identical</text>')
+    s.append(f'<text x="{L}" y="588" class="fine" style="fill:{INK3}">source: benchmarks/jmh-results-rigorous.json</text>')
     return "".join(s) + "</svg>"
 
 
@@ -864,34 +856,41 @@ def plate_glyph() -> str:
     work, with Shree Chaturvedi credited; the browser application is the
     author's own. The question becomes "how much faster can you make code
     you didn't write?" and the committed benchmarks answer it both ways:
-    3.5x on the 256 dot kernel, 6.9x SLOWER on the small axpy — parallelism
+    3.5x on the 256 dot kernel, 10.7x SLOWER on the small axpy — parallelism
     has a floor, and printing the inversion is the point of the page.
+
+    The axpy figure read 6.9x until 2026-08-10, and the correction is a
+    sourcing one rather than an arithmetic one: 6.9 was the honest ratio in
+    docs/benchmarks/bench_summary.csv, which is the December record taken on
+    a different, fanless machine that glyph's own ENVIRONMENT.md had already
+    retired in favour of the 2026-08-02 M1 Pro runs. Both ratios on this
+    plate now come from that reference machine. The dot figure survives the
+    move at 3.5 only because the run glyph names as canonical agrees with the
+    old CSV to one decimal; the other 2026-08-02 pair would have drawn 3.6.
 
     The net reads handwriting, so its 299 failures are drawn as failed
     homework: ruled baselines edge to edge, an amber margin line, every mark
     the true label of one missed image — the 220 in grey ink, the 79 the net
     was SURE about in heavy amber, so the field's own hue count is the 79.
-    Carrier: the marker's nib reads the whole sheet, boustrophedon, one rule
-    at a time, and the row under it lifts from grey to full ink — the grader
-    working the field, which round 21 measured as the largest sleeping mass
-    on the page. Gesture: the pen re-draws the hero 3.5 once per loop, over
-    a half-ink ghost of itself, so the answer is NEVER absent (the round-21
-    snap-to-nothing was the worst defect of the live pass). The nib's
-    circuit is exactly two headline loops, so the two hands share a clock.
+    The plate's ONE motion (round 24's budget) is the one that re-derives a
+    claim: the pen draws the hero 3.5 stroke by stroke once per loop, over a
+    half-ink ghost of itself, so the answer is never absent. The nib that
+    used to ride the field is gone — ambient travel, meaningless on the
+    arbitrary frame a camo-served <img> actually shows a reader.
     """
-    H, LOOP, SET, a = 556, 9.1, 7.6, CLAY_G
+    H, LOOP, SET, a = 576, 9.1, 7.6, CLAY_G
     NIB = 18.2                     # the nib's circuit — 2 x LOOP, commensurate
     s = [head(H, "Glyph — borrowed code made 3.5x faster, same 97.01%",
               "Glyph: a course-provided C++ MNIST network, hand-optimised — AVX-512, AVX2 and "
               "NEON kernels over a scalar fallback, written with Shree Chaturvedi; the React "
               "and TypeScript browser app is the author's own. The committed benchmarks "
               "answer both ways: 3.5 times faster on the 256 dot kernel under OpenMP and "
-              "native codegen, and 6.9 times slower on the 128 axpy, because parallelism has "
+              "native codegen, and 10.7 times slower on the 128 axpy, because parallelism has "
               "a floor. Accuracy is unchanged at 97.01 percent on the 10,000-image MNIST "
               "test set, which means 299 wrong — every one of them drawn as a grid of the "
               "labels it missed, and the 79 it was most confident about drawn in a heavier "
               "stroke.", key="plate-1-glyph.svg",
-              col=(96, 770), frame=(55, 10, 20))]
+              col=(96, 770), frame=(56, 10, 17))]
     s.append(f""".ink{{fill:none;stroke:{a};stroke-width:7;stroke-linecap:round;stroke-linejoin:round;
   stroke-dasharray:1;stroke-dashoffset:0;animation:draw {LOOP}s linear infinite;animation-delay:{-SET}s}}
 /* 4% a glyph (round 19): at 17% the pen laid ink below the perceptual floor;
@@ -909,7 +908,13 @@ def plate_glyph() -> str:
 /* the nib: one closed boustrophedon circuit of the WHOLE field — up the
    margin, then every clear band between the ink rows, out and back. Closed
    path, so there is no wrap to hide and no reset to fade. Constant speed;
-   the row groups below lift as it passes them. */
+   the row groups below lift as it passes them.
+   RESTORED at its authored coordinates. I first "corrected" these 8u upward
+   on the theory that the field had moved when the plate grew 556 -> 576; it
+   had not — the rails were always 288 + r*28, and the circuit deliberately
+   rides 8u BELOW each rail, in the clear band. Shifting it put the nib
+   straight through the digit rows, which gate.mjs reported as eight collisions
+   against the miss marks. The measurement is the field, not the plate. */
 .nib{{offset-path:path('M146 436V296H773V324H146V352H773V380H146V408H773V436H146');
   offset-rotate:auto;animation:nib {NIB}s linear infinite;animation-delay:-9.3s}}
 @keyframes nib{{from{{offset-distance:0%}}to{{offset-distance:100%}}}}
@@ -967,8 +972,29 @@ def plate_glyph() -> str:
              f'<g class="stl" style="animation-delay:-7.15s">' + "".join(xg) + '</g></g>')
     s.append(f'<text x="330" y="76" class="say" style="fill:{INK}">SOMEONE ELSE’S NET, 3.5× FASTER</text>')
     s.append(f'<text x="330" y="100" class="fine">benchDot/256 · openmp+native vs the course baseline</text>')
-    s.append(f'<text x="330" y="120" class="fine" style="fill:{INK3}">6.9× SLOWER on benchAxpy/128 — threads have a floor</text>')
-    s.append(f'<text x="330" y="140" class="fine" style="fill:{INK3}">three committed runs agree</text>')
+    # Order matters here, and it did not until round 22. The evidence line
+    # belongs to the DOT ratio and sits under the dot caption; the axpy loss
+    # goes last, as the kicker. Drawn the other way round, nearest-caption
+    # pairing attaches "three committed runs, spread under two percent" to the
+    # axpy number — for which it is flatly false: the reference machine has
+    # exactly one committed axpy run, and the cross-machine spread on that
+    # kernel is 69%. That would have misread the one number on this plate that
+    # exists to argue against its own author.
+    s.append(f'<text x="330" y="120" class="fine" style="fill:{INK3}">three committed runs, spread under two percent</text>')
+    # Led with the case name, like the benchDot caption two lines up, because
+    # this line has a hard length budget and that phrasing is the short one.
+    # "10.7×" is one glyph wider than the "6.9×" it replaced, which spent the
+    # 6u of design margin gate.mjs check 5 reserves, and the check caught it at
+    # all 40 timesteps of both themes.
+    #
+    # The .fine column is MONOSPACE, which is the whole lesson: the first fix
+    # attempted here swapped the em dash for a middot on the theory that a
+    # narrower separator would buy the space back. It bought nothing — every
+    # glyph in this face has the same advance — and gate.mjs returned a
+    # byte-identical 244->683 to prove it. Only the character COUNT moves this
+    # measurement. The budget is 51: the benchDot caption at y100 sits exactly
+    # there and passes. This line is 50.
+    s.append(f'<text x="330" y="140" class="fine" style="fill:{INK3}">benchAxpy/128 · 10.7× SLOWER, threads have a floor</text>')
 
     # the invariant: optimisation must not change the answers
     s.append(f'<text x="150" y="206" class="sub">97.01<tspan class="unit" style="font-size:21px">%</tspan></text>')
@@ -1014,187 +1040,134 @@ def plate_glyph() -> str:
     s.append(f'<text x="150" y="490" class="fine" style="fill:{INK3}">each mark — the true label of one missed image, from the pinned CSV</text>')
     s.append(f'<text x="150" y="512" class="fine">course-provided net, after Nielsen — optimised with Shree Chaturvedi</text>')
     s.append(f'<text x="150" y="532" class="fine">the browser app is mine alone</text>')
+    s.append(f'<text x="150" y="556" class="fine" style="fill:{INK3}">source: benchmarks/ — pinned runs and the misclassification CSV</text>')
     return "".join(s) + "</svg>"
 
 
 # ────────────────────────────────────────────────────────────── PLATE IV
 def plate_automl() -> str:
-    """The phase dial. Room: a rotary instrument, and its sealed vessel.
+    """The tool manifest. Room: a stores ledger — what may be drawn, by whom.
 
-    "One phase, one tool set" is a rotary fact — position selects capability,
-    like a microscope turret — so the seven sets are sectors of a dial. The
-    model's 15 carried tools live in the hub and NEVER move: they travel
-    with the model, so they are simply always there. The 29 phase tools are
-    ticks on the rim, lit only while their sector is active.
+    REDRAWN from scratch in round 24. The phase dial was chartjunk by the
+    house's own test: seven near-equal sectors encoding neither magnitude
+    nor membership, while a centre text box did all the work. The section's
+    claim is SET MEMBERSHIP UNDER LEAST PRIVILEGE, so the plate now draws
+    the sets themselves: the 44-tool registry as 44 marks, the 15-tool base
+    set bracketed and filled, the other 29 hollow — a drawn set difference.
 
-    Carrier: the needle CREEPS across the live sector and swings to the
-    next — it is never still, because routing is never parked. Second
-    carrier: a dashed feed drifts from the dial into the sandbox vessel —
-    the Python the model writes, flowing into the only place allowed to run
-    it. Sector windows, ticks and needle share one clock so they can never
-    disagree about which phase is live, and 15/44 is set at headline weight
-    because it is the claim.
+    What it deliberately does NOT draw: per-phase mark counts. The source
+    audit put numbers on some of them (training 12, onboarding 4) but no
+    claims row exists for those and this page does not draw unregistered
+    numbers, so per-phase membership is stated in words: no phase gets all
+    15, five declared sets are imported by the phases that name them, two —
+    preprocessing and feature engineering — are exported and imported by
+    NOTHING, printed and struck through, the estate's absence-as-evidence
+    device (the strikes are static hairlines; the moving-hairline check
+    does not apply). The one claim that survived a three-layer audit gets
+    the verdict row: TRAINING, a route, and a pine stop before
+    PREPROCESSING — the request map carries no preprocessing name.
+
+    The sandbox vessel is retired with the dial: the containment facts are
+    two lines of type, "no route out BY DEFAULT" kept on its face. No
+    motion at all — round 24's budget allows a plate to hold still, and a
+    stores ledger should.
     """
-    H, LOOP, SET = 764, 13.3, 9.9
-    a = CLAY_G
-    CXD, CYD = 440, 296          # dial centre
-    N = 7
-    SPAN = 360 / N
-    A = [round(100 / N * j + 2.25, 2) for j in range(N)]           # arrive at set j
-    D = [round(100 / N * (j + 1) - 2.25, 2) for j in range(N)]     # depart set j
-    pol = lambda deg, r: (CXD + r * math.sin(math.radians(deg)),
-                          CYD - r * math.cos(math.radians(deg)))
-    s = [head(H, "Agentic AutoML",
-              "Agentic AutoML takes a dataset and a sentence and returns a trained model. "
-              "Its tool registry holds 44 definitions, but the model never carries all of "
-              "them: 15 travel with it in every phase and the remaining 29 arrive with the "
-              "phase that needs them, routed by seven named tool sets — onboarding, "
-              "preprocessing, feature proposal, feature continue, feature engineering, "
-              "feature lifecycle and training lifecycle. The Python it writes executes in a "
-              "container on an internal Docker network with no route out, a read-only root "
-              "filesystem, a non-root user and the dataset mounted read-only, leaving 5 "
-              "tmpfs mounts as the only writable surface. Behind it sits a 29-table Postgres "
-              "schema with pgvector. Written with Shree Chaturvedi; the repository is public "
-              "and licensed GPL-3.0.",
-              key="plate-6b-automl.svg", frame=(40, 64, 26))]
-    # sector windows and rim ticks on one shared clock
-    phase = []
-    for j in range(N):
-        phase.append(
-            f".sa{j}{{animation:sa{j} {LOOP}s linear infinite;animation-delay:{-SET}s}}\n"
-            f"@keyframes sa{j}{{0%,{A[j]-1.5:g}%{{stroke:{ROW}}}{A[j]:g}%,{D[j]:g}%{{stroke:{a}}}"
-            f"{min(D[j]+1.5, 99.9):g}%,100%{{stroke:{ROW}}}}}\n"
-            f".tk{j}{{animation:tk{j} {LOOP}s linear infinite;animation-delay:{-SET}s}}\n"
-            f"@keyframes tk{j}{{0%,{A[j]-1.5:g}%{{fill:{WIRE}}}{A[j]:g}%,{D[j]:g}%{{fill:{a}}}"
-            f"{min(D[j]+1.5, 99.9):g}%,100%{{fill:{WIRE}}}}}")
-    # ── the needle: creep + swing, never still. Within sector j it creeps
-    # from centre-6° to centre+6° (the dwell is a slow read, not a hold);
-    # between sectors it swings. The wrap from the last sector to the first
-    # happens faded out, like every loop wrap on this page.
-    ang = lambda j: -(N - 1 - j) * SPAN
-    ndl = [f"0%{{opacity:0;transform:rotate({ang(0)-6:.2f}deg)}}",
-           f"2%{{opacity:1;transform:rotate({ang(0)-6:.2f}deg)}}"]
-    for j in range(N):
-        if j:
-            ndl.append(f"{A[j]:g}%{{transform:rotate({ang(j)-6:.2f}deg)}}")
-        ndl.append(f"{D[j]:g}%{{transform:rotate({ang(j)+6:.2f}deg)}}")
-    ndl.append(f"97%{{opacity:1;transform:rotate({ang(N-1)+6:.2f}deg)}}")
-    ndl.append(f"100%{{opacity:0;transform:rotate({ang(N-1)+6:.2f}deg)}}")
-    s.append("".join(phase) + f"""
-/* the needle IS the routing. Round 21's live pass caught it parked for 9.3
-   of every 13.3s while the sector chase ran on: without transform-box, its
-   CSS rotation origin was left to the renderer's legacy SVG default, not
-   the dial. So it now uses the same idiom as every other rotating element
-   here — fill-box + origin:center — with a zero-ink balance path in its
-   group pinning the fill-box's centre exactly on the dial's axis. */
-.ndl{{transform-box:fill-box;transform-origin:center;animation:ndl {LOOP}s {EASE} infinite;animation-delay:{-SET}s}}
-@keyframes ndl{{{"".join(ndl)}}}
-/* the feed: what the model writes, flowing into the vessel. 12u per period,
-   so the wrap is seamless; linear, because a pipe is steady state. */
-.feed{{animation:feed 1.9s linear infinite}}
-@keyframes feed{{from{{stroke-dashoffset:0}}to{{stroke-dashoffset:-12}}}}
+    H, a = 578, CLAY_G
+    s = [head(H, "Agentic AutoML — one phase, one tool set",
+              "Agentic AutoML takes a dataset and a sentence and returns a trained model, "
+              "one MCP server over a LangGraph state machine. Its registry holds 44 tool "
+              "definitions, drawn here as 44 marks with the 15-tool base set bracketed — "
+              "and no phase gets all 15: every request is narrowed again per stage. Of the "
+              "seven declared per-phase sets, two — preprocessing and feature "
+              "engineering — are exported and imported by nothing, drawn struck through; "
+              "the rest are imported by the phases that name them. What survives every layer is "
+              "that a training-phase model cannot reach a preprocessing tool: its request "
+              "map carries no preprocessing name. The Python it writes runs in a container "
+              "on an internal Docker network with no route out by default, a read-only "
+              "root filesystem, a non-root user, the dataset mounted read-only and 5 tmpfs "
+              "mounts as the only writable surface. Behind it, a 29-table Postgres schema "
+              "with pgvector. Public, GPL-3.0, written with Shree Chaturvedi.",
+              key="plate-6b-automl.svg", frame=(28, 62, 17))]
+    # The carrier: a dim point walking the 44-mark shelf, one traverse per
+    # loop. The dial this plate replaced carried a needle; a set diagram has
+    # no needle, so the carrier is drawn from the diagram's own material —
+    # the registry being read. One @keyframes with 44 staggered negative
+    # delays, not 44 rules. It is deliberately INERT: it lights no particular
+    # mark and encodes no count, so it cannot become a number nothing derives.
+    s.append(f""".mk{{stroke-dasharray:3 3;animation:mk 2.6s linear infinite}}
+@keyframes mk{{from{{stroke-dashoffset:0}}to{{stroke-dashoffset:-6}}}}
 </style>{ground(H)}""")
 
-    s.append(f'<text x="{L}" y="{TOP}" class="kick">IV · AGENTIC AUTOML</text>')
-    s.append(f'<text x="{L}" y="84" class="say" style="fill:{INK}">ONE PHASE, ONE TOOL SET</text>')
-    s.append(f'<text x="{R}" y="{TOP}" text-anchor="end" class="key">44 TOOL DEFINITIONS</text>')
-    s.append(f'<text x="{R}" y="104" text-anchor="end" class="fine">one MCP server over a LangGraph state machine</text>')
-    # the headline the plate never had: every other section leads with its
-    # number (6.4x, 3.5x, 0.979, B only) and this one buried 15-of-44 in
-    # 11px small caps. The fraction is the claim; set it at the claim's size.
-    s.append(f'<text x="{L}" y="176" class="hero">15<tspan class="unit">/44</tspan></text>')
-    s.append(f'<text x="{L}" y="212" class="lbl">TRAVEL WITH THE MODEL</text>')
+    s.append(f'<text x="{L}" y="{TOP - 16}" class="kick">IV · AGENTIC AUTOML</text>')
+    s.append(f'<text x="{R}" y="{TOP - 16}" text-anchor="end" class="kick">ONE MCP SERVER · LANGGRAPH</text>')
+    s.append(f'<text x="{L}" y="74" class="say" style="fill:{INK}">ONE PHASE, ONE TOOL SET</text>')
 
-    # ── the dial. Arcs share one <g> — adjacent 51° arcs necessarily overlap
-    # as bounding boxes, and the dial is one composed instrument.
-    arcs = []
-    for j in range(N):
-        a0, a1 = j * SPAN + 3, (j + 1) * SPAN - 3
-        x0, y0 = pol(a0, 92); x1, y1 = pol(a1, 92)
-        arcs.append(f'<path class="sa{j}" d="M{x0:.1f} {y0:.1f}A92 92 0 0 1 {x1:.1f} {y1:.1f}" '
-                    f'fill="none" stroke-width="13" style="stroke:{a if j == N-1 else ROW}"/>')
-    ticks = []
-    for j in range(N):
-        n = 5 if j == N - 1 else 4
-        for i in range(n):
-            tang = j * SPAN + 8 + i * (SPAN - 16) / (n - 1)
-            tx, ty = pol(tang, 112)
-            ticks.append(f'<rect class="tk{j}" x="{tx-1.5:.1f}" y="{ty-5:.1f}" width="3" height="10" '
-                         f'transform="rotate({tang:.1f} {tx:.1f} {ty:.1f})" '
-                         f'style="fill:{a if j == N-1 else WIRE}"/>')
-    # the needle, authored at its rest (the last sector's creep end). A RIM
-    # index now — 84u to 106u, riding across the sector band — because with
-    # the rotation origin actually on the dial's axis, a hub needle would
-    # cross the 150u hub box every time it pointed near-horizontal. Drawn in
-    # INK so it reads over the grey ring and the lit sector alike, at the
-    # structural 2u. The zero-ink two-dot path spans +-110 so the group's
-    # fill-box stays centred exactly on the axis whatever the needle's angle.
-    th = (N - 1) * SPAN + SPAN / 2 + 6
-    nx0, ny0 = math.sin(math.radians(th)) * 84, -math.cos(math.radians(th)) * 84
-    nx1, ny1 = math.sin(math.radians(th)) * 106, -math.cos(math.radians(th)) * 106
-    s.append('<g>' + "".join(arcs) + "".join(ticks)
-             + f'<g transform="translate({CXD},{CYD})"><g class="ndl">'
-             f'<path d="M-110 -110h0.01M110 110h0.01" fill="none"/>'
-             f'<path d="M{nx0:.1f} {ny0:.1f}L{nx1:.1f} {ny1:.1f}" stroke="{INK}" stroke-width="2"/>'
-             f'</g></g></g>')
-    # the hub: what the model always holds. It does not move, because the 15
-    # travel WITH the model — they are simply always there.
-    s.append(f'<rect x="365" y="270" width="150" height="52" rx="6" fill="none" stroke="{a}"/>')
-    s.append(f'<text x="{CXD}" y="292" text-anchor="middle" class="key">15 TRAVEL</text>')
-    s.append(f'<text x="{CXD}" y="312" text-anchor="middle" class="kick">WITH THE MODEL</text>')
-    # the seven sets, named around the rim
-    NAMES = ["ONBOARD", "PREPROC", "PROPOSE", "CONTINUE", "ENGINEER", "LIFECYCLE", "TRAINING"]
-    for j, nm in enumerate(NAMES):
-        tang = j * SPAN + SPAN / 2
-        lx, ly = pol(tang, 132)
-        sn, cs = math.sin(math.radians(tang)), math.cos(math.radians(tang))
-        if abs(sn) < 0.35:
-            anch, lx, ly = 'middle', lx, ly + (14 if cs < 0 else -6)
-        elif sn > 0:
-            anch, lx, ly = 'start', lx + 6, ly + 4
+    # ── the claim triplet: the fraction at claim size, and the narrowing
+    # lines beside it — no phase gets even the base set whole
+    s.append(f'<text x="{L}" y="152" class="hero">15<tspan class="unit">/44</tspan></text>')
+    s.append(f'<text x="{L}" y="180" class="lbl">IN THE BASE SET</text>')
+    for i, ln in enumerate(["no phase gets all 15 —", "every request narrows per stage,",
+                            "a training-phase model cannot", "reach a preprocessing tool"]):
+        s.append(f'<text x="330" y="{126 + i*18}" class="fine">{ln}</text>')
+
+    # ── the registry, drawn as itself: 44 marks on one shelf. The base 15
+    # filled (they travel furthest), the other 29 hollow (they arrive only
+    # with a phase). The bracket is the set boundary made visible.
+    for i in range(44):
+        x = L + i * 13
+        if i < 15:
+            # the base set is HELD: it is the part that is always there
+            s.append(f'<rect x="{x}" y="210" width="7" height="7" fill="{a}"/>')
         else:
-            anch, lx, ly = 'end', lx - 6, ly + 4
-        s.append(f'<text x="{lx:.0f}" y="{ly:.0f}" text-anchor="{anch}" class="kick">{nm}</text>')
+            # the other 29 arrive only with a phase, so their outlines run —
+            # drawn pending rather than absent. This is the plate's carrier,
+            # and it is inert: it lights no particular mark and encodes no
+            # count, so it can never become a number nothing derives.
+            s.append(f'<rect class="mk" x="{x}" y="210" width="7" height="7" fill="none" '
+                     f'stroke="{WIRE}" stroke-width="1.2"/>')
+    # the bracket stays SOLID and still: it delimits the base set, which is the
+    # part that is never pending. Only the 29 run.
+    s.append(f'<path d="M{L} 226v4M{L} 230H{L + 14*13 + 7}M{L + 14*13 + 7} 230v-4" '
+             f'fill="none" stroke="{WIRE}" stroke-width="1.2"/>')
+    s.append(f'<text x="{L}" y="248" class="lbl">THE BASE SET — 15</text>')
+    s.append(f'<text x="{L + 43*13 + 7}" y="248" text-anchor="end" class="lbl">THE OTHER 29 — PHASE TOOLS</text>')
 
-    s.append(f'<text x="{R}" y="462" text-anchor="end" class="kick">29 ARRIVE WITH THE PHASE</text>')
-    s.append(f'<text x="{R}" y="484" text-anchor="end" class="kick">SEVEN PHASE SETS</text>')
+    # ── the seven declared sets, and the two nobody imports. The dead pair
+    # is printed AND struck — absence presented as evidence, not omitted.
+    s.append(f'<text x="{L}" y="288" class="kick">SEVEN DECLARED PER-PHASE SETS</text>')
+    # "five are imported…" drew a number whose MEANING no row carries. It passed
+    # only because automl.sandbox_tmpfs licenses a 5 on this plate for the tmpfs
+    # mounts — a different noun entirely. The count-noun trap, arriving through
+    # the gate's permissive direction rather than its strict one. The positive
+    # count is arithmetic a reader can do from "seven declared" and the two
+    # named below, so it does not need drawing. 45 chars.
+    s.append(f'<text x="{L}" y="312" class="fine">each imported by the phase that names it — except</text>')
+    s.append(f'<text x="{L}" y="334" class="fine" style="fill:{INK3}">preprocessing · feature-engineering — exported, imported by nothing</text>')
+    # the strikes, measured on the mono grid: 13 chars, then a 3-char gap,
+    # then 19 — static hairlines, drawn through dead names on purpose
+    x1 = L + 13 * CELL_13
+    x2 = L + 16 * CELL_13
+    x3 = x2 + 19 * CELL_13
+    s.append(f'<path d="M{L - 2} 330H{x1 + 2:.1f}M{x2 - 2:.1f} 330H{x3 + 2:.1f}" '
+             f'stroke="{INK3}" stroke-width="1.2"/>')
 
-    # ── the feed, and the vessel it fills: where the generated Python runs.
-    # Isometric, exploded — the five tmpfs trays lifted out on leaders,
-    # because the count of writable surfaces IS the blast radius.
-    s.append(f'<path class="feed" d="M382 388C330 442 290 470 262 522" fill="none" '
-             f'stroke="{a}" stroke-width="1.6" stroke-dasharray="5 7"/>')
-    s.append(f'<text x="418" y="524" class="kick">WHERE GENERATED PYTHON RUNS</text>')
-    # the vessel itself is PINE, not the accent that feeds it: the sandbox is
-    # a guarantee, and a guarantee speaks in the check's colour. Drawn in
-    # CLAY_G it said "the vessel is my act", which is the one thing about it
-    # that is not true — its walls are the container runtime's, not mine.
-    s.append(f'<path d="M183 568L258 532L333 568L258 604Z" fill="none" stroke="{PINE}" stroke-width="1.6"/>')
-    s.append(f'<path d="M183 568V614L258 650L333 614V568" fill="none" stroke="{PINE}" stroke-width="1.6"/>')
-    s.append(f'<path d="M258 604V650" stroke="{WIRE}" stroke-width="1"/>')
-    for i in range(5):
-        ty = 548 + i * 22
-        # WIRE, not the accent: a tmpfs mount is structure the sandbox grants,
-        # not Python I wrote. Only the feed stays CLAY_G, because the feed is
-        # the one thing on this half of the plate that is mine.
-        s.append(f'<g><path d="M352 {ty}L366 {ty-7}L380 {ty}L366 {ty+7}Z" fill="none" stroke="{WIRE}" stroke-width="1.4"/>'
-                 f'<path d="M352 {ty}H338" stroke="{WIRE}" stroke-width="1"/></g>')
-    # The trays no longer "breathe": round 21's live pass measured that
-    # motion at under two rendered pixels — below the threshold of vision,
-    # five animations buying nothing on the reader's compositor. An exploded
-    # drawing is allowed to hold still; the dial and the feed carry the plate.
-    FLAGS = ["--internal network — no route out",
-             "--read-only — immutable rootfs",
-             "--user sandbox — never root",
-             "/datasets:ro — read-only mount",
-             "5 tmpfs mounts — writable, transient"]
-    for i, flag in enumerate(FLAGS):
-        s.append(f'<text x="418" y="{548 + i*26}" class="fine" style="fill:{INK}">{flag}</text>')
+    # ── the verdict row: the one route the audit proved cannot exist
+    s.append(f'<text x="{L}" y="370" class="key">TRAINING</text>')
+    s.append(f'<path d="M240 365H340" stroke="{WIRE}" stroke-width="1.2"/>')
+    s.append(f'<rect x="344" y="355" width="4" height="20" fill="{PINE}"/>')
+    s.append(f'<text x="360" y="370" class="key" style="fill:{INK3}">PREPROCESSING</text>')
+    s.append(f'<text x="{L}" y="392" class="fine">its request map carries no preprocessing name at any layer</text>')
 
-    s.append(f'<text x="{L}" y="692" class="sub">29</text>')
-    s.append(f'<text x="206" y="684" class="lbl">TABLES · POSTGRES + PGVECTOR</text>')
-    s.append(f'<text x="206" y="706" class="fine">a Jupyter kernel per project, kept alive between cells</text>')
-    s.append(f'<text x="{L}" y="{H-30}" class="fine" style="fill:{INK3}">public · GPL-3.0 · written with Shree Chaturvedi</text>')
+    # ── where the generated Python runs — the containment, stated plainly
+    s.append(f'<text x="{L}" y="430" class="kick">WHERE GENERATED PYTHON RUNS — CONTAINED BY DEFAULT</text>')
+    s.append(f'<text x="{L}" y="452" class="fine" style="fill:{INK}">--internal network — no route out by default · non-root user</text>')
+    s.append(f'<text x="{L}" y="472" class="fine" style="fill:{INK}">read-only root · /datasets:ro · 5 tmpfs — the only writable surface</text>')
+
+    # ── the stores behind it, and the imprint
+    s.append(f'<text x="{L}" y="514" class="sub">29</text>')
+    s.append(f'<text x="206" y="514" class="lbl">TABLES · POSTGRES + PGVECTOR</text>')
+    s.append(f'<text x="206" y="534" class="fine">public · GPL-3.0 · written with Shree Chaturvedi</text>')
+    s.append(f'<text x="{L}" y="558" class="fine" style="fill:{INK3}">source: backend/src/services/llm/tools/index.ts</text>')
     return "".join(s) + "</svg>"
 
 
@@ -1215,22 +1188,25 @@ def plate_cadence() -> str:
     Round 21's live pass found the two defects that undid the figure: at
     rest, A's and B's bars were near-identical grey slabs (the refusal only
     existed for 0.77s of a 9.7s loop), and in dark the redaction fill was
-    one value off the returned rows. So the rest state now STATES the claim:
+    one value off the returned rows. So the rest state STATES the claim:
     tenant A's rows are redaction — black ink in light, a void held by a
-    wire edge in dark, since a black bar on near-black paper vanishes —
-    while tenant B's rows carry visible record-lines with a continuous
-    emerald stream running through them: B's data flowing back, A's not,
-    always. Carrier: that stream, plus the auditor's scan (the same
-    instrument as plate I, turned inward, with the same bright index head).
-    Gesture: the redactions are RE-STRUCK once per loop — each bar lifts
-    faded, leaves its row blank for half a second (the void the database
-    returned), then wipes back across left-to-right in a tight 60ms cascade
-    down the column: the door slamming, and staying shut.
+    wire edge in dark — while tenant B's rows carry visible record-lines.
+
+    ROUND 24 CUT THIS PLATE TO ONE MOVING IDEA. The auditor's scan is
+    deleted: gate.mjs's moving-hairline check proved it crossed every
+    service name and both printed confessions somewhere in its loop, and a
+    camo-served <img> lands a reader on an arbitrary frame — an instrument
+    that can strike out "tags**" is asserting a deletion the audit never
+    made. The emerald stream inside B's rows is stilled too (the drawn
+    record-lines carry "returned" without moving). What remains is the one
+    motion that re-derives meaning: the redactions are RE-STRUCK once per
+    loop — each bar lifts faded, leaves its row blank for half a second
+    (the void the database returned), then wipes back left-to-right in a
+    tight cascade down the column: the door slamming, and staying shut.
     """
     # PINE, not an arbitrary hue: this whole plate is the database refusing,
     # and the refusal is a CHECK. The accent says so.
-    H, LOOP, a = 776, 9.7, PINE
-    SCAN = 17.1
+    H, LOOP, a = 762, 9.7, PINE
     rbar = redact()
     s = [head(H, "Cadence — six services audited, and the database that refuses",
               "Cadence, a calendar that files plain sentences, audited by its own author and "
@@ -1244,36 +1220,31 @@ def plate_cadence() -> str:
               "task-lists still has no regression test. Below, an unfiltered SELECT "
               "count(*) FROM tasks, run as B, comes back B only: PostgreSQL row-level "
               "security refused the rest.", key="plate-5-refusal.svg",
-              frame=(45, 64, 28))]
+              frame=(44, 64, 23))]
     # the re-strike: 0% is the finished frame (redacted), held for 84% of the
     # loop; the bar lifts FADED (no visible retraction — the row is simply
     # blank, which is what the database sent), then wipes back left-to-right.
     # Round 21's bars returned to full width from a visible retraction, so
     # the resting figure showed A and B identical — the opposite of the claim.
     s.append(f""".vast{{font-size:89px;letter-spacing:-2px;fill:{INK};font-weight:600;font-family:'S',Georgia,serif}}
+/* the tenant-B rows stream their record-lines: the plate's CARRIER, restored.
+   Only .bfl comes back — .scan does NOT. That one swept a rule down the table
+   and across every service name and both printed confessions, drawing true
+   claims struck out; gate.mjs check 3 now fails on exactly that, deliberately,
+   so restoring it would correctly turn the build red. The carrier stays, the
+   strikethrough does not. */
+.bfl{{animation:bfl 1.7s linear infinite}}
+@keyframes bfl{{from{{stroke-dashoffset:0}}to{{stroke-dashoffset:-8}}}}
 .red{{transform-box:fill-box;transform-origin:left center;animation:red {LOOP}s {EASE} infinite}}
 @keyframes red{{0%,84%{{opacity:1;transform:scaleX(1)}}85.5%{{opacity:0;transform:scaleX(1)}}
   86.5%{{opacity:0;transform:scaleX(.02)}}90.5%{{opacity:1;transform:scaleX(.02)}}
   95%,100%{{opacity:1;transform:scaleX(1)}}}}
-/* B's stream: the record-lines inside every returned row drift toward the
-   tenant — data coming back, continuously, on the side the guard allows.
-   8u is one dash cycle, so the wrap is seamless. */
-.bfl{{animation:bfl 1.7s linear infinite}}
-@keyframes bfl{{from{{stroke-dashoffset:0}}to{{stroke-dashoffset:-8}}}}
-.scan{{animation:scan {SCAN}s linear infinite;animation-delay:-6.1s}}
-@keyframes scan{{0%{{opacity:0;transform:translateY(0)}}3%{{opacity:1}}
-  94%{{opacity:1;transform:translateY(340px)}}97%,100%{{opacity:0;transform:translateY(340px)}}}}
 </style>{ground(H)}""")
 
     s.append(f'<text x="{L}" y="{TOP}" class="kick">V · CADENCE — THE ISOLATION AUDIT</text>')
     s.append(f'<text x="{L}" y="88" class="say" style="fill:{INK}">SIX SERVICES, SELF-AUDITED</text>')
     s.append(f'<text x="{L}" y="116" class="kick">ANY USER COULD READ OR DELETE ANOTHER’S ROWS BY ID</text>')
     s.append(f'<text x="{L}" y="136" class="kick">THE MARKS SHOW WHERE EACH GUARD NOW SITS</text>')
-
-    # the auditor's scan, turned on the author's own code — the plate-I
-    # instrument, its index head in this section's emerald
-    s.append(f'<g class="scan"><path d="M{L} 158H{R}" stroke="{INK2}" stroke-width="1.6"/>'
-             f'<rect x="{L}" y="156.5" width="26" height="3" fill="{a}"/></g>')
 
     for x, t in ((340, "READ"), (396, "DELETE"), (492, "TENANT A")):
         s.append(f'<text x="{x}" y="170" class="kick">{t}</text>')
@@ -1318,10 +1289,13 @@ def plate_cadence() -> str:
     s.append(f'<text x="{L}" y="544" class="key">SELECT count(*) FROM tasks</text>')
     s.append(f'<text x="470" y="544" class="fine">as B — unfiltered on purpose</text>')
     # the response, at the largest type on the page — and it is not a number
-    s.append(f'<text x="{L}" y="660" class="vast">B only</text>')
-    s.append(f'<text x="520" y="660" class="lbl">ROW-LEVEL SECURITY</text>')
-    s.append(f'<text x="{L}" y="712" class="say">The app didn’t remember to filter.</text>')
-    s.append(f'<text x="{L}" y="{H-32}" class="say">The database refused.</text>')
+    s.append(f'<text x="{L}" y="640" class="vast">B only</text>')
+    s.append(f'<text x="520" y="640" class="lbl">ROW-LEVEL SECURITY</text>')
+    s.append(f'<text x="{L}" y="684" class="say">The app didn’t remember to filter.</text>')
+    s.append(f'<text x="{L}" y="712" class="say">The database refused.</text>')
+    # the source footer every plate closes with: the isolation suite is the
+    # artifact that makes the sentence above checkable
+    s.append(f'<text x="{L}" y="736" class="fine" style="fill:{INK3}">source: rls.postgres.test.ts — the isolation suite</text>')
     return "".join(s) + "</svg>"
 
 
@@ -1337,38 +1311,62 @@ def plate_applied() -> str:
 
     A tapered channel with real walls. Three screens span the channel wall
     to wall — 201 regex rules, then e5 embeddings, then the SetFit head,
-    cheapest first — labelled outside on level leaders. A continuous stream
-    of messages falls in at the mouth; most are decided at a screen and ride
-    a chute out to CLASSIFIED. The one message no layer is sure of lands on
-    the 0.85 gate — a solid member drawn across the foot, the one edge in
-    the channel nothing passes — pauses there, and is walked sideways to a
+    cheapest first — labelled outside on level leaders. Decided mail leaves
+    by the chutes to CLASSIFIED (drawn as static guides). The one message
+    no layer is sure of lands on the 0.85 gate — a solid member across the
+    foot, the one edge nothing passes — pauses, and is walked sideways to a
     human, where it rests. Below the gate, nothing is guessed.
 
-    Carrier: the stream — five phased messages on three routes; at every
-    instant something is falling, being tested, or being handed over. The
-    still frame is honest: queued messages at the mouth, and the referred
-    one resting beside the human it was handed to (data-rest, check 11/16).
+    Round 24: the four ambient stream messages are deleted and the channel
+    is compressed 72u — the taper below the SetFit screen was the empty
+    fifth of the plate. The one motion kept is the one that IS the section's
+    claim: the refused message replaying its journey — inlet, three screens,
+    the pause at the gate, the handover — with the human's small rise to
+    receive it. Authored at rest beside the human (data-rest), so the still
+    frame any camo-served reader lands on shows the handover already made.
     """
-    H, a = 712, CLAY_G
+    H, a = 652, CLAY_G
     T1, T2, T3 = 8.6, 12.9, 15.5   # route periods — near-coprime, unfindable
     s = [head(H, "Applied — a classifier allowed to say it doesn't know",
               "Applied: a three-layer email classifier — 201 regex rules, then e5 embeddings, "
-              "then a fine-tuned SetFit head, cheapest first — drawn as a sifting channel a "
-              "stream of messages falls through. A message no layer is sure of stops at the "
-              "0.85 confidence gate and is walked to a human instead of guessed at. It "
-              "scores 0.979 macro-F1 — 2 mistakes on a 96-message evaluation set — measured "
-              "with the rules layer alone; CI fails the build below 0.95. Inference runs in "
-              "your browser: the int8 ONNX build is 22.8 megabytes, down from 90.4.",
-              key="plate-4-applied.svg", col=(110, 776), frame=(42, 25.4, 27))]
+              "then a fine-tuned SetFit head, cheapest first — drawn as a tapered sifting "
+              "channel. The one message no layer is sure of stops at the 0.85 confidence "
+              "gate across the channel's foot and is walked to a human instead of guessed "
+              "at. It scores 0.979 macro-F1 — 2 mistakes on a 96-message evaluation set — "
+              "measured with the rules layer alone, which is also all the hosted app runs; "
+              "CI fails the build below 0.95. On the Hugging Face Space the fine-tuned head "
+              "runs inside your own browser tab: the int8 ONNX build is 22.8 megabytes, "
+              "down from 90.4.",
+              key="plate-4-applied.svg", col=(110, 776), frame=(42, 25.4, 23))]
 
-    # ── the routes. Authored once here so the drawing and the motion cannot
-    # disagree: the chutes the messages ride are the chutes the plate draws.
-    P1 = "M440 104 C440 148 438 166 436 186 C434 208 420 224 342 232 C300 237 246 248 218 258"
-    P2 = ("M440 104 C440 148 438 166 436 186 C434 214 436 250 438 276 "
-          "C436 300 420 314 360 322 C316 328 250 340 222 348")
+    # ── the chutes: static guides now — where decided mail leaves. Authored
+    # here beside the walls so drawing and geometry cannot disagree.
+    # The routes enter at 109, not 88. 88 was authored against the taller
+    # pre-compression channel; after the 72u trim it put an 18u token's box
+    # straight over the headline at y=84 — gate.mjs check 3 caught it the
+    # moment the ambient stream came back. 109 is the same inlet the refused
+    # message uses (its rest box is y 100-118), so both routes now enter at
+    # the channel mouth rather than through the type above it.
+    P1 = "M440 109 C440 130 438 143 436 156 C434 176 420 190 342 198 C300 203 246 214 218 224"
+    P2 = ("M440 109 C440 130 438 143 436 156 C434 184 436 214 438 240 "
+          "C436 262 420 276 360 284 C316 290 250 302 222 312")
     # the walk to the human happens in translate keyframes (dv below), so the
     # refused message can be AUTHORED at its rest beside the human — with
     # motion off, the still frame shows the handover already made.
+    #
+    # The inlet is -315px, not -329: the 72u channel compression carried the
+    # old inlet offset up with it and at 35% of the loop the token surfaced
+    # ON the section headline (gate check 3, t=5.42s). -315 puts it at
+    # y=100-118 — ten units clear of the headline's descenders, still above
+    # the channel mouth at 104, so it reads as mail entering the channel.
+    # RESTORED — the stream is this plate's carrier, and the argument that
+    # deleted it ("ambient travel means nothing on an arbitrary camo frame")
+    # is an argument about a GESTURE. Four messages perpetually on the two
+    # routes are semantically identical in every frame: no frame lies, and
+    # the plate is alive whichever instant a reader is handed. The refused
+    # message's journey is the gesture and stays exactly as re-choreographed.
+    # The paths are the CURRENT P1/P2, so the stream follows the compressed
+    # channel rather than the pre-compression one.
     s.append(f""".msg{{offset-rotate:0deg}}
 .pa0{{offset-path:path('{P1}');animation:pa0 {T1}s {EASE} infinite;animation-delay:-3.1s}}
 .pa1{{offset-path:path('{P1}');animation:pa1 {T1}s {EASE} infinite;animation-delay:-6.4s}}
@@ -1388,16 +1386,14 @@ def plate_applied() -> str:
   24%{{offset-distance:20%}}40%{{offset-distance:44%}}46%{{offset-distance:46%}}
   70%{{offset-distance:74%}}88%{{offset-distance:98%;opacity:1}}92%{{opacity:0;offset-distance:100%}}
   100%{{opacity:0;offset-distance:100%}}}}
-/* the refused message: authored at rest beside the human; the loop replays
-   its journey — inlet, three screens, the pause at the gate, the handover */
 .dv{{animation:dv {T3}s {EASE} infinite}}
 @keyframes dv{{0%,30%{{opacity:1;transform:translate(0,0)}}
   32%{{opacity:0;transform:translate(0,0)}}
-  33%{{opacity:0;transform:translate(-208px,-385px)}}
-  35%{{opacity:1;transform:translate(-208px,-385px)}}
-  40%,43%{{transform:translate(-208px,-315px)}}
-  47%,50%{{transform:translate(-208px,-225px)}}
-  54%,57%{{transform:translate(-208px,-135px)}}
+  33%{{opacity:0;transform:translate(-208px,-315px)}}
+  35%{{opacity:1;transform:translate(-208px,-315px)}}
+  40%,43%{{transform:translate(-208px,-261px)}}
+  47%,50%{{transform:translate(-208px,-185px)}}
+  54%,57%{{transform:translate(-208px,-109px)}}
   61%,70%{{transform:translate(-208px,-44px)}}
   75%{{transform:translate(-146px,-32px)}}
   80%{{transform:translate(-66px,-11px)}}
@@ -1422,14 +1418,14 @@ def plate_applied() -> str:
     # walls at 3u — a full weight above the 2u screens, because a wall is the
     # thing the stream cannot pass and the drawing should say so (round 21
     # called the 1-2u channel "the most timid drawing in the set")
-    wx = lambda y: 320 + 70 * (y - 120) / 348
-    ch.append(f'<path d="M320 120L{wx(220):.1f} 220M{wx(244):.1f} 244L{wx(310):.1f} 310'
-              f'M{wx(334):.1f} 334L390 468" stroke="{WIRE}" stroke-width="3"/>')
-    ch.append(f'<path d="M560 120L{560 - 70 * 330 / 348:.1f} 450" stroke="{WIRE}" stroke-width="3"/>')
+    wx = lambda y: 320 + 70 * (y - 104) / 292
+    ch.append(f'<path d="M320 104L{wx(198):.1f} 198M{wx(220):.1f} 220L{wx(274):.1f} 274'
+              f'M{wx(296):.1f} 296L390 396" stroke="{WIRE}" stroke-width="3"/>')
+    ch.append(f'<path d="M560 104L{560 - 70 * 274 / 292:.1f} 378" stroke="{WIRE}" stroke-width="3"/>')
     # screens: wall-to-wall at their depth, perforated
-    for sy in (186, 276, 366):
-        wl = 320 + 70 * (sy - 120) / 348
-        wr = 560 - 70 * (sy - 120) / 348
+    for sy in (168, 244, 320):
+        wl = 320 + 70 * (sy - 104) / 292
+        wr = 560 - 70 * (sy - 104) / 292
         # RULE, a step below the walls' WIRE: a wall is what the stream cannot
         # pass and a screen is what it passes THROUGH, and the drawing now says
         # which is which by weight AND tone rather than weight alone. 3.40 night
@@ -1446,233 +1442,282 @@ def plate_applied() -> str:
     # each chute ends at a TERMINUS — a bar the exiting message visibly
     # arrives against before it fades. Round 21: "paths to nowhere, a third
     # of the plate's width spent fading into empty space."
-    ch.append(f'<path d="M212 246V270M216 336V360" stroke="{WIRE}" stroke-width="2"/>')
+    ch.append(f'<path d="M212 212V236M216 300V324" stroke="{WIRE}" stroke-width="2"/>')
     # the gate: a solid member across the foot — the one edge nothing passes.
     # PINE, because the gate is the check, and its two labels ("0.85 GATE",
     # "RULES LAYER ONLY") already are. Drawn in the accent it was the only
     # pine claim on the plate whose subject was painted in my own colour.
-    ch.append(f'<rect x="390" y="468" width="100" height="4" fill="{PINE}"/>')
-    ch.append(f'<path d="M490 470H586" stroke="{WIRE}" stroke-width="1"/>')
+    ch.append(f'<rect x="390" y="396" width="100" height="4" fill="{PINE}"/>')
+    ch.append(f'<path d="M490 398H586" stroke="{WIRE}" stroke-width="1"/>')
     # the walk to the human, drawn as the same faint guide
-    ch.append(f'<path d="M446 458C500 462 560 476 620 494" fill="none" stroke="{RULE}" stroke-width="1" stroke-dasharray="2 6"/>')
+    ch.append(f'<path d="M446 386C500 390 560 404 620 422" fill="none" stroke="{RULE}" stroke-width="1" stroke-dasharray="2 6"/>')
     # the human: head and shoulders, on the plate, at the end of the walk —
     # and it REACTS (the .hum rise) when the refused message reaches it
     # INK, a step above the refused message that arrives beside them. At INK2
     # the person and the packet were the same tone, so the end of the walk read
     # as two objects rather than a subject receiving one.
-    ch.append(f'<g class="hum"><g id="the-human"><circle cx="660" cy="497" r="8" fill="none" stroke="{INK}" stroke-width="1.6"/>'
-              f'<path d="M644 526C644 512 676 512 676 526" fill="none" stroke="{INK}" stroke-width="1.6"/></g></g>')
+    ch.append(f'<g class="hum"><g id="the-human"><circle cx="660" cy="425" r="8" fill="none" stroke="{INK}" stroke-width="1.6"/>'
+              f'<path d="M644 454C644 440 676 440 676 454" fill="none" stroke="{INK}" stroke-width="1.6"/></g></g>')
     # the stream: four messages on the two decided routes, at 18u — round 21
-    # measured the 14u tokens as too small to track on the dark slab...
+    # measured the 14u tokens as too small to track on the dark slab
     for cls in ("pa0", "pa1", "pb0", "pb1"):
         ch.append(f'<rect class="msg {cls}" x="-9" y="-9" width="18" height="18" rx="3.5" '
                   f'style="fill:{a};fill-opacity:{op(0.55)};stroke:{a};stroke-width:1.6"/>')
-    # ...and the refused one, authored at rest beside the human
-    ch.append(f'<rect class="dv" data-rest="the-human" data-rest-within="12" x="630" y="487" '
+    # ...and the refused message, authored at rest beside the human
+    ch.append(f'<rect class="dv" data-rest="the-human" data-rest-within="12" x="630" y="415" '
               f'width="18" height="18" rx="3.5" '
               f'style="fill:{INK2};fill-opacity:{op(0.7)};stroke:{INK2};stroke-width:1.6"/>')
     s.append('<g>' + "".join(ch) + '</g>')
 
     # the screen labels, on their level leaders
-    s.append(f'<text x="594" y="191" class="key">201 REGEX RULES</text>')
-    s.append(f'<text x="594" y="281" class="key">e5 EMBEDDINGS</text>')
-    s.append(f'<text x="594" y="371" class="key">SETFIT HEAD</text>')
-    s.append(f'<text x="594" y="213" class="fine">cheapest first —</text>')
-    s.append(f'<text x="594" y="231" class="fine">most mail stops</text>')
-    s.append(f'<text x="594" y="475" class="key" style="fill:{PINE}">0.85 GATE</text>')
+    s.append(f'<text x="594" y="173" class="key">201 REGEX RULES</text>')
+    s.append(f'<text x="594" y="249" class="key">e5 EMBEDDINGS</text>')
+    s.append(f'<text x="594" y="325" class="key">SETFIT HEAD</text>')
+    s.append(f'<text x="594" y="195" class="fine">cheapest first —</text>')
+    s.append(f'<text x="594" y="213" class="fine">most mail stops</text>')
+    s.append(f'<text x="594" y="403" class="key" style="fill:{PINE}">0.85 GATE</text>')
 
     # what leaves the channel decided — a rotated tab at the left edge,
     # the one strip the stream can never enter
-    s.append(f'<text transform="rotate(-90 128 300)" x="128" y="300" text-anchor="middle" class="kick">CLASSIFIED — DECIDED AT A SCREEN</text>')
+    s.append(f'<text transform="rotate(-90 128 250)" x="128" y="250" text-anchor="middle" class="kick">CLASSIFIED — DECIDED AT A SCREEN</text>')
 
     # the human's name, under the figure
-    s.append(f'<text x="660" y="556" text-anchor="middle" class="lbl">A HUMAN</text>')
-    s.append(f'<text x="400" y="510" text-anchor="middle" class="fine" style="fill:{INK3}">below the gate, nothing is guessed</text>')
+    s.append(f'<text x="660" y="484" text-anchor="middle" class="lbl">A HUMAN</text>')
+    s.append(f'<text x="400" y="438" text-anchor="middle" class="fine" style="fill:{INK3}">below the gate, nothing is guessed</text>')
 
     # ── the verdict. 0.979 is the number with an artifact behind it,
     # labelled for what it measures; the cascade's 0.9583 has none.
-    s.append(f'<path d="M{L} 580H{R}" stroke="{RULE}"/>')
-    s.append(f'<text x="{L}" y="628" class="hero">0.979</text>')
-    s.append(f'<text x="330" y="606" class="lbl">MACRO-F1 · 96-MSG EVAL SET · 2 MISTAKES</text>')
-    s.append(f'<text x="330" y="628" class="key" style="fill:{PINE}">RULES LAYER ONLY</text>')
-    s.append(f'<text x="330" y="650" class="fine">SetFit off, embeddings emptied · CI fails below 0.95</text>')
-    s.append(f'<text x="{L}" y="{H-30}" class="lbl">YOUR BROWSER</text>')
-    s.append(arrowed(300, H - 30, "fine", "int8 ONNX · 90.4 MB", "22.8 MB"))
-    s.append(f'<text x="{R}" y="{H-30}" text-anchor="end" class="fine" style="fill:{INK3}">never leaves your tab</text>')
+    s.append(f'<path d="M{L} 508H{R}" stroke="{RULE}"/>')
+    s.append(f'<text x="{L}" y="556" class="hero">0.979</text>')
+    s.append(f'<text x="330" y="534" class="lbl">MACRO-F1 · 96-MSG EVAL SET · 2 MISTAKES</text>')
+    s.append(f'<text x="330" y="556" class="key" style="fill:{PINE}">RULES LAYER ONLY</text>')
+    s.append(f'<text x="330" y="578" class="fine">SetFit off, embeddings emptied · CI fails below 0.95</text>')
+    s.append(f'<text x="{L}" y="602" class="lbl">YOUR BROWSER</text>')
+    s.append(arrowed(300, 602, "fine", "int8 ONNX · 90.4 MB", "22.8 MB"))
+    s.append(f'<text x="{R}" y="602" text-anchor="end" class="fine" style="fill:{INK3}">never leaves your tab</text>')
+    s.append(f'<text x="{L}" y="626" class="fine" style="fill:{INK3}">source: backend/jobtracker/classifier/hybrid.py</text>')
     return "".join(s) + "</svg>"
 
 
 # ────────────────────────────────────────────────────────────── PLATE VII
 def plate_visualassist() -> str:
-    """The depth sweep. Room: an instrument's field of view.
+    """The alert policy. Room: an instrument's field of view, and its
+    calibration card.
 
-    NEW this round, at the client's choice. The skills banner has sold Swift
-    since round one without a single Swift system on the page; this is the
-    system — an iPhone app that turns ARKit LiDAR depth into spatial audio,
-    haptics and speech for low-vision users. It is also the one system here
-    with no live link, and the plate says why in plain words: it needs an
-    iPhone with a lidar sensor. That is a reason, not an excuse.
+    REBUILT in round 23. The round-22 plate drew a generic cone, six
+    scattered dots and two unlabelled arcs — an instrument with no reading —
+    while the section it illustrates had just been rewritten around the one
+    piece of engineering worth a drawing: THREE DISTANCE BANDS and what each
+    one emits. The only numbers the old plate carried were inventory (lines,
+    files, workflows) — counts of typing, not decisions. The section's real
+    numbers are 0.5 / 1.0 / 2.0 metres: they measure what the app does to a
+    person walking. So the plate now draws the policy itself, twice over:
 
-    Carrier: the sweep — the phone's field of view oscillating across the
-    obstacle field, on a curve that never stalls at the turn. The range
-    rings drift outward continuously. Gesture: each obstacle blinks the
-    moment the sweep crosses its bearing — and the crossing times are solved
-    against the ACTUAL easing the sweep runs on. Round 21 solved them
-    against a pure sine while the sweep ran the DRIFT bezier, and the live
-    pass caught the consequence: points pulsing with the beam visibly
-    elsewhere, causality broken at exactly the extreme bearings. The answer
-    half of the claim is drawn too: audio arcs at the phone's ear flash with
-    every detection — depth in, sound out.
+    * THE SCENE — the phone's field of view with the three thresholds as
+      arcs at TRUE PROPORTION (100/200/400u on one scale), ticked and
+      dimensioned on the beam axis like a drafting section. The two arcs
+      where the app interrupts are CLAY (my act, my chosen thresholds); the
+      2.0 m arc is PINE, because the deliberate silence inside it is the
+      check working — an aid that narrates every wall is an aid you switch
+      off, and the estate draws "the system working" in pine everywhere else.
+    * THE TABLE — a ruled calibration card, one row per band: the distance
+      at claim size, what fires, and the haptic signature drawn as a
+      waveform on a hairline track. One continuous bar for the 0.5 m buzz,
+      three transient ticks for the 1.0 m pulse, and for 2.0 m the track is
+      a FLATLINE: the absence is drawn, not left blank, so the row states
+      "no alert fires" as evidence rather than as missing content. The
+      source path (LiDARService.swift — no line numbers, which would be
+      unregistered digits) and the finding that the Settings sliders cannot
+      reach these constants close the card.
+
+    The plate's one moving device (round 24's budget): the approach. One
+    obstacle walks in from beyond the field at constant speed (the honest
+    physical statement; its crossing times are LINEAR in distance, so no
+    bezier inversion — round 21's sweep bug category is structurally gone)
+    and trips each band in turn: crossing 2.0 m lights that row's numeral
+    pine and nothing else — silence, performed; crossing 1.0 m fires three
+    staggered vibration ticks at the phone and one brief speech flash;
+    crossing 0.5 m holds the vibration marks and speech arcs lit while the
+    walker is inside — the continuous full-strength buzz — and then the
+    walker stops and fades: the interrupt worked. Every output mark sits at
+    the phone under a plain label, because round 22's unlabelled speaker
+    arc read as a rendering artifact.
+
+    The inventory line survives, demoted to the repo corner where it
+    belongs: it identifies the artifact, it is not the argument.
     """
-    H, a = 500, CLAY_G
-    T, AMP = 8.9, 13.0             # sweep period and half-angle, degrees
-    EX, EY = 238, 227              # the emitter — the phone's sensor
-
-    # invert the DRIFT bezier: e(u) is progress through one half-sweep, so a
-    # bearing phi is crossed at u with e(u) = (phi+AMP)/(2AMP). Bisection on
-    # the y-polynomial, then the x-polynomial maps parameter to time.
-    def _cross(q: float) -> float:
-        p1x, p1y, p2x, p2y = .45, .05, .55, .95
-        bez = lambda c1, c2, t: 3*(1-t)**2*t*c1 + 3*(1-t)*t**2*c2 + t**3
-        lo, hi = 0.0, 1.0
-        for _ in range(60):
-            mid = (lo + hi) / 2
-            if bez(p1y, p2y, mid) < q: lo = mid
-            else: hi = mid
-        return bez(p1x, p2x, (lo + hi) / 2)
-    s = [head(H, "VisualAssist — LiDAR depth to spatial audio, in Swift",
+    H, a = 748, CLAY_G
+    T = 13.7                        # the approach's clock
+    EX, EY = 238, 272               # the emitter — the phone's sensor
+    SC = 200                        # u per metre — one scale, stated by ticks
+    R05, R10, R20 = SC * 0.5, SC * 1.0, SC * 2.0
+    SPAN = 15                       # field half-angle, degrees
+    sin_, cos_ = math.sin(math.radians(SPAN)), math.cos(math.radians(SPAN))
+    X0, X1 = 676.0, 290.0           # the walk: start and stop (inside 0.5 m)
+    TRAVEL = X0 - X1
+    ARRIVE = 80.0                   # % of loop when the walker reaches X1
+    # crossing times are linear in distance — constant walking speed
+    c20, c10, c05 = (round(ARRIVE * (X0 - (EX + r)) / TRAVEL, 1)
+                     for r in (R20, R10, R05))
+    s = [head(H, "VisualAssist — three distance bands: stop, caution, silence",
               "VisualAssist: an iPhone app for low-vision users, written in Swift — ARKit "
-              "LiDAR depth becomes spatial audio, haptics and speech, so the phone tells "
-              "you what is in front of you. 7,177 lines across 38 Swift files, 5 CI "
-              "workflows. It is the one system on this page you cannot click into, because "
-              "it needs an iPhone with a lidar sensor.",
-              key="plate-8-visualassist.svg", col=(118, 762), frame=(42, 64, 28))]
-    # obstacle bearings (degrees off axis) and ranges — the field the sweep
-    # reads. Pulse times fall where the sweep's sine crosses each bearing.
-    PTS = [(-11.5, 196), (-6, 262), (-1.5, 152), (2.5, 236), (7, 180), (11, 272)]
-    css = [f""".swp{{animation:swp {T}s {DRIFT} infinite;animation-delay:{-T/4}s}}
-@keyframes swp{{0%{{transform:rotate({-AMP}deg)}}50%{{transform:rotate({AMP}deg)}}100%{{transform:rotate({-AMP}deg)}}}}
-.ring{{animation:ring 11.7s linear infinite}}
-@keyframes ring{{from{{stroke-dashoffset:0}}to{{stroke-dashoffset:-11}}}}"""]
-    crossings = []
-    for i, (phi, _r) in enumerate(PTS):
-        # the sweep runs -AMP -> +AMP over 0-50% and back over 50-100%, DRIFT
-        # eased per segment; solve each segment's bezier for this bearing
-        q = max(0.0, min(1.0, (phi + AMP) / (2 * AMP)))
-        t1 = 50 * _cross(q)
-        t2 = 50 + 50 * _cross(1 - q)
-        t1, t2 = sorted((t1, t2))
-        crossings += [t1, t2]
-        # the crossed point takes CLAY as well as swelling. The swell alone
-        # says SOMETHING happened here; the colour says WHICH point the sweep
-        # is on, which is the only thing a still frame near a crossing can
-        # carry. Text-grade CLAY, not the graphic tone — it has to read off
-        # the CLAY_G hatch passing over it at that exact instant.
-        seg = "".join(
-            f"{max(t-2.2,0):.1f}%{{transform:scale(1);fill:{INK}}}"
-            f"{t:.1f}%{{transform:scale(1.7);fill:{CLAY}}}"
-            f"{min(t+2.2,100):.1f}%{{transform:scale(1);fill:{INK}}}" for t in (t1, t2))
-        css.append(f".pt{i}{{fill:{INK};transform-box:fill-box;transform-origin:center;"
-                   f"animation:pt{i} {T}s {BREATHE} infinite;animation-delay:{-T/4}s}}\n"
-                   f"@keyframes pt{i}{{0%{{transform:scale(1);fill:{INK}}}{seg}"
-                   f"100%{{transform:scale(1);fill:{INK}}}}}")
-    # the output: audio arcs at the phone's left edge take CLAY_G at EVERY
-    # crossing — one detection, one utterance. Colour, not opacity, so the
-    # authored frame stays the finished frame. Overlapping windows merge so
-    # the keyframe percentages stay strictly increasing.
-    ev: list[list[float]] = []
-    for t in sorted(crossings):
-        if ev and t - 1.7 <= ev[-1][1]: ev[-1][1] = min(t + 1.7, 100.0)
-        else: ev.append([max(t - 1.7, 0.0), min(t + 1.7, 100.0)])
-    aud = "".join(f"{a0:.1f}%{{stroke:{WIRE}}}{(a0+a1)/2:.1f}%{{stroke:{a}}}{a1:.1f}%{{stroke:{WIRE}}}"
-                  for a0, a1 in ev)
-    css.append(f".aud{{animation:aud {T}s linear infinite;animation-delay:{-T/4}s}}\n"
-               f"@keyframes aud{{0%{{stroke:{WIRE}}}{aud}100%{{stroke:{WIRE}}}}}")
+              "LiDAR depth becomes speech and haptics, and the plate draws its alert "
+              "policy as three distance bands in front of the phone, to scale. Inside "
+              "0.5 metres: a continuous haptic at full strength and the spoken phrase "
+              "Stop, obstacle ahead. Inside 1.0 metres: a triple pulse, softer, and the "
+              "single spoken word Caution. Inside 2.0 metres nothing fires at all — the "
+              "zone turns yellow on screen and the distance is read only if you press "
+              "for it, because an aid that narrates every wall is an aid you switch "
+              "off. An obstacle drawn approaching the phone trips each band in turn. "
+              "7,177 lines across 38 Swift files, 5 CI workflows. It is the one system "
+              "on this page you cannot click into, because it needs an iPhone with a "
+              "lidar sensor.",
+              key="plate-8-visualassist.svg", col=(118, 762), frame=(44, 60, 25))]
+    # ── the walk, and everything it triggers. The obstacle is authored at
+    # its start (beyond the outer band), travels linearly, rests briefly
+    # inside the stop band — the interrupt WORKED — and fades before the
+    # reset, so nothing teleports while visible and t=0 is a full-opacity
+    # authored frame.
+    # the beam holds still (round 24: one moving device per plate, and this
+    # plate's is the approach); its dashes read as a drawn datum line
+    css = [f""".dtm{{animation:dtm 2.4s linear infinite}}
+@keyframes dtm{{from{{stroke-dashoffset:0}}to{{stroke-dashoffset:-8}}}}
+.obs{{animation:obs {T}s linear infinite}}
+@keyframes obs{{0%{{opacity:1;transform:translateX(0)}}
+  {ARRIVE:g}%,87%{{opacity:1;transform:translateX({-TRAVEL:g}px)}}
+  89%{{opacity:0;transform:translateX({-TRAVEL:g}px)}}
+  89.5%,93%{{opacity:0;transform:translateX(0)}}
+  95.5%,100%{{opacity:1;transform:translateX(0)}}}}"""]
+    # each band's row numeral lights while the walker is inside that band —
+    # the read-chase idiom, driven by the scene. The silent band lights PINE
+    # (the check), the interrupting bands CLAY (the act). Fill animations on
+    # tspans that own nothing, exactly as the index rows learned in 6aec558.
+    for cls, on, off, col in (("rn2", c20, c10, PINE),
+                              ("rn1", c10, c05, CLAY),
+                              ("rn0", c05, 86.0, CLAY)):
+        css.append(f".{cls}{{animation:{cls} {T}s linear infinite}}"
+                   f"@keyframes {cls}{{0%,{on-0.7:g}%{{fill:{INK}}}{on+0.7:g}%,{off-0.7:g}%{{fill:{col}}}"
+                   f"{off+0.7:g}%,100%{{fill:{INK}}}}}")
+    # the outputs, at the phone: speech arcs flash once per utterance — a
+    # brief word at 1.0 m, a held phrase at 0.5 m — and the vibration marks
+    # fire three STAGGERED transients at 1.0 m (the triple pulse, performed
+    # in sequence) then hold through the stop band (the continuous buzz).
+    css.append(f".spk{{animation:spk {T}s linear infinite}}"
+               f"@keyframes spk{{0%,{c10-0.7:g}%{{stroke:{WIRE}}}{c10+0.7:g}%,{c10+4.3:g}%{{stroke:{a}}}"
+               f"{c10+5.7:g}%,{c05-0.7:g}%{{stroke:{WIRE}}}{c05+0.7:g}%,{c05+10:g}%{{stroke:{a}}}"
+               f"{c05+11.4:g}%,100%{{stroke:{WIRE}}}}}")
+    for k in range(3):
+        p0 = c10 + k * 1.6
+        css.append(f".vb{k}{{animation:vb{k} {T}s linear infinite}}"
+                   f"@keyframes vb{k}{{0%,{p0-0.6:g}%{{stroke:{WIRE}}}{p0:g}%,{p0+1.1:g}%{{stroke:{a}}}"
+                   f"{p0+1.7:g}%,{c05-0.6:g}%{{stroke:{WIRE}}}{c05:g}%,86%{{stroke:{a}}}"
+                   f"87%,100%{{stroke:{WIRE}}}}}")
     s.append("\n".join(css) + f"</style>{ground(H)}")
 
     s.append(f'<text x="{L}" y="{TOP}" class="kick">VII · VISUALASSIST</text>')
     s.append(f'<text x="{R}" y="{TOP}" text-anchor="end" class="key">SWIFT · ARKIT · LIDAR</text>')
-    s.append(f'<text x="{L}" y="88" class="say" style="fill:{INK}">CAN A PHONE TELL YOU WHAT IS IN FRONT OF YOU?</text>')
+    # the inventory, demoted to the repo corner: it identifies the artifact
+    s.append(f'<text x="{R}" y="76" text-anchor="end" class="kick">7,177 LINES · 38 SWIFT FILES · 5 CI WORKFLOWS</text>')
+    s.append(f'<text x="{L}" y="100" class="say" style="fill:{INK}">CAN A PHONE TELL YOU WHAT IS IN FRONT OF YOU?</text>')
 
-    # ── the scene: phone, sweep, range rings, obstacles. One composed
-    # instrument — the sweep legitimately passes over everything in it.
+    # ── the scene: one composed instrument, so the walker may legitimately
+    # cross the ticks, the arcs and the beam (the applied channel's ruling).
     sc = []
-    # the phone, drawn as a phone: body, screen line, the sensor it sweeps
-    # from. The handset is INK — it is an object in the world like the
-    # obstacles, not an act of mine. Only the SENSOR keeps the accent, because
-    # it is the apex the sweep comes out of, and that is the act.
-    sc.append(f'<rect x="176" y="168" width="58" height="118" rx="9" fill="none" stroke="{INK}" stroke-width="2"/>')
-    sc.append(f'<path d="M196 178H214" stroke="{INK}" stroke-width="1.5" stroke-linecap="round"/>')
+    # the phone is an object in the world — INK; only the sensor is the act
+    sc.append(f'<rect x="176" y="213" width="58" height="118" rx="9" fill="none" stroke="{INK}" stroke-width="2"/>')
+    sc.append(f'<path d="M196 223H214" stroke="{INK}" stroke-width="1.5" stroke-linecap="round"/>')
     sc.append(f'<circle cx="{EX}" cy="{EY}" r="3.5" fill="{a}"/>')
-    # the audio out: two arcs at the phone's ear, flashing with each detection
-    sc.append(f'<path class="aud" d="M170 220A8 8 0 0 0 170 234" fill="none" '
+    # the field's edges — structure, WIRE, clear of the sensor dot
+    for sgn in (-1, 1):
+        sc.append(f'<path d="M{EX + 26*cos_:.1f} {EY + sgn*26*sin_:.1f}'
+                  f'L{EX + R20*cos_:.1f} {EY + sgn*R20*sin_:.1f}" '
+                  f'stroke="{WIRE}" stroke-width="1.2"/>')
+    # the three thresholds, at true proportion. Weight ranks the policy —
+    # the hard interrupt heaviest — and colour states whose act each one is:
+    # the two interrupting bands CLAY, the silent band PINE, the check.
+    for r, col, w in ((R05, a, 2.4), (R10, a, 1.8), (R20, PINE, 1.6)):
+        x, dy = EX + r * cos_, r * sin_
+        sc.append(f'<path d="M{x:.1f} {EY-dy:.1f}A{r:g} {r:g} 0 0 1 {x:.1f} {EY+dy:.1f}" '
+                  f'fill="none" stroke="{col}" stroke-width="{w}"/>')
+    # the beam: the datum, drifting inward at a constant rate — the sensor
+    # sampling, and this plate's CARRIER. The walker is the gesture and keeps
+    # its semantic pause at the stop band (it arrives, the interrupt fires, it
+    # halts); that pause left the plate frozen for 13% of the loop. A carrier
+    # is the right instrument for the gap because it is phase-invariant: 8u is
+    # one dash period, so the wrap is invisible and every frame reads alike.
+    sc.append(f'<path class="dtm" d="M246 {EY}H690" fill="none" stroke="{a}" '
+              f'stroke-width="1.3" stroke-dasharray="2 6"/>')
+    # dimension ticks where each threshold crosses the axis
+    for r in (R05, R10, R20):
+        sc.append(f'<rect x="{EX + r - 1.25:g}" y="{EY-7}" width="2.5" height="14" fill="{WIRE}"/>')
+    # the walker: the world approaching — INK, authored at the start
+    sc.append(f'<circle class="obs" cx="{X0:g}" cy="{EY}" r="5.5" fill="{INK}"/>')
+    # the outputs, AT the phone and labelled below it — round 22's speaker
+    # arc was unlabelled and near-invisible, and read as an artifact
+    sc.append(f'<path class="spk" d="M166 231A10 10 0 0 0 166 251" fill="none" '
               f'style="stroke:{WIRE}" stroke-width="2" stroke-linecap="round"/>')
-    sc.append(f'<path class="aud" d="M164 214A14 14 0 0 0 164 240" fill="none" '
+    sc.append(f'<path class="spk" d="M159 222A19 19 0 0 0 159 260" fill="none" '
               f'style="stroke:{WIRE}" stroke-width="2" stroke-linecap="round"/>')
-    # the sweep: a wedge rotating about the sensor, drawn the way an
-    # instrument drawing draws a field of view — its boundary, and its axis.
-    # The interior stays paper.
-    #
-    # TWO fills died here. First a radial gradient, which composited to
-    # 1.51:1 at its DENSEST stop (night #6c4d3b; day #e3b697 at 1.47) and
-    # 1.08:1 over most of its area — an element spent on ink that renders as
-    # nothing, while the full-accent edge carried the component all along.
-    # Then a radial hatch meant to redraw the falloff as solid geometry: its
-    # arithmetic was right (coverage w/(r*pitch), an exact 1/r decay) and its
-    # drawing was wrong. At this scale the eye counts rays instead of
-    # integrating tone, so thirteen of them read as a fan — a subject, and
-    # louder than the six discs the plate exists to show. It was built,
-    # rendered and rejected on sight. The idiom was also wrong: section
-    # hatching marks CUT SOLIDS, and a cone of air is bounded, not cut.
-    #
-    # So the falloff goes undrawn. It binds no claims row and no sentence of
-    # the description, and an element that failed invisible in one round and
-    # too loud in the next had no job. The depth reading is carried by the
-    # rings (the field), the points (what is found) and the flash (when).
-    #
-    # The axis is the read head made visible. The crossing times below are
-    # solved for the instant the sweep's ROTATION equals a point's bearing —
-    # which is the instant this centreline passes through that point — so
-    # each flash now coincides with visible contact, and causality is drawn
-    # rather than inferred. Drafting dash-dot, the only one on the plate;
-    # radial, so rotation cannot tilt it wrongly; 1.1 under the rim's 1.4, so
-    # the boundary outranks the datum. It ends ON the rim arc — the apex-to-
-    # arc distance along the axis — and starts clear of the sensor dot.
-    wr = 290
-    wy = wr * math.tan(math.radians(10.4))
-    axr = 2 * wr - math.sqrt(wr * wr - wy * wy)
-    sc.append(f'<g transform="translate({EX},{EY})"><g class="swp">'
-              f'<path d="M12 0H{axr:.1f}" fill="none" stroke="{a}" '
-              f'stroke-width="1.1" stroke-dasharray="10 4 2 4"/>'
-              f'<path d="M0 0L{wr} {-wy:.0f}A{wr} {wr} 0 0 1 {wr} {wy:.0f}Z" '
-              f'fill="none" stroke="{a}" stroke-width="1.4"/></g></g>')
-    # range rings, drifting outward — the depth field being read continuously.
-    # RULE, not WIRE: the grid the reading is plotted on sits under the things
-    # plotted on it, and WIRE put it level with the audio arcs, which are an
-    # output. Weight now ranks the whole vocabulary: rim 1.4, hatch 1.1, ring 1.0.
-    for rr in (210, 280):
-        y0 = rr * math.sin(math.radians(19))
-        x0 = rr * math.cos(math.radians(19))
-        sc.append(f'<path class="ring" d="M{EX+x0:.0f} {EY-y0:.0f}A{rr} {rr} 0 0 1 {EX+x0:.0f} {EY+y0:.0f}" '
-                  f'fill="none" stroke="{RULE}" stroke-width="1" stroke-dasharray="3 8"/>')
-    # the obstacles: what the sweep finds, blinking as it crosses them. INK at
-    # rest — the world is not my act, and sharing CLAY_G with the hatch that
-    # sweeps over them was the one arrangement that could eat the reading.
-    # No fill ATTRIBUTE: .pt{i} animates fill, and an attribute an animation
-    # overrides is exactly what check 15 fails on, so the rest tone lives in
-    # the rule and the keyframes start from it.
-    for i, (phi, rr) in enumerate(PTS):
-        px = EX + rr * math.cos(math.radians(phi))
-        py = EY + rr * math.sin(math.radians(phi))
-        sc.append(f'<circle class="pt{i}" cx="{px:.0f}" cy="{py:.0f}" r="4.5"/>')
+    for k, d in enumerate(("M168 289L156 295", "M170 301L157 307", "M168 313L156 319")):
+        sc.append(f'<path class="vb{k}" d="{d}" fill="none" style="stroke:{WIRE}" '
+                  f'stroke-width="2" stroke-linecap="round"/>')
     s.append('<g>' + "".join(sc) + '</g>')
+    # the dimensions, read off the axis — the numbers ARE the policy
+    for r, t in ((R05, "0.5 m"), (R10, "1.0 m"), (R20, "2.0 m")):
+        s.append(f'<text x="{EX + r + 8:g}" y="294" class="key">{t}</text>')
+    s.append(f'<text x="205" y="356" text-anchor="middle" class="kick">SPEECH + HAPTICS</text>')
 
-    # what the reading becomes
-    s.append(arrowed(L, 400, "fine", "LIDAR DEPTH", "SPATIAL AUDIO + HAPTICS + SPEECH"))
-    s.append(f'<text x="{L}" y="424" class="key">7,177 LINES · 38 SWIFT FILES · 5 CI WORKFLOWS</text>')
+    # ── the calibration card: one row per band, ruled, no box. The header
+    # carries the ruling that makes these three numbers a design decision
+    s.append(f'<path d="M{L} 396H{R}" stroke="{RULE}"/>')
+    s.append(f'<text x="{L}" y="422" class="kick">THE ALERT POLICY — THE SLIDERS DO NOT REACH IT</text>')
+    ROWS = [
+        ("0.5", "rn0", "STOP — CONTINUOUS HAPTIC, FULL STRENGTH", INK,
+         # Reported, not quoted. The utterance is "Stop! Obstacle ahead at
+         # <distance>" and MONO_CHARS carries no "!", so a colon-quote here
+         # renders a paraphrase in quotation form — the plate asserting an
+         # exact string it cannot actually set. The word Stop IS spoken
+         # verbatim; the rest is described. README quotes it in full, where
+         # the character set is the reader's, not ours.
+         # 33 chars. The row's right edge is the haptic-signature track at
+         # x=628, so this line is budgeted against that, not the type column:
+         # the 45-char first attempt cleared the column and sat on the bar.
+         ["and speaks Stop, then the distance"]),
+        ("1.0", "rn1", "CAUTION — A TRIPLE PULSE, SOFTER", INK,
+         ["and one spoken word: Caution."]),
+        ("2.0", "rn2", "SILENT — NO ALERT FIRES", PINE,
+         ["the zone turns yellow on screen —",
+          "the distance is yours if you press for it"]),
+    ]
+    for i, (num, cls, key, kcol, fines) in enumerate(ROWS):
+        y = 462 + i * 62
+        s.append(f'<text x="{L}" y="{y}" class="sub {cls}">{num}<tspan class="unit"> m</tspan></text>')
+        s.append(f'<text x="300" y="{y}" class="key" style="fill:{kcol}">{key}</text>')
+        for j, fn in enumerate(fines):
+            s.append(f'<text x="300" y="{y + 20 + j*20}" class="fine">{fn}</text>')
+        # the haptic signature, on a hairline track: one continuous bar, three
+        # transients, and — for the silent band — a pine FLATLINE: the absence
+        # drawn as evidence, in the check's colour
+        ty = y + 11
+        if i == 0:
+            s.append(f'<path d="M620 {ty}H716" stroke="{RULE}" stroke-width="1"/>')
+            s.append(f'<rect x="628" y="{ty-4.5}" width="80" height="9" rx="2" fill="{a}"/>')
+        elif i == 1:
+            s.append(f'<path d="M620 {ty}H716" stroke="{RULE}" stroke-width="1"/>')
+            for k in range(3):
+                s.append(f'<rect x="{628 + k*30}" y="{ty-4.5}" width="18" height="9" rx="2" fill="{a}"/>')
+        else:
+            s.append(f'<path d="M620 {ty}H716" stroke="{PINE}" stroke-width="1.4"/>')
+        if i < 2:
+            s.append(f'<path d="M{L} {y+34}H{R}" stroke="{RULE}"/>')
+    s.append(f'<path d="M{L} 642H{R}" stroke="{RULE}"/>')
+    # the source footer, path only — line numbers are digits no claims row
+    # carries, so the file is named and the range is not
+    s.append(f'<text x="{L}" y="664" class="fine" style="fill:{INK3}">source: VisualAssist/Services/LiDARService.swift · let constants</text>')
+
     # the honest close: the only system here without a link, and why
-    s.append(f'<text x="{L}" y="452" class="say" style="fill:{INK}">THE ONE SYSTEM HERE YOU CANNOT CLICK INTO</text>')
-    s.append(f'<text x="{L}" y="{H-28}" class="fine" style="fill:{INK3}">no live link — it needs an iPhone with a lidar sensor</text>')
+    s.append(f'<text x="{L}" y="696" class="say" style="fill:{INK}">THE ONE SYSTEM HERE YOU CANNOT CLICK INTO</text>')
+    s.append(f'<text x="{L}" y="720" class="fine" style="fill:{INK3}">no live link — it needs an iPhone with a lidar sensor</text>')
     return "".join(s) + "</svg>"
 
 
@@ -1688,11 +1733,20 @@ def plate_colophon() -> str:
     """
     H, CX = 312, 440
     s = [head(H, "Colophon", "Colophon: every number on this page is re-derived in CI from a "
-                             "pinned commit, except section one, which is attested and says so. "
+                             "pinned commit, except section one and the VisualAssist grant, "
+                             "which are attested and say so. "
                              "The page itself is animated SVG with no JavaScript and no server. "
                              "If a number here is wrong, it is wrong in public.",
               key="plate-7-colophon.svg", col=(118, 762), frame=(44, 161, 25),
               serif=True)]
+    # The device turns again. Cutting it read as "ambient travel means nothing
+    # at an arbitrary camo frame" — but that is the argument against a GESTURE,
+    # not a CARRIER. A slow orbit is identical in every frame, so there is no
+    # frame at which it misleads, and it is moving at whichever instant the
+    # reader is handed. It is also the only motion on the page's last plate,
+    # and mutations.mjs probe 11 anchors on these three literals: cutting them
+    # left gate.mjs check 13 unexercised, which is this repo's signature
+    # defect arriving through a design change.
     s.append(f""".ser{{font-family:'S',ui-serif,Georgia,'Times New Roman',serif;font-size:34px;fill:{INK}}}
 .dev{{animation:dev 31s linear infinite}}
 @keyframes dev{{from{{transform:rotate(0deg)}}to{{transform:rotate(360deg)}}}}
@@ -1782,7 +1836,11 @@ def _motif(name: str) -> str:
                 f'<path d="M338 102H402" stroke="{WIRE}" stroke-width="1.4" stroke-dasharray="5 4"/>'
                 f'<path d="M342 118H398" stroke="{WIRE}" stroke-width="1.4" stroke-dasharray="5 4"/>'
                 f'<rect x="348" y="138" width="44" height="3" fill="{CLAY_G}"/>'
-                f'<circle cx="416" cy="156" r="6" fill="none" stroke="{INK2}" stroke-width="1.4"/></g>')
+                # head AND shoulders: the bare circle read as a stray mark,
+                # not as the human below the gate — the desktop plate's
+                # figure, at monogram scale
+                f'<circle cx="416" cy="156" r="6" fill="none" stroke="{INK2}" stroke-width="1.4"/>'
+                f'<path d="M405 171C405 162 427 162 427 171" fill="none" stroke="{INK2}" stroke-width="1.4"/></g>')
     if name == "redact":
         # THE ONE PLACE THE PHONE WAS ACTUALLY WORSE OFF, and the reason the
         # ground above stopped being transparent. Every other token gains
@@ -1831,17 +1889,20 @@ def _motif(name: str) -> str:
                    f'L{390 + 26*math.sin(th):.1f} {104 - 26*math.cos(th):.1f}" '
                    f'stroke="{CLAY_G}" stroke-width="1.5"/></g>')
         return "".join(out)
-    if name == "sweep":
-        return (f'<g><circle cx="316" cy="116" r="3" fill="{CLAY_G}"/>'
-                f'<path d="M338 92A34 34 0 0 1 338 140" fill="none" stroke="{CLAY_G}" stroke-width="2" stroke-linecap="round"/>'
-                f'<path d="M352 78A54 54 0 0 1 352 154" fill="none" stroke="{CLAY_G}" stroke-width="2" stroke-linecap="round"/>'
-                # the two obstacles are INK, as they now are on the desktop
-                # plate: the sensor and the arcs are mine, what the sweep
-                # FINDS is the world. Drawn in the accent, a phone reader was
-                # told the obstacles were my act while a desktop reader was
-                # told they were not.
-                f'<circle cx="398" cy="104" r="4" fill="{INK}"/>'
-                f'<circle cx="408" cy="132" r="4" fill="{INK}"/></g>')
+    if name == "bands":
+        # the alert policy at monogram scale: three arcs at TRUE proportion
+        # (0.5 / 1.0 / 2.0 m on one scale — 19/38/76u), the two interrupting
+        # thresholds in the act's clay, the silent one in the check's pine,
+        # and the world approaching as one INK dot. Replaces the "sweep"
+        # motif, whose arcs were decorative radii tied to no number.
+        out = [f'<circle cx="308" cy="112" r="3" fill="{CLAY_G}"/>']
+        for r, col, w in ((19, CLAY_G, 2), (38, CLAY_G, 1.6), (76, PINE, 1.6)):
+            dy, dx = r * 0.5, r * 0.866         # ±30° about the axis
+            out.append(f'<path d="M{308+dx:.1f} {112-dy:.1f}A{r} {r} 0 0 1 '
+                       f'{308+dx:.1f} {112+dy:.1f}" fill="none" stroke="{col}" '
+                       f'stroke-width="{w}" stroke-linecap="round"/>')
+        out.append(f'<circle cx="400" cy="112" r="4" fill="{INK}"/>')
+        return '<g>' + "".join(out) + '</g>'
     if name == "stamp":
         return (f'<g transform="translate(80,84) rotate(-8)">'
                 f'<rect x="-52" y="-16" width="104" height="32" rx="5" fill="none" stroke="{INK3}" stroke-width="1.6"/>'
@@ -1872,7 +1933,19 @@ def plate_mobile(accent: str, kicker: str, hero: str, unit: str,
         f".t{{font-size:21px;fill:{INK2}}}"
         # the glide: a light running the accent rule — constant speed (a
         # runner, not a pendulum: the pendulum's turns measured as stalls),
-        # fading out at the far end and back in at the head
+        # fading out at the far end and back in at the head.
+        #
+        # RESTORED. It was cut on the argument that GitHub serves these
+        # through camo as <img>, so the phase a reader lands on is arbitrary
+        # and ambient motion buys nothing. That argument is right about a
+        # GESTURE — a one-shot burst most readers never see, whose mid-flight
+        # frames are where a frame can lie — and backwards about a CARRIER.
+        # A carrier is phase-INVARIANT: every frame of a texture drift says
+        # the same thing, so it has no lying frame and it is alive at
+        # whatever instant camo hands over. Deleting it kept the fragile
+        # class and threw away the robust one. See motion.mjs's v1/v2/v3
+        # history: v2 already tried legal stillness and the verdict was
+        # "very static feel".
         f".gl{{animation:gl {glide}s linear infinite}}"
         f"@keyframes gl{{0%{{transform:translateX(0);opacity:1}}86%{{transform:translateX({rw-46}px);opacity:1}}"
         f"90%{{opacity:0}}91%{{transform:translateX(0);opacity:0}}95%{{opacity:1}}100%{{transform:translateX(0);opacity:1}}}}"
@@ -1936,10 +2009,22 @@ MOBILE = {
  "m-6b-automl.svg": ("AGENTIC AUTOML", "CLAY_G", "44", "", "tools in the registry. The", "model holds its phase’s set.",
    "Agentic AutoML: dataset in, trained model out. Its registry holds 44 tool definitions, but the model only ever holds the set its phase needs.",
    "left", "dial", 12.9),
- "m-8-visualassist.svg": ("VISUALASSIST", "CLAY_G", "LiDAR", "", "Depth in, spatial audio out.", "Needs an iPhone’s sensor.",
-   "VisualAssist: LiDAR depth in, spatial audio out — an iPhone app for "
-   "low-vision users, in Swift. The one system here with no live link, "
-   "because it needs an iPhone with a lidar sensor.", "left", "sweep", 10.1),
+ # Round 23 re-hung this plate on the section's real numbers. "LiDAR" as the
+ # hero was a technology name where every other m-plate leads with a measured
+ # claim; the rewritten section is about three fixed distances, so the phone
+ # reader now gets the nearest threshold at claim size and the policy's two
+ # poles in the body lines. 24 characters each — the budget here is 27 (the
+ # phone column runs 30-412 and gate.mjs counts, not the em dashes; the old
+ # "Depth in, speech and haptics out." overflowed to 462 and was caught at
+ # every sampled timestep). No exclamation mark and no double quotes: the
+ # mono face's subset carries neither (charsets.py), and a paraphrase in the
+ # face the page owns beats the exact utterance in a platform fallback.
+ "m-8-visualassist.svg": ("VISUALASSIST", "CLAY_G", "0.5", " m", "Inside it the phone says", "Stop. At 2.0 m, silence.",
+   "VisualAssist: an iPhone app for low-vision users, in Swift. Inside 0.5 "
+   "metres the phone interrupts — a continuous haptic at full strength and "
+   "the spoken phrase Stop, obstacle ahead; at 2.0 metres it is deliberately "
+   "silent. No live link — it needs an iPhone with a lidar sensor.",
+   "left", "bands", 10.1),
  "m-7-colophon.svg": ("COLOPHON", "RULE", "SVG", "",
    "No JavaScript, no server,", "no external assets.",
    "Colophon: this page is SVG with no JavaScript, no server and no "

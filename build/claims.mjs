@@ -82,7 +82,16 @@ function bytes(repoKey, path) {
 //    live page fetches /wasm/fast_mnist.wasm, 46,960 bytes" is checkable by
 //    anyone with curl, and it SHOULD break if the deployment changes — that is
 //    the claim. Not cached: a stale cache would defeat the point.
-function live(url, header) {
+function live(url, header, digest) {
+  // ── WHY A ROW MAY NOW ASK FOR THE BODY, NOT A HEADER
+  //
+  // §III prints a sha256 and dares the reader to `curl … | shasum -a 256`. Until
+  // now the gate could not run that dare: it hashed the REPO blob and separately
+  // read the DEPLOYMENT's content-length, two different sources, so a
+  // same-length different-bytes deploy passed both halves green. That is not
+  // hypothetical — on 2026-08-08 the deployment rebuilt, content-length went red
+  // and the hash stayed green against the repo. `digest` closes it by hashing
+  // what the host actually serves, which is the only thing the sentence claims.
   // ── WHY THIS IS NOT A PLAIN curl ANY MORE
   //
   // This is the only claim on the page about a DEPLOYED artifact rather than a
@@ -107,7 +116,7 @@ function live(url, header) {
   // it already knows.
   const FRESH = !!process.env.CI || process.argv.includes('--fresh');
   const TTL = 12 * 60 * 60 * 1000;
-  const key = join(CACHE, 'live__' + `${url}__${header}`.replace(/[^\w.]/g, '_'));
+  const key = join(CACHE, 'live__' + `${url}__${header}__${digest || ''}`.replace(/[^\w.]/g, '_'));
 
   if (!FRESH && existsSync(key) && Date.now() - statSync(key).mtimeMs < TTL)
     return readFileSync(key, 'utf8').trim();
@@ -120,6 +129,13 @@ function live(url, header) {
                 : status === '404' ? 'the path is gone from the deployment'
                 : `the host answered ${status}`;
       throw new Error(`${url} returns ${status} — ${why}`);
+    }
+    if (digest) {
+      // The reader's own command, run verbatim. Piped in one shell so the body
+      // is never written to disk and cannot be confused with a repo blob.
+      return execFileSync('bash', ['-c',
+        `curl -fsS --max-time 60 ${JSON.stringify(url)} | shasum -a ${digest === 'sha256' ? 256 : 1} | cut -d' ' -f1`],
+        { encoding: 'utf8' }).trim();
     }
     const out = execFileSync('curl', ['-fsSI', '--max-time', '60', url], { encoding: 'utf8' });
     const m = out.match(new RegExp(`^${header}:\\s*(.+)$`, 'im'));
@@ -173,7 +189,7 @@ for (const c of spec.claims) {
     // A row names one path, several paths (a count that lives across files), or
     // asks for a byte length. $BLOB / $BLOBS / $BYTES, whichever it declared.
     const env = { ...process.env };
-    if (c.live) env.HEADER = live(c.live, c.header);
+    if (c.live) env.HEADER = live(c.live, c.header, c.digest);
     else if (c.bytes) env.BYTES = bytes(c.repo, c.path);
     else if (c.paths) env.BLOBS = c.paths.map(p => blob(c.repo, p)).join(' ');
     else env.BLOB = blob(c.repo, c.path);

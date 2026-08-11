@@ -50,7 +50,7 @@ jobs:
       # And the negative test. Four gates in this repo have shipped unable to
       # fail; two more probes went stale as the plates they anchored on were
       # rewritten; an audit found two further dead checks by hand. mutations.mjs
-      # breaks the plates ten ways and asserts each check notices. Its own
+      # breaks the plates thirteen ways and asserts each check notices. Its own
       # header says the negative test must "stop being something you remember to
       # do" — which it was, until this step.
       - name: Prove every check can still fail
