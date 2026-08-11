@@ -1834,9 +1834,35 @@ def _motif(name: str) -> str:
     if name == "copybook":
         return _digits_row(212, 24, 34, 15.5, 0.055)
     if name == "bench":
-        return (f'<path d="M300 84V148" stroke="{WIRE}" stroke-width="1"/>'
-                f'<rect x="300" y="92" width="18.5" height="12" fill="{INK2}"/>'
-                f'<rect x="300" y="118" width="118" height="12" fill="{CLAY_G}"/>')
+        # TWO groups, because this card carries two claims and used to draw
+        # only one. It showed the gzip pair — 66.2 against 422, the 6.4× — and
+        # captioned it "The JDK intrinsic beats it." The intrinsic had no bar
+        # at all, so the long accent bar was the only thing the sentence could
+        # attach to and the reader took away the opposite of the truth. That is
+        # the same defect as a wrong verb in the prose, drawn instead of typed.
+        #
+        # So the checksum group is drawn too, scaled WITHIN itself (4.26 against
+        # 14.06) and separated by a gap and a tick — the desktop plate's
+        # arrangement at monogram scale. Putting GB/s on the same axis as MB/s
+        # would have fixed the caption by telling a different lie.
+        #
+        # The intrinsic takes INK2, not PINE: teal means "safe / guarded /
+        # checked" everywhere else on this page, and the longest, most
+        # confident bar meaning "this one beats me" would have been the colour
+        # system arguing with the sentence.
+        # Four bars have to live inside the ORIGINAL two-bar envelope (bottom
+        # ~130). The card glides, so anything reaching y=150 lands on the body
+        # line at baseline 168 partway through the loop — gate.mjs caught that
+        # on the first attempt, at eight consecutive timesteps.
+        return (f'<path d="M300 84V133" stroke="{WIRE}" stroke-width="1"/>'
+                # gzip: one thread, then the bounded window
+                f'<rect x="300" y="86" width="18.5" height="8" fill="{INK2}"/>'
+                f'<rect x="300" y="96" width="118" height="8" fill="{CLAY_G}"/>'
+                # the group break — these are different units, not one axis
+                f'<path d="M300 109H310" stroke="{WIRE}" stroke-width="1"/>'
+                # checksum: mine, then the JDK's — the longest bar on the card
+                f'<rect x="300" y="113" width="36" height="8" fill="{CLAY_G}"/>'
+                f'<rect x="300" y="123" width="118" height="8" fill="{INK2}"/>')
     if name == "sieve":
         # compact and held above the body lines — the desktop channel owns
         # the full drawing; this is its monogram
