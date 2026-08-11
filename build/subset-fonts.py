@@ -50,7 +50,7 @@ SRC = pathlib.Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT
 def build(src: pathlib.Path, wght: int, chars: str, out: pathlib.Path,
           features: list[str] | None = None,
           metrics: tuple[int, int] | None = None,
-          opsz: int | None = None) -> None:
+          opsz: int | None = None, _repro: bool = True) -> None:
     font = TTFont(src)
     if "fvar" in font:
         # Pin EVERY axis, not just weight. Fraunces declares four — wght, opsz,
@@ -124,6 +124,15 @@ def build(src: pathlib.Path, wght: int, chars: str, out: pathlib.Path,
     ss = subset.Subsetter(opts)
     ss.populate(text=chars)
     ss.subset(font)
+    # fontTools stamps head.modified from the CLOCK on every save, because
+    # TTFont defaults recalcTimestamp=True. So two builds of identical inputs
+    # differ in bytes, the 32 plates that embed this subset as base64 differ
+    # with them, and "did that change anything?" stops being answerable by
+    # looking — which cost real time this month, spent hunting a fontTools
+    # version difference that did not exist. Set on the object about to be
+    # SAVED and not on the TTFont(src) above: instancing returns a new font and
+    # the flag would not have survived the assignment.
+    font.recalcTimestamp = False
     font.save(out)
     # ── DID THE GLYPHS ACTUALLY SURVIVE?
     #
@@ -165,8 +174,53 @@ def build(src: pathlib.Path, wght: int, chars: str, out: pathlib.Path,
             f"requested from {src.name}, and absent from the binary: the "
             f"source face has no glyph for them. They would render as a "
             f"platform fallback.")
-    print(f"{out.name}: {out.stat().st_size:,} bytes, {len(chars)} chars at "
-          f"wght {wght}, all present in cmap")
+    # ── AND IS THE BUILD ACTUALLY REPRODUCIBLE?
+    #
+    # A determinism flag with nothing asserting determinism is a claim with no
+    # gate behind it. TWO assertions, because the obvious one turned out not to
+    # work and was nearly shipped as though it did.
+    #
+    # The obvious one is second below: build the same inputs again and require
+    # byte identity. Falsified with the flag REMOVED, it passed — three times.
+    # A subset takes 0.3s and head.modified has one-second resolution, so both
+    # builds land in the same second and stamp the same clock. It is not a check
+    # of the timestamp at all; it is a check of everything else that could vary
+    # (set iteration under a different PYTHONHASHSEED, dict order, a temp path
+    # leaking into a table), which is worth having and is not what it looked
+    # like. Naming that here rather than letting the next reader assume.
+    #
+    # So the timestamp gets its own, and it is exact rather than probabilistic:
+    # the written file must carry the SOURCE face's modification date. With the
+    # flag that holds by construction; without it the value is the clock and
+    # differs on every run, so this fires every time instead of almost never.
+    # The four subsets committed today PREDATE this flag and carry a clock
+    # stamp, so the next real subset build will change their bytes once — and
+    # the 32 plates that embed them with it — before settling. That is stated
+    # here rather than absorbed by rebuilding them now, because a rebuild would
+    # churn 36 published files for a timestamp and hide the actual change the
+    # next contributor makes inside it. Deterministic from that build onward.
+    written_modified = TTFont(out)["head"].modified
+    source_modified = TTFont(src)["head"].modified
+    if written_modified != source_modified:
+        raise SystemExit(
+            f"{out.name}: head.modified is {written_modified}, but "
+            f"{src.name} says {source_modified} — the save stamped the clock. "
+            f"Set recalcTimestamp=False on the font being saved; otherwise "
+            f"every rebuild churns this subset and the 32 plates that embed it.")
+    if _repro:
+        twin = out.with_name(out.name + ".repro")
+        try:
+            build(src, wght, chars, twin, features, metrics, opsz, _repro=False)
+            same = twin.read_bytes() == out.read_bytes()
+        finally:
+            twin.unlink(missing_ok=True)
+        if not same:
+            raise SystemExit(
+                f"{out.name}: two builds of identical inputs produced different "
+                f"bytes, and the timestamp is not the reason — that is checked "
+                f"above. Something else in this pipeline varies between runs.")
+        print(f"{out.name}: {out.stat().st_size:,} bytes, {len(chars)} chars at "
+              f"wght {wght}, all present in cmap, byte-identical on rebuild")
 
 
 # ── 2026-08-08: the faces are the PORTFOLIO's now.
