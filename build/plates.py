@@ -471,6 +471,58 @@ def redact() -> str:
     return f'fill="{REDACT}" stroke="{WIRE}" stroke-width="1.4"'
 
 
+def redact_bar(x: float, y: float, w: float, h: float, rx: float = 2,
+               cls: str = "", extra: str = "") -> str:
+    """A withheld record: the mute bar, plus a HATCH that makes it an act.
+
+    The docstring above still stands on luminance — do not darken REDACT. This
+    is the other axis. Night REDACT is 1.29:1 on night paper, and a design
+    review measured the bars at APCA Lc 0.0, reading as six EMPTY outlined
+    boxes: "tenant A has no rows", which is a materially different claim from
+    "tenant A's rows were withheld by the database". A meaning inversion on the
+    plate's central evidence, present in every frame of the dark theme.
+
+    Luminance cannot fix it and the arithmetic says so. Night ground #43372f
+    has relative luminance 0.0414, so even PURE BLACK caps the ratio at
+    (0.0414+0.05)/0.05 = 1.83:1 — half a stop, nowhere near separation. Real
+    separation needs a fill LIGHTER than the ground, which flips removal into
+    highlight: the exact sign error the phone shipped once, recorded above.
+
+    So the fix adds STRUCTURE, not luminance. Hatch in WIRE — 5.44:1 on the
+    fill at night, 3.02:1 on day ink — clearly-read strokes over a bar whose
+    1.29:1 mute void is left exactly as authored. A hatched bar cannot read as
+    an empty box, and it does not shout.
+
+    45 degrees ASCENDING, deliberately: tenant B's returned rows carry
+    HORIZONTAL record-lines, and a hatch that rhymed with them would blur the
+    one opposition this plate exists to draw. 6u perpendicular pitch, round
+    caps, endpoints inset 1u so the strokes stop inside the bar and no clip
+    path is needed. Hairlines in the same <g> as the bar, so the collision
+    rules' same-group exemption covers them by construction.
+    """
+    PITCH = 6.0                       # perpendicular; horizontal period 6*sqrt2
+    period = PITCH * 2 ** 0.5
+    inset = 1.0
+    x_lo, x_hi = x + inset, x + w - inset
+    y_lo, y_hi = y + inset, y + h - inset
+    seg = []
+    x0 = x - h                        # first "/" whose top-right can enter the bar
+    while x0 <= x + w:
+        t1 = max(x_lo, x0 + inset)
+        t2 = min(x_hi, x0 + h - inset)
+        if t2 - t1 > 0.5:             # skip corner slivers that read as dirt
+            seg.append(f"M{t1:.1f} {y + h - (t1 - x0):.1f}L{t2:.1f} {y + h - (t2 - x0):.1f}")
+        x0 += period
+    hatch = (f'<path d="{"".join(seg)}" stroke="{WIRE}" stroke-width="1" '
+             f'stroke-linecap="round" fill="none"/>') if seg else ''
+    c = f' class="{cls}"' if cls else ''
+    # The re-strike animation rides the GROUP, not the rect: transform-box
+    # fill-box works on a <g>, so the wipe carries the hatch with the bar and
+    # t=0 stays the authored redacted frame.
+    return (f'<g{c}{extra}><rect x="{x:g}" y="{y:g}" width="{w:g}" height="{h:g}" '
+            f'rx="{rx:g}" {redact()}/>{hatch}</g>')
+
+
 # ────────────────────────────────────────────────────────────── PLATE 0
 def plate_thesis() -> str:
     """The title page and index. Room: a book's opening.
@@ -802,8 +854,25 @@ def plate_jetpack() -> str:
             f"animation:cyc{k} {LOOP}s linear infinite}}\n@keyframes cyc{k}{{"
             f"0%{{opacity:1;transform:translateY(0) scaleX(1)}}"
             f"{r:g}%{{opacity:1;transform:translateY({TRAVEL - SP*k}px) scaleX(1)}}"
+            # The drain COLLAPSES IN FULL VIEW, then cuts. It used to ramp
+            # opacity 1 -> 0 across 2% of the loop while scaleX collapsed, so a
+            # reader landing mid-ramp saw a half-faded, half-collapsed block —
+            # measured at APCA Lc 0.0 in dark, which reads as a HOLE punched in
+            # the bounded window, this plate's signature device, on roughly a
+            # third of landings. Camo serves these as <img>, so the phase a
+            # reader gets is arbitrary and a frame that reads as broken IS a
+            # defect.
+            #
+            # Clamping the fade floor cannot work here: the block must reach
+            # opacity 0 to re-enter at the head, so a floor would leave a ghost
+            # parked in the window. Making the transition instant achieves what
+            # the floor was for — the block is either fully present or absent,
+            # never a ghost — and the scaleX collapse still carries the drain,
+            # which is the part that means "this one left the queue".
+            f"{r+1.9:g}%{{opacity:1;transform:translateY({TRAVEL - SP*k}px) scaleX(.08)}}"
             f"{r+2:g}%{{opacity:0;transform:translateY({TRAVEL - SP*k}px) scaleX(.08)}}"
             f"{r+3.5:g}%{{opacity:0;transform:translateY({-SP*k}px) scaleX(1)}}"
+            f"{r+5.4:g}%{{opacity:0;transform:translateY({-SP*k}px) scaleX(1)}}"
             f"{r+5.5:g}%{{opacity:1;transform:translateY({-SP*k}px) scaleX(1)}}"
             f"100%{{opacity:1;transform:translateY(0) scaleX(1)}}}}")
     s.append("".join(cyc))
@@ -1131,7 +1200,7 @@ def plate_automl() -> str:
               "root filesystem, a non-root user, the dataset mounted read-only and 5 tmpfs "
               "mounts as the only writable surface. Behind it, a 29-table Postgres schema "
               "with pgvector. Public, GPL-3.0, written with Shree Chaturvedi.",
-              key="plate-6b-automl.svg", frame=(30, 78, 17))]
+              key="plate-6b-automl.svg", frame=(30, 64, 17))]
     # The carrier: a dim point walking the 44-mark shelf, one traverse per
     # loop. The dial this plate replaced carried a needle; a set diagram has
     # no needle, so the carrier is drawn from the diagram's own material —
@@ -1309,8 +1378,8 @@ def plate_cadence() -> str:
             s.append(f'<rect x="427" y="{y-10}" width="8" height="8" fill="none" stroke="{a}" stroke-width="1.4"/>')
         # A's row comes back REDACTED — there is nothing under the bar,
         # because the database never sent the row
-        s.append(f'<rect class="red" x="480" y="{y-12}" width="110" height="16" rx="2" {rbar} '
-                 f'style="animation-delay:{round(i*0.06,2)}s"/>')
+        s.append(redact_bar(480, y - 12, 110, 16, cls="red",
+                            extra=f' style="animation-delay:{round(i*0.06,2)}s"'))
         # B's row is the one that returns: record-lines inside, streaming
         s.append(f'<g><rect x="620" y="{y-12}" width="110" height="16" rx="2" fill="{ROW}" stroke="{a}"/>'
                  f'<path class="bfl" d="M626 {y-7}H724M626 {y-1}H724" stroke="{a}" '
@@ -1321,7 +1390,7 @@ def plate_cadence() -> str:
     s.append(f'<text x="166" y="406" class="fine">the guard is in the query</text>')
     s.append(f'<rect x="390" y="398" width="8" height="8" fill="none" stroke="{a}" stroke-width="1.4"/>')
     s.append(f'<text x="406" y="406" class="fine">checked first, then DELETE WHERE id</text>')
-    s.append(f'<rect x="{L}" y="426" width="24" height="10" {rbar}/>')
+    s.append(redact_bar(L, 426, 24, 10))
     s.append(f'<text x="182" y="435" class="fine">withheld by row-level security, not by the app</text>')
 
     # the footnotes ARE the finding — an audit that means it keeps its asterisks
@@ -1787,7 +1856,7 @@ def plate_colophon() -> str:
                              "which are attested and say so. "
                              "The page itself is animated SVG with no JavaScript and no server. "
                              "If a number here is wrong, it is wrong in public.",
-              key="plate-7-colophon.svg", col=(118, 762), frame=(46, 293, 25),
+              key="plate-7-colophon.svg", col=(118, 762), frame=(46, 170, 25),
               serif=True, bold=False, mono=False)]
     # The device turns again. Cutting it read as "ambient travel means nothing
     # at an arbitrary camo frame" — but that is the argument against a GESTURE,
@@ -1947,9 +2016,9 @@ def _motif(name: str) -> str:
         #
         # No numeric floor could have caught it: a contrast ratio is unsigned.
         # That is why the fix is opaque paper and not a different REDACT hex.
-        return (f'<rect x="300" y="84" width="110" height="12" rx="2" {redact()}/>'
-                f'<rect x="300" y="104" width="110" height="12" rx="2" {redact()}/>'
-                f'<rect x="300" y="124" width="110" height="12" rx="2" fill="{ROW}" stroke="{PINE}"/>')
+        return (redact_bar(300, 84, 110, 12)
+                + redact_bar(300, 104, 110, 12)
+                + f'<rect x="300" y="124" width="110" height="12" rx="2" fill="{ROW}" stroke="{PINE}"/>')
     if name == "dial":
         out = ['<g>']
         for j in range(7):

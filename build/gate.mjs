@@ -193,13 +193,13 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
     // 618/1000 — read from its hmtx — so every column and edge would have
     // mis-normalised by 2.6% against the old constant, silently and in the
     // direction that HIDES overflow.
-    const REF = 40 * (16 * 618 / 1000 + 1.6);   // = 459.52
+    const REF = 40 * (16 * 1958 / 2000 + 1.6);   // = 690.56, Newsreader's 'M'
     const probe = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     // styled EXPLICITLY, not via class="lbl": the mobile plates never define
     // .lbl, so the probe there rendered at letter-spacing 0, the metric came
     // out 0.857, and every mobile column width was inflated ~17% — a latent
     // gate bug that surfaced the first time a mobile line was centered.
-    probe.setAttribute('style', 'font-size:16px;letter-spacing:1.6px');
+    probe.setAttribute('style', "font-family:'T';font-size:16px;letter-spacing:1.6px");
     probe.setAttribute('x', '0'); probe.setAttribute('y', '0');
     probe.textContent = 'M'.repeat(40);
     svgEl.appendChild(probe);
@@ -793,13 +793,13 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
       // 5u further out on CI — and check 12 was failing a plate that check 5
       // had already passed. Two checks measuring the same edge with different
       // rulers is worse than either ruler being wrong.
-      const REF = 40 * (16 * 618 / 1000 + 1.6);   // = 459.52, see check 5
+      const REF = 40 * (16 * 1958 / 2000 + 1.6);   // = 690.56, see check 5
       const probe = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       // styled EXPLICITLY, not via class="lbl": the mobile plates never define
     // .lbl, so the probe there rendered at letter-spacing 0, the metric came
     // out 0.857, and every mobile column width was inflated ~17% — a latent
     // gate bug that surfaced the first time a mobile line was centered.
-    probe.setAttribute('style', 'font-size:16px;letter-spacing:1.6px');
+    probe.setAttribute('style', "font-family:'T';font-size:16px;letter-spacing:1.6px");
     probe.setAttribute('x', '0'); probe.setAttribute('y', '0');
       probe.textContent = 'M'.repeat(40);
       svg.appendChild(probe);
