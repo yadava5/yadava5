@@ -1926,22 +1926,52 @@ PLATES = {
 MW = 440
 
 
-def _digits_row(y: float, n: int, x0: float, pitch: float, sc: float,
-                start: int = 0) -> str:
-    """A copybook rule with real error labels sitting on it (from the same
-    pinned CSV the desktop field uses)."""
-    _e = json.loads((ROOT / "errors.json").read_text())
-    out = [f'<path d="M16 {y}H424" stroke="{RULE}" stroke-width="1"/>']
-    for i in range(start, start + n):
-        d = DIGITS[_e["true"][i]]
-        out.append(f'<g opacity="{op(0.72)}" {digit(d, x0 + (i - start) * pitch, y - 150 * sc, sc, centre=pitch - 2)}>'
-                   f'<path d="{d}" fill="none" stroke="{CLAY_G}" stroke-width="14" stroke-linecap="round"/></g>')
-    return "".join(out)
-
-
 def _motif(name: str) -> str:
     if name == "copybook":
-        return _digits_row(212, 24, 34, 15.5, 0.055)
+        # MOVED OUT OF THE BOTTOM BAND. It was one rule at y=212 carrying 24
+        # errors: 3.75u under the prose bbox and 12u off the canvas — neither
+        # the 24u bottom margin its eight siblings hold nor a bleed, and the
+        # in-between is what read as clipped.
+        #
+        # A bleed was not available. ground() draws this sheet's edge as an
+        # OBJECT — rect 0.5,0.5,439,223 in WIRE — so ink run to the boundary
+        # reads as ink hitting the paper's edge, not as a field continuing
+        # past a crop. The desktop copybook is not bled either: M96..H784 on
+        # an 880 canvas is full-COLUMN. And a 24u margin is arithmetically
+        # closed here, because line2's bbox already ends at y=200.
+        #
+        # So the copybook becomes what the other seven motifs are — its
+        # section's room as a monogram, in the zone the bench, the sieve and
+        # the dial occupy, and which on this card was empty. Envelope 82..138,
+        # inside the bench's warning that a motif reaching y=150 lands on the
+        # body line at baseline 168 partway through the loop.
+        #
+        # Three rules AND the margin line. The vertical clay is what makes a
+        # ruled sheet read as a copybook rather than as an underline; it is
+        # the desktop field's own signature and the one element the bottom
+        # strip never had.
+        _e = json.loads((ROOT / "errors.json").read_text())
+        sc, pitch = 0.065, 10.5
+        out = [f'<rect x="308" y="82" width="1.5" height="56" fill="{CLAY_G}"/>']
+        for r in range(3):
+            y = 92 + r * 20
+            out.append(f'<path d="M300 {y}H418" stroke="{RULE}" stroke-width="1"/>')
+            for c in range(10):
+                i = r * 10 + c
+                d = DIGITS[_e["true"][i]]
+                # The desktop field's ink logic at monogram scale: grey for
+                # merely wrong, clay for the ones the net was sure of. Eight
+                # of these thirty are sure, which is the pinned CSV's own
+                # 79-in-299 rate — the sample carries the field's information,
+                # not a decorative slice of it. Both strokes are heavier than
+                # a straight scale of the desktop's 13/22, because a 9.75u
+                # glyph still needs the 1u every hairline in this system
+                # holds; below that the browser composites with the paper.
+                ink_ = (f'stroke="{CLAY_G}" stroke-width="24"' if _e["conf"][i]
+                        else f'stroke="{INK2}" stroke-width="15"')
+                out.append(f'<g {digit(d, 314 + c * pitch, y - 150 * sc, sc, centre=pitch - 2)}>'
+                           f'<path d="{d}" fill="none" {ink_} stroke-linecap="round"/></g>')
+        return '<g>' + "".join(out) + '</g>'
     if name == "bench":
         # TWO groups, because this card carries two claims and used to draw
         # only one. It showed the gzip pair — 66.2 against 422, the 6.4× — and
@@ -2057,15 +2087,21 @@ def _motif(name: str) -> str:
 
 def plate_mobile(accent: str, kicker: str, hero: str, unit: str,
                  line1: str, line2: str, desc: str,
-                 layout: str = "left", motif: str = "", glide: float = 9.7) -> str:
+                 layout: str = "left", motif: str = "", glide: float = 9.7,
+                 frame: tuple[float, float, float] | None = None) -> str:
     h = 224
     mid = layout == "center"
     ax = 'text-anchor="middle" ' if mid else ''
     tx = 220 if mid else 34
     hx, ha = (220, 'text-anchor="middle" ') if mid else ((406, 'text-anchor="end" ') if layout == "ledger" else (34, ''))
     rx, rw = (130, 180) if mid else (34, MW - 68)
+    # This plate's DECLARED edges, same contract as head()'s: gate.mjs check 12
+    # measures the render and the two must agree. plate_mobile writes its own
+    # root rather than calling head(), which is the whole reason the mobile set
+    # went ten rounds without one — the attribute had nowhere to be written.
+    fr = f' data-frame="{frame[0]:g},{frame[1]:g},{frame[2]:g}"' if frame else ''
     parts = [
-        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {MW} {h}" width="{MW}" height="{h}" '
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {MW} {h}" width="{MW}" height="{h}"{fr} '
         f'role="img" aria-label="{desc}"><title>{kicker}</title><desc>{desc}</desc><style>'
         # both weights: .n is 600, and .u inherits it — see head()'s note on
         # why a synthesised bold is a per-platform rendering.
@@ -2181,6 +2217,42 @@ MOBILE = {
    "external assets.", "center", "", 7.9),
 }
 
+# ─────────────────────────────────── the phone canvas declares its edges too
+# (top, rightGap, bottomGap) in viewBox units on the 440x224 sheet, asserted
+# by gate.mjs check 12 within tolerance 4. Kept as a separate block rather than
+# an eleventh tuple field because that is what these are: nine decisions a
+# reviewer can read in one place, which a value buried at the end of a ten-item
+# tuple is not.
+#
+# Check 12 was guarded `if (!mobile)` from round 11 to round 21, so until now
+# there was nothing for these to be. It found a defect on its first run: every
+# card holds top 30 and bottom 24, and m-1-glyph held 12 — its copybook motif
+# sat below both prose baselines, 3.75u under line 2 and 12u off the sheet
+# edge, which is neither a margin nor a bleed. The motif moved into the zone
+# its siblings use and the card now holds 24 like the rest.
+#
+# rightGap is the one column that legitimately varies, and it varies for a
+# reason worth stating rather than averaging away:
+#   · 90.5 / 110.8 — the two CENTERED cards (thesis, colophon). Centred text
+#     leaves the right margin by construction; the gap is the layout, not slack.
+#   · 13         — applied's sieve reaches x=427, past the 412 text column. A
+#     graphic overhang into the margin, on purpose: the figure below the gate
+#     is the point of the card. Text is still held to 412 by check 5.
+#   · 16..34     — the left-layout cards, where a motif occupies the right.
+MFRAME = {
+ "m-0-thesis.svg":      (30, 90.5, 24),
+ "m-0b-work.svg":       (30, 34, 24),
+ "m-1-glyph.svg":       (30, 21.5, 24),
+ "m-2-jetpack.svg":     (30, 22, 24),
+ "m-4-applied.svg":     (30, 13, 24),
+ "m-5-refusal.svg":     (30, 30, 24),
+ "m-6b-automl.svg":     (30, 16, 24),
+ "m-7-colophon.svg":    (30, 110.8, 24),
+ "m-8-visualassist.svg": (30, 34, 24),
+}
+if set(MFRAME) != set(MOBILE):
+    raise SystemExit(f"MFRAME/MOBILE disagree: {set(MFRAME) ^ set(MOBILE)}")
+
 # ────────────────────────────────────────────────── the build-time gate
 # Cheap structural checks only. The REAL layout gate is build/gate.mjs.
 import re as _re, sys as _sys, xml.dom.minidom as _xml
@@ -2249,7 +2321,8 @@ for _theme in ("dark", "light"):
             _check_coverage(fn, path.read_text())
         print(f"{_theme:5s} {fn}: {path.stat().st_size:,} bytes")
     for _fn, (_k, _acc, _n, _u, _l1, _l2, _desc, _lay, _mo, _gl) in MOBILE.items():
-        _svg = plate_mobile(globals()[_acc], _k, _n, _u, _l1, _l2, _desc, _lay, _mo, _gl)
+        _svg = plate_mobile(globals()[_acc], _k, _n, _u, _l1, _l2, _desc, _lay, _mo, _gl,
+                            MFRAME[_fn])
         (_out / _fn).write_text(_svg)
         if _theme == "dark":
             _check_coverage(_fn, _svg)

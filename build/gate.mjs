@@ -777,70 +777,81 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
 
   for (const f of found) fails.push(`${file}: ${f}`);
 
-  // desktop plates only — the mobile set is a different canvas and a different
-  // column, so comparing their margins to the desktop set would be meaningless
-  if (!mobile) {
-    const g = await page.evaluate(() => {
-      const svg = document.querySelector('svg');
-      const H = svg.viewBox.baseVal.height, W = svg.viewBox.baseVal.width;
-      const els = [...svg.querySelectorAll('text,rect,circle,path')].filter(e => {
-        const b = e.getBBox();
-        return !(b.width >= W - 2 && b.height >= H - 2) && !(b.width <= 5 && b.height >= H - 2);
-      });
-      // Normalise TEXT width by the measured font metric, exactly as check 5
-      // does. Chromium on Linux advances ~4% wider for this embedded woff2, so
-      // a line that clears the column locally reports the document's right edge
-      // 5u further out on CI — and check 12 was failing a plate that check 5
-      // had already passed. Two checks measuring the same edge with different
-      // rulers is worse than either ruler being wrong.
-      const REF = 40 * (16 * 1958 / 2000 + 1.6);   // = 690.56, see check 5
-      const probe = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      // styled EXPLICITLY, not via class="lbl": the mobile plates never define
+  // EVERY plate, both canvases. This block was guarded `if (!mobile)` from
+  // round 11 (89c69e4) to round 21 — ten rounds — on the reasoning that "the
+  // mobile set is a different canvas and a different column, so comparing
+  // their margins to the desktop set would be meaningless". That was true of
+  // what this check USED to do: assert ONE set of edges across the whole
+  // document, where a 440-wide canvas genuinely has nothing to say. Round 20
+  // retired exactly that doctrine (see the re-authoring note below), and the
+  // guard's reason died with it — under per-plate declaration nothing is
+  // compared BETWEEN plates at all. Each is measured against its own frame,
+  // in its own viewBox units, on its own canvas, which a phone plate can do
+  // as well as a desktop one. The guard outlived its justification by a round
+  // and took 18 of the 36 published files with it: every mobile plate, in
+  // both themes, had no edge assertion of any kind, in the file whose whole
+  // subject is edges that are accidents. It found one on the first run —
+  // m-1-glyph held 12u of bottom margin where its eight siblings hold 24.
+  const g = await page.evaluate(() => {
+    const svg = document.querySelector('svg');
+    const H = svg.viewBox.baseVal.height, W = svg.viewBox.baseVal.width;
+    const els = [...svg.querySelectorAll('text,rect,circle,path')].filter(e => {
+      const b = e.getBBox();
+      return !(b.width >= W - 2 && b.height >= H - 2) && !(b.width <= 5 && b.height >= H - 2);
+    });
+    // Normalise TEXT width by the measured font metric, exactly as check 5
+    // does. Chromium on Linux advances ~4% wider for this embedded woff2, so
+    // a line that clears the column locally reports the document's right edge
+    // 5u further out on CI — and check 12 was failing a plate that check 5
+    // had already passed. Two checks measuring the same edge with different
+    // rulers is worse than either ruler being wrong.
+    const REF = 40 * (16 * 1958 / 2000 + 1.6);   // = 690.56, see check 5
+    const probe = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    // styled EXPLICITLY, not via class="lbl": the mobile plates never define
     // .lbl, so the probe there rendered at letter-spacing 0, the metric came
     // out 0.857, and every mobile column width was inflated ~17% — a latent
     // gate bug that surfaced the first time a mobile line was centered.
     probe.setAttribute('style', "font-family:'T';font-size:16px;letter-spacing:1.6px");
     probe.setAttribute('x', '0'); probe.setAttribute('y', '0');
-      probe.textContent = 'M'.repeat(40);
-      svg.appendChild(probe);
-      const metric = probe.getBoundingClientRect().width / REF || 1;
-      probe.remove();
-      let top = 1e9, right = -1, bottom = -1;
-      for (const e of els) {
-        const c = e.getBoundingClientRect();
-        if (!c.width && !c.height) continue;
-        const w = e.tagName === 'text' ? c.width / metric : c.width;
-        top = Math.min(top, c.y); right = Math.max(right, c.x + w);
-        bottom = Math.max(bottom, c.y + c.height);
-      }
-      return { top, rightGap: W - right, bottomGap: H - bottom };
-    });
-    // 12 — EVERY EDGE IS A DECLARATION. RE-AUTHORED, round 20, in the same
-    // change as the design it measures. This check used to assert first-ink /
-    // right-edge / bottom-margin EQUALITY across the whole document — which
-    // was the right instrument for round 18's finding (edges wandering by
-    // accident) and the wrong doctrine once the client rejected the sameness:
-    // a gate that fails any page whose sections differ is the frontispiece
-    // armature, mechanised. What survives is the original virtue with the
-    // uniformity removed: no edge may be an ACCIDENT. Each desktop plate now
-    // declares its frame (data-frame="top,rightGap,bottomGap", viewBox
-    // units), and the render must match the declaration within tolerance —
-    // so a margin is still a decision with a machine behind it, it is just no
-    // longer the same decision ten times. A plate with no declaration fails,
-    // with the measured values printed so authoring is one round trip.
-    // Tolerance 4: check 5's font-metric normalisation absorbs the Linux/mac
-    // advance-width skew, but ascent rounding still moves first ink ~1-2u.
-    const decl = (svg.match(/data-frame="([^"]+)"/) || [])[1];
-    const measured = [g.top, g.rightGap, g.bottomGap].map(v => Math.round(v * 10) / 10);
-    if (!decl) {
-      fails.push(`${file}: declares no data-frame — measured top/right/bottom = ${measured.join('/')}`);
-    } else {
-      const want = decl.split(',').map(Number);
-      const off = want.map((w, i) => Math.abs(w - measured[i]));
-      if (want.length !== 3 || off.some(d => !(d <= 4)))
-        fails.push(`${file}: data-frame says ${decl} but the render measures ${measured.join('/')} `
-                 + `— the declared edge and the drawn edge disagree`);
+    probe.textContent = 'M'.repeat(40);
+    svg.appendChild(probe);
+    const metric = probe.getBoundingClientRect().width / REF || 1;
+    probe.remove();
+    let top = 1e9, right = -1, bottom = -1;
+    for (const e of els) {
+      const c = e.getBoundingClientRect();
+      if (!c.width && !c.height) continue;
+      const w = e.tagName === 'text' ? c.width / metric : c.width;
+      top = Math.min(top, c.y); right = Math.max(right, c.x + w);
+      bottom = Math.max(bottom, c.y + c.height);
     }
+    return { top, rightGap: W - right, bottomGap: H - bottom };
+  });
+  // 12 — EVERY EDGE IS A DECLARATION. RE-AUTHORED, round 20, in the same
+  // change as the design it measures. This check used to assert first-ink /
+  // right-edge / bottom-margin EQUALITY across the whole document — which
+  // was the right instrument for round 18's finding (edges wandering by
+  // accident) and the wrong doctrine once the client rejected the sameness:
+  // a gate that fails any page whose sections differ is the frontispiece
+  // armature, mechanised. What survives is the original virtue with the
+  // uniformity removed: no edge may be an ACCIDENT. Each desktop plate now
+  // declares its frame (data-frame="top,rightGap,bottomGap", viewBox
+  // units), and the render must match the declaration within tolerance —
+  // so a margin is still a decision with a machine behind it, it is just no
+  // longer the same decision ten times. A plate with no declaration fails,
+  // with the measured values printed so authoring is one round trip.
+  // Tolerance 4: check 5's font-metric normalisation absorbs the Linux/mac
+  // advance-width skew, but ascent rounding still moves first ink ~1-2u.
+  const decl = (svg.match(/data-frame="([^"]+)"/) || [])[1];
+  const measured = [g.top, g.rightGap, g.bottomGap].map(v => Math.round(v * 10) / 10);
+  if (!decl) {
+    fails.push(`${file}: declares no data-frame — measured top/right/bottom = ${measured.join('/')}`);
+  } else {
+    const want = decl.split(',').map(Number);
+    const off = want.map((w, i) => Math.abs(w - measured[i]));
+    if (want.length !== 3 || off.some(d => !(d <= 4)))
+      fails.push(`${file}: data-frame says ${decl} but the render measures ${measured.join('/')} `
+               + `— the declared edge and the drawn edge disagree`);
   }
 
   // 9 — every number the description claims must be drawn on the plate.
@@ -903,7 +914,14 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
 //
 // Check 11 could not see any of it: it measures the animated timeline, and
 // every one of these plates is correct once it is allowed to move.
-for (const { dir, tag, file: base } of sheet(/^plate-.*\.svg$/)) {
+// Mobile included from round 21. Only one plate declares data-rest, so the
+// assertion this loop makes on the other seventeen files is the first line of
+// its body: reduced motion must actually STOP the animation. That was never
+// checked on the phone canvas, and round 21 is exactly when it started to
+// matter — every mobile plate now carries a gliding highlight on its accent
+// rule, so before this change the mobile set had a carrier and no test that a
+// reader who asked for stillness got it.
+for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
   const file = tag + base;
   await still.setContent(`<body style="margin:0">${readFileSync(join(dir, base), 'utf8')}</body>`);
   const bad = await still.evaluate(async () => {

@@ -187,6 +187,29 @@ const MUTATIONS = [
         + `<rect class="mutsweep" x="150" y="${Number(m[1]) - 8}" width="360" height="2" `
         + 'fill="#ffffff" style="animation:mutsweep 4s linear infinite"/></svg>');
     }],
+  // ── The mobile canvas, for the first time.
+  //
+  // Check 12 was guarded `if (!mobile)` for three rounds, so 18 of the 36
+  // published files had no edge assertion at all. Round 21 removed the guard.
+  // These two probes exist because a new coverage nobody has watched fail is
+  // the very defect that guard turned out to be — and this file's own history
+  // is four gates that were trusted before they were falsified.
+  //
+  // Both expectations are keyed to an `m-` filename ON PURPOSE. Every other
+  // probe here mutates a desktop plate, so an expectation matching the bare
+  // phrase would be satisfied by a desktop plate that is already failing check
+  // 12 and would report "caught" without the mutation contributing anything —
+  // the stale-probe shape documented above, which this file has shipped three
+  // times.
+  ['a mobile plate stops declaring its frame', /\bm-[\w-]+\.svg: declares no data-frame/,
+    (s) => s.replace(/ data-frame="[^"]*"/, ''), /^m-.*\.svg$/],
+  // The other direction: a declaration that survives but stops being true.
+  // +40 rather than +5 because tolerance is 4 and the point is to prove the
+  // comparison happens at all, not to probe where its edge sits.
+  ['a mobile frame declares an edge it does not draw',
+    /\bm-[\w-]+\.svg: data-frame says [^\n]*the declared edge and the drawn edge disagree/,
+    (s) => s.replace(/(data-frame="[\d.]+,[\d.]+,)([\d.]+)"/,
+      (_m, head, bottom) => `${head}${Number(bottom) + 40}"`), /^m-.*\.svg$/],
 ];
 
 const gate = (dir) => {
@@ -199,11 +222,17 @@ const gate = (dir) => {
 
 console.log('baseline:', gate(ASSETS) ? 'FAILS (fix the plates first)' : 'passes');
 let dead = 0;
-for (const [name, expect, breakIt] of MUTATIONS) {
+for (const [name, expect, breakIt, only] of MUTATIONS) {
   const dir = mkdtempSync(join(tmpdir(), 'mut-'));
   cpSync(ASSETS, dir, { recursive: true });
   let touched = false;
-  for (const f of readdirSync(dir).filter(x => /^plate-.*\.svg$/.test(x))) {
+  // Scope defaults to the desktop set: every probe above this line was written
+  // against a desktop plate, so widening the default would silently re-point
+  // them. A probe that needs the mobile canvas asks for it by name. Sorted
+  // because readdirSync order is not stable across platforms and "the first
+  // file the mutation matches" is otherwise a different file on CI than here —
+  // which would make a probe's target, and so its failure text, unreproducible.
+  for (const f of readdirSync(dir).sort().filter(x => (only || /^plate-.*\.svg$/).test(x))) {
     const before = readFileSync(join(dir, f), 'utf8');
     const after = breakIt(before);
     if (after !== before) { writeFileSync(join(dir, f), after); touched = true; break; }
@@ -228,9 +257,9 @@ for (const [name, expect, breakIt] of MUTATIONS) {
 //
 // Everything above mutates a PLATE and invokes gate.mjs. That was the WHOLE
 // negative test, which means claims.mjs — the gate that leaves the repository
-// and re-derives 56 numbers from pinned commits — had no probe at all, and the
-// colophon's "fails if a check sleeps through it" was a sentence about one of
-// two gates. A gate nobody has ever watched fail is this repo's signature
+// and re-derives every drawn number from pinned commits — had no probe at all,
+// and the colophon's "fails if a check sleeps through it" was a sentence about
+// one of two gates. A gate nobody has ever watched fail is this repo's signature
 // defect; it has shipped four of them, and the fix has never been to trust the
 // newest one harder.
 //
