@@ -125,7 +125,48 @@ def build(src: pathlib.Path, wght: int, chars: str, out: pathlib.Path,
     ss.populate(text=chars)
     ss.subset(font)
     font.save(out)
-    print(f"{out.name}: {out.stat().st_size:,} bytes, {len(chars)} chars at wght {wght}")
+    # ── DID THE GLYPHS ACTUALLY SURVIVE?
+    #
+    # Nothing asked this until 2026-08-11. plates.py has a check named for
+    # charset coverage and it compares the characters a plate DRAWS against the
+    # declarations in charsets.py — two Python constants agreeing with each
+    # other. It never opens a font. So the one failure that matters here — a
+    # character declared, requested, and absent from the binary because the
+    # SOURCE face has no such glyph — was invisible to every gate in the
+    # repository, and would reach a reader as a silent fallback: one letter of
+    # a hero numeral set in Georgia, measured by the gate in Georgia, and
+    # passing.
+    #
+    # Re-opened from disk rather than asserted against `font` in memory, so it
+    # verifies what LANDED — the woff2 round-trip included — instead of what
+    # was asked for. An in-memory check would have agreed with the request by
+    # construction, which is the shape of the check it replaces.
+    #
+    # SCOPE, stated rather than implied: this file is not run by CI — plates.py
+    # is deliberately stdlib-only so the workflow needs no pip step, and
+    # fontTools lives here. So this fires when a subset is BUILT, not on every
+    # push. That is the right place and not a compromise: the defect it catches
+    # can only be introduced by building a subset, which is when it runs. It
+    # would not catch a committed woff2 corrupted by hand, and nothing here
+    # claims otherwise.
+    #
+    # Falsified before being trusted, the way this repository requires: built
+    # with the real charset (clean, 41/41) and then with one CJK character
+    # appended, which raised. Both halves run, because a probe that fails for a
+    # broken harness proves nothing.
+    written = TTFont(out)
+    have = {chr(c) for t in written["cmap"].tables for c in t.cmap}
+    written.close()
+    missing = sorted(set(chars) - have)
+    if missing:
+        raise SystemExit(
+            f"{out.name}: {len(missing)} declared character(s) are NOT in the "
+            f"built subset — {''.join(missing)!r}. Declared in charsets.py, "
+            f"requested from {src.name}, and absent from the binary: the "
+            f"source face has no glyph for them. They would render as a "
+            f"platform fallback.")
+    print(f"{out.name}: {out.stat().st_size:,} bytes, {len(chars)} chars at "
+          f"wght {wght}, all present in cmap")
 
 
 # ── 2026-08-08: the faces are the PORTFOLIO's now.
