@@ -12,38 +12,38 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#1A2224}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#1A2224;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k706{to{stroke-dashoffset:-346}}
-.k706{animation:k706 2100ms linear infinite}
-@keyframes k707{to{stroke-dashoffset:-318}}
-.k707{animation:k707 2100ms linear infinite}
-@keyframes k708{to{stroke-dashoffset:-296}}
-.k708{animation:k708 2100ms linear infinite}
-@keyframes k709{to{stroke-dashoffset:-261}}
-.k709{animation:k709 2450ms linear infinite}
-@keyframes k710{to{stroke-dashoffset:-233}}
-.k710{animation:k710 2450ms linear infinite}
-@keyframes k711{to{stroke-dashoffset:-211}}
-.k711{animation:k711 2450ms linear infinite}
-@keyframes k712{to{stroke-dashoffset:-201}}
-.k712{animation:k712 2750ms linear infinite}
-@keyframes k713{to{stroke-dashoffset:-173}}
-.k713{animation:k713 2750ms linear infinite}
-@keyframes k714{to{stroke-dashoffset:-151}}
-.k714{animation:k714 2750ms linear infinite}
-@keyframes k715{to{stroke-dashoffset:-231}}
-.k715{animation:k715 2750ms linear infinite}
-@keyframes k716{to{stroke-dashoffset:-203}}
-.k716{animation:k716 2750ms linear infinite}
-@keyframes k717{to{stroke-dashoffset:-181}}
-.k717{animation:k717 2750ms linear infinite}
-@keyframes k718{to{stroke-dashoffset:-272}}
-.k718{animation:k718 2750ms linear infinite}
-@keyframes k719{to{stroke-dashoffset:-244}}
-.k719{animation:k719 2750ms linear infinite}
-@keyframes k720{to{stroke-dashoffset:-222}}
-.k720{animation:k720 2750ms linear infinite}
+@keyframes k715{to{stroke-dashoffset:-346}}
+.k715{animation:k715 2100ms linear infinite}
+@keyframes k716{to{stroke-dashoffset:-318}}
+.k716{animation:k716 2100ms linear infinite}
+@keyframes k717{to{stroke-dashoffset:-296}}
+.k717{animation:k717 2100ms linear infinite}
+@keyframes k718{to{stroke-dashoffset:-261}}
+.k718{animation:k718 2450ms linear infinite}
+@keyframes k719{to{stroke-dashoffset:-233}}
+.k719{animation:k719 2450ms linear infinite}
+@keyframes k720{to{stroke-dashoffset:-211}}
+.k720{animation:k720 2450ms linear infinite}
+@keyframes k721{to{stroke-dashoffset:-201}}
+.k721{animation:k721 2750ms linear infinite}
+@keyframes k722{to{stroke-dashoffset:-173}}
+.k722{animation:k722 2750ms linear infinite}
+@keyframes k723{to{stroke-dashoffset:-151}}
+.k723{animation:k723 2750ms linear infinite}
+@keyframes k724{to{stroke-dashoffset:-231}}
+.k724{animation:k724 2750ms linear infinite}
+@keyframes k725{to{stroke-dashoffset:-203}}
+.k725{animation:k725 2750ms linear infinite}
+@keyframes k726{to{stroke-dashoffset:-181}}
+.k726{animation:k726 2750ms linear infinite}
+@keyframes k727{to{stroke-dashoffset:-272}}
+.k727{animation:k727 2750ms linear infinite}
+@keyframes k728{to{stroke-dashoffset:-244}}
+.k728{animation:k728 2750ms linear infinite}
+@keyframes k729{to{stroke-dashoffset:-222}}
+.k729{animation:k729 2750ms linear infinite}
 </style>
-<g><path class="bus" stroke="#1F6D5C" d="M40,0 V490"/><path class="cm k706" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-136" d="M40,2.5 V487.5"/><path class="cm k707" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="-108" d="M40,2.5 V487.5"/><path class="cm k708" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="-86" d="M40,2.5 V487.5"/></g><g><path class="bus" stroke="#9A3412" d="M54,0 V490"/><path class="cm k709" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="-51" d="M54,2.5 V487.5"/><path class="cm k710" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="-23" d="M54,2.5 V487.5"/><path class="cm k711" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="-1" d="M54,2.5 V487.5"/></g><g><path class="bus" stroke="#5F6E73" d="M68,0 V490"/><path class="cm k712" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="9" d="M68,2.5 V487.5"/><path class="cm k713" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="37" d="M68,2.5 V487.5"/><path class="cm k714" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="59" d="M68,2.5 V487.5"/></g><g><path class="bus" stroke="#5F6E73" d="M68,120 H92.5"/><path class="cm k715" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-21" d="M72,120 H88"/><path class="cm k716" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="7" d="M72,120 H88"/><path class="cm k717" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="29" d="M72,120 H88"/></g><g transform="translate(92,96) scale(1.0000)"><rect x="0.75" y="0.75" width="46.5" height="46.5" rx="12" fill="#0A0A0B" stroke="#6E7A80" stroke-width="1"/>
+<g><path class="bus" stroke="#1F6D5C" d="M40,0 V490"/><path class="cm k715" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-136" d="M40,2.5 V487.5"/><path class="cm k716" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="-108" d="M40,2.5 V487.5"/><path class="cm k717" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="-86" d="M40,2.5 V487.5"/></g><g><path class="bus" stroke="#9A3412" d="M54,0 V490"/><path class="cm k718" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="-51" d="M54,2.5 V487.5"/><path class="cm k719" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="-23" d="M54,2.5 V487.5"/><path class="cm k720" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="-1" d="M54,2.5 V487.5"/></g><g><path class="bus" stroke="#5F6E73" d="M68,0 V490"/><path class="cm k721" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="9" d="M68,2.5 V487.5"/><path class="cm k722" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="37" d="M68,2.5 V487.5"/><path class="cm k723" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="59" d="M68,2.5 V487.5"/></g><g><path class="bus" stroke="#5F6E73" d="M68,120 H92.5"/><path class="cm k724" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-21" d="M72,120 H88"/><path class="cm k725" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="7" d="M72,120 H88"/><path class="cm k726" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="29" d="M72,120 H88"/></g><g transform="translate(92,96) scale(1.0000)"><rect x="0.75" y="0.75" width="46.5" height="46.5" rx="12" fill="#0A0A0B" stroke="#6E7A80" stroke-width="1"/>
 <path d="M24,12.5 A11.5,11.5 0 0 1 34.3,29.2 M31.5,33.8 A11.5,11.5 0 0 1 16.5,33.8"
   fill="none" stroke="#A78BFA" stroke-width="2.2" stroke-linecap="round"/>
 <path d="M13.7,29.2 A11.5,11.5 0 0 1 24,12.5" fill="none" stroke="#A78BFA"
@@ -51,4 +51,4 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#1A2224}
 <path d="M34.3,25.6 L34.3,29.6 L30.6,28.4" fill="#A78BFA"/>
 <circle cx="24" cy="12.5" r="3" fill="#0A0A0B" stroke="#A78BFA" stroke-width="2.2"/>
 <circle cx="15.1" cy="31.5" r="3" fill="#0A0A0B" stroke="#A78BFA" stroke-width="2.2"/>
-<circle cx="32.9" cy="31.5" r="3" fill="#A78BFA"/></g><text x="92" y="54" class="d" font-size="24" letter-spacing="0.5">IV — AUTOML</text><text x="92" y="76" class="dim" font-size="13">a LangGraph agent, dealt its tools phase by phase.</text><text x="172" y="140" class="d" font-size="44">44</text><text x="172" y="172" class="dim" font-size="12">defined across the dispatcher;</text><text x="172" y="189" class="dim" font-size="12">no phase’s hand holds them all.</text><g><path class="bus" stroke="#5F6E73" d="M116,144 V236 H128"/><path class="cm k718" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-62" d="M116,148 V236 H124"/><path class="cm k719" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="-34" d="M116,148 V236 H124"/><path class="cm k720" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="-12" d="M116,148 V236 H124"/></g><text x="128" y="206" class="ts dim" font-size="10" letter-spacing="1.1">THE REGISTRY · 44 TOOLS DEFINED</text><rect x="128" y="214" width="276" height="44" rx="4" fill="none" stroke="#5F6E73" stroke-width="1.3"/><path fill="none" stroke="#5F6E73" stroke-width="2" d="M140.0,222 V242 M145.9,222 V242 M151.7,222 V242 M157.6,222 V242 M163.4,222 V242 M169.3,222 V242 M175.2,222 V242 M181.0,222 V242 M186.9,222 V242 M192.7,222 V242 M198.6,222 V242 M204.5,222 V242 M210.3,222 V242 M216.2,222 V242 M222.0,222 V242 M227.9,222 V242 M233.8,222 V242 M239.6,222 V242 M245.5,222 V242 M251.3,222 V242 M257.2,222 V242 M263.1,222 V242 M268.9,222 V242 M274.8,222 V242 M280.7,222 V242 M286.5,222 V242 M292.4,222 V242 M298.2,222 V242 M304.1,222 V242 M310.0,222 V242 M315.8,222 V242 M321.7,222 V242 M327.5,222 V242 M333.4,222 V242 M339.3,222 V242 M345.1,222 V242 M351.0,222 V242 M356.8,222 V242 M362.7,222 V242 M368.6,222 V242 M374.4,222 V242 M380.3,222 V242 M386.1,222 V242 M392.0,222 V242"/><path fill="none" stroke="#5F6E73" stroke-width="1.4" d="M152,258 V294 M192,258 V294 M232,258 V294 M272,258 V294 M312,258 V294 M352,258 V294 M392,258 V294"/><circle cx="152" cy="300" r="5" fill="none" stroke="#5F6E73" stroke-width="2"/><circle cx="192" cy="300" r="5" fill="none" stroke="#5F6E73" stroke-width="2"/><circle cx="232" cy="300" r="5" fill="none" stroke="#5F6E73" stroke-width="2"/><circle cx="272" cy="300" r="5" fill="none" stroke="#5F6E73" stroke-width="2"/><circle cx="312" cy="300" r="5" fill="none" stroke="#5F6E73" stroke-width="2"/><circle cx="352" cy="300" r="5" fill="none" stroke="#5F6E73" stroke-width="2"/><circle cx="392" cy="300" r="5" fill="none" stroke="#5F6E73" stroke-width="2"/><text x="92" y="334" class="ts dim" font-size="10" letter-spacing="1.1">SEVEN TOOL SETS — NO PHASE IS HANDED ALL 44</text><rect x="92" y="376" width="4" height="16" fill="#5F6E73"/><text x="106" y="389" class="mid" font-size="13">the sandbox guards against accidents,</text><text x="106" y="408" class="mid" font-size="13">not adversaries.</text><text x="106" y="428" class="dim" font-size="12">the network is an env var — the beta template</text><text x="106" y="445" class="dim" font-size="12">renders it bridge; no cap-drop, no pids-limit,</text><text x="106" y="462" class="dim" font-size="12">no seccomp.</text></svg>
+<circle cx="32.9" cy="31.5" r="3" fill="#A78BFA"/></g><text x="92" y="54" class="d" font-size="24" letter-spacing="0.5">IV — AUTOML</text><text x="92" y="76" class="dim" font-size="13">a LangGraph agent, dealt its tools phase by phase.</text><text x="172" y="140" class="d" font-size="44">44</text><text x="172" y="172" class="dim" font-size="12">defined across the dispatcher;</text><text x="172" y="189" class="dim" font-size="12">no phase’s hand holds them all.</text><g><path class="bus" stroke="#5F6E73" d="M116,144 V236 H128"/><path class="cm k727" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-62" d="M116,148 V236 H124"/><path class="cm k728" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="-34" d="M116,148 V236 H124"/><path class="cm k729" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="-12" d="M116,148 V236 H124"/></g><text x="128" y="206" class="ts dim" font-size="10" letter-spacing="1.1">THE REGISTRY · 44 TOOLS DEFINED</text><rect x="128" y="214" width="276" height="44" rx="4" fill="none" stroke="#5F6E73" stroke-width="1.3"/><path fill="none" stroke="#5F6E73" stroke-width="2" d="M140.0,222 V242 M145.9,222 V242 M151.7,222 V242 M157.6,222 V242 M163.4,222 V242 M169.3,222 V242 M175.2,222 V242 M181.0,222 V242 M186.9,222 V242 M192.7,222 V242 M198.6,222 V242 M204.5,222 V242 M210.3,222 V242 M216.2,222 V242 M222.0,222 V242 M227.9,222 V242 M233.8,222 V242 M239.6,222 V242 M245.5,222 V242 M251.3,222 V242 M257.2,222 V242 M263.1,222 V242 M268.9,222 V242 M274.8,222 V242 M280.7,222 V242 M286.5,222 V242 M292.4,222 V242 M298.2,222 V242 M304.1,222 V242 M310.0,222 V242 M315.8,222 V242 M321.7,222 V242 M327.5,222 V242 M333.4,222 V242 M339.3,222 V242 M345.1,222 V242 M351.0,222 V242 M356.8,222 V242 M362.7,222 V242 M368.6,222 V242 M374.4,222 V242 M380.3,222 V242 M386.1,222 V242 M392.0,222 V242"/><path fill="none" stroke="#5F6E73" stroke-width="1.4" d="M152,258 V294 M192,258 V294 M232,258 V294 M272,258 V294 M312,258 V294 M352,258 V294 M392,258 V294"/><circle cx="152" cy="300" r="5" fill="none" stroke="#5F6E73" stroke-width="2"/><circle cx="192" cy="300" r="5" fill="none" stroke="#5F6E73" stroke-width="2"/><circle cx="232" cy="300" r="5" fill="none" stroke="#5F6E73" stroke-width="2"/><circle cx="272" cy="300" r="5" fill="none" stroke="#5F6E73" stroke-width="2"/><circle cx="312" cy="300" r="5" fill="none" stroke="#5F6E73" stroke-width="2"/><circle cx="352" cy="300" r="5" fill="none" stroke="#5F6E73" stroke-width="2"/><circle cx="392" cy="300" r="5" fill="none" stroke="#5F6E73" stroke-width="2"/><text x="92" y="334" class="ts dim" font-size="10" letter-spacing="1.1">SEVEN TOOL SETS — NO PHASE IS HANDED ALL 44</text><rect x="92" y="376" width="4" height="16" fill="#5F6E73"/><text x="106" y="389" class="mid" font-size="13">the sandbox guards against accidents,</text><text x="106" y="408" class="mid" font-size="13">not adversaries.</text><text x="106" y="428" class="dim" font-size="12">the network is an env var — the beta template</text><text x="106" y="445" class="dim" font-size="12">renders it bridge; no cap-drop, no pids-limit,</text><text x="106" y="462" class="dim" font-size="12">no seccomp.</text></svg>

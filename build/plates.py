@@ -1623,6 +1623,33 @@ def m_visualassist() -> str:
     ) + css_close() + body + "</svg>"
 
 
+# ── the return, phone cut. At 440 the chip row WRAPS — the chips are
+# fixed-px components and keep their size, so the four drop columns the
+# desktop return receives do not exist at any predictable x. The board does
+# not pretend otherwise: the lanes RE-ENTER at pads (the colophon's edge
+# vocabulary, inverted — a pad is where the board meets what is off-board),
+# at MBUS_X, where the hero above the row handed them off.
+def m_link_return() -> str:
+    body = (
+        "".join(f'<rect x="{x - 5}" y="0" width="10" height="22" fill="{T[k]}"/>'
+                for k, x in MBUS_X.items())
+        + bus("verd", "M40,22 V72", C=30, cd="M40,24.5 V69.5")
+        + bus("rust", "M54,22 V72", C=150, cd="M54,24.5 V69.5")
+        + bus("zinc", "M68,22 V72", C=100, cd="M68,24.5 V69.5")
+        + lbl(404, 46, "THE EVIDENCE · SECTIONS II — VII", size=10.5, anchor="end")
+    )
+    return head(
+        72,
+        "the link ports rejoin the page bus — phone cut",
+        "The link ports hand back to the page bus, phone cut: below the "
+        "wrapped row of ports the three lanes re-enter the board at their "
+        "pads and continue into the evidence, sections two to seven.",
+        key="m-link-return.svg",
+        col=(88, 412), frame=(0, 36, 0), w=440,
+        faces="6",
+    ) + css_close() + body + "</svg>"
+
+
 # ── declared frames (top, rightGap, bottomGap), baked from gate.mjs
 # measurement on this machine; tolerance 4 absorbs the CI ascent skew.
 HERO_FRAME = (30, 37.7, 0)
@@ -1677,6 +1704,7 @@ MOBILE = {
     "m-5-cadence.svg": m_cadence,
     "m-6-applied.svg": m_applied,
     "m-7-visualassist.svg": m_visualassist,
+    "m-link-return.svg": m_link_return,
 }
 
 _re = re

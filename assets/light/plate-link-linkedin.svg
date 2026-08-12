@@ -10,17 +10,17 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#E4E9E9}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#1A2224;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k421{to{stroke-dashoffset:-376}}
-.k421{animation:k421 2450ms linear infinite}
-@keyframes k422{to{stroke-dashoffset:-348}}
-.k422{animation:k422 2450ms linear infinite}
-@keyframes k423{to{stroke-dashoffset:-326}}
-.k423{animation:k423 2450ms linear infinite}
-@keyframes k424{to{stroke-dashoffset:-271}}
-.k424{animation:k424 2450ms linear infinite}
-@keyframes k425{to{stroke-dashoffset:-243}}
-.k425{animation:k425 2450ms linear infinite}
-@keyframes k426{to{stroke-dashoffset:-221}}
-.k426{animation:k426 2450ms linear infinite}
+@keyframes k430{to{stroke-dashoffset:-376}}
+.k430{animation:k430 2450ms linear infinite}
+@keyframes k431{to{stroke-dashoffset:-348}}
+.k431{animation:k431 2450ms linear infinite}
+@keyframes k432{to{stroke-dashoffset:-326}}
+.k432{animation:k432 2450ms linear infinite}
+@keyframes k433{to{stroke-dashoffset:-271}}
+.k433{animation:k433 2450ms linear infinite}
+@keyframes k434{to{stroke-dashoffset:-243}}
+.k434{animation:k434 2450ms linear infinite}
+@keyframes k435{to{stroke-dashoffset:-221}}
+.k435{animation:k435 2450ms linear infinite}
 </style>
-<path class="bus" stroke="#C1663A" d="M24,0 V88"/><g><rect x="0.5" y="20" width="123" height="64" rx="3" fill="#0A0A0B" stroke="#79848C" stroke-width="1"/><rect x="21.5" y="20.5" width="5" height="4" fill="#E0703A"/><rect x="21.5" y="79.5" width="5" height="4" fill="#E0703A"/><path class="bus" stroke="#C1663A" d="M24,20 V26 M24,54 V84"/><rect x="10" y="26" width="28" height="28" rx="8" fill="#0A0A0B" stroke="#6B6B76" stroke-width="1.2"/><text transform="translate(0,16)" x="24" y="29" class="ts" font-size="15.5" text-anchor="middle" style="fill:#F7F8F8">in</text><text x="46" y="44.5" class="ts" font-size="11.5" letter-spacing="1.3">LINKEDIN</text></g><path class="cm k421" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-166" d="M24,58 V80"/><path class="cm k422" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-138" d="M24,58 V80"/><path class="cm k423" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-116" d="M24,58 V80"/><path class="cm k424" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-61" d="M24,58 V80"/><path class="cm k425" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-33" d="M24,58 V80"/><path class="cm k426" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-11" d="M24,58 V80"/></svg>
+<path class="bus" stroke="#C1663A" d="M24,0 V88"/><g><rect x="0.5" y="20" width="123" height="64" rx="3" fill="#0A0A0B" stroke="#79848C" stroke-width="1"/><rect x="21.5" y="20.5" width="5" height="4" fill="#E0703A"/><rect x="21.5" y="79.5" width="5" height="4" fill="#E0703A"/><path class="bus" stroke="#C1663A" d="M24,20 V26 M24,54 V84"/><rect x="10" y="26" width="28" height="28" rx="8" fill="#0A0A0B" stroke="#6B6B76" stroke-width="1.2"/><text transform="translate(0,16)" x="24" y="29" class="ts" font-size="15.5" text-anchor="middle" style="fill:#F7F8F8">in</text><text x="46" y="44.5" class="ts" font-size="11.5" letter-spacing="1.3">LINKEDIN</text></g><path class="cm k430" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-166" d="M24,58 V80"/><path class="cm k431" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-138" d="M24,58 V80"/><path class="cm k432" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-116" d="M24,58 V80"/><path class="cm k433" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-61" d="M24,58 V80"/><path class="cm k434" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-33" d="M24,58 V80"/><path class="cm k435" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-11" d="M24,58 V80"/></svg>
