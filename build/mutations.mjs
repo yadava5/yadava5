@@ -403,11 +403,20 @@ const SET_MUTATIONS = [
   // and the partial case, which the existsSync form could never have seen even
   // when the directory was present: one theme holding one fewer plate than the
   // other means a <picture> whose light <source> resolves to nothing.
-  ['one plate loses its light twin', /have no light twin: plate-1-glyph\.svg/,
+  //
+  // Named plate-1-glyph.svg until the redraw renumbered the set, and then it
+  // deleted nothing and reported "?? stale". It takes whichever plate sorts
+  // first in the light directory now — the assertion is that ANY hole in the
+  // twinning is refused, and naming one file was never part of it. The
+  // expectation still pins the COUNT, because "1 plate(s)" is what makes it a
+  // hole rather than the missing-directory case the probe above covers.
+  ['one plate loses its light twin', /1 plate\(s\) have no light twin: plate-[\w-]+\.svg\./,
     (dir) => {
-      const p = join(dir, 'light', 'plate-1-glyph.svg');
-      if (!existsSync(p)) return false;
-      rmSync(p);
+      const light = join(dir, 'light');
+      if (!existsSync(light)) return false;
+      const victim = readdirSync(light).sort().find(f => /^plate-.*\.svg$/.test(f));
+      if (!victim) return false;
+      rmSync(join(light, victim));
       return true;
     }],
 ];
