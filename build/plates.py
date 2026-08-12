@@ -835,6 +835,116 @@ def plate_glyph() -> str:
     ) + css_close() + body + "</svg>"
 
 
+# ══════════════════════════════════════════════════ IV · automl
+#
+# The dispatcher drawn as its registry: a 44-pin strip — one pin per tool
+# the graph defines, emitted by loop so the count is true by construction —
+# with seven tool-set taps hanging below it. No tap spans the strip, which
+# is the claim: no phase is handed all 44. The per-phase counts (15/7/29)
+# were cut by the prose inventory and are deliberately NOT drawn, so no
+# bracket on this plate is countable into a number the page no longer backs.
+def plate_automl() -> str:
+    pins = " ".join(f"M{276 + i * (604 - 276) / 43:.1f},150 V170" for i in range(44))
+    drops = " ".join(f"M{300 + i * 45},182 V218" for i in range(7))
+    sets = "".join(f'<circle cx="{300 + i * 45}" cy="224" r="5" fill="none" '
+                   f'stroke="{T["zinc"]}" stroke-width="2"/>' for i in range(7))
+    body = (
+        bus("verd", "M63,0 V380", C=170, cd="M63,2.5 V377.5")
+        + bus("rust", "M90,0 V380", C=85, cd="M90,2.5 V377.5")
+        + bus("zinc", "M117,0 V380", C=25, cd="M117,2.5 V377.5")
+        + bus("zinc", "M117,120 H150", C=55, cd="M121,120 H145")
+        + bus("zinc", "M198,120 H240 V160 H262", C=96, cd="M202,120 H240 V160 H258")
+        + f'<rect x="262" y="138" width="356" height="44" rx="4" fill="none" '
+          f'stroke="{T["zinc"]}" stroke-width="1.3"/>'
+        + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="2" d="{pins}"/>'
+        + lbl(262, 130, "THE REGISTRY · 44 TOOLS DEFINED", size=10, ls=1.1)
+        + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="1.4" d="{drops}"/>'
+        + sets
+        + lbl(300, 256, "SEVEN TOOL SETS — NO PHASE IS HANDED ALL 44", size=10, ls=1.1)
+        + mark("automl", 150, 96, 48)
+        + f'<text x="150" y="54" class="d" font-size="30" letter-spacing="0.5">IV — AUTOML</text>'
+        + f'<text x="150" y="76" class="dim" font-size="14.5">a LangGraph agent, dealt its tools phase by phase.</text>'
+        + f'<text x="660" y="160" class="d" font-size="62">44</text>'
+        + f'<text x="660" y="198" class="dim" font-size="13">defined across the dispatcher;</text>'
+        + f'<text x="660" y="216" class="dim" font-size="13">no phase&#8217;s hand holds them all.</text>'
+        + f'<rect x="150" y="308" width="4" height="16" fill="{T["zinc"]}"/>'
+        + f'<text x="164" y="321" class="mid" font-size="14">the sandbox guards against accidents, not adversaries.</text>'
+        + f'<text x="164" y="341" class="dim" font-size="13">the network is an env var — the beta template renders it bridge; no cap-drop, no pids-limit, no seccomp.</text>'
+    )
+    return head(
+        380,
+        "IV · AutoML — 44 tools defined; no phase is handed all of them",
+        "IV · AutoML — the dispatcher drawn as its registry: a 44-pin strip, "
+        "one pin per tool the graph defines, with seven tool-set taps below "
+        "it — no phase is handed all 44. The against-self line is the "
+        "sandbox: it guards against accidents, not adversaries — the network "
+        "is an env var the beta template renders as bridge, with no "
+        "cap-drop, no pids-limit, no seccomp.",
+        key="plate-4-automl.svg",
+        col=(148, 880), frame=AUTOML_FRAME,
+    ) + css_close() + body + "</svg>"
+
+
+# ══════════════════════════════════════════════════ V · cadence
+#
+# The whole API drawn as the one part it actually is: 37 entry stubs — one
+# per route handler, range(150,331,5), count true by construction — into a
+# single serverless package, whose single output crosses a doored wall
+# before the 7 table frames behind it. The wall is the section's claim: the
+# door is the only way through, because RLS is FORCEd. The app-side guards
+# being conditional is the admission, and the drawing agrees — nothing else
+# crosses the wall.
+def plate_cadence() -> str:
+    stubs = " ".join(f"M252,{y} H300" for y in range(150, 331, 5))
+    fan = " ".join(f"M600,{y} H628" for y in range(165, 316, 25))
+    tables = "".join(f'<rect x="628" y="{y - 9}" width="120" height="18" rx="3" '
+                     f'fill="none" stroke="{T["zinc"]}" stroke-width="1.3"/>'
+                     for y in range(165, 316, 25))
+    body = (
+        bus("verd", "M63,0 V440", C=12, cd="M63,2.5 V437.5")
+        + bus("rust", "M90,0 V440", C=175, cd="M90,2.5 V437.5")
+        + bus("zinc", "M117,0 V440", C=90, cd="M117,2.5 V437.5")
+        + bus("verd", "M63,120 H150", C=30, cd="M67,120 H145")
+        + bus("verd", "M198,120 H252 V330", C=132, cd="M202,120 H252 V326")
+        + f'<path fill="none" stroke="{T["verd"]}" stroke-width="1.4" d="{stubs}"/>'
+        + f'<rect x="300" y="140" width="170" height="200" rx="8" fill="none" '
+          f'stroke="{T["verd"]}" stroke-width="1.6"/>'
+        + lbl(312, 222, "ONE SERVERLESS", cls="ts", size=10, ls=1.1)
+        + lbl(312, 238, "FUNCTION", cls="ts", size=10, ls=1.1)
+        + lbl(312, 258, "37 ROUTE HANDLERS", cls="ts dim", size=10, ls=1.1)
+        + bus("verd", "M496,235 H600", C=66, cd="M500,235 H596")
+        # the wall, doored only where the output passes
+        + f'<path class="bus" stroke="{T["verd"]}" d="M560,150 V223 M560,247 V330"/>'
+        + f'<path class="bus" stroke="{T["verd"]}" d="M566,150 V223 M566,247 V330"/>'
+        + lbl(563, 140, "RLS · FORCED", size=10.5, anchor="middle")
+        + bus("verd", "M600,165 V315", C=190, cd="M600,168 V312")
+        + f'<path fill="none" stroke="{T["verd"]}" stroke-width="1.4" d="{fan}"/>'
+        + tables
+        + mark("cadence", 150, 96, 48)
+        + f'<text x="150" y="54" class="d" font-size="30" letter-spacing="0.5">V — CADENCE</text>'
+        + f'<text x="150" y="76" class="dim" font-size="14.5">every route into one function; every row behind RLS.</text>'
+        + f'<text x="680" y="70" class="d" font-size="62">37</text>'
+        + f'<text x="680" y="108" class="dim" font-size="13">route handlers, one function;</text>'
+        + f'<text x="680" y="126" class="dim" font-size="13">RLS FORCEd on all 7 tables.</text>'
+        + f'<rect x="150" y="374" width="4" height="16" fill="{T["verd"]}"/>'
+        + f'<text x="164" y="387" class="mid" font-size="14">five of six app-side guards begin if (context?.userId) — conditional.</text>'
+        + f'<text x="164" y="407" class="dim" font-size="13">a caller that forgets the identity still sends the query; the database&#8217;s refusal cannot be forgotten.</text>'
+    )
+    return head(
+        440,
+        "V · Cadence — 37 route handlers, one function, and a wall with one door",
+        "V · Cadence — the whole API drawn as one part: 37 route handlers "
+        "enter one serverless function, and its single output passes through "
+        "the one door in a wall — row-level security, FORCEd — before "
+        "reaching the 7 tables behind it. The against-self line: five of six "
+        "app-side guards are conditional, if context userId; a caller that "
+        "forgets the identity still sends the query, and the database's "
+        "refusal is the one that cannot be forgotten.",
+        key="plate-5-cadence.svg",
+        col=(148, 880), frame=CADENCE_FRAME,
+    ) + css_close() + body + "</svg>"
+
+
 # ══════════════════════════════════════════════════ the mobile hero
 #
 # 440u canvas, its own bus at MBUS_X. No email line here: the mobile set's
@@ -896,6 +1006,8 @@ HERO_FRAME = (30, 37.7, 0)
 JET_FRAME = (2.5, 55.9, 2.5)
 WORK_FRAME = (2.5, 28, 2.5)
 GLYPH_FRAME = (2.5, 35.5, 2.5)
+AUTOML_FRAME = (2.5, 60.8, 2.5)
+CADENCE_FRAME = (2.5, 51.7, 2.5)
 MOB_FRAME = (36, 58, 0)
 # The return plate's right edge is its one silkscreen line, which now ends
 # 47.2u short of the canvas — 30 was authored against a longer string. Measured
@@ -924,6 +1036,8 @@ PLATES = {
     "plate-1-work.svg": plate_work,
     "plate-2-jetpack.svg": plate_jetpack,
     "plate-3-glyph.svg": plate_glyph,
+    "plate-4-automl.svg": plate_automl,
+    "plate-5-cadence.svg": plate_cadence,
 }
 MOBILE = {"m-0-hero.svg": m_hero}
 
