@@ -244,19 +244,47 @@ for (const c of spec.claims) {
 
 // ── 2. drawn_on must be true. A row claiming the page shows a number the page
 //       does not show is bookkeeping, not evidence.
+// ── A CHARACTER REFERENCE IS TEXT, NOT A NUMBER.
+//
+// The plates write typographic punctuation as numeric references — the
+// apostrophe in "the JDK&#8217;s own Adler-32" is `&#8217;`. Stripping tags
+// leaves the reference intact, so the sweep below read 8217 as a number the
+// page draws and demanded a derivation for an apostrophe. Six files carried
+// that phantom. Decoding happens AFTER the tags are stripped, never before:
+// `&lt;` would otherwise become a `<` and invent a tag boundary nobody wrote,
+// and the strip would then eat real text on its way to the next `>`.
+const NAMED = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ' };
+const cp = (n, raw) =>
+  Number.isFinite(n) && n >= 0 && n <= 0x10ffff ? String.fromCodePoint(n) : raw;
+const decodeRefs = (s) => s
+  .replace(/&#x([0-9a-fA-F]+);/g, (m, h) => cp(parseInt(h, 16), m))
+  .replace(/&#(\d+);/g, (m, d) => cp(Number(d), m))
+  // Named last, so a double-encoded `&amp;#8217;` decodes exactly one level and
+  // does not quietly become an apostrophe the author never wrote.
+  .replace(/&([a-zA-Z][a-zA-Z0-9]*);/g, (m, n) => NAMED[n.toLowerCase()] ?? m);
+
 const fileText = new Map();
+// Returns null — not a throw — when the file is not on disk. A drawn_on target
+// that does not exist is PRECISELY the condition this gate exists to report: a
+// plate was retired and a row still points at it. readFileSync threw ENOENT out
+// of the entire process from here, so one retired filename took all 225 defects
+// with it and the caller got a stack trace instead of a report. Every caller
+// below records the absence as a defect and carries on.
 const textOf = (f) => {
   if (fileText.has(f)) return fileText.get(f);
-  const raw = readFileSync(join(f.endsWith('.svg') ? ASSETS : ROOT, f), 'utf8');
+  const p = join(f.endsWith('.svg') ? ASSETS : ROOT, f);
+  if (!existsSync(p)) { fileText.set(f, null); return null; }
+  const raw = readFileSync(p, 'utf8');
   // Tags become a SPACE, not nothing. Deleting them butts adjacent <text> runs
   // together and invents numbers that nobody drew: "n=10,000" followed by
   // "299 wrong" read as the single token 10000299, and the coverage check below
   // then demanded evidence for it.
-  const t = f.endsWith('.svg')
+  const stripped = f.endsWith('.svg')
     ? raw.replace(/<style[\s\S]*?<\/style>/g, ' ')
          .replace(/<(?:title|desc)>[\s\S]*?<\/(?:title|desc)>/g, ' ')
-         .replace(/<[^>]*>/g, ' ').replace(/,/g, '')
-    : raw.replace(/,/g, '');
+         .replace(/<[^>]*>/g, ' ')
+    : raw;
+  const t = decodeRefs(stripped).replace(/,/g, '');
   fileText.set(f, t);
   return t;
 };
@@ -289,7 +317,13 @@ const drawsToken = (text, v) => {
 };
 for (const c of [...spec.claims, ...spec.unpinnable, ...spec.external, ...(spec.attested || [])]) {
   for (const f of c.drawn_on || []) {
-    if (!drawsToken(textOf(f), c.value))
+    const text = textOf(f);
+    if (text === null) {
+      fails.push(`${c.id}: drawn_on lists ${f}, which is not on disk — a row cannot be evidence `
+               + `that the page draws "${c.value}" on a plate the build no longer authors`);
+      continue;
+    }
+    if (!drawsToken(text, c.value))
       fails.push(`${c.id}: drawn_on lists ${f}, but "${c.value}" does not appear there as a whole number`);
   }
 }
@@ -378,6 +412,7 @@ const numsOf = (f) => {
   // honest statement is that it audits the drawn text and leans on two other
   // checks for the accessible copy.
   const src = sweepText(f) ?? textOf(f);
+  if (src === null) return new Set();   // reported once, below, not per call
   const t = f === 'README.md'
     ? src.replace(/<[^>]*>/g, ' ').replace(/\]\([^)]*\)/g, ' ').replace(/https?:\/\/\S+/g, ' ')
     : src;
@@ -407,6 +442,11 @@ const masked = new Map();
 for (const c of [...spec.claims, ...(spec.attested || [])]) {
   for (const [file, list] of Object.entries(c.anchors || {})) {
     let text = masked.has(file) ? masked.get(file) : textOf(file);
+    if (text === null) {
+      fails.push(`${c.id}: anchors into ${file}, which is not on disk — the sentence this row `
+               + `pins cannot be checked, so the occurrence it claims to account for is unaccounted`);
+      continue;
+    }
     for (const anchor of list) {
       if (!text.includes(anchor)) {
         fails.push(`${c.id}: anchor ${JSON.stringify(anchor)} no longer appears in ${file} `
@@ -422,6 +462,12 @@ for (const c of [...spec.claims, ...(spec.attested || [])]) {
 }
 const sweepText = (f) => masked.has(f) ? masked.get(f) : null;
 
+// numsOf yields nothing for a file it cannot read, and SWEPT's plates come from
+// readdirSync, so the only member that can go missing is the prose. Said once
+// here rather than per call: a silently empty sweep of README.md is the
+// coverage half of this gate passing because it read nothing.
+if (textOf('README.md') === null)
+  fails.push('README.md is not on disk, so every number in the prose is outside this sweep');
 for (const file of SWEPT) {
   for (const n of numsOf(file)) {
     if (known(file).has(n) || exempt.has(n)

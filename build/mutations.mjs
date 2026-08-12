@@ -338,7 +338,14 @@ const gate = (dir) => {
 };
 
 console.log('baseline:', gate(ASSETS) ? 'FAILS (fix the plates first)' : 'passes');
-let dead = 0;
+// TWO counters, because these are two different findings and summing them hid
+// the one that matters. `??` means the mutation never landed — the check behind
+// it was never asked the question, so the probe proves nothing in either
+// direction. `!!` means the page WAS broken, the gate read it, and the gate
+// said nothing: a hole. One combined "N mutation(s) went unnoticed" read as N
+// dead checks when most of N was stale probes, in the one file whose whole
+// purpose is telling those two states apart.
+let stale = 0, asleep = 0;
 for (const [name, expect, breakIt, only] of MUTATIONS) {
   const dir = mkdtempSync(join(tmpdir(), 'mut-'));
   cpSync(ASSETS, dir, { recursive: true });
@@ -356,7 +363,7 @@ for (const [name, expect, breakIt, only] of MUTATIONS) {
   }
   if (!touched) {
     console.log(`  ?? ${name} — mutation matched nothing; the probe is stale`);
-    dead++; rmSync(dir, { recursive: true, force: true }); continue;
+    stale++; rmSync(dir, { recursive: true, force: true }); continue;
   }
   const out = gate(dir);
   // Each probe copies assets/ into a fresh tmpdir and nothing ever removed
@@ -368,7 +375,7 @@ for (const [name, expect, breakIt, only] of MUTATIONS) {
   rmSync(dir, { recursive: true, force: true });
   const caught = expect.test(out);
   console.log(`  ${caught ? '..' : '!!'} ${name}${caught ? '' : '  — NOT CAUGHT'}`);
-  if (!caught) dead++;
+  if (!caught) asleep++;
 }
 // ── Still gate.mjs, but breaking the SET rather than a file in it.
 //
@@ -378,24 +385,45 @@ for (const [name, expect, breakIt, only] of MUTATIONS) {
 // three lines under a comment asserting those files "are measured by every
 // check here", so an absent directory left the gate measuring the dark half and
 // printing GATE PASSED. Same runner, a mutator that takes the copied directory.
+// Each mutator returns whether it CHANGED anything, exactly as the file-level
+// family above does. It did not: both returned a hardcoded `true`, and the
+// second one named a plate the redesign retired, so `rmSync` threw ENOENT out
+// of the whole process — the run died after 21 of 36 probes and two of the
+// three baselines never printed. A probe that cannot report itself stale is
+// the check-that-cannot-fail shape this file exists to find, sitting inside
+// this file. Absence is a finding here, the same as everywhere else.
 const SET_MUTATIONS = [
   ['the light twin of every plate is missing', /does not exist\. It holds the light twin/,
-    (dir) => { rmSync(join(dir, 'light'), { recursive: true, force: true }); return true; }],
+    (dir) => {
+      const p = join(dir, 'light');
+      if (!existsSync(p)) return false;
+      rmSync(p, { recursive: true, force: true });
+      return true;
+    }],
   // and the partial case, which the existsSync form could never have seen even
   // when the directory was present: one theme holding one fewer plate than the
   // other means a <picture> whose light <source> resolves to nothing.
   ['one plate loses its light twin', /have no light twin: plate-1-glyph\.svg/,
-    (dir) => { rmSync(join(dir, 'light', 'plate-1-glyph.svg')); return true; }],
+    (dir) => {
+      const p = join(dir, 'light', 'plate-1-glyph.svg');
+      if (!existsSync(p)) return false;
+      rmSync(p);
+      return true;
+    }],
 ];
 for (const [name, expect, breakIt] of SET_MUTATIONS) {
   const dir = mkdtempSync(join(tmpdir(), 'mut-'));
   cpSync(ASSETS, dir, { recursive: true });
-  breakIt(dir);
+  const touched = breakIt(dir);
+  if (!touched) {
+    console.log(`  ?? ${name} — mutation matched nothing; the probe is stale`);
+    stale++; rmSync(dir, { recursive: true, force: true }); continue;
+  }
   const out = gate(dir);
   rmSync(dir, { recursive: true, force: true });
   const caught = expect.test(out);
   console.log(`  ${caught ? '..' : '!!'} ${name}${caught ? '' : '  — NOT CAUGHT'}`);
-  if (!caught) dead++;
+  if (!caught) asleep++;
 }
 
 // ── The second family: can claims.mjs fail?
@@ -516,13 +544,13 @@ for (const [name, expect, breakIt] of CLAIM_MUTATIONS) {
   const touched = breakIt(dir);
   if (!touched) {
     console.log(`  ?? ${name} — mutation matched nothing; the probe is stale`);
-    dead++; rmSync(dir, { recursive: true, force: true }); continue;
+    stale++; rmSync(dir, { recursive: true, force: true }); continue;
   }
   const out = claimsGate(dir);
   rmSync(dir, { recursive: true, force: true });
   const caught = expect.test(out);
   console.log(`  ${caught ? '..' : '!!'} ${name}${caught ? '' : '  — NOT CAUGHT'}`);
-  if (!caught) dead++;
+  if (!caught) asleep++;
 }
 
 // ── The third family: can plates.py fail?
@@ -651,14 +679,21 @@ for (const [name, expect, breakIt] of PLATE_MUTATIONS) {
   const touched = breakIt(dir);
   if (!touched) {
     console.log(`  ?? ${name} — mutation matched nothing; the probe is stale`);
-    dead++; rmSync(dir, { recursive: true, force: true }); continue;
+    stale++; rmSync(dir, { recursive: true, force: true }); continue;
   }
   const out = platesGate(dir);
   rmSync(dir, { recursive: true, force: true });
   const caught = expect.test(out);
   console.log(`  ${caught ? '..' : '!!'} ${name}${caught ? '' : '  — NOT CAUGHT'}`);
-  if (!caught) dead++;
+  if (!caught) asleep++;
 }
 
-if (dead) { console.log(`\n${dead} mutation(s) went unnoticed — those checks are not connected.`); process.exit(1); }
-console.log('\nevery mutation was caught: the checks are live.');
+if (stale || asleep) {
+  if (asleep) console.log(`\n${asleep} mutation(s) went unnoticed — the page was broken, the gate `
+    + `read it, and said nothing. Those checks are asleep.`);
+  if (stale) console.log(`\n${stale} probe(s) matched nothing — the mutation never landed, so the `
+    + `check behind it was never asked. Those probes are stale: they prove nothing in either `
+    + `direction, and a green line from one would have been a lie.`);
+  process.exit(1);
+}
+console.log('\nevery mutation landed and every mutation was caught: the checks are live.');
