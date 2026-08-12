@@ -468,51 +468,113 @@ const editReadme = (root, fn) => {
   return true;
 };
 
-// Each entry names ONE of claims.mjs's four independent failure modes. They are
-// keyed to the mutated row by id, not to a bare phrase: while any real claim is
-// failing, a loose /the page says/ would be satisfied by the pre-existing
+// claims.mjs answers "does this file draw this value?" with drawsToken()
+// (claims.mjs:310-317): a digit match on token boundaries, OR the number
+// SPELLED — "IDOR IN SIX SERVICES" satisfies a value of 6. A probe that picks
+// its victim row with String.includes can therefore select a row the gate goes
+// on to find anyway, and then report the check asleep for a reason that has
+// nothing to do with the check. So the predicate is mirrored here, and a
+// mutator that cannot find a qualifying row DECLINES — "?? stale" is an honest
+// answer and a green line from a mutation that could never fire is not.
+const WORDOF = { 3: 'three', 4: 'four', 5: 'five', 6: 'six', 7: 'seven',
+  8: 'eight', 9: 'nine', 10: 'ten', 11: 'eleven', 12: 'twelve', 13: 'thirteen',
+  14: 'fourteen', 15: 'fifteen', 16: 'sixteen', 17: 'seventeen', 18: 'eighteen',
+  19: 'nineteen', 20: 'twenty', 30: 'thirty', 40: 'forty', 50: 'fifty',
+  60: 'sixty', 70: 'seventy', 80: 'eighty', 90: 'ninety', 100: 'hundred',
+  1000: 'thousand' };
+// The same strip claims.mjs:282-287 performs, for the same reason: tags become
+// a SPACE so two adjacent <text> runs cannot fuse into a number nobody drew.
+const plateText = (p) => readFileSync(p, 'utf8')
+  .replace(/<style[\s\S]*?<\/style>/g, ' ')
+  .replace(/<(?:title|desc)>[\s\S]*?<\/(?:title|desc)>/g, ' ')
+  .replace(/<[^>]*>/g, ' ').replace(/,/g, '');
+const drawsToken = (text, v) => {
+  const s = String(v);
+  if (!/^\d+(\.\d+)?$/.test(s)) return text.toLowerCase().includes(s.toLowerCase());
+  if (new RegExp(`(?<![\\d.])${s.replace('.', '\\.')}(?!\\d)(?!\\.\\d)`).test(text)) return true;
+  const w = WORDOF[s];
+  return w ? new RegExp(`\\b${w}\\b`, 'i').test(text) : false;
+};
+
+// Each entry names ONE of claims.mjs's four independent failure modes.
+//
+// Round 28 (BOARD) re-aimed four of the five. Every one of them had been keyed
+// to a literal the rebuild was free to change and duly did: an id whose value
+// moved (cadence.handlers 36 -> 37 -> 38), a filename the redraw retired
+// (plate-1-glyph.svg), a markdown heading the README no longer has (`## I ·
+// Work` — the file has no `#` heading at all now), and an anchored sentence
+// about seven tenant tables that was cut with the prose. Three of the four
+// reported "?? stale", which is the right failure mode and still means the
+// check behind them went unasked for a whole redesign.
+//
+// What replaces them is a SELECTOR over the spec rather than a name out of it:
+// the first row that has an extractor, the first plate on disk, the first row
+// carrying an anchor. The expectations keep their shape — id, message, file —
+// but stop naming a value, an id or a plate, because while a real claim is
+// failing a loose /the page says/ would be satisfied by the pre-existing
 // failure and report "caught" with the mutation contributing nothing.
 const CLAIM_MUTATIONS = [
-  // 1. the extractor half — a registered value that no longer re-derives
+  // 1. the extractor half — a registered value that no longer re-derives.
+  //    Any row with an extractor and a numeric value will do, so it takes the
+  //    first; `live` rows are skipped because they print a different sentence
+  //    (claims.mjs:236) and this probe is pointed at the pinned-blob half.
   ['a registered number stops matching its pinned commit',
-    /cadence\.handlers: the page says "38"/,
+    /: the page says "[\d.]+", [\w.-]+\/[\w.-]+@[0-9a-f]{7}\/\S+ says "[^"]*"/,
     (root) => editJson(root, (s) => {
-      const c = s.claims.find(x => x.id === 'cadence.handlers');
+      const c = s.claims.find(x => x.extractor && !x.live && x.repo
+        && /^\d+(\.\d+)?$/.test(String(x.value)));
       if (!c) return false;
       c.value = String(Number(c.value) + 1);
     })],
   // 2. the drawn_on half — a row asserting the page shows what it does not.
-  //    Keyed on SHAPE, not on an id: three plate probes above went stale in one
-  //    week from pinning a literal, and `glyph.accuracy` was already the wrong
-  //    guess here (the row is `glyph.accuracy_pct`). This picks any Glyph row
-  //    whose value provably does NOT occur in the jetpack plate, so the
-  //    expectation below cannot be satisfied by coincidence.
+  //    Named plate-1-glyph.svg and plate-2-jetpack.svg until the redraw took
+  //    the first of them; before that it named glyph.accuracy, which was never
+  //    a row at all (it is glyph.accuracy_pct). Two stale anchors in one entry.
+  //    So: the target is whatever plate sorts first on disk, and the row is the
+  //    first whose value that plate provably does NOT draw — checked with the
+  //    gate's own predicate, so the mutation cannot be a value the gate would
+  //    have found anyway.
   ['a row claims a plate draws a number it never draws',
-    /drawn_on lists plate-2-jetpack\.svg, but "[^"]*" does not appear there/,
-    (root) => editJson(root, (s) => {
-      const other = readFileSync(join(ASSETS, 'plate-2-jetpack.svg'), 'utf8');
-      const c = s.claims.find(x => (x.drawn_on || []).includes('plate-1-glyph.svg')
-        && !other.includes(String(x.value)));
-      if (!c) return false;
-      c.drawn_on = [...c.drawn_on, 'plate-2-jetpack.svg'];
-    })],
+    /drawn_on lists plate-[\w-]+\.svg, but "[^"]*" does not appear there as a whole number/,
+    (root) => {
+      const dir = join(root, 'assets');
+      const target = readdirSync(dir).sort().find(f => /^plate-.*\.svg$/.test(f));
+      if (!target) return false;
+      const text = plateText(join(dir, target));
+      return editJson(root, (s) => {
+        const c = s.claims.find(x => (x.drawn_on || []).length
+          && !x.drawn_on.includes(target) && !drawsToken(text, x.value));
+        if (!c) return false;
+        c.drawn_on = [...c.drawn_on, target];
+      });
+    }],
   // 3. the coverage half — the load-bearing one. A number on the page that no
-  //    row derives and no exemption names must be rejected.
+  //    row derives and no exemption names must be rejected. Appended rather
+  //    than spliced into a heading: an append lands on any README that exists,
+  //    and the sentence carries no numeral word, so the only number it adds to
+  //    the sweep is the one the expectation names.
   ['the page grows a number nothing accounts for',
-    /README\.md: draws "8675309"/,
+    /README\.md: draws "8675309", which claims\.json neither derives nor exempts/,
     (root) => editReadme(root, (s) =>
-      s.replace('## I · Work', '## I · Work 8675309'))],
+      `${s}\nA number no row derives and no exemption names: 8675309.\n`)],
   // 4. the anchor half — anchors exist because README.md's permitted-value pool
   //    is nearly vacuous, so an anchored sentence must fail closed when edited.
-  // Round 27: same defect as the collision probe above. The expectation named
-  // no row, so while automl.tool_sets held an anchor into alt text that a plate
-  // rewrite had deleted, the claims baseline printed this exact sentence for a
-  // row this mutation never touches — and the probe passed without discriminating.
-  // Keyed to the sentence it actually rewords now.
+  //    The edit is the one anchors are FOR: change the count inside the pinned
+  //    phrase and leave the rest of the sentence alone. Read out of the spec in
+  //    the copy, so it follows the anchor wherever the prose moves it.
   ['an anchored sentence is quietly reworded',
-    /anchor "[^"]*seven\*\* tenant tables" no longer appears in README\.md/,
-    (root) => editReadme(root, (s) =>
-      s.replace('on all **seven** tenant tables', 'on all **nineteen** tenant tables'))],
+    /: anchor "[^"]*" no longer appears in README\.md/,
+    (root) => {
+      const spec = JSON.parse(readFileSync(join(root, 'build', 'claims.json'), 'utf8'));
+      const row = [...spec.claims, ...(spec.attested || [])]
+        .find(c => (c.anchors || {})['README.md']?.length);
+      if (!row) return false;
+      const anchor = row.anchors['README.md'][0];
+      const NUM = /\b(three|four|five|six|seven|eight|nine|ten|eleven|twelve|\d+)\b/i;
+      if (!NUM.test(anchor)) return false;
+      const reworded = anchor.replace(NUM, (m) => /^nineteen$/i.test(m) ? 'twelve' : 'nineteen');
+      return editReadme(root, (s) => s.includes(anchor) ? s.replace(anchor, reworded) : s);
+    }],
   // 5. the SCOPE of the sweep, rather than anything inside it. The light plates
   //    were added to SWEPT and made conditional on their directory in the same
   //    breath, so a missing half of the published set dropped out in silence and
