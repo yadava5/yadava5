@@ -405,16 +405,24 @@ def plate_hero() -> str:
         + bus("rust", d_rust, C=87, cd=c_rust)
         + bus("zinc", d_zinc, C=41, cd=c_zinc)
         + pulse(c_verd, 1200, 400) + pulse(c_rust, 1050, 530) + pulse(c_zinc, 950, 680)
-        # the marks
-        + mark("automl", 480, 52, 56) + mark("cadence", 620, 52, 56)
+        # the marks — automl deliberately BETWEEN the rows (see the registry
+        # above): its tile at (520,140) is what makes the board uneven, and
+        # the zinc feed out of its right flank at y=168 is only connected
+        # while the tile is here.
+        + mark("automl", 520, 140, 56) + mark("cadence", 620, 52, 56)
         + mark("applied", 784, 52, 56)
         + mark("glyph", 620, 188, 56) + mark("jetpack", 784, 188, 56)
         + mark("visualassist", 48, 300, 56)
-        # edge labels sit clear of every trace; drops were routed around them
-        + lbl(578, 68, "POSTGRES", size=10, anchor="middle")
+        # edge labels sit clear of every trace; drops were routed around them.
+        # POSTGRES is VERTICAL, reading up the riser it names: baseline at
+        # x=600 puts the rotated em box at x 590-603, 8u clear of the riser
+        # comet's left edge at 611; rotation puts the +4% Linux advance skew
+        # on the label's HEIGHT (y 92-158 with skew), which nothing crosses.
+        + '<text x="600" y="124" class="ts dim" font-size="10" letter-spacing="1.4" '
+          'text-anchor="middle" transform="rotate(-90 600 124)">POSTGRES</text>'
         + lbl(730, 68, "RLS · FORCED", size=10.5, anchor="middle")
         + lbl(730, 202, "SIMD", size=10.5, anchor="middle")
-        + lbl(480, 44, "IV · AUTOML", size=10.5)
+        + lbl(520, 212, "IV · AUTOML", size=10.5)
         + lbl(620, 124, "V · CADENCE", size=10.5) + lbl(784, 124, "VI · APPLIED", size=10.5)
         + lbl(620, 260, "III · GLYPH", size=10.5) + lbl(784, 260, "II · JETPACK", size=10.5)
         + lbl(48, 376, "VII · VISUALASSIST", size=10.5)
