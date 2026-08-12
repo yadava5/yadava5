@@ -11,23 +11,23 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#1A2224}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#1A2224;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k565{to{stroke-dashoffset:-326}}
-.k565{animation:k565 2100ms linear infinite}
-@keyframes k566{to{stroke-dashoffset:-298}}
-.k566{animation:k566 2100ms linear infinite}
-@keyframes k567{to{stroke-dashoffset:-276}}
-.k567{animation:k567 2100ms linear infinite}
-@keyframes k568{to{stroke-dashoffset:-206}}
-.k568{animation:k568 2450ms linear infinite}
-@keyframes k569{to{stroke-dashoffset:-178}}
-.k569{animation:k569 2450ms linear infinite}
-@keyframes k570{to{stroke-dashoffset:-156}}
-.k570{animation:k570 2450ms linear infinite}
-@keyframes k571{to{stroke-dashoffset:-276}}
-.k571{animation:k571 2750ms linear infinite}
-@keyframes k572{to{stroke-dashoffset:-248}}
-.k572{animation:k572 2750ms linear infinite}
-@keyframes k573{to{stroke-dashoffset:-226}}
-.k573{animation:k573 2750ms linear infinite}
+@keyframes k583{to{stroke-dashoffset:-326}}
+.k583{animation:k583 2100ms linear infinite}
+@keyframes k584{to{stroke-dashoffset:-298}}
+.k584{animation:k584 2100ms linear infinite}
+@keyframes k585{to{stroke-dashoffset:-276}}
+.k585{animation:k585 2100ms linear infinite}
+@keyframes k586{to{stroke-dashoffset:-206}}
+.k586{animation:k586 2450ms linear infinite}
+@keyframes k587{to{stroke-dashoffset:-178}}
+.k587{animation:k587 2450ms linear infinite}
+@keyframes k588{to{stroke-dashoffset:-156}}
+.k588{animation:k588 2450ms linear infinite}
+@keyframes k589{to{stroke-dashoffset:-276}}
+.k589{animation:k589 2750ms linear infinite}
+@keyframes k590{to{stroke-dashoffset:-248}}
+.k590{animation:k590 2750ms linear infinite}
+@keyframes k591{to{stroke-dashoffset:-226}}
+.k591{animation:k591 2750ms linear infinite}
 </style>
-<g><path class="bus" stroke="#1F6D5C" d="M63,0 V140"/><path class="cm k565" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-116" d="M63,2.5 V136"/><path class="cm k566" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="-88" d="M63,2.5 V136"/><path class="cm k567" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="-66" d="M63,2.5 V136"/></g><g><path class="bus" stroke="#9A3412" d="M90,0 V140"/><path class="cm k568" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="4" d="M90,2.5 V136"/><path class="cm k569" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="32" d="M90,2.5 V136"/><path class="cm k570" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="54" d="M90,2.5 V136"/></g><g><path class="bus" stroke="#5F6E73" d="M117,0 V140"/><path class="cm k571" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-66" d="M117,2.5 V136"/><path class="cm k572" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="-38" d="M117,2.5 V136"/><path class="cm k573" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="-16" d="M117,2.5 V136"/></g><rect x="58" y="140" width="10" height="22" fill="#1F6D5C"/><rect x="85" y="140" width="10" height="22" fill="#9A3412"/><rect x="112" y="140" width="10" height="22" fill="#5F6E73"/><path class="bus" stroke="#5F6E73" d="M48,166 L56,166 M48,166 L44,160 M852,166 L844,166 M852,166 L856,160 M56,166 H844"/><text x="852" y="120" class="ts mid" font-size="10.5" letter-spacing="1.4" text-anchor="end">58 CLAIMS · 58 COMMANDS · RE-RUN IN CI FROM PINNED COMMITS</text><text x="852" y="140" class="dim" font-size="10" letter-spacing="0.2" text-anchor="end">what is my word rather than a derivation says so where it stands</text></svg>
+<g><path class="bus" stroke="#1F6D5C" d="M63,0 V140"/><path class="cm k583" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-116" d="M63,2.5 V136"/><path class="cm k584" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="-88" d="M63,2.5 V136"/><path class="cm k585" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="-66" d="M63,2.5 V136"/></g><g><path class="bus" stroke="#9A3412" d="M90,0 V140"/><path class="cm k586" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="4" d="M90,2.5 V136"/><path class="cm k587" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="32" d="M90,2.5 V136"/><path class="cm k588" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="54" d="M90,2.5 V136"/></g><g><path class="bus" stroke="#5F6E73" d="M117,0 V140"/><path class="cm k589" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-66" d="M117,2.5 V136"/><path class="cm k590" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="-38" d="M117,2.5 V136"/><path class="cm k591" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="-16" d="M117,2.5 V136"/></g><rect x="58" y="140" width="10" height="22" fill="#1F6D5C"/><rect x="85" y="140" width="10" height="22" fill="#9A3412"/><rect x="112" y="140" width="10" height="22" fill="#5F6E73"/><path class="bus" stroke="#5F6E73" d="M48,166 L56,166 M48,166 L44,160 M852,166 L844,166 M852,166 L856,160 M56,166 H844"/><text x="852" y="120" class="ts mid" font-size="10.5" letter-spacing="1.4" text-anchor="end">58 CLAIMS · 58 COMMANDS · RE-RUN IN CI FROM PINNED COMMITS</text><text x="852" y="140" class="dim" font-size="10" letter-spacing="0.2" text-anchor="end">what is my word rather than a derivation says so where it stands</text></svg>

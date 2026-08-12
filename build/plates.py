@@ -1494,6 +1494,64 @@ def m_cadence() -> str:
     ) + css_close() + body + "</svg>"
 
 
+# ── VI · applied, phone cut. The graded strip reflows 96 = 3×32 (the row
+# split is layout, the 96 and the 2 are the claims); the cascade keeps the
+# absence vocabulary — dashed outline, open lead — directly under the rules
+# layer it never shipped behind. The caption says "the strip below" because
+# here it IS below: each description is true of its own plate.
+def m_applied() -> str:
+    def row(y0: int, wrong: int | None) -> str:
+        xs = [104 + i * 280 / 31 for i in range(32)]
+        ticks = " ".join(f"M{x:.1f},{y0} V{y0 + 24}"
+                         for i, x in enumerate(xs) if i != wrong)
+        out = f'<path fill="none" stroke="{T["verd"]}" stroke-width="2" d="{ticks}"/>'
+        if wrong is not None:
+            out += (f'<path fill="none" stroke="{T["rust"]}" stroke-width="2" '
+                    f'd="M{xs[wrong]:.1f},{y0 - 3} V{y0 + 27}"/>')
+        return out
+    body = (
+        m_sec(610, (200, 45, 130), tap=("verd", 88))
+        + mark("applied", 92, 96, 48)
+        + f'<text x="92" y="54" class="d" font-size="24" letter-spacing="0.5">VI — APPLIED</text>'
+        + f'<text x="92" y="76" class="dim" font-size="13">an inbox read by rules that keep score.</text>'
+        + m_fig("0.979", "macro-F1 — the rules layer alone,",
+                "graded on the strip below.")
+        + bus("verd", "M116,144 V206", C=140, cd="M116,148 V202")
+        + f'<rect x="92" y="206" width="160" height="42" rx="8" fill="none" '
+          f'stroke="{T["verd"]}" stroke-width="1.6"/>'
+        + lbl(104, 231, "THE RULES LAYER", cls="ts", size=11.5, ls=1.3)
+        + bus("verd", "M252,227 H332 V380", C=20, cd="M256.5,227 H332 V376")
+        # the cascade, in the board's absence vocabulary: dashed, lead open
+        + f'<path fill="none" stroke="{T["verd"]}" stroke-width="1.4" d="M116,248 V264"/>'
+        + f'<circle cx="116" cy="271" r="3.5" fill="none" stroke="{T["verd"]}" stroke-width="2"/>'
+        + f'<rect x="92" y="284" width="140" height="42" rx="8" fill="none" '
+          f'stroke="{T["zinc"]}" stroke-width="1.4" stroke-dasharray="5 4"/>'
+        + lbl(104, 309, "THE CASCADE", cls="ts dim", size=10, ls=1.1)
+        + lbl(92, 344, "LAYER TWO — NO EVALUATION", size=10, ls=1.1)
+        + lbl(92, 360, "ARTIFACT SURVIVES", size=10, ls=1.1)
+        + f'<rect x="92" y="380" width="304" height="102" rx="6" fill="none" '
+          f'stroke="{T["zinc"]}" stroke-width="1.3"/>'
+        + row(390, 21) + row(420, 8) + row(450, None)
+        + lbl(92, 502, "96 LABELLED MESSAGES · 2 CALLED WRONG", size=10, ls=1.1)
+        + m_adm(528, "verd",
+                ["the full cascade scored 0.9583 — and",
+                 "the artifact is gone; the run was overwritten."],
+                ["what is deployed runs only that first layer."])
+    )
+    return head(
+        610,
+        "VI · Applied — the graded strip, phone cut",
+        "VI · Applied, phone cut — the mail triage as the part that ships: "
+        "the rules layer grades a labelled strip of 96 messages and gets 2 "
+        "wrong — 0.979 macro-F1, rules layer alone. Below it, drawn dashed "
+        "with its lead left open, is the cascade: layer two, whose 0.9583 has "
+        "no evaluation artifact — the run was overwritten. What is deployed "
+        "runs only that first layer.",
+        key="m-6-applied.svg",
+        col=(88, 412), frame=(2.5, 43, 2.5), w=440,
+    ) + css_close() + body + "</svg>"
+
+
 # ── declared frames (top, rightGap, bottomGap), baked from gate.mjs
 # measurement on this machine; tolerance 4 absorbs the CI ascent skew.
 HERO_FRAME = (30, 37.7, 0)
@@ -1546,6 +1604,7 @@ MOBILE = {
     "m-3-glyph.svg": m_glyph,
     "m-4-automl.svg": m_automl,
     "m-5-cadence.svg": m_cadence,
+    "m-6-applied.svg": m_applied,
 }
 
 _re = re

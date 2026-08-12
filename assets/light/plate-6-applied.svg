@@ -12,44 +12,44 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#1A2224}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#1A2224;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k535{to{stroke-dashoffset:-376}}
-.k535{animation:k535 2100ms linear infinite}
-@keyframes k536{to{stroke-dashoffset:-348}}
-.k536{animation:k536 2100ms linear infinite}
-@keyframes k537{to{stroke-dashoffset:-326}}
-.k537{animation:k537 2100ms linear infinite}
-@keyframes k538{to{stroke-dashoffset:-221}}
-.k538{animation:k538 2450ms linear infinite}
-@keyframes k539{to{stroke-dashoffset:-193}}
-.k539{animation:k539 2450ms linear infinite}
-@keyframes k540{to{stroke-dashoffset:-171}}
-.k540{animation:k540 2450ms linear infinite}
-@keyframes k541{to{stroke-dashoffset:-306}}
-.k541{animation:k541 2750ms linear infinite}
-@keyframes k542{to{stroke-dashoffset:-278}}
-.k542{animation:k542 2750ms linear infinite}
-@keyframes k543{to{stroke-dashoffset:-256}}
-.k543{animation:k543 2750ms linear infinite}
-@keyframes k544{to{stroke-dashoffset:-264}}
-.k544{animation:k544 2100ms linear infinite}
-@keyframes k545{to{stroke-dashoffset:-236}}
-.k545{animation:k545 2100ms linear infinite}
-@keyframes k546{to{stroke-dashoffset:-214}}
-.k546{animation:k546 2100ms linear infinite}
-@keyframes k547{to{stroke-dashoffset:-316}}
-.k547{animation:k547 2100ms linear infinite}
-@keyframes k548{to{stroke-dashoffset:-288}}
-.k548{animation:k548 2100ms linear infinite}
-@keyframes k549{to{stroke-dashoffset:-266}}
-.k549{animation:k549 2100ms linear infinite}
-@keyframes k550{to{stroke-dashoffset:-196}}
-.k550{animation:k550 2100ms linear infinite}
-@keyframes k551{to{stroke-dashoffset:-168}}
-.k551{animation:k551 2100ms linear infinite}
-@keyframes k552{to{stroke-dashoffset:-146}}
-.k552{animation:k552 2100ms linear infinite}
+@keyframes k553{to{stroke-dashoffset:-376}}
+.k553{animation:k553 2100ms linear infinite}
+@keyframes k554{to{stroke-dashoffset:-348}}
+.k554{animation:k554 2100ms linear infinite}
+@keyframes k555{to{stroke-dashoffset:-326}}
+.k555{animation:k555 2100ms linear infinite}
+@keyframes k556{to{stroke-dashoffset:-221}}
+.k556{animation:k556 2450ms linear infinite}
+@keyframes k557{to{stroke-dashoffset:-193}}
+.k557{animation:k557 2450ms linear infinite}
+@keyframes k558{to{stroke-dashoffset:-171}}
+.k558{animation:k558 2450ms linear infinite}
+@keyframes k559{to{stroke-dashoffset:-306}}
+.k559{animation:k559 2750ms linear infinite}
+@keyframes k560{to{stroke-dashoffset:-278}}
+.k560{animation:k560 2750ms linear infinite}
+@keyframes k561{to{stroke-dashoffset:-256}}
+.k561{animation:k561 2750ms linear infinite}
+@keyframes k562{to{stroke-dashoffset:-264}}
+.k562{animation:k562 2100ms linear infinite}
+@keyframes k563{to{stroke-dashoffset:-236}}
+.k563{animation:k563 2100ms linear infinite}
+@keyframes k564{to{stroke-dashoffset:-214}}
+.k564{animation:k564 2100ms linear infinite}
+@keyframes k565{to{stroke-dashoffset:-316}}
+.k565{animation:k565 2100ms linear infinite}
+@keyframes k566{to{stroke-dashoffset:-288}}
+.k566{animation:k566 2100ms linear infinite}
+@keyframes k567{to{stroke-dashoffset:-266}}
+.k567{animation:k567 2100ms linear infinite}
+@keyframes k568{to{stroke-dashoffset:-196}}
+.k568{animation:k568 2100ms linear infinite}
+@keyframes k569{to{stroke-dashoffset:-168}}
+.k569{animation:k569 2100ms linear infinite}
+@keyframes k570{to{stroke-dashoffset:-146}}
+.k570{animation:k570 2100ms linear infinite}
 </style>
-<g><path class="bus" stroke="#1F6D5C" d="M63,0 V430"/><path class="cm k535" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-166" d="M63,2.5 V427.5"/><path class="cm k536" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="-138" d="M63,2.5 V427.5"/><path class="cm k537" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="-116" d="M63,2.5 V427.5"/></g><g><path class="bus" stroke="#9A3412" d="M90,0 V430"/><path class="cm k538" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="-11" d="M90,2.5 V427.5"/><path class="cm k539" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="17" d="M90,2.5 V427.5"/><path class="cm k540" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="39" d="M90,2.5 V427.5"/></g><g><path class="bus" stroke="#5F6E73" d="M117,0 V430"/><path class="cm k541" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-96" d="M117,2.5 V427.5"/><path class="cm k542" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="-68" d="M117,2.5 V427.5"/><path class="cm k543" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="-46" d="M117,2.5 V427.5"/></g><g><path class="bus" stroke="#1F6D5C" d="M63,120 H150"/><path class="cm k544" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-54" d="M67,120 H145"/><path class="cm k545" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="-26" d="M67,120 H145"/><path class="cm k546" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="-4" d="M67,120 H145"/></g><g><path class="bus" stroke="#1F6D5C" d="M198,120 H240"/><path class="cm k547" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-106" d="M202,120 H236"/><path class="cm k548" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="-78" d="M202,120 H236"/><path class="cm k549" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="-56" d="M202,120 H236"/></g><rect x="240" y="99" width="160" height="42" rx="8" fill="none" stroke="#1F6D5C" stroke-width="1.6"/><text x="252" y="124" class="ts" font-size="11.5" letter-spacing="1.3">THE RULES LAYER</text><g><path class="bus" stroke="#1F6D5C" d="M400,120 H452"/><path class="cm k550" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="14" d="M404,120 H448"/><path class="cm k551" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="42" d="M404,120 H448"/><path class="cm k552" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="64" d="M404,120 H448"/></g><rect x="452" y="88" width="324" height="80" rx="6" fill="none" stroke="#5F6E73" stroke-width="1.3"/><path fill="none" stroke="#1F6D5C" stroke-width="2" d="M462.0,100 V124 M468.4,100 V124 M474.8,100 V124 M481.2,100 V124 M487.6,100 V124 M494.0,100 V124 M500.4,100 V124 M506.8,100 V124 M513.2,100 V124 M519.6,100 V124 M526.0,100 V124 M532.4,100 V124 M538.8,100 V124 M545.2,100 V124 M551.6,100 V124 M558.0,100 V124 M570.8,100 V124 M577.2,100 V124 M583.6,100 V124 M590.0,100 V124 M596.4,100 V124 M602.8,100 V124 M609.2,100 V124 M615.6,100 V124 M622.0,100 V124 M628.4,100 V124 M634.8,100 V124 M641.2,100 V124 M647.6,100 V124 M654.0,100 V124 M660.4,100 V124 M666.8,100 V124 M673.2,100 V124 M679.6,100 V124 M686.0,100 V124 M692.4,100 V124 M698.8,100 V124 M705.2,100 V124 M711.6,100 V124 M718.0,100 V124 M724.4,100 V124 M730.8,100 V124 M737.2,100 V124 M743.6,100 V124 M750.0,100 V124 M756.4,100 V124 M762.8,100 V124"/><path fill="none" stroke="#9A3412" stroke-width="2" d="M564.4,97 V127"/><path fill="none" stroke="#1F6D5C" stroke-width="2" d="M462.0,132 V156 M468.4,132 V156 M474.8,132 V156 M481.2,132 V156 M487.6,132 V156 M494.0,132 V156 M500.4,132 V156 M506.8,132 V156 M513.2,132 V156 M519.6,132 V156 M526.0,132 V156 M532.4,132 V156 M538.8,132 V156 M545.2,132 V156 M551.6,132 V156 M558.0,132 V156 M564.4,132 V156 M570.8,132 V156 M577.2,132 V156 M583.6,132 V156 M590.0,132 V156 M596.4,132 V156 M602.8,132 V156 M609.2,132 V156 M615.6,132 V156 M622.0,132 V156 M628.4,132 V156 M634.8,132 V156 M641.2,132 V156 M647.6,132 V156 M654.0,132 V156 M660.4,132 V156 M666.8,132 V156 M673.2,132 V156 M679.6,132 V156 M686.0,132 V156 M692.4,132 V156 M698.8,132 V156 M705.2,132 V156 M711.6,132 V156 M724.4,132 V156 M730.8,132 V156 M737.2,132 V156 M743.6,132 V156 M750.0,132 V156 M756.4,132 V156 M762.8,132 V156"/><path fill="none" stroke="#9A3412" stroke-width="2" d="M718.0,129 V159"/><text x="452" y="80" class="ts dim" font-size="10" letter-spacing="1.1">96 LABELLED MESSAGES · 2 CALLED WRONG</text><path fill="none" stroke="#1F6D5C" stroke-width="1.4" d="M320,141 V196"/><circle cx="320" cy="202.5" r="3.5" fill="none" stroke="#1F6D5C" stroke-width="2"/><rect x="240" y="220" width="160" height="42" rx="8" fill="none" stroke="#5F6E73" stroke-width="1.4" stroke-dasharray="5 4"/><text x="252" y="245" class="ts dim" font-size="10" letter-spacing="1.1">THE CASCADE</text><text x="240" y="286" class="ts dim" font-size="10" letter-spacing="1.1">LAYER TWO — NO EVALUATION ARTIFACT SURVIVES</text><g transform="translate(150,96) scale(1.0000)"><rect x="0.75" y="0.75" width="46.5" height="46.5" rx="12" fill="#0A0A0B" stroke="#6E7A80" stroke-width="1"/>
+<g><path class="bus" stroke="#1F6D5C" d="M63,0 V430"/><path class="cm k553" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-166" d="M63,2.5 V427.5"/><path class="cm k554" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="-138" d="M63,2.5 V427.5"/><path class="cm k555" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="-116" d="M63,2.5 V427.5"/></g><g><path class="bus" stroke="#9A3412" d="M90,0 V430"/><path class="cm k556" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="-11" d="M90,2.5 V427.5"/><path class="cm k557" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="17" d="M90,2.5 V427.5"/><path class="cm k558" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="39" d="M90,2.5 V427.5"/></g><g><path class="bus" stroke="#5F6E73" d="M117,0 V430"/><path class="cm k559" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-96" d="M117,2.5 V427.5"/><path class="cm k560" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="-68" d="M117,2.5 V427.5"/><path class="cm k561" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="-46" d="M117,2.5 V427.5"/></g><g><path class="bus" stroke="#1F6D5C" d="M63,120 H150"/><path class="cm k562" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-54" d="M67,120 H145"/><path class="cm k563" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="-26" d="M67,120 H145"/><path class="cm k564" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="-4" d="M67,120 H145"/></g><g><path class="bus" stroke="#1F6D5C" d="M198,120 H240"/><path class="cm k565" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-106" d="M202,120 H236"/><path class="cm k566" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="-78" d="M202,120 H236"/><path class="cm k567" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="-56" d="M202,120 H236"/></g><rect x="240" y="99" width="160" height="42" rx="8" fill="none" stroke="#1F6D5C" stroke-width="1.6"/><text x="252" y="124" class="ts" font-size="11.5" letter-spacing="1.3">THE RULES LAYER</text><g><path class="bus" stroke="#1F6D5C" d="M400,120 H452"/><path class="cm k568" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="14" d="M404,120 H448"/><path class="cm k569" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="42" d="M404,120 H448"/><path class="cm k570" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="64" d="M404,120 H448"/></g><rect x="452" y="88" width="324" height="80" rx="6" fill="none" stroke="#5F6E73" stroke-width="1.3"/><path fill="none" stroke="#1F6D5C" stroke-width="2" d="M462.0,100 V124 M468.4,100 V124 M474.8,100 V124 M481.2,100 V124 M487.6,100 V124 M494.0,100 V124 M500.4,100 V124 M506.8,100 V124 M513.2,100 V124 M519.6,100 V124 M526.0,100 V124 M532.4,100 V124 M538.8,100 V124 M545.2,100 V124 M551.6,100 V124 M558.0,100 V124 M570.8,100 V124 M577.2,100 V124 M583.6,100 V124 M590.0,100 V124 M596.4,100 V124 M602.8,100 V124 M609.2,100 V124 M615.6,100 V124 M622.0,100 V124 M628.4,100 V124 M634.8,100 V124 M641.2,100 V124 M647.6,100 V124 M654.0,100 V124 M660.4,100 V124 M666.8,100 V124 M673.2,100 V124 M679.6,100 V124 M686.0,100 V124 M692.4,100 V124 M698.8,100 V124 M705.2,100 V124 M711.6,100 V124 M718.0,100 V124 M724.4,100 V124 M730.8,100 V124 M737.2,100 V124 M743.6,100 V124 M750.0,100 V124 M756.4,100 V124 M762.8,100 V124"/><path fill="none" stroke="#9A3412" stroke-width="2" d="M564.4,97 V127"/><path fill="none" stroke="#1F6D5C" stroke-width="2" d="M462.0,132 V156 M468.4,132 V156 M474.8,132 V156 M481.2,132 V156 M487.6,132 V156 M494.0,132 V156 M500.4,132 V156 M506.8,132 V156 M513.2,132 V156 M519.6,132 V156 M526.0,132 V156 M532.4,132 V156 M538.8,132 V156 M545.2,132 V156 M551.6,132 V156 M558.0,132 V156 M564.4,132 V156 M570.8,132 V156 M577.2,132 V156 M583.6,132 V156 M590.0,132 V156 M596.4,132 V156 M602.8,132 V156 M609.2,132 V156 M615.6,132 V156 M622.0,132 V156 M628.4,132 V156 M634.8,132 V156 M641.2,132 V156 M647.6,132 V156 M654.0,132 V156 M660.4,132 V156 M666.8,132 V156 M673.2,132 V156 M679.6,132 V156 M686.0,132 V156 M692.4,132 V156 M698.8,132 V156 M705.2,132 V156 M711.6,132 V156 M724.4,132 V156 M730.8,132 V156 M737.2,132 V156 M743.6,132 V156 M750.0,132 V156 M756.4,132 V156 M762.8,132 V156"/><path fill="none" stroke="#9A3412" stroke-width="2" d="M718.0,129 V159"/><text x="452" y="80" class="ts dim" font-size="10" letter-spacing="1.1">96 LABELLED MESSAGES · 2 CALLED WRONG</text><path fill="none" stroke="#1F6D5C" stroke-width="1.4" d="M320,141 V196"/><circle cx="320" cy="202.5" r="3.5" fill="none" stroke="#1F6D5C" stroke-width="2"/><rect x="240" y="220" width="160" height="42" rx="8" fill="none" stroke="#5F6E73" stroke-width="1.4" stroke-dasharray="5 4"/><text x="252" y="245" class="ts dim" font-size="10" letter-spacing="1.1">THE CASCADE</text><text x="240" y="286" class="ts dim" font-size="10" letter-spacing="1.1">LAYER TWO — NO EVALUATION ARTIFACT SURVIVES</text><g transform="translate(150,96) scale(1.0000)"><rect x="0.75" y="0.75" width="46.5" height="46.5" rx="12" fill="#0A0A0B" stroke="#6E7A80" stroke-width="1"/>
 <path d="M17.2,30.2 L20.3,27.4 M27.7,20.7 L30.6,18.1" fill="none" stroke="#F7F8F8" stroke-opacity="0.65" stroke-width="2" stroke-linecap="round"/>
 <circle cx="13.5" cy="33.5" r="3" fill="none" stroke="#06B6D4" stroke-width="2.4"/>
 <circle cx="24" cy="24" r="3" fill="none" stroke="#06B6D4" stroke-width="2.4"/>

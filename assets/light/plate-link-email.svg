@@ -10,17 +10,17 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#E4E9E9}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#1A2224;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k397{to{stroke-dashoffset:-242}}
-.k397{animation:k397 2750ms linear infinite}
-@keyframes k398{to{stroke-dashoffset:-214}}
-.k398{animation:k398 2750ms linear infinite}
-@keyframes k399{to{stroke-dashoffset:-192}}
-.k399{animation:k399 2750ms linear infinite}
-@keyframes k400{to{stroke-dashoffset:-347}}
-.k400{animation:k400 2750ms linear infinite}
-@keyframes k401{to{stroke-dashoffset:-319}}
-.k401{animation:k401 2750ms linear infinite}
-@keyframes k402{to{stroke-dashoffset:-297}}
-.k402{animation:k402 2750ms linear infinite}
+@keyframes k415{to{stroke-dashoffset:-242}}
+.k415{animation:k415 2750ms linear infinite}
+@keyframes k416{to{stroke-dashoffset:-214}}
+.k416{animation:k416 2750ms linear infinite}
+@keyframes k417{to{stroke-dashoffset:-192}}
+.k417{animation:k417 2750ms linear infinite}
+@keyframes k418{to{stroke-dashoffset:-347}}
+.k418{animation:k418 2750ms linear infinite}
+@keyframes k419{to{stroke-dashoffset:-319}}
+.k419{animation:k419 2750ms linear infinite}
+@keyframes k420{to{stroke-dashoffset:-297}}
+.k420{animation:k420 2750ms linear infinite}
 </style>
-<path class="bus" stroke="#79848C" d="M24,0 V88"/><g><rect x="0.5" y="20" width="101" height="64" rx="3" fill="#0A0A0B" stroke="#79848C" stroke-width="1"/><rect x="21.5" y="20.5" width="5" height="4" fill="#8A9599"/><rect x="21.5" y="79.5" width="5" height="4" fill="#8A9599"/><path class="bus" stroke="#79848C" d="M24,20 V26 M24,54 V84"/><rect x="10" y="26" width="28" height="28" rx="8" fill="#0A0A0B" stroke="#6B6B76" stroke-width="1.2"/><text transform="translate(0,16)" x="24" y="29.5" class="ts" font-size="17" text-anchor="middle" style="fill:#F7F8F8">@</text><text x="46" y="44.5" class="ts" font-size="11.5" letter-spacing="1.3">EMAIL</text></g><path class="cm k397" stroke="#C9D3D6" stroke-dasharray="34 176" stroke-dashoffset="-32" d="M24,58 V80"/><path class="cm k398" stroke="#AEB9BD" stroke-dasharray="28 182" stroke-dashoffset="-4" d="M24,58 V80"/><path class="cm k399" stroke="#9AA5A9" stroke-dasharray="22 188" stroke-dashoffset="18" d="M24,58 V80"/><path class="cm k400" stroke="#C9D3D6" stroke-dasharray="34 176" stroke-dashoffset="-137" d="M24,58 V80"/><path class="cm k401" stroke="#AEB9BD" stroke-dasharray="28 182" stroke-dashoffset="-109" d="M24,58 V80"/><path class="cm k402" stroke="#9AA5A9" stroke-dasharray="22 188" stroke-dashoffset="-87" d="M24,58 V80"/></svg>
+<path class="bus" stroke="#79848C" d="M24,0 V88"/><g><rect x="0.5" y="20" width="101" height="64" rx="3" fill="#0A0A0B" stroke="#79848C" stroke-width="1"/><rect x="21.5" y="20.5" width="5" height="4" fill="#8A9599"/><rect x="21.5" y="79.5" width="5" height="4" fill="#8A9599"/><path class="bus" stroke="#79848C" d="M24,20 V26 M24,54 V84"/><rect x="10" y="26" width="28" height="28" rx="8" fill="#0A0A0B" stroke="#6B6B76" stroke-width="1.2"/><text transform="translate(0,16)" x="24" y="29.5" class="ts" font-size="17" text-anchor="middle" style="fill:#F7F8F8">@</text><text x="46" y="44.5" class="ts" font-size="11.5" letter-spacing="1.3">EMAIL</text></g><path class="cm k415" stroke="#C9D3D6" stroke-dasharray="34 176" stroke-dashoffset="-32" d="M24,58 V80"/><path class="cm k416" stroke="#AEB9BD" stroke-dasharray="28 182" stroke-dashoffset="-4" d="M24,58 V80"/><path class="cm k417" stroke="#9AA5A9" stroke-dasharray="22 188" stroke-dashoffset="18" d="M24,58 V80"/><path class="cm k418" stroke="#C9D3D6" stroke-dasharray="34 176" stroke-dashoffset="-137" d="M24,58 V80"/><path class="cm k419" stroke="#AEB9BD" stroke-dasharray="28 182" stroke-dashoffset="-109" d="M24,58 V80"/><path class="cm k420" stroke="#9AA5A9" stroke-dasharray="22 188" stroke-dashoffset="-87" d="M24,58 V80"/></svg>
