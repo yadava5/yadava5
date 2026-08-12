@@ -320,7 +320,8 @@ for (const c of [...spec.claims, ...spec.unpinnable, ...spec.external, ...(spec.
     const text = textOf(f);
     if (text === null) {
       fails.push(`${c.id}: drawn_on lists ${f}, which is not on disk — a row cannot be evidence `
-               + `that the page draws "${c.value}" on a plate the build no longer authors`);
+               + `that the page draws "${c.value}" somewhere that does not exist (a retired plate, `
+               + `or a rename this row never followed)`);
       continue;
     }
     if (!drawsToken(text, c.value))
