@@ -1552,6 +1552,77 @@ def m_applied() -> str:
     ) + css_close() + body + "</svg>"
 
 
+# ── VII · visualassist, phone cut. The policy stays TO SCALE — 100u per
+# metre against desktop's 120 — with the arc chords rebuilt so each apex
+# still lands on its ruler tick (chord x = tick − 0.134r, the 60° sagitta).
+# The title is the one name Syne 800 cannot fit across 440 at any size worth
+# reading, so it takes the hero's own two-line device. The legend moves
+# below the arcs: at this width a label beside them would ride the 2 m
+# chord. The slider keeps its severed lead, and keeps desktop's one licensed
+# crossing — the dead 1.4u drop through the value it is set to.
+def m_visualassist() -> str:
+    body = (
+        m_sec(650, (60, 145, 205))
+        # the open stub: reaching for the zinc bus, not landing
+        + f'<circle cx="76.5" cy="140" r="3.5" fill="none" stroke="{T["zinc"]}" stroke-width="2"/>'
+        + f'<path class="bus" stroke="{T["zinc"]}" stroke-dasharray="3 6" d="M84,140 H90"/>'
+        + f'<text x="92" y="44" class="d" font-size="24" letter-spacing="0.5">VII —'
+          f'<tspan x="92" dy="26">VISUALASSIST</tspan></text>'
+        + f'<text x="92" y="92" class="dim" font-size="13">it decides by distance when to speak —</text>'
+        + f'<text x="92" y="108" class="dim" font-size="13">and when not to.</text>'
+        + mark("visualassist", 92, 116, 48)
+        # the one live current: mark to phone
+        + bus("rust", "M140,140 H156 V210 H164", C=100, cd="M144,140 H156 V210 H159.5")
+        + f'<g><rect x="164" y="195" width="18" height="30" rx="4" fill="{TILE}" '
+          f'stroke="{T["edge"]}" stroke-width="1.2"/>'
+          f'<circle cx="173" cy="203" r="1.5" fill="#F7F8F8"/></g>'
+        # the policy, to scale: 100u per metre along a measured ruler
+        + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="1.4" '
+          f'd="M184,210 H394 M234,206 V214 M284,206 V214 M384,206 V214"/>'
+        + f'<path fill="none" stroke="{T["rust"]}" stroke-width="2" d="M227.3,185 A50,50 0 0 1 227.3,235"/>'
+        + f'<path fill="none" stroke="{T["rust"]}" stroke-width="2" stroke-dasharray="4.5 4.8" '
+          f'd="M270.6,160 A100,100 0 0 1 270.6,260"/>'
+        + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="2" d="M357.2,110 A200,200 0 0 1 357.2,310"/>'
+        # the legend, keyed by the arcs' own strokes
+        + f'<path fill="none" stroke="{T["rust"]}" stroke-width="2" d="M92,326 H104"/>'
+        + lbl(110, 330, "0.5 M — INTERRUPT", cls="ts", size=11, ls=1.3)
+        + f'<path fill="none" stroke="{T["rust"]}" stroke-width="2" stroke-dasharray="4.5 4.8" d="M92,348 H104"/>'
+        + lbl(110, 352, "1.0 M — PULSE", cls="ts", size=11, ls=1.3)
+        + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="2" d="M92,370 H104"/>'
+        + lbl(110, 374, "2.0 M — STAY SILENT", cls="ts", size=11, ls=1.3)
+        # the settings slider, lead severed before the service that ignores it
+        + lbl(92, 414, "SETTINGS · ALERT DISTANCE — METRES, READ ALOUD", size=10, ls=1.1)
+        + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="2" '
+          f'd="M100,446 H400 M160,440 V452 M220,440 V452 M340,440 V452"/>'
+        + f'<circle cx="220" cy="446" r="7" fill="{T["rust"]}"/>'
+        + lbl(160, 470, "0.5", cls="dim", size=10, ls=0.5, anchor="middle")
+        + lbl(220, 470, "1.0", cls="dim", size=10, ls=0.5, anchor="middle")
+        + lbl(340, 470, "2.0", cls="dim", size=10, ls=0.5, anchor="middle")
+        + f'<path fill="none" stroke="{T["rust"]}" stroke-width="1.4" d="M220,453 V499 H248"/>'
+        + f'<circle cx="255" cy="499" r="3.5" fill="none" stroke="{T["rust"]}" stroke-width="2"/>'
+        + f'<rect x="288" y="478" width="116" height="42" rx="8" fill="none" '
+          f'stroke="{T["rust"]}" stroke-width="1.6"/>'
+        + lbl(300, 503, "LIDARSERVICE", cls="ts", size=11.5, ls=1.3)
+        + f'<rect x="92" y="548" width="4" height="16" fill="{T["rust"]}"/>'
+        + f'<text x="106" y="561" class="dim" font-size="12">a slider labelled in metres, its value read aloud —</text>'
+        + f'<text x="106" y="578" class="dim" font-size="12">bound to a threshold LiDARService never consults.</text>'
+        + f'<text x="106" y="600" font-size="13">a live control that does nothing lies</text>'
+        + f'<text x="106" y="619" font-size="13">to the person the app is for.</text>'
+    )
+    return head(
+        650,
+        "VII · VisualAssist — the alert policy to scale, phone cut",
+        "VII · VisualAssist, phone cut — the alert policy to scale from the "
+        "phone drawn on the plate: interrupt inside 0.5 m, pulse at 1.0, stay "
+        "silent past 2.0. Below it, the settings slider the app actually "
+        "shows — labelled in metres, its value read aloud — its lead drawn "
+        "ending open before LiDARService, the threshold it never consults. A "
+        "live control that does nothing lies to the person the app is for.",
+        key="m-7-visualassist.svg",
+        col=(88, 412), frame=(2.5, 35, 2.5), w=440,
+    ) + css_close() + body + "</svg>"
+
+
 # ── declared frames (top, rightGap, bottomGap), baked from gate.mjs
 # measurement on this machine; tolerance 4 absorbs the CI ascent skew.
 HERO_FRAME = (30, 37.7, 0)
@@ -1605,6 +1676,7 @@ MOBILE = {
     "m-4-automl.svg": m_automl,
     "m-5-cadence.svg": m_cadence,
     "m-6-applied.svg": m_applied,
+    "m-7-visualassist.svg": m_visualassist,
 }
 
 _re = re
