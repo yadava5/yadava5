@@ -945,6 +945,141 @@ def plate_cadence() -> str:
     ) + css_close() + body + "</svg>"
 
 
+# ══════════════════════════════════════════════════ VI · applied
+#
+# The part that ships and the part that doesn't, on one plate. The rules
+# layer grades a strip of 96 ticks — two of them rust, the two it called
+# wrong — and below it the cascade is drawn in the board's absence
+# vocabulary: a dashed outline, its lead ending in an open circle, because
+# its 0.9583 has no surviving artifact. The wrong ticks are placed by hand;
+# their COUNT is the claim, their positions are not.
+def plate_applied() -> str:
+    def row(y0: int, wrong: int) -> str:
+        ticks = " ".join(f"M{462 + i * 6.4:.1f},{y0} V{y0 + 24}"
+                         for i in range(48) if i != wrong)
+        wx = 462 + wrong * 6.4
+        return (f'<path fill="none" stroke="{T["verd"]}" stroke-width="2" d="{ticks}"/>'
+                f'<path fill="none" stroke="{T["rust"]}" stroke-width="2" '
+                f'd="M{wx:.1f},{y0 - 3} V{y0 + 27}"/>')
+    body = (
+        bus("verd", "M63,0 V430", C=200, cd="M63,2.5 V427.5")
+        + bus("rust", "M90,0 V430", C=45, cd="M90,2.5 V427.5")
+        + bus("zinc", "M117,0 V430", C=130, cd="M117,2.5 V427.5")
+        + bus("verd", "M63,120 H150", C=88, cd="M67,120 H145")
+        + bus("verd", "M198,120 H240", C=140, cd="M202,120 H236")
+        + f'<rect x="240" y="99" width="160" height="42" rx="8" fill="none" '
+          f'stroke="{T["verd"]}" stroke-width="1.6"/>'
+        + lbl(252, 124, "THE RULES LAYER", cls="ts", size=11.5, ls=1.3)
+        + bus("verd", "M400,120 H452", C=20, cd="M404,120 H448")
+        + f'<rect x="452" y="88" width="324" height="80" rx="6" fill="none" '
+          f'stroke="{T["zinc"]}" stroke-width="1.3"/>'
+        + row(100, 16) + row(132, 40)
+        + lbl(452, 80, "96 LABELLED MESSAGES · 2 CALLED WRONG", size=10, ls=1.1)
+        # the cascade, in the board's absence vocabulary: dashed, lead open
+        + f'<path fill="none" stroke="{T["verd"]}" stroke-width="1.4" d="M320,141 V196"/>'
+        + f'<circle cx="320" cy="202.5" r="3.5" fill="none" stroke="{T["verd"]}" stroke-width="2"/>'
+        + f'<rect x="240" y="220" width="160" height="42" rx="8" fill="none" '
+          f'stroke="{T["zinc"]}" stroke-width="1.4" stroke-dasharray="5 4"/>'
+        + lbl(252, 245, "THE CASCADE", cls="ts dim", size=10, ls=1.1)
+        + lbl(240, 286, "LAYER TWO — NO EVALUATION ARTIFACT SURVIVES", size=10, ls=1.1)
+        + mark("applied", 150, 96, 48)
+        + f'<text x="150" y="54" class="d" font-size="30" letter-spacing="0.5">VI — APPLIED</text>'
+        + f'<text x="150" y="76" class="dim" font-size="14.5">an inbox read by rules that keep score.</text>'
+        + f'<text x="560" y="240" class="d" font-size="62">0.979</text>'
+        + f'<text x="560" y="278" class="dim" font-size="13">macro-F1 — the rules layer alone,</text>'
+        + f'<text x="560" y="296" class="dim" font-size="13">graded on the strip above.</text>'
+        + f'<rect x="150" y="362" width="4" height="16" fill="{T["verd"]}"/>'
+        + f'<text x="164" y="375" class="mid" font-size="14">the full cascade scored 0.9583 — and the artifact is gone; the run was overwritten.</text>'
+        + f'<text x="164" y="395" class="dim" font-size="13">what is deployed runs only that first layer.</text>'
+    )
+    return head(
+        430,
+        "VI · Applied — 0.979 macro-F1, rules layer alone; the cascade has no artifact",
+        "VI · Applied — the mail triage drawn as the part that ships: the "
+        "rules layer grades a labelled strip of 96 messages and gets 2 wrong "
+        "— 0.979 macro-F1, rules layer alone. Below it, drawn dashed with "
+        "its lead left open, is the cascade: layer two, whose 0.9583 has no "
+        "evaluation artifact — the run was overwritten. What is deployed "
+        "runs only that first layer.",
+        key="plate-6-applied.svg",
+        col=(148, 880), frame=APPLIED_FRAME,
+    ) + css_close() + body + "</svg>"
+
+
+# ══════════════════════════════════════════════════ VII · visualassist
+#
+# The alert policy drawn to scale from the phone in the reader's hand:
+# three arcs at 0.5 / 1.0 / 2.0 m along a measured ruler, their styles
+# keyed to a swatch legend — solid rust interrupts, dashed rust pulses,
+# zinc stays silent, the mark's own encoding at board scale. The behaviour
+# words live in the legend rather than on the arcs because a label laid
+# across a curve reads as ink through type at exactly the radii that
+# matter. Below: the settings slider the app actually shows, drawn with
+# its lead severed — an open circle short of LIDARSERVICE — which is the
+# section's admission made geometry. The plate taps no page bus: like the
+# hero says, no URL. Its only current runs mark-to-phone.
+def plate_visualassist() -> str:
+    body = (
+        bus("verd", "M63,0 V524", C=60, cd="M63,2.5 V521.5")
+        + bus("rust", "M90,0 V524", C=145, cd="M90,2.5 V521.5")
+        + bus("zinc", "M117,0 V524", C=205, cd="M117,2.5 V521.5")
+        # the open stub: reaching for the zinc bus, not landing
+        + f'<path class="bus" stroke="{T["zinc"]}" stroke-dasharray="3 6" d="M132,120 H146"/>'
+        + f'<circle cx="125.5" cy="120" r="3.5" fill="none" stroke="{T["zinc"]}" stroke-width="2"/>'
+        # the one live current: mark to phone
+        + bus("rust", "M198,120 H226 V213 H252", C=100, cd="M202,120 H226 V213 H247")
+        + f'<g><rect x="252" y="198" width="18" height="30" rx="4" fill="{TILE}" '
+          f'stroke="{T["edge"]}" stroke-width="1.2"/>'
+          f'<circle cx="261" cy="206" r="1.5" fill="#F7F8F8"/></g>'
+        # the policy, to scale: 120u per metre along a measured ruler
+        + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="1.4" '
+          f'd="M272,213 H524 M332,209 V217 M392,209 V217 M512,209 V217"/>'
+        + f'<path fill="none" stroke="{T["rust"]}" stroke-width="2" d="M324,183 A60,60 0 0 1 324,243"/>'
+        + f'<path fill="none" stroke="{T["rust"]}" stroke-width="2" stroke-dasharray="4.5 4.8" '
+          f'd="M375.9,153 A120,120 0 0 1 375.9,273"/>'
+        + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="2" d="M479.8,93 A240,240 0 0 1 479.8,333"/>'
+        # the legend, keyed by the arcs' own strokes
+        + f'<path fill="none" stroke="{T["rust"]}" stroke-width="2" d="M522,176 H534"/>'
+        + lbl(540, 180, "0.5 M — INTERRUPT", cls="ts", size=11, ls=1.3)
+        + f'<path fill="none" stroke="{T["rust"]}" stroke-width="2" stroke-dasharray="4.5 4.8" d="M522,201 H534"/>'
+        + lbl(540, 205, "1.0 M — PULSE", cls="ts", size=11, ls=1.3)
+        + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="2" d="M522,226 H534"/>'
+        + lbl(540, 230, "2.0 M — STAY SILENT", cls="ts", size=11, ls=1.3)
+        # the settings slider, lead severed before the service that ignores it
+        + lbl(150, 372, "SETTINGS · ALERT DISTANCE — METRES, READ ALOUD", size=10, ls=1.1)
+        + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="2" '
+          f'd="M150,398 H458 M211.6,392 V404 M273.2,392 V404 M396.4,392 V404"/>'
+        + f'<circle cx="273.2" cy="398" r="7" fill="{T["rust"]}"/>'
+        + lbl(211.6, 422, "0.5", cls="dim", size=10, ls=0.5, anchor="middle")
+        + lbl(273.2, 422, "1.0", cls="dim", size=10, ls=0.5, anchor="middle")
+        + lbl(396.4, 422, "2.0", cls="dim", size=10, ls=0.5, anchor="middle")
+        + f'<path fill="none" stroke="{T["rust"]}" stroke-width="1.4" d="M273.2,405 V436 H544"/>'
+        + f'<circle cx="551" cy="436" r="3.5" fill="none" stroke="{T["rust"]}" stroke-width="2"/>'
+        + f'<rect x="590" y="415" width="160" height="42" rx="8" fill="none" '
+          f'stroke="{T["rust"]}" stroke-width="1.6"/>'
+        + lbl(602, 440, "LIDARSERVICE", cls="ts", size=11.5, ls=1.3)
+        + f'<text x="150" y="54" class="d" font-size="30" letter-spacing="0.5">VII — VISUALASSIST</text>'
+        + f'<text x="150" y="76" class="dim" font-size="14.5">it decides by distance when to speak — and when not to.</text>'
+        + mark("visualassist", 150, 96, 48)
+        + f'<rect x="150" y="470" width="4" height="16" fill="{T["rust"]}"/>'
+        + f'<text x="164" y="483" class="dim" font-size="13">a slider labelled in metres, its value read aloud — bound to a threshold LiDARService never consults.</text>'
+        + f'<text x="164" y="505" font-size="14.5">a live control that does nothing lies to the person the app is for.</text>'
+    )
+    return head(
+        524,
+        "VII · VisualAssist — 0.5 / 1.0 / 2.0 m: interrupt, pulse, stay silent; the slider is bound to nothing",
+        "VII · VisualAssist — the alert policy drawn to scale from the phone "
+        "in your hand: interrupt inside 0.5 m, pulse at 1.0, stay silent "
+        "past 2.0. Below it, the settings slider the app actually shows — "
+        "labelled in metres, its value read aloud — drawn with its lead "
+        "ending open before LiDARService, the threshold it never consults. "
+        "A live control that does nothing lies to the person the app is "
+        "for.",
+        key="plate-7-visualassist.svg",
+        col=(148, 880), frame=VA_FRAME,
+    ) + css_close() + body + "</svg>"
+
+
 # ══════════════════════════════════════════════════ the mobile hero
 #
 # 440u canvas, its own bus at MBUS_X. No email line here: the mobile set's
@@ -1008,6 +1143,8 @@ WORK_FRAME = (2.5, 28, 2.5)
 GLYPH_FRAME = (2.5, 35.5, 2.5)
 AUTOML_FRAME = (2.5, 60.8, 2.5)
 CADENCE_FRAME = (2.5, 51.7, 2.5)
+APPLIED_FRAME = (2.5, 37, 2.5)
+VA_FRAME = (2.5, 150, 2.5)
 MOB_FRAME = (36, 58, 0)
 # The return plate's right edge is its one silkscreen line, which now ends
 # 47.2u short of the canvas — 30 was authored against a longer string. Measured
@@ -1038,6 +1175,8 @@ PLATES = {
     "plate-3-glyph.svg": plate_glyph,
     "plate-4-automl.svg": plate_automl,
     "plate-5-cadence.svg": plate_cadence,
+    "plate-6-applied.svg": plate_applied,
+    "plate-7-visualassist.svg": plate_visualassist,
 }
 MOBILE = {"m-0-hero.svg": m_hero}
 
