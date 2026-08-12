@@ -715,6 +715,126 @@ def plate_jetpack() -> str:
     ) + css_close() + body + "</svg>"
 
 
+# ══════════════════════════════════════════════════ I · work
+#
+# The one section with no product mark, drawn as the thing a board does when
+# the part exists but is not fitted: an UNPOPULATED FOOTPRINT. The dashed
+# outline sits in the exact slot every other section's mark occupies, the
+# zinc tap runs to its entry pad and stops — a year of paid work, and the
+# component is off-board. Drawing a sigil for it was rejected in the brief:
+# the absence is the claim. The eyebrow at top right answers the return
+# plate's "SECTIONS II — VII" wayfinding: I is the exception, and says so.
+def plate_work() -> str:
+    body = (
+        bus("verd", "M63,0 V320", C=95, cd="M63,2.5 V317.5")
+        + bus("rust", "M90,0 V320", C=10, cd="M90,2.5 V317.5")
+        + bus("zinc", "M117,0 V320", C=160, cd="M117,2.5 V317.5")
+        # the tap: onto the pad, and no further. The comet dies here every
+        # 2750ms, which is the drawing doing the section's arguing.
+        + bus("zinc", "M117,120 H148.5", C=48, cd="M121,120 H144")
+        # one <g>, like the chips' modules: the pad pierces the outline it
+        # serves, which is composition, not collision
+        + f'<g><rect x="150.75" y="96.75" width="46.5" height="46.5" rx="12" '
+          f'fill="none" stroke="{T["zinc"]}" stroke-width="1.4" stroke-dasharray="5 4"/>'
+          f'<rect x="148.25" y="118" width="5" height="4" fill="{T["zinc"]}"/></g>'
+        + lbl(150, 163, "NO PRODUCT MARK — THE WORK IS OFF-REPO", size=10, ls=1.1)
+        + f'<text x="150" y="54" class="d" font-size="30" letter-spacing="0.5">I — WORK</text>'
+        + f'<text x="150" y="76" class="dim" font-size="14.5">twelve months of production data work — none of it public.</text>'
+        + lbl(852, 30, "FIRST, THE EXCEPTION — ATTESTED, NOT DERIVED", size=10.5, anchor="end")
+        + f'<text x="584" y="150" class="d" font-size="56">57.8M</text>'
+        + f'<text x="584" y="186" class="dim" font-size="13">rows in one field-usage table,</text>'
+        + f'<text x="584" y="204" class="dim" font-size="13">from 1.6M Oracle Analytics query logs.</text>'
+        + f'<rect x="150" y="248" width="4" height="16" fill="{T["zinc"]}"/>'
+        + f'<text x="164" y="261" class="mid" font-size="14">none of these numbers can be re-derived by you.</text>'
+        + f'<text x="164" y="281" class="dim" font-size="13">the data belongs to Miami University and to a competition — this section is my word.</text>'
+    )
+    return head(
+        320,
+        "I · Work — a year of paid data work; the part is off-board",
+        "I · Work — the one section drawn as an empty footprint: a component "
+        "the board expects that is not fitted, because the year of paid work "
+        "is off-repo. A 57.8M-row field-usage table, distilled from 1.6M "
+        "Oracle Analytics query logs at Miami University. None of these "
+        "numbers can be re-derived by a reader — the data belongs to Miami "
+        "University and to a competition; this section is attested, not "
+        "derived.",
+        key="plate-1-work.svg",
+        col=(148, 880), frame=WORK_FRAME,
+    ) + css_close() + body + "</svg>"
+
+
+# ══════════════════════════════════════════════════ III · glyph
+#
+# The section drawn as its own part: three register-lane bundles — NEON,
+# AVX2, AVX-512, the ISAs the kernels were written for — fed off the SIMD
+# bus and converging on the one benchmark chip, then dropping to the package
+# that actually ships: the wasm_simd128 build, byte-counted and checked
+# daily. The admission block runs three lines, the longest on the page,
+# because this section owes two of them: the size-floor slowdown and the
+# checkpoint the test set picked.
+def plate_glyph() -> str:
+    # lane counts are the ISAs' own: 128/256/512-bit registers hold 2/4/8
+    # 64-bit lanes, and the 1:2:4 ratio holds for any element width — the
+    # bundle heights ARE the claim the section makes about register width.
+    lanes = ""
+    for label, n, yc in (("NEON", 2, 175), ("AVX2", 4, 235), ("AVX-512", 8, 295)):
+        y0 = yc - 3 * (n - 1)
+        rules = " ".join(f"M300,{y0 + i * 6} H420" for i in range(n))
+        lanes += (lbl(300, y0 - 10, label, size=10, ls=1.2)
+                  + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="1.4" d="{rules}"/>')
+    body = (
+        bus("verd", "M63,0 V448", C=40, cd="M63,2.5 V445.5")
+        + bus("rust", "M90,0 V448", C=130, cd="M90,2.5 V445.5")
+        + bus("zinc", "M117,0 V448", C=8, cd="M117,2.5 V445.5")
+        # SIMD tap into the mark, then the feeder down the bundle column
+        + bus("rust", "M90,120 H150", C=88, cd="M94,120 H145")
+        + bus("rust", "M198,120 H264 V295", C=30, cd="M202,120 H264 V292")
+        + f'<circle cx="264" cy="175" r="2.6" fill="{T["rust"]}"/>'
+        + f'<circle cx="264" cy="235" r="2.6" fill="{T["rust"]}"/>'
+        + bus("rust", "M264,175 H300", C=60, cd="M266.5,175 H297")
+        + bus("rust", "M264,235 H300", C=115, cd="M266.5,235 H297")
+        + bus("rust", "M264,295 H300", C=170, cd="M266.5,295 H297")
+        + lanes
+        # the collector gathers the three bundles into the benchmark chip
+        + f'<path class="bus" stroke="{T["rust"]}" d="M420,175 H456 V295 H420 M420,235 H456"/>'
+        + bus("rust", "M456,235 H492", C=142, cd="M422,175 H456 V235 H489")
+        + f'<rect x="492" y="214" width="170" height="42" rx="8" fill="none" '
+          f'stroke="{T["rust"]}" stroke-width="1.6"/>'
+        + lbl(504, 240, "BENCHDOT/256", cls="ts", size=11.5, ls=1.3)
+        # and drops to the package that ships
+        + bus("rust", "M577,256 V300", C=55, cd="M577,258.5 V296")
+        + f'<rect x="492" y="300" width="208" height="42" rx="8" fill="none" '
+          f'stroke="{T["zinc"]}" stroke-width="1.6"/>'
+        + lbl(504, 326, "WASM_SIMD128 · 43,751 B", cls="ts", size=11.5, ls=1.3)
+        + lbl(492, 360, "BYTE-IDENTICAL TO MAIN · CHECKED DAILY IN CI", size=10, ls=1.1)
+        + mark("glyph", 150, 96, 48)
+        + f'<text x="150" y="54" class="d" font-size="30" letter-spacing="0.5">III — GLYPH</text>'
+        + f'<text x="150" y="76" class="dim" font-size="14.5">SIMD kernels over a net the course provided.</text>'
+        + f'<text x="660" y="150" class="d" font-size="62">3.5×</text>'
+        + f'<text x="660" y="188" class="dim" font-size="13">benchDot/256 — course baseline,</text>'
+        + f'<text x="660" y="206" class="dim" font-size="13">reference machine, committed run.</text>'
+        + f'<rect x="150" y="382" width="4" height="16" fill="{T["rust"]}"/>'
+        + f'<text x="164" y="395" class="mid" font-size="14">the same flags run 10.7× slower on benchAxpy/128 — below the size floor,</text>'
+        + f'<text x="164" y="415" class="dim" font-size="13">where threading costs more than it pays. and 97.01% is a training-time</text>'
+        + f'<text x="164" y="433" class="dim" font-size="13">number: the test set that graded the net also picked its checkpoint.</text>'
+    )
+    return head(
+        448,
+        "III · Glyph — SIMD kernels over a course-provided net: 3.5× where the size is right, 10.7× slower where it is not",
+        "III · Glyph — SIMD kernels over a course-provided MNIST net, drawn "
+        "as three register-lane bundles — NEON, AVX2, AVX-512 — converging "
+        "on benchDot/256: 3.5× over the course baseline on the reference "
+        "machine. The package that ships is WASM_SIMD128, 43,751 bytes, "
+        "byte-identical to main and checked daily in CI. The against-self "
+        "results are printed: the same flags run 10.7× slower on "
+        "benchAxpy/128, below the size floor, and 97.01% is a training-time "
+        "number — the test set that graded the net also picked its "
+        "checkpoint.",
+        key="plate-3-glyph.svg",
+        col=(148, 880), frame=GLYPH_FRAME,
+    ) + css_close() + body + "</svg>"
+
+
 # ══════════════════════════════════════════════════ the mobile hero
 #
 # 440u canvas, its own bus at MBUS_X. No email line here: the mobile set's
@@ -774,6 +894,8 @@ def m_hero() -> str:
 # measurement on this machine; tolerance 4 absorbs the CI ascent skew.
 HERO_FRAME = (30, 37.7, 0)
 JET_FRAME = (2.5, 55.9, 2.5)
+WORK_FRAME = (2.5, 28, 2.5)
+GLYPH_FRAME = (2.5, 35.5, 2.5)
 MOB_FRAME = (36, 58, 0)
 # The return plate's right edge is its one silkscreen line, which now ends
 # 47.2u short of the canvas — 30 was authored against a longer string. Measured
@@ -799,7 +921,9 @@ PLATES = {
     "plate-link-linkedin.svg": make_chip("linkedin"),
     "plate-link-email.svg": make_chip("email"),
     "plate-link-return.svg": plate_return,
+    "plate-1-work.svg": plate_work,
     "plate-2-jetpack.svg": plate_jetpack,
+    "plate-3-glyph.svg": plate_glyph,
 }
 MOBILE = {"m-0-hero.svg": m_hero}
 
