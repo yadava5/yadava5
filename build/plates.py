@@ -584,7 +584,19 @@ def chip(kind: str, label: str, glyph: str, tap_bus: str,
         # two comets 105 pattern-units apart: on the 22u visible run one of
         # them is always on-path, so the carrier never blinks (motion.mjs)
         current = "".join(comet(tap_bus, f"M{sx},58 V80", C=c) for c in phases)
-        return head(CHIP_H, title, desc, key=key, col=(pad + 8, w - 4), frame=frame,
+        # THE TYPE COLUMN this chip declares (gate check 5, which holds a
+        # left-anchored label 6u short of the declared edge). Default: 8u in
+        # from the canvas left, 4u short of its right.
+        #
+        # RÉSUMÉ is the one label that nearly fills its module — drawn 46->102
+        # in a 108-wide chip, identical at all 40 samples — so the 6u margin
+        # needs 105.85 and the blanket `w - 4` (= 104) declared an edge 2u
+        # inside what the plate DRAWS. The module's own ink edge is this
+        # chip's column: type may not leave the package, which is a decision
+        # a reviewer can read, and the label clears it with 1.65u. Written as
+        # its derivation, not as 107.5, so it follows the module width.
+        col = (pad + 8, pad + w_mod - 0.5 if kind == "resume" else w - 4)
+        return head(CHIP_H, title, desc, key=key, col=col, frame=frame,
                     faces="6", w=w) + css_close() + track + module + current + "</svg>"
     finally:
         T = saved
@@ -644,6 +656,11 @@ def plate_return() -> str:
         "merge and continue into the evidence, sections two to seven.",
         key="plate-link-return.svg",
         col=(44, 886), frame=RET_FRAME,
+        # This plate speaks in ONE line of silkscreen, class "ts" — Commissioner
+        # 600 and nothing else. It was shipping the display 800 and the text 400
+        # as well: ~37KB of base64 no glyph on it ever asks for, sent to every
+        # reader of the profile, in both themes. Same declaration a chip makes.
+        faces="6",
     ) + css_close() + body + "</svg>"
 
 
@@ -758,10 +775,21 @@ def m_hero() -> str:
 HERO_FRAME = (30, 37.7, 0)
 JET_FRAME = (2.5, 55.9, 2.5)
 MOB_FRAME = (36, 58, 0)
-RET_FRAME = (0, 30, 0)
+# The return plate's right edge is its one silkscreen line, which now ends
+# 47.2u short of the canvas — 30 was authored against a longer string. Measured
+# AFTER the dead faces came off, not before: check 12 normalises by a probe set
+# in 'T' 400, so while that face was embedded the probe resolved to it and the
+# same render measured 46.4. With only the 600 face on the plate the probe
+# substitutes the weight it already has, and both checks read one ruler.
+RET_FRAME = (0, 47.2, 0)
+# The chips' frame is the MODULE, not the canvas: check 12 excludes the
+# full-height through-lead by construction (a >=H-2 tall, <=5u wide element is
+# the trace, not content), so first ink is the package's top edge at y=20 and
+# the bottom margin is the 4u below it. The old 0,0.5,0 described the strip
+# these chips replaced, where the lanes ran edge to edge.
 CHIP_FRAME = {
-    "portfolio": (0, 0.5, 0), "resume": (0, 0.5, 0),
-    "linkedin": (0, 0.5, 0), "email": (0, 0.5, 0),
+    "portfolio": (20, 0.5, 4), "resume": (20, 0.5, 4),
+    "linkedin": (20, 0.5, 4), "email": (20, 0.5, 4),
 }
 
 PLATES = {
