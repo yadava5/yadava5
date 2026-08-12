@@ -217,7 +217,7 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
     // 618/1000 — read from its hmtx — so every column and edge would have
     // mis-normalised by 2.6% against the old constant, silently and in the
     // direction that HIDES overflow.
-    const REF = 40 * (16 * 1958 / 2000 + 1.6);   // = 690.56, Newsreader's 'M'
+    const REF = 40 * (16 * 1914 / 2000 + 1.6);   // = 676.48, Commissioner's 'M' (hmtx 1914 / upm 2000, comm-400.woff2)
     const probe = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     // styled EXPLICITLY, not via class="lbl": the mobile plates never define
     // .lbl, so the probe there rendered at letter-spacing 0, the metric came
@@ -707,15 +707,16 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
     //      opacity on the rect or any ancestor of it.
     // 21 — A TRANSPARENT PLATE DECLARES THE CANVAS IT IS GRADED AGAINST.
     //
-    //      Round 27's two frontispieces (title page, colophon) paint no sheet
-    //      at all: pure ink on GitHub's own canvas. Check 20 below exists
-    //      precisely to refuse a ground that declares and does not paint, so
-    //      transparency cannot ride through it — it has to be a declaration
-    //      of its own. data-canvas names the hex every ratio on the plate is
-    //      graded against, and plates.py declares the WORST canvas GitHub
-    //      serves that theme on (#22272e, the lightest of the three dark
-    //      canvases, and #ffffff for light — see F1_CANVAS there), so a pass
-    //      here is a pass on all of them. A plate that declares a canvas AND
+    //      Check 20 below exists precisely to refuse a ground that declares
+    //      and does not paint, so transparency cannot ride through it — it
+    //      has to be a declaration of its own. data-canvas names the hex
+    //      every ratio on the plate is graded against, and plates.py
+    //      declares the WORST canvas GitHub serves that theme on (#212830,
+    //      Primer 11.10.0 dark-dimmed, the lightest of the three dark
+    //      canvases, and #ffffff for light). The previous value here,
+    //      #22272e, is a canvas GitHub no longer serves — Primer renamed
+    //      dark-dimmed and moved the hex, so every ratio graded on the old
+    //      value was overstated by ~0.9%. A plate that declares a canvas AND
     //      paints a full-canvas sheet is claiming to be two things at once,
     //      and fails — mutations.mjs probes exactly that.
     const declaredCanvas = svgEl.getAttribute('data-canvas');
@@ -762,6 +763,44 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
       : parse(slabStyle ? slabStyle.fill : 'rgb(0, 0, 0)');
     const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
 
+    // ── LOCAL GROUNDS. RE-TUNED for BOARD (2026-08-12), in the same change
+    // as the design it measures. The plates are transparent, and their
+    // grounding comes from OBJECTS: the product marks are opaque near-black
+    // tiles (#0A0A0B) carrying their own ink. Grading that ink against the
+    // page canvas measures a colour relationship no reader ever sees — the
+    // glyph mark's structure rules read 7.7:1 against white and sit on a
+    // near-black tile — and it fails faithful marks while passing anything
+    // bright enough on the canvas but invisible on its actual ground. So:
+    // an element wholly inside an opaque-filled rect is graded against the
+    // innermost such rect. Containment is measured at t=0 in screen space
+    // (transforms applied); a travelling element's whole-path box is never
+    // inside a tile, so moving ink still grades against the canvas.
+    // mutations.mjs carries the probe: dim a mark internal against its tile
+    // and this check must call it out.
+    const grounds = meta.filter(g => {
+      if (g.tag !== 'rect') return false;
+      const cs = getComputedStyle(g.el);
+      if (cs.fill === 'none' || cs.fill.startsWith('url')) return false;
+      const chan = parse(cs.fill);
+      const fo = parseFloat(cs.fillOpacity);
+      const a = (chan.length > 3 ? chan[3] : 1) * (Number.isFinite(fo) ? fo : 1) * opacityOf(g.el);
+      return a >= 1;
+    }).map(g => {
+      const r = g.el.getBoundingClientRect();
+      return { i: g.i, r, rgb: parse(getComputedStyle(g.el).fill).slice(0, 3), area: r.width * r.height };
+    });
+    const groundOf = (m) => {
+      const b = m.el.getBoundingClientRect();
+      let best = null;
+      for (const g of grounds) {
+        if (g.i === m.i) continue;
+        if (b.x >= g.r.x - TOL && b.x + b.width <= g.r.x + g.r.width + TOL
+          && b.y >= g.r.y - TOL && b.y + b.height <= g.r.y + g.r.height + TOL)
+          if (!best || g.area < best.area) best = g;
+      }
+      return best ? best.rgb : SLABRGB;
+    };
+
     for (const m of meta) {
       const st = getComputedStyle(m.el);
       // opacity is NOT inherited, so getComputedStyle(child).opacity reads 1
@@ -775,14 +814,15 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
       // checks, since the day it was written.
       const alpha = opacityOf(m.el);
       if (alpha < 0.05) continue;
+      const GROUND = groundOf(m);
       // A shape outlined in something legible is legible: WCAG asks that the
       // component be perceivable, not that every channel of it clear 3:1.
       const strokeOK = (() => {
         const sv = st.stroke;
         if (!sv || sv === 'none') return false;
         const c = parse(sv); if (c.length < 3) return false;
-        const e = over(c.slice(0, 3), SLABRGB, (c.length > 3 ? c[3] : 1) * alpha);
-        return ratio(e, SLABRGB) >= 3.0;
+        const e = over(c.slice(0, 3), GROUND, (c.length > 3 ? c[3] : 1) * alpha);
+        return ratio(e, GROUND) >= 3.0;
       })();
       for (const prop of ['fill', 'stroke']) {
         if (prop === 'fill' && m.tag !== 'text' && strokeOK) continue;
@@ -800,24 +840,27 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
         // exported logo actually carries — were not read at all. A <text> at
         // fill-opacity="0.12" measured 1.4:1 and passed.
         //
-        // Not hypothetical: build/logos.json bakes stroke-opacity into two of
-        // the six product marks on the contact sheet, and this check graded
-        // them at full strength while they rendered at 1.49:1 and 2.68:1 on
-        // the light slab.
+        // Not hypothetical: the paper design's logos.json (retired with it,
+        // 2026-08-12) baked stroke-opacity into two of the six product marks,
+        // and this check graded them at full strength while they rendered at
+        // 1.49:1 and 2.68:1 on the light slab. BOARD's marks carry the same
+        // attribute — cadence's ticks, automl's return arc — so the hole
+        // this line closes is as live as ever.
         const po = parseFloat(st[prop === 'fill' ? 'fillOpacity' : 'strokeOpacity']);
         const a = (rgb.length > 3 ? rgb[3] : 1) * alpha * (Number.isFinite(po) ? po : 1);
         if (a < 0.05) continue;
-        const eff = over(rgb.slice(0, 3), SLABRGB, a);
-        const r = ratio(eff, SLABRGB);
+        const eff = over(rgb.slice(0, 3), GROUND, a);
+        const r = ratio(eff, GROUND);
         // The 4.5:1 text floor was UNREACHABLE. `continue`-ing on r >= 3.0 before
         // computing `need` meant text between 3.0 and 4.5 was waved through, and
         // the 4.5 branch only ever ran where `r < 4.5` was already true. The
         // gate advertised AA on text and enforced the non-text floor. Compute
         // the floor first, then compare against it.
         const need = m.tag === 'text' ? 4.5 : 3.0;
-        if (r >= need || Math.abs(r - 1) < 0.02) continue;          // 1:1 == it IS the slab
+        if (r >= need || Math.abs(r - 1) < 0.02) continue;          // 1:1 == it IS the ground
         if (r < need)
-          out.push(`${m.nm} ${prop} is ${r.toFixed(2)}:1 on the slab (needs ${need}:1)`);
+          out.push(`${m.nm} ${prop} is ${r.toFixed(2)}:1 on ${GROUND === SLABRGB
+            ? 'the slab' : `its local ground rgb(${GROUND.join(',')})`} (needs ${need}:1)`);
       }
     }
 
@@ -854,7 +897,7 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
     // 5u further out on CI — and check 12 was failing a plate that check 5
     // had already passed. Two checks measuring the same edge with different
     // rulers is worse than either ruler being wrong.
-    const REF = 40 * (16 * 1958 / 2000 + 1.6);   // = 690.56, see check 5
+    const REF = 40 * (16 * 1914 / 2000 + 1.6);   // = 676.48, see check 5
     const probe = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     // styled EXPLICITLY, not via class="lbl": the mobile plates never define
     // .lbl, so the probe there rendered at letter-spacing 0, the metric came

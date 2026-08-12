@@ -306,6 +306,18 @@ const MUTATIONS = [
   // 12 and would report "caught" without the mutation contributing anything —
   // the stale-probe shape documented above, which this file has shipped three
   // times.
+  // Check 10's local-ground retune (BOARD, 2026-08-12): ink wholly inside an
+  // opaque rect is graded against that rect, not the canvas. This is the
+  // probe that ships with it: dim the glyph mark's structure rules to a grey
+  // that is LEGIBLE on the canvas of both themes but near-invisible on the
+  // #0A0A0B tile they actually sit on (#26262B is 1.34:1 there). The old
+  // canvas-graded check cannot see this defect; only the retuned one can, so
+  // a pass here proves the local ground is really being consulted. Keyed to
+  // the hero by name — every plate with a mark would do, but an expectation
+  // that floats across files is the stale-probe shape this file documents.
+  ['mark ink goes dim against its own tile', /is 1\.\d+:1 on its local ground/,
+    (s) => s.replace(/stroke="#6B6B76" stroke-width="1.4"/,
+      'stroke="#26262B" stroke-width="1.4"'), /^plate-0-hero\.svg$/],
   ['a mobile plate stops declaring its frame', /\bm-[\w-]+\.svg: declares no data-frame/,
     (s) => s.replace(/ data-frame="[^"]*"/, ''), /^m-.*\.svg$/],
   // The other direction: a declaration that survives but stops being true.
