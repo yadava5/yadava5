@@ -193,10 +193,33 @@ const MUTATIONS = [
         + `<rect class="mutsweep" x="150" y="${Number(m[1]) - 8}" width="360" height="2" `
         + 'fill="#ffffff" style="animation:mutsweep 4s linear infinite"/></svg>');
     }],
+  // The OTHER half of check 3, which had no probe at all until 2026-08-11.
+  // The rule above exercises the hairline branch — a thin thing travelling
+  // across type. A solid graphic simply lying on type takes a different branch
+  // (`sits on top of`), and that is the branch a mark like plate-1's index
+  // triangle would trip, so the round that added the triangle was leaning on an
+  // unfalsified check to say the triangle was fine. Found by asking what the
+  // check would have caught rather than by reading that it passed.
+  //
+  // Appended before </svg> so the rect is a top-level sibling: check 3 exempts
+  // pairs inside the same group, and injecting next to the text would have put
+  // the probe inside whatever <g> holds it and proved nothing. 80x16 because a
+  // rect is a HAIRLINE to this gate at 3u or under on either side, and a FRAME
+  // if its fill is none — a probe that is either is a probe of a different
+  // branch.
+  ['a solid graphic is laid over type', /<rect [\d.,]+> sits on top of/,
+    (s) => {
+      const m = /<text x="([\d.]+)" y="([\d.]+)" class="(?:lbl|kick|fine)\b[^"]*"/.exec(s);
+      if (!m) return s;
+      return s.replace('</svg>',
+        `<rect x="${Number(m[1]) + 2}" y="${Number(m[2]) - 12}" width="80" height="16" `
+        + 'fill="#8a8a8a"/></svg>');
+    }],
   // ── The mobile canvas, for the first time.
   //
-  // Check 12 was guarded `if (!mobile)` for three rounds, so 18 of the 36
-  // published files had no edge assertion at all. Round 21 removed the guard.
+  // Check 12 was guarded `if (!mobile)` from round 11 (89c69e4) to round 21 —
+  // ten rounds, not the three an earlier draft of this comment claimed — so 18
+  // of the 36 published files had no edge assertion at all.
   // These two probes exist because a new coverage nobody has watched fail is
   // the very defect that guard turned out to be — and this file's own history
   // is four gates that were trusted before they were falsified.
