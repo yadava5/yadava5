@@ -12,38 +12,38 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#1A2224}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#1A2224;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k481{to{stroke-dashoffset:-346}}
-.k481{animation:k481 2100ms linear infinite}
-@keyframes k482{to{stroke-dashoffset:-318}}
-.k482{animation:k482 2100ms linear infinite}
-@keyframes k483{to{stroke-dashoffset:-296}}
-.k483{animation:k483 2100ms linear infinite}
-@keyframes k484{to{stroke-dashoffset:-261}}
-.k484{animation:k484 2450ms linear infinite}
-@keyframes k485{to{stroke-dashoffset:-233}}
-.k485{animation:k485 2450ms linear infinite}
-@keyframes k486{to{stroke-dashoffset:-211}}
-.k486{animation:k486 2450ms linear infinite}
-@keyframes k487{to{stroke-dashoffset:-201}}
-.k487{animation:k487 2750ms linear infinite}
-@keyframes k488{to{stroke-dashoffset:-173}}
-.k488{animation:k488 2750ms linear infinite}
-@keyframes k489{to{stroke-dashoffset:-151}}
-.k489{animation:k489 2750ms linear infinite}
-@keyframes k490{to{stroke-dashoffset:-231}}
-.k490{animation:k490 2750ms linear infinite}
-@keyframes k491{to{stroke-dashoffset:-203}}
-.k491{animation:k491 2750ms linear infinite}
-@keyframes k492{to{stroke-dashoffset:-181}}
-.k492{animation:k492 2750ms linear infinite}
-@keyframes k493{to{stroke-dashoffset:-272}}
-.k493{animation:k493 2750ms linear infinite}
-@keyframes k494{to{stroke-dashoffset:-244}}
-.k494{animation:k494 2750ms linear infinite}
-@keyframes k495{to{stroke-dashoffset:-222}}
-.k495{animation:k495 2750ms linear infinite}
+@keyframes k499{to{stroke-dashoffset:-346}}
+.k499{animation:k499 2100ms linear infinite}
+@keyframes k500{to{stroke-dashoffset:-318}}
+.k500{animation:k500 2100ms linear infinite}
+@keyframes k501{to{stroke-dashoffset:-296}}
+.k501{animation:k501 2100ms linear infinite}
+@keyframes k502{to{stroke-dashoffset:-261}}
+.k502{animation:k502 2450ms linear infinite}
+@keyframes k503{to{stroke-dashoffset:-233}}
+.k503{animation:k503 2450ms linear infinite}
+@keyframes k504{to{stroke-dashoffset:-211}}
+.k504{animation:k504 2450ms linear infinite}
+@keyframes k505{to{stroke-dashoffset:-201}}
+.k505{animation:k505 2750ms linear infinite}
+@keyframes k506{to{stroke-dashoffset:-173}}
+.k506{animation:k506 2750ms linear infinite}
+@keyframes k507{to{stroke-dashoffset:-151}}
+.k507{animation:k507 2750ms linear infinite}
+@keyframes k508{to{stroke-dashoffset:-231}}
+.k508{animation:k508 2750ms linear infinite}
+@keyframes k509{to{stroke-dashoffset:-203}}
+.k509{animation:k509 2750ms linear infinite}
+@keyframes k510{to{stroke-dashoffset:-181}}
+.k510{animation:k510 2750ms linear infinite}
+@keyframes k511{to{stroke-dashoffset:-272}}
+.k511{animation:k511 2750ms linear infinite}
+@keyframes k512{to{stroke-dashoffset:-244}}
+.k512{animation:k512 2750ms linear infinite}
+@keyframes k513{to{stroke-dashoffset:-222}}
+.k513{animation:k513 2750ms linear infinite}
 </style>
-<g><path class="bus" stroke="#1F6D5C" d="M63,0 V380"/><path class="cm k481" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-136" d="M63,2.5 V377.5"/><path class="cm k482" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="-108" d="M63,2.5 V377.5"/><path class="cm k483" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="-86" d="M63,2.5 V377.5"/></g><g><path class="bus" stroke="#9A3412" d="M90,0 V380"/><path class="cm k484" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="-51" d="M90,2.5 V377.5"/><path class="cm k485" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="-23" d="M90,2.5 V377.5"/><path class="cm k486" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="-1" d="M90,2.5 V377.5"/></g><g><path class="bus" stroke="#5F6E73" d="M117,0 V380"/><path class="cm k487" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="9" d="M117,2.5 V377.5"/><path class="cm k488" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="37" d="M117,2.5 V377.5"/><path class="cm k489" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="59" d="M117,2.5 V377.5"/></g><g><path class="bus" stroke="#5F6E73" d="M117,120 H150"/><path class="cm k490" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-21" d="M121,120 H145"/><path class="cm k491" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="7" d="M121,120 H145"/><path class="cm k492" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="29" d="M121,120 H145"/></g><g><path class="bus" stroke="#5F6E73" d="M198,120 H240 V160 H262"/><path class="cm k493" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-62" d="M202,120 H240 V160 H258"/><path class="cm k494" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="-34" d="M202,120 H240 V160 H258"/><path class="cm k495" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="-12" d="M202,120 H240 V160 H258"/></g><rect x="262" y="138" width="356" height="44" rx="4" fill="none" stroke="#5F6E73" stroke-width="1.3"/><path fill="none" stroke="#5F6E73" stroke-width="2" d="M276.0,150 V170 M283.6,150 V170 M291.3,150 V170 M298.9,150 V170 M306.5,150 V170 M314.1,150 V170 M321.8,150 V170 M329.4,150 V170 M337.0,150 V170 M344.7,150 V170 M352.3,150 V170 M359.9,150 V170 M367.5,150 V170 M375.2,150 V170 M382.8,150 V170 M390.4,150 V170 M398.0,150 V170 M405.7,150 V170 M413.3,150 V170 M420.9,150 V170 M428.6,150 V170 M436.2,150 V170 M443.8,150 V170 M451.4,150 V170 M459.1,150 V170 M466.7,150 V170 M474.3,150 V170 M482.0,150 V170 M489.6,150 V170 M497.2,150 V170 M504.8,150 V170 M512.5,150 V170 M520.1,150 V170 M527.7,150 V170 M535.3,150 V170 M543.0,150 V170 M550.6,150 V170 M558.2,150 V170 M565.9,150 V170 M573.5,150 V170 M581.1,150 V170 M588.7,150 V170 M596.4,150 V170 M604.0,150 V170"/><text x="262" y="130" class="ts dim" font-size="10" letter-spacing="1.1">THE REGISTRY · 44 TOOLS DEFINED</text><path fill="none" stroke="#5F6E73" stroke-width="1.4" d="M300,182 V218 M345,182 V218 M390,182 V218 M435,182 V218 M480,182 V218 M525,182 V218 M570,182 V218"/><circle cx="300" cy="224" r="5" fill="none" stroke="#5F6E73" stroke-width="2"/><circle cx="345" cy="224" r="5" fill="none" stroke="#5F6E73" stroke-width="2"/><circle cx="390" cy="224" r="5" fill="none" stroke="#5F6E73" stroke-width="2"/><circle cx="435" cy="224" r="5" fill="none" stroke="#5F6E73" stroke-width="2"/><circle cx="480" cy="224" r="5" fill="none" stroke="#5F6E73" stroke-width="2"/><circle cx="525" cy="224" r="5" fill="none" stroke="#5F6E73" stroke-width="2"/><circle cx="570" cy="224" r="5" fill="none" stroke="#5F6E73" stroke-width="2"/><text x="300" y="256" class="ts dim" font-size="10" letter-spacing="1.1">SEVEN TOOL SETS — NO PHASE IS HANDED ALL 44</text><g transform="translate(150,96) scale(1.0000)"><rect x="0.75" y="0.75" width="46.5" height="46.5" rx="12" fill="#0A0A0B" stroke="#6E7A80" stroke-width="1"/>
+<g><path class="bus" stroke="#1F6D5C" d="M63,0 V380"/><path class="cm k499" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-136" d="M63,2.5 V377.5"/><path class="cm k500" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="-108" d="M63,2.5 V377.5"/><path class="cm k501" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="-86" d="M63,2.5 V377.5"/></g><g><path class="bus" stroke="#9A3412" d="M90,0 V380"/><path class="cm k502" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="-51" d="M90,2.5 V377.5"/><path class="cm k503" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="-23" d="M90,2.5 V377.5"/><path class="cm k504" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="-1" d="M90,2.5 V377.5"/></g><g><path class="bus" stroke="#5F6E73" d="M117,0 V380"/><path class="cm k505" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="9" d="M117,2.5 V377.5"/><path class="cm k506" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="37" d="M117,2.5 V377.5"/><path class="cm k507" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="59" d="M117,2.5 V377.5"/></g><g><path class="bus" stroke="#5F6E73" d="M117,120 H150"/><path class="cm k508" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-21" d="M121,120 H145"/><path class="cm k509" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="7" d="M121,120 H145"/><path class="cm k510" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="29" d="M121,120 H145"/></g><g><path class="bus" stroke="#5F6E73" d="M198,120 H240 V160 H262"/><path class="cm k511" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-62" d="M202,120 H240 V160 H258"/><path class="cm k512" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="-34" d="M202,120 H240 V160 H258"/><path class="cm k513" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="-12" d="M202,120 H240 V160 H258"/></g><rect x="262" y="138" width="356" height="44" rx="4" fill="none" stroke="#5F6E73" stroke-width="1.3"/><path fill="none" stroke="#5F6E73" stroke-width="2" d="M276.0,150 V170 M283.6,150 V170 M291.3,150 V170 M298.9,150 V170 M306.5,150 V170 M314.1,150 V170 M321.8,150 V170 M329.4,150 V170 M337.0,150 V170 M344.7,150 V170 M352.3,150 V170 M359.9,150 V170 M367.5,150 V170 M375.2,150 V170 M382.8,150 V170 M390.4,150 V170 M398.0,150 V170 M405.7,150 V170 M413.3,150 V170 M420.9,150 V170 M428.6,150 V170 M436.2,150 V170 M443.8,150 V170 M451.4,150 V170 M459.1,150 V170 M466.7,150 V170 M474.3,150 V170 M482.0,150 V170 M489.6,150 V170 M497.2,150 V170 M504.8,150 V170 M512.5,150 V170 M520.1,150 V170 M527.7,150 V170 M535.3,150 V170 M543.0,150 V170 M550.6,150 V170 M558.2,150 V170 M565.9,150 V170 M573.5,150 V170 M581.1,150 V170 M588.7,150 V170 M596.4,150 V170 M604.0,150 V170"/><text x="262" y="130" class="ts dim" font-size="10" letter-spacing="1.1">THE REGISTRY · 44 TOOLS DEFINED</text><path fill="none" stroke="#5F6E73" stroke-width="1.4" d="M300,182 V218 M345,182 V218 M390,182 V218 M435,182 V218 M480,182 V218 M525,182 V218 M570,182 V218"/><circle cx="300" cy="224" r="5" fill="none" stroke="#5F6E73" stroke-width="2"/><circle cx="345" cy="224" r="5" fill="none" stroke="#5F6E73" stroke-width="2"/><circle cx="390" cy="224" r="5" fill="none" stroke="#5F6E73" stroke-width="2"/><circle cx="435" cy="224" r="5" fill="none" stroke="#5F6E73" stroke-width="2"/><circle cx="480" cy="224" r="5" fill="none" stroke="#5F6E73" stroke-width="2"/><circle cx="525" cy="224" r="5" fill="none" stroke="#5F6E73" stroke-width="2"/><circle cx="570" cy="224" r="5" fill="none" stroke="#5F6E73" stroke-width="2"/><text x="300" y="256" class="ts dim" font-size="10" letter-spacing="1.1">SEVEN TOOL SETS — NO PHASE IS HANDED ALL 44</text><g transform="translate(150,96) scale(1.0000)"><rect x="0.75" y="0.75" width="46.5" height="46.5" rx="12" fill="#0A0A0B" stroke="#6E7A80" stroke-width="1"/>
 <path d="M24,12.5 A11.5,11.5 0 0 1 34.3,29.2 M31.5,33.8 A11.5,11.5 0 0 1 16.5,33.8"
   fill="none" stroke="#A78BFA" stroke-width="2.2" stroke-linecap="round"/>
 <path d="M13.7,29.2 A11.5,11.5 0 0 1 24,12.5" fill="none" stroke="#A78BFA"

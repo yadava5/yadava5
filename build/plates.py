@@ -1441,6 +1441,59 @@ def m_automl() -> str:
     ) + css_close() + body + "</svg>"
 
 
+# ── V · cadence, phone cut. The wall rotates with the flow: 37 stubs rain
+# off a rail into the function's top edge, and the single output crosses a
+# HORIZONTAL doored wall before the 7 tables. One comet runs entry to last
+# table — the door is the only way through, and the drawing has exactly one
+# current to prove it with.
+def m_cadence() -> str:
+    stubs = " ".join(f"M{124 + i * 264 / 36:.1f},202 V216" for i in range(37))
+    fan = " ".join(f"M248,{y} H264" for y in range(350, 495, 24))
+    tables = "".join(f'<rect x="264" y="{y - 8}" width="132" height="16" rx="3" '
+                     f'fill="none" stroke="{T["zinc"]}" stroke-width="1.3"/>'
+                     for y in range(350, 495, 24))
+    body = (
+        m_sec(640, (12, 175, 90), tap=("verd", 30))
+        + mark("cadence", 92, 96, 48)
+        + f'<text x="92" y="54" class="d" font-size="24" letter-spacing="0.5">V — CADENCE</text>'
+        + f'<text x="92" y="76" class="dim" font-size="13">every route into one function; every row behind RLS.</text>'
+        + m_fig("37", "route handlers, one function;",
+                "RLS FORCEd on all 7 tables.")
+        + bus("verd", "M116,144 V202 H388", C=132, cd="M116,148 V202 H384")
+        + f'<path fill="none" stroke="{T["verd"]}" stroke-width="1.4" d="{stubs}"/>'
+        + f'<rect x="100" y="216" width="296" height="60" rx="8" fill="none" '
+          f'stroke="{T["verd"]}" stroke-width="1.6"/>'
+        + lbl(112, 242, "ONE SERVERLESS FUNCTION", cls="ts", size=11.5, ls=1.3)
+        + lbl(112, 260, "37 ROUTE HANDLERS", cls="ts dim", size=10, ls=1.1)
+        # the wall, doored only where the output passes
+        + f'<path class="bus" stroke="{T["verd"]}" d="M100,326 H236 M260,326 H396"/>'
+        + f'<path class="bus" stroke="{T["verd"]}" d="M100,332 H236 M260,332 H396"/>'
+        + lbl(100, 316, "RLS · FORCED", size=10.5)
+        + bus("verd", "M248,276 V494", C=190, cd="M248,278.5 V490")
+        + f'<path fill="none" stroke="{T["verd"]}" stroke-width="1.4" d="{fan}"/>'
+        + tables
+        + m_adm(524, "verd",
+                ["five of six app-side guards begin",
+                 "if (context?.userId) — conditional."],
+                ["a caller that forgets the identity",
+                 "still sends the query; the database’s",
+                 "refusal cannot be forgotten."])
+    )
+    return head(
+        640,
+        "V · Cadence — one function, one door, phone cut",
+        "V · Cadence, phone cut — 37 route handlers rain into one serverless "
+        "function, and its single output passes through the one door in a "
+        "wall — row-level security, FORCEd — before reaching the 7 tables "
+        "behind it. The against-self line: five of six app-side guards are "
+        "conditional, if context userId; a caller that forgets the identity "
+        "still sends the query, and the database's refusal is the one that "
+        "cannot be forgotten.",
+        key="m-5-cadence.svg",
+        col=(88, 412), frame=(2.5, 43, 2.5), w=440,
+    ) + css_close() + body + "</svg>"
+
+
 # ── declared frames (top, rightGap, bottomGap), baked from gate.mjs
 # measurement on this machine; tolerance 4 absorbs the CI ascent skew.
 HERO_FRAME = (30, 37.7, 0)
@@ -1492,6 +1545,7 @@ MOBILE = {
     "m-2-jetpack.svg": m_jetpack,
     "m-3-glyph.svg": m_glyph,
     "m-4-automl.svg": m_automl,
+    "m-5-cadence.svg": m_cadence,
 }
 
 _re = re
