@@ -292,7 +292,7 @@ def pulse(d: str, travel: float, delay_ms: int) -> str:
 
 # ── the plate opener.
 def head(h: int, title: str, desc: str, key: str = "",
-         col: tuple[int, int] = (44, 886),
+         col: tuple[float, float] = (44, 886),
          frame: tuple[float, float, float] | None = None,
          faces: str = "DT6", w: int = W) -> str:
     """Open a plate.
