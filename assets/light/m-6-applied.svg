@@ -12,45 +12,45 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#1A2224}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#1A2224;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k748{to{stroke-dashoffset:-376}}
-.k748{animation:k748 2100ms linear infinite}
-@keyframes k749{to{stroke-dashoffset:-348}}
-.k749{animation:k749 2100ms linear infinite}
-@keyframes k750{to{stroke-dashoffset:-326}}
-.k750{animation:k750 2100ms linear infinite}
-@keyframes k751{to{stroke-dashoffset:-221}}
-.k751{animation:k751 2450ms linear infinite}
-@keyframes k752{to{stroke-dashoffset:-193}}
-.k752{animation:k752 2450ms linear infinite}
-@keyframes k753{to{stroke-dashoffset:-171}}
-.k753{animation:k753 2450ms linear infinite}
-@keyframes k754{to{stroke-dashoffset:-306}}
-.k754{animation:k754 2750ms linear infinite}
-@keyframes k755{to{stroke-dashoffset:-278}}
-.k755{animation:k755 2750ms linear infinite}
-@keyframes k756{to{stroke-dashoffset:-256}}
-.k756{animation:k756 2750ms linear infinite}
-@keyframes k757{to{stroke-dashoffset:-264}}
+@keyframes k757{to{stroke-dashoffset:-376}}
 .k757{animation:k757 2100ms linear infinite}
-@keyframes k758{to{stroke-dashoffset:-236}}
+@keyframes k758{to{stroke-dashoffset:-348}}
 .k758{animation:k758 2100ms linear infinite}
-@keyframes k759{to{stroke-dashoffset:-214}}
+@keyframes k759{to{stroke-dashoffset:-326}}
 .k759{animation:k759 2100ms linear infinite}
-@keyframes k760{to{stroke-dashoffset:-316}}
-.k760{animation:k760 2100ms linear infinite}
-@keyframes k761{to{stroke-dashoffset:-288}}
-.k761{animation:k761 2100ms linear infinite}
-@keyframes k762{to{stroke-dashoffset:-266}}
-.k762{animation:k762 2100ms linear infinite}
-@keyframes k763{to{stroke-dashoffset:-196}}
-.k763{animation:k763 2100ms linear infinite}
-@keyframes k764{to{stroke-dashoffset:-168}}
-.k764{animation:k764 2100ms linear infinite}
-@keyframes k765{to{stroke-dashoffset:-146}}
-.k765{animation:k765 2100ms linear infinite}
+@keyframes k760{to{stroke-dashoffset:-221}}
+.k760{animation:k760 2450ms linear infinite}
+@keyframes k761{to{stroke-dashoffset:-193}}
+.k761{animation:k761 2450ms linear infinite}
+@keyframes k762{to{stroke-dashoffset:-171}}
+.k762{animation:k762 2450ms linear infinite}
+@keyframes k763{to{stroke-dashoffset:-306}}
+.k763{animation:k763 2750ms linear infinite}
+@keyframes k764{to{stroke-dashoffset:-278}}
+.k764{animation:k764 2750ms linear infinite}
+@keyframes k765{to{stroke-dashoffset:-256}}
+.k765{animation:k765 2750ms linear infinite}
+@keyframes k766{to{stroke-dashoffset:-264}}
+.k766{animation:k766 2100ms linear infinite}
+@keyframes k767{to{stroke-dashoffset:-236}}
+.k767{animation:k767 2100ms linear infinite}
+@keyframes k768{to{stroke-dashoffset:-214}}
+.k768{animation:k768 2100ms linear infinite}
+@keyframes k769{to{stroke-dashoffset:-316}}
+.k769{animation:k769 2100ms linear infinite}
+@keyframes k770{to{stroke-dashoffset:-288}}
+.k770{animation:k770 2100ms linear infinite}
+@keyframes k771{to{stroke-dashoffset:-266}}
+.k771{animation:k771 2100ms linear infinite}
+@keyframes k772{to{stroke-dashoffset:-196}}
+.k772{animation:k772 2100ms linear infinite}
+@keyframes k773{to{stroke-dashoffset:-168}}
+.k773{animation:k773 2100ms linear infinite}
+@keyframes k774{to{stroke-dashoffset:-146}}
+.k774{animation:k774 2100ms linear infinite}
 </style>
-<g><path class="bus" stroke="#1F6D5C" d="M40,0 V610"/><path class="cm k748" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-166" d="M40,2.5 V607.5"/><path class="cm k749" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="-138" d="M40,2.5 V607.5"/><path class="cm k750" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="-116" d="M40,2.5 V607.5"/></g><g><path class="bus" stroke="#9A3412" d="M54,0 V610"/><path class="cm k751" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="-11" d="M54,2.5 V607.5"/><path class="cm k752" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="17" d="M54,2.5 V607.5"/><path class="cm k753" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="39" d="M54,2.5 V607.5"/></g><g><path class="bus" stroke="#5F6E73" d="M68,0 V610"/><path class="cm k754" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-96" d="M68,2.5 V607.5"/><path class="cm k755" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="-68" d="M68,2.5 V607.5"/><path class="cm k756" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="-46" d="M68,2.5 V607.5"/></g><g><path class="bus" stroke="#1F6D5C" d="M40,120 H92.5"/><path class="cm k757" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-54" d="M44,120 H88"/><path class="cm k758" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="-26" d="M44,120 H88"/><path class="cm k759" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="-4" d="M44,120 H88"/></g><g transform="translate(92,96) scale(1.0000)"><rect x="0.75" y="0.75" width="46.5" height="46.5" rx="12" fill="#0A0A0B" stroke="#6E7A80" stroke-width="1"/>
+<g><path class="bus" stroke="#1F6D5C" d="M40,0 V610"/><path class="cm k757" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-166" d="M40,2.5 V607.5"/><path class="cm k758" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="-138" d="M40,2.5 V607.5"/><path class="cm k759" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="-116" d="M40,2.5 V607.5"/></g><g><path class="bus" stroke="#9A3412" d="M54,0 V610"/><path class="cm k760" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="-11" d="M54,2.5 V607.5"/><path class="cm k761" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="17" d="M54,2.5 V607.5"/><path class="cm k762" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="39" d="M54,2.5 V607.5"/></g><g><path class="bus" stroke="#5F6E73" d="M68,0 V610"/><path class="cm k763" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-96" d="M68,2.5 V607.5"/><path class="cm k764" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="-68" d="M68,2.5 V607.5"/><path class="cm k765" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="-46" d="M68,2.5 V607.5"/></g><g><path class="bus" stroke="#1F6D5C" d="M40,120 H92.5"/><path class="cm k766" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-54" d="M44,120 H88"/><path class="cm k767" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="-26" d="M44,120 H88"/><path class="cm k768" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="-4" d="M44,120 H88"/></g><g transform="translate(92,96) scale(1.0000)"><rect x="0.75" y="0.75" width="46.5" height="46.5" rx="12" fill="#0A0A0B" stroke="#6E7A80" stroke-width="1"/>
 <path d="M17.2,30.2 L20.3,27.4 M27.7,20.7 L30.6,18.1" fill="none" stroke="#F7F8F8" stroke-opacity="0.65" stroke-width="2" stroke-linecap="round"/>
 <circle cx="13.5" cy="33.5" r="3" fill="none" stroke="#06B6D4" stroke-width="2.4"/>
 <circle cx="24" cy="24" r="3" fill="none" stroke="#06B6D4" stroke-width="2.4"/>
-<circle cx="34.5" cy="14.5" r="4.1" fill="#10B981"/></g><text x="92" y="54" class="d" font-size="24" letter-spacing="0.5">VI — APPLIED</text><text x="92" y="76" class="dim" font-size="13">an inbox read by rules that keep score.</text><text x="172" y="140" class="d" font-size="44">0.979</text><text x="172" y="172" class="dim" font-size="12">macro-F1 — the rules layer alone,</text><text x="172" y="189" class="dim" font-size="12">graded on the strip below.</text><g><path class="bus" stroke="#1F6D5C" d="M116,144 V206"/><path class="cm k760" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-106" d="M116,148 V202"/><path class="cm k761" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="-78" d="M116,148 V202"/><path class="cm k762" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="-56" d="M116,148 V202"/></g><rect x="92" y="206" width="160" height="42" rx="8" fill="none" stroke="#1F6D5C" stroke-width="1.6"/><text x="104" y="231" class="ts" font-size="11.5" letter-spacing="1.3">THE RULES LAYER</text><g><path class="bus" stroke="#1F6D5C" d="M252,227 H332 V380"/><path class="cm k763" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="14" d="M256.5,227 H332 V376"/><path class="cm k764" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="42" d="M256.5,227 H332 V376"/><path class="cm k765" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="64" d="M256.5,227 H332 V376"/></g><path fill="none" stroke="#1F6D5C" stroke-width="1.4" d="M116,248 V264"/><circle cx="116" cy="271" r="3.5" fill="none" stroke="#1F6D5C" stroke-width="2"/><rect x="92" y="284" width="140" height="42" rx="8" fill="none" stroke="#5F6E73" stroke-width="1.4" stroke-dasharray="5 4"/><text x="104" y="309" class="ts dim" font-size="10" letter-spacing="1.1">THE CASCADE</text><text x="92" y="344" class="ts dim" font-size="10" letter-spacing="1.1">LAYER TWO — NO EVALUATION</text><text x="92" y="360" class="ts dim" font-size="10" letter-spacing="1.1">ARTIFACT SURVIVES</text><rect x="92" y="380" width="304" height="102" rx="6" fill="none" stroke="#5F6E73" stroke-width="1.3"/><path fill="none" stroke="#1F6D5C" stroke-width="2" d="M104.0,390 V414 M113.0,390 V414 M122.1,390 V414 M131.1,390 V414 M140.1,390 V414 M149.2,390 V414 M158.2,390 V414 M167.2,390 V414 M176.3,390 V414 M185.3,390 V414 M194.3,390 V414 M203.4,390 V414 M212.4,390 V414 M221.4,390 V414 M230.5,390 V414 M239.5,390 V414 M248.5,390 V414 M257.5,390 V414 M266.6,390 V414 M275.6,390 V414 M284.6,390 V414 M302.7,390 V414 M311.7,390 V414 M320.8,390 V414 M329.8,390 V414 M338.8,390 V414 M347.9,390 V414 M356.9,390 V414 M365.9,390 V414 M375.0,390 V414 M384.0,390 V414"/><path fill="none" stroke="#9A3412" stroke-width="2" d="M293.7,387 V417"/><path fill="none" stroke="#1F6D5C" stroke-width="2" d="M104.0,420 V444 M113.0,420 V444 M122.1,420 V444 M131.1,420 V444 M140.1,420 V444 M149.2,420 V444 M158.2,420 V444 M167.2,420 V444 M185.3,420 V444 M194.3,420 V444 M203.4,420 V444 M212.4,420 V444 M221.4,420 V444 M230.5,420 V444 M239.5,420 V444 M248.5,420 V444 M257.5,420 V444 M266.6,420 V444 M275.6,420 V444 M284.6,420 V444 M293.7,420 V444 M302.7,420 V444 M311.7,420 V444 M320.8,420 V444 M329.8,420 V444 M338.8,420 V444 M347.9,420 V444 M356.9,420 V444 M365.9,420 V444 M375.0,420 V444 M384.0,420 V444"/><path fill="none" stroke="#9A3412" stroke-width="2" d="M176.3,417 V447"/><path fill="none" stroke="#1F6D5C" stroke-width="2" d="M104.0,450 V474 M113.0,450 V474 M122.1,450 V474 M131.1,450 V474 M140.1,450 V474 M149.2,450 V474 M158.2,450 V474 M167.2,450 V474 M176.3,450 V474 M185.3,450 V474 M194.3,450 V474 M203.4,450 V474 M212.4,450 V474 M221.4,450 V474 M230.5,450 V474 M239.5,450 V474 M248.5,450 V474 M257.5,450 V474 M266.6,450 V474 M275.6,450 V474 M284.6,450 V474 M293.7,450 V474 M302.7,450 V474 M311.7,450 V474 M320.8,450 V474 M329.8,450 V474 M338.8,450 V474 M347.9,450 V474 M356.9,450 V474 M365.9,450 V474 M375.0,450 V474 M384.0,450 V474"/><text x="92" y="502" class="ts dim" font-size="10" letter-spacing="1.1">96 LABELLED MESSAGES · 2 CALLED WRONG</text><rect x="92" y="528" width="4" height="16" fill="#1F6D5C"/><text x="106" y="541" class="mid" font-size="13">the full cascade scored 0.9583 — and</text><text x="106" y="560" class="mid" font-size="13">the artifact is gone; the run was overwritten.</text><text x="106" y="580" class="dim" font-size="12">what is deployed runs only that first layer.</text></svg>
+<circle cx="34.5" cy="14.5" r="4.1" fill="#10B981"/></g><text x="92" y="54" class="d" font-size="24" letter-spacing="0.5">VI — APPLIED</text><text x="92" y="76" class="dim" font-size="13">an inbox read by rules that keep score.</text><text x="172" y="140" class="d" font-size="44">0.979</text><text x="172" y="172" class="dim" font-size="12">macro-F1 — the rules layer alone,</text><text x="172" y="189" class="dim" font-size="12">graded on the strip below.</text><g><path class="bus" stroke="#1F6D5C" d="M116,144 V206"/><path class="cm k769" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-106" d="M116,148 V202"/><path class="cm k770" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="-78" d="M116,148 V202"/><path class="cm k771" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="-56" d="M116,148 V202"/></g><rect x="92" y="206" width="160" height="42" rx="8" fill="none" stroke="#1F6D5C" stroke-width="1.6"/><text x="104" y="231" class="ts" font-size="11.5" letter-spacing="1.3">THE RULES LAYER</text><g><path class="bus" stroke="#1F6D5C" d="M252,227 H332 V380"/><path class="cm k772" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="14" d="M256.5,227 H332 V376"/><path class="cm k773" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="42" d="M256.5,227 H332 V376"/><path class="cm k774" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="64" d="M256.5,227 H332 V376"/></g><path fill="none" stroke="#1F6D5C" stroke-width="1.4" d="M116,248 V264"/><circle cx="116" cy="271" r="3.5" fill="none" stroke="#1F6D5C" stroke-width="2"/><rect x="92" y="284" width="140" height="42" rx="8" fill="none" stroke="#5F6E73" stroke-width="1.4" stroke-dasharray="5 4"/><text x="104" y="309" class="ts dim" font-size="10" letter-spacing="1.1">THE CASCADE</text><text x="92" y="344" class="ts dim" font-size="10" letter-spacing="1.1">LAYER TWO — NO EVALUATION</text><text x="92" y="360" class="ts dim" font-size="10" letter-spacing="1.1">ARTIFACT SURVIVES</text><rect x="92" y="380" width="304" height="102" rx="6" fill="none" stroke="#5F6E73" stroke-width="1.3"/><path fill="none" stroke="#1F6D5C" stroke-width="2" d="M104.0,390 V414 M113.0,390 V414 M122.1,390 V414 M131.1,390 V414 M140.1,390 V414 M149.2,390 V414 M158.2,390 V414 M167.2,390 V414 M176.3,390 V414 M185.3,390 V414 M194.3,390 V414 M203.4,390 V414 M212.4,390 V414 M221.4,390 V414 M230.5,390 V414 M239.5,390 V414 M248.5,390 V414 M257.5,390 V414 M266.6,390 V414 M275.6,390 V414 M284.6,390 V414 M302.7,390 V414 M311.7,390 V414 M320.8,390 V414 M329.8,390 V414 M338.8,390 V414 M347.9,390 V414 M356.9,390 V414 M365.9,390 V414 M375.0,390 V414 M384.0,390 V414"/><path fill="none" stroke="#9A3412" stroke-width="2" d="M293.7,387 V417"/><path fill="none" stroke="#1F6D5C" stroke-width="2" d="M104.0,420 V444 M113.0,420 V444 M122.1,420 V444 M131.1,420 V444 M140.1,420 V444 M149.2,420 V444 M158.2,420 V444 M167.2,420 V444 M185.3,420 V444 M194.3,420 V444 M203.4,420 V444 M212.4,420 V444 M221.4,420 V444 M230.5,420 V444 M239.5,420 V444 M248.5,420 V444 M257.5,420 V444 M266.6,420 V444 M275.6,420 V444 M284.6,420 V444 M293.7,420 V444 M302.7,420 V444 M311.7,420 V444 M320.8,420 V444 M329.8,420 V444 M338.8,420 V444 M347.9,420 V444 M356.9,420 V444 M365.9,420 V444 M375.0,420 V444 M384.0,420 V444"/><path fill="none" stroke="#9A3412" stroke-width="2" d="M176.3,417 V447"/><path fill="none" stroke="#1F6D5C" stroke-width="2" d="M104.0,450 V474 M113.0,450 V474 M122.1,450 V474 M131.1,450 V474 M140.1,450 V474 M149.2,450 V474 M158.2,450 V474 M167.2,450 V474 M176.3,450 V474 M185.3,450 V474 M194.3,450 V474 M203.4,450 V474 M212.4,450 V474 M221.4,450 V474 M230.5,450 V474 M239.5,450 V474 M248.5,450 V474 M257.5,450 V474 M266.6,450 V474 M275.6,450 V474 M284.6,450 V474 M293.7,450 V474 M302.7,450 V474 M311.7,450 V474 M320.8,450 V474 M329.8,450 V474 M338.8,450 V474 M347.9,450 V474 M356.9,450 V474 M365.9,450 V474 M375.0,450 V474 M384.0,450 V474"/><text x="92" y="502" class="ts dim" font-size="10" letter-spacing="1.1">96 LABELLED MESSAGES · 2 CALLED WRONG</text><rect x="92" y="528" width="4" height="16" fill="#1F6D5C"/><text x="106" y="541" class="mid" font-size="13">the full cascade scored 0.9583 — and</text><text x="106" y="560" class="mid" font-size="13">the artifact is gone; the run was overwritten.</text><text x="106" y="580" class="dim" font-size="12">what is deployed runs only that first layer.</text></svg>

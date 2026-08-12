@@ -1650,6 +1650,40 @@ def m_link_return() -> str:
     ) + css_close() + body + "</svg>"
 
 
+# ── the colophon, phone cut. Same edge connector, same derived count —
+# the two silkscreen lines reflow to four because 440 will not carry 55
+# characters of 10.5px silkscreen past three bus lanes.
+def m_colophon() -> str:
+    body = (
+        bus("verd", "M40,0 V100", C=150, cd="M40,2.5 V96")
+        + bus("rust", "M54,0 V100", C=30, cd="M54,2.5 V96")
+        + bus("zinc", "M68,0 V100", C=100, cd="M68,2.5 V96")
+        + "".join(f'<rect x="{x - 5}" y="100" width="10" height="22" fill="{T[k]}"/>'
+                  for k, x in MBUS_X.items())
+        + f'<path class="bus" stroke="{T["zinc"]}" d="M32,126 L40,126 M32,126 L28,120 '
+          f'M408,126 L400,126 M408,126 L412,120 M40,126 H400"/>'
+        + lbl(404, 40, f"{CLAIMS_N} CLAIMS · {CLAIMS_N} COMMANDS",
+              cls="ts mid", size=10.5, anchor="end")
+        + lbl(404, 58, "RE-RUN IN CI FROM PINNED COMMITS",
+              cls="ts mid", size=10.5, anchor="end")
+        + lbl(404, 78, "what is my word rather than a derivation",
+              cls="dim", size=10, ls=0.2, anchor="end")
+        + lbl(404, 94, "says so where it stands",
+              cls="dim", size=10, ls=0.2, anchor="end")
+    )
+    return head(
+        150,
+        "colophon — the board's edge, phone cut",
+        f"Colophon, phone cut — the board's edge connector: the three buses "
+        f"land on their pads and leave the page. {CLAIMS_N} claims, "
+        f"{CLAIMS_N} commands, re-run in CI from pinned commits; what is my "
+        f"word rather than a derivation says so where it stands.",
+        key="m-colophon.svg",
+        col=(28, 414), frame=(0, 27, 22), w=440,
+        faces="T6",
+    ) + css_close() + body + "</svg>"
+
+
 # ── declared frames (top, rightGap, bottomGap), baked from gate.mjs
 # measurement on this machine; tolerance 4 absorbs the CI ascent skew.
 HERO_FRAME = (30, 37.7, 0)
@@ -1705,6 +1739,7 @@ MOBILE = {
     "m-6-applied.svg": m_applied,
     "m-7-visualassist.svg": m_visualassist,
     "m-link-return.svg": m_link_return,
+    "m-colophon.svg": m_colophon,
 }
 
 _re = re

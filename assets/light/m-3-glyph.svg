@@ -12,70 +12,70 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#1A2224}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#1A2224;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k685{to{stroke-dashoffset:-216}}
-.k685{animation:k685 2100ms linear infinite}
-@keyframes k686{to{stroke-dashoffset:-188}}
-.k686{animation:k686 2100ms linear infinite}
-@keyframes k687{to{stroke-dashoffset:-166}}
-.k687{animation:k687 2100ms linear infinite}
-@keyframes k688{to{stroke-dashoffset:-306}}
-.k688{animation:k688 2450ms linear infinite}
-@keyframes k689{to{stroke-dashoffset:-278}}
-.k689{animation:k689 2450ms linear infinite}
-@keyframes k690{to{stroke-dashoffset:-256}}
-.k690{animation:k690 2450ms linear infinite}
-@keyframes k691{to{stroke-dashoffset:-184}}
-.k691{animation:k691 2750ms linear infinite}
-@keyframes k692{to{stroke-dashoffset:-156}}
-.k692{animation:k692 2750ms linear infinite}
-@keyframes k693{to{stroke-dashoffset:-134}}
-.k693{animation:k693 2750ms linear infinite}
-@keyframes k694{to{stroke-dashoffset:-264}}
-.k694{animation:k694 2450ms linear infinite}
-@keyframes k695{to{stroke-dashoffset:-236}}
-.k695{animation:k695 2450ms linear infinite}
-@keyframes k696{to{stroke-dashoffset:-214}}
-.k696{animation:k696 2450ms linear infinite}
-@keyframes k697{to{stroke-dashoffset:-206}}
+@keyframes k694{to{stroke-dashoffset:-216}}
+.k694{animation:k694 2100ms linear infinite}
+@keyframes k695{to{stroke-dashoffset:-188}}
+.k695{animation:k695 2100ms linear infinite}
+@keyframes k696{to{stroke-dashoffset:-166}}
+.k696{animation:k696 2100ms linear infinite}
+@keyframes k697{to{stroke-dashoffset:-306}}
 .k697{animation:k697 2450ms linear infinite}
-@keyframes k698{to{stroke-dashoffset:-178}}
+@keyframes k698{to{stroke-dashoffset:-278}}
 .k698{animation:k698 2450ms linear infinite}
-@keyframes k699{to{stroke-dashoffset:-156}}
+@keyframes k699{to{stroke-dashoffset:-256}}
 .k699{animation:k699 2450ms linear infinite}
-@keyframes k700{to{stroke-dashoffset:-236}}
-.k700{animation:k700 2450ms linear infinite}
-@keyframes k701{to{stroke-dashoffset:-208}}
-.k701{animation:k701 2450ms linear infinite}
-@keyframes k702{to{stroke-dashoffset:-186}}
-.k702{animation:k702 2450ms linear infinite}
-@keyframes k703{to{stroke-dashoffset:-291}}
+@keyframes k700{to{stroke-dashoffset:-184}}
+.k700{animation:k700 2750ms linear infinite}
+@keyframes k701{to{stroke-dashoffset:-156}}
+.k701{animation:k701 2750ms linear infinite}
+@keyframes k702{to{stroke-dashoffset:-134}}
+.k702{animation:k702 2750ms linear infinite}
+@keyframes k703{to{stroke-dashoffset:-264}}
 .k703{animation:k703 2450ms linear infinite}
-@keyframes k704{to{stroke-dashoffset:-263}}
+@keyframes k704{to{stroke-dashoffset:-236}}
 .k704{animation:k704 2450ms linear infinite}
-@keyframes k705{to{stroke-dashoffset:-241}}
+@keyframes k705{to{stroke-dashoffset:-214}}
 .k705{animation:k705 2450ms linear infinite}
-@keyframes k706{to{stroke-dashoffset:-346}}
+@keyframes k706{to{stroke-dashoffset:-206}}
 .k706{animation:k706 2450ms linear infinite}
-@keyframes k707{to{stroke-dashoffset:-318}}
+@keyframes k707{to{stroke-dashoffset:-178}}
 .k707{animation:k707 2450ms linear infinite}
-@keyframes k708{to{stroke-dashoffset:-296}}
+@keyframes k708{to{stroke-dashoffset:-156}}
 .k708{animation:k708 2450ms linear infinite}
-@keyframes k709{to{stroke-dashoffset:-318}}
+@keyframes k709{to{stroke-dashoffset:-236}}
 .k709{animation:k709 2450ms linear infinite}
-@keyframes k710{to{stroke-dashoffset:-290}}
+@keyframes k710{to{stroke-dashoffset:-208}}
 .k710{animation:k710 2450ms linear infinite}
-@keyframes k711{to{stroke-dashoffset:-268}}
+@keyframes k711{to{stroke-dashoffset:-186}}
 .k711{animation:k711 2450ms linear infinite}
-@keyframes k712{to{stroke-dashoffset:-231}}
+@keyframes k712{to{stroke-dashoffset:-291}}
 .k712{animation:k712 2450ms linear infinite}
-@keyframes k713{to{stroke-dashoffset:-203}}
+@keyframes k713{to{stroke-dashoffset:-263}}
 .k713{animation:k713 2450ms linear infinite}
-@keyframes k714{to{stroke-dashoffset:-181}}
+@keyframes k714{to{stroke-dashoffset:-241}}
 .k714{animation:k714 2450ms linear infinite}
+@keyframes k715{to{stroke-dashoffset:-346}}
+.k715{animation:k715 2450ms linear infinite}
+@keyframes k716{to{stroke-dashoffset:-318}}
+.k716{animation:k716 2450ms linear infinite}
+@keyframes k717{to{stroke-dashoffset:-296}}
+.k717{animation:k717 2450ms linear infinite}
+@keyframes k718{to{stroke-dashoffset:-318}}
+.k718{animation:k718 2450ms linear infinite}
+@keyframes k719{to{stroke-dashoffset:-290}}
+.k719{animation:k719 2450ms linear infinite}
+@keyframes k720{to{stroke-dashoffset:-268}}
+.k720{animation:k720 2450ms linear infinite}
+@keyframes k721{to{stroke-dashoffset:-231}}
+.k721{animation:k721 2450ms linear infinite}
+@keyframes k722{to{stroke-dashoffset:-203}}
+.k722{animation:k722 2450ms linear infinite}
+@keyframes k723{to{stroke-dashoffset:-181}}
+.k723{animation:k723 2450ms linear infinite}
 </style>
-<g><path class="bus" stroke="#1F6D5C" d="M40,0 V690"/><path class="cm k685" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-6" d="M40,2.5 V687.5"/><path class="cm k686" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="22" d="M40,2.5 V687.5"/><path class="cm k687" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="44" d="M40,2.5 V687.5"/></g><g><path class="bus" stroke="#9A3412" d="M54,0 V690"/><path class="cm k688" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="-96" d="M54,2.5 V687.5"/><path class="cm k689" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="-68" d="M54,2.5 V687.5"/><path class="cm k690" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="-46" d="M54,2.5 V687.5"/></g><g><path class="bus" stroke="#5F6E73" d="M68,0 V690"/><path class="cm k691" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="26" d="M68,2.5 V687.5"/><path class="cm k692" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="54" d="M68,2.5 V687.5"/><path class="cm k693" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="76" d="M68,2.5 V687.5"/></g><g><path class="bus" stroke="#9A3412" d="M54,120 H92.5"/><path class="cm k694" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="-54" d="M58,120 H88"/><path class="cm k695" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="-26" d="M58,120 H88"/><path class="cm k696" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="-4" d="M58,120 H88"/></g><g transform="translate(92,96) scale(1.0000)"><rect x="0.75" y="0.75" width="46.5" height="46.5" rx="12" fill="#0A0A0B" stroke="#6E7A80" stroke-width="1"/>
+<g><path class="bus" stroke="#1F6D5C" d="M40,0 V690"/><path class="cm k694" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-6" d="M40,2.5 V687.5"/><path class="cm k695" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="22" d="M40,2.5 V687.5"/><path class="cm k696" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="44" d="M40,2.5 V687.5"/></g><g><path class="bus" stroke="#9A3412" d="M54,0 V690"/><path class="cm k697" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="-96" d="M54,2.5 V687.5"/><path class="cm k698" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="-68" d="M54,2.5 V687.5"/><path class="cm k699" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="-46" d="M54,2.5 V687.5"/></g><g><path class="bus" stroke="#5F6E73" d="M68,0 V690"/><path class="cm k700" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="26" d="M68,2.5 V687.5"/><path class="cm k701" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="54" d="M68,2.5 V687.5"/><path class="cm k702" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="76" d="M68,2.5 V687.5"/></g><g><path class="bus" stroke="#9A3412" d="M54,120 H92.5"/><path class="cm k703" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="-54" d="M58,120 H88"/><path class="cm k704" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="-26" d="M58,120 H88"/><path class="cm k705" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="-4" d="M58,120 H88"/></g><g transform="translate(92,96) scale(1.0000)"><rect x="0.75" y="0.75" width="46.5" height="46.5" rx="12" fill="#0A0A0B" stroke="#6E7A80" stroke-width="1"/>
 <path transform="translate(4.8,4.8) scale(0.96)" d="M8,11 H32 M8,17 H32 M8,23 H32 M8,29 H32"
   fill="none" stroke="#6B6B76" stroke-width="1.4"/>
 <path transform="translate(4.8,4.8) scale(0.96)"
   d="M12.5 16 C12.5 10.5 27 9.5 27 15.5 C27 20 17 24 12 30 L29 30"
-  fill="none" stroke="#F7F8F8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g><text x="92" y="54" class="d" font-size="24" letter-spacing="0.5">III — GLYPH</text><text x="92" y="76" class="dim" font-size="13">SIMD kernels over a net the course provided.</text><text x="172" y="140" class="d" font-size="44">3.5×</text><text x="172" y="172" class="dim" font-size="12">benchDot/256 — course baseline,</text><text x="172" y="189" class="dim" font-size="12">reference machine, committed run.</text><g><path class="bus" stroke="#9A3412" d="M140,120 H160 V368"/><path class="cm k697" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="4" d="M144,120 H160 V365"/><path class="cm k698" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="32" d="M144,120 H160 V365"/><path class="cm k699" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="54" d="M144,120 H160 V365"/></g><circle cx="160" cy="240" r="2.6" fill="#9A3412"/><circle cx="160" cy="300" r="2.6" fill="#9A3412"/><g><path class="bus" stroke="#9A3412" d="M160,240 H200"/><path class="cm k700" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="-26" d="M162.5,240 H197"/><path class="cm k701" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="2" d="M162.5,240 H197"/><path class="cm k702" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="24" d="M162.5,240 H197"/></g><g><path class="bus" stroke="#9A3412" d="M160,300 H200"/><path class="cm k703" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="-81" d="M162.5,300 H197"/><path class="cm k704" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="-53" d="M162.5,300 H197"/><path class="cm k705" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="-31" d="M162.5,300 H197"/></g><g><path class="bus" stroke="#9A3412" d="M160,368 H200"/><path class="cm k706" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="-136" d="M162.5,368 H197"/><path class="cm k707" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="-108" d="M162.5,368 H197"/><path class="cm k708" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="-86" d="M162.5,368 H197"/></g><text x="200" y="227" class="ts dim" font-size="10" letter-spacing="1.2">NEON</text><path fill="none" stroke="#5F6E73" stroke-width="1.4" d="M200,237 H320 M200,243 H320"/><text x="200" y="281" class="ts dim" font-size="10" letter-spacing="1.2">AVX2</text><path fill="none" stroke="#5F6E73" stroke-width="1.4" d="M200,291 H320 M200,297 H320 M200,303 H320 M200,309 H320"/><text x="200" y="337" class="ts dim" font-size="10" letter-spacing="1.2">AVX-512</text><path fill="none" stroke="#5F6E73" stroke-width="1.4" d="M200,347 H320 M200,353 H320 M200,359 H320 M200,365 H320 M200,371 H320 M200,377 H320 M200,383 H320 M200,389 H320"/><path class="bus" stroke="#9A3412" d="M320,240 H344 V368 H320 M320,300 H344"/><g><path class="bus" stroke="#9A3412" d="M344,368 V404"/><path class="cm k709" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="-108" d="M322,240 H344 V400"/><path class="cm k710" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="-80" d="M322,240 H344 V400"/><path class="cm k711" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="-58" d="M322,240 H344 V400"/></g><rect x="200" y="404" width="160" height="36" rx="8" fill="none" stroke="#9A3412" stroke-width="1.6"/><text x="212" y="426" class="ts" font-size="11.5" letter-spacing="1.3">BENCHDOT/256</text><g><path class="bus" stroke="#9A3412" d="M280,440 V464"/><path class="cm k712" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="-21" d="M280,442.5 V459.5"/><path class="cm k713" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="7" d="M280,442.5 V459.5"/><path class="cm k714" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="29" d="M280,442.5 V459.5"/></g><rect x="200" y="464" width="196" height="36" rx="8" fill="none" stroke="#5F6E73" stroke-width="1.6"/><text x="212" y="486" class="ts" font-size="11.5" letter-spacing="1.3">WASM_SIMD128 · 43,751 B</text><text x="200" y="522" class="ts dim" font-size="10" letter-spacing="1.1">BYTE-IDENTICAL TO MAIN</text><text x="200" y="537" class="ts dim" font-size="10" letter-spacing="1.1">CHECKED DAILY IN CI</text><rect x="92" y="556" width="4" height="16" fill="#9A3412"/><text x="106" y="569" class="mid" font-size="13">the same flags run 10.7× slower on</text><text x="106" y="588" class="mid" font-size="13">benchAxpy/128 — below the size floor,</text><text x="106" y="608" class="dim" font-size="12">where threading costs more than it pays.</text><text x="106" y="625" class="dim" font-size="12">and 97.01% is a training-time number:</text><text x="106" y="642" class="dim" font-size="12">the test set that graded the net</text><text x="106" y="659" class="dim" font-size="12">also picked its checkpoint.</text></svg>
+  fill="none" stroke="#F7F8F8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g><text x="92" y="54" class="d" font-size="24" letter-spacing="0.5">III — GLYPH</text><text x="92" y="76" class="dim" font-size="13">SIMD kernels over a net the course provided.</text><text x="172" y="140" class="d" font-size="44">3.5×</text><text x="172" y="172" class="dim" font-size="12">benchDot/256 — course baseline,</text><text x="172" y="189" class="dim" font-size="12">reference machine, committed run.</text><g><path class="bus" stroke="#9A3412" d="M140,120 H160 V368"/><path class="cm k706" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="4" d="M144,120 H160 V365"/><path class="cm k707" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="32" d="M144,120 H160 V365"/><path class="cm k708" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="54" d="M144,120 H160 V365"/></g><circle cx="160" cy="240" r="2.6" fill="#9A3412"/><circle cx="160" cy="300" r="2.6" fill="#9A3412"/><g><path class="bus" stroke="#9A3412" d="M160,240 H200"/><path class="cm k709" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="-26" d="M162.5,240 H197"/><path class="cm k710" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="2" d="M162.5,240 H197"/><path class="cm k711" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="24" d="M162.5,240 H197"/></g><g><path class="bus" stroke="#9A3412" d="M160,300 H200"/><path class="cm k712" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="-81" d="M162.5,300 H197"/><path class="cm k713" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="-53" d="M162.5,300 H197"/><path class="cm k714" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="-31" d="M162.5,300 H197"/></g><g><path class="bus" stroke="#9A3412" d="M160,368 H200"/><path class="cm k715" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="-136" d="M162.5,368 H197"/><path class="cm k716" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="-108" d="M162.5,368 H197"/><path class="cm k717" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="-86" d="M162.5,368 H197"/></g><text x="200" y="227" class="ts dim" font-size="10" letter-spacing="1.2">NEON</text><path fill="none" stroke="#5F6E73" stroke-width="1.4" d="M200,237 H320 M200,243 H320"/><text x="200" y="281" class="ts dim" font-size="10" letter-spacing="1.2">AVX2</text><path fill="none" stroke="#5F6E73" stroke-width="1.4" d="M200,291 H320 M200,297 H320 M200,303 H320 M200,309 H320"/><text x="200" y="337" class="ts dim" font-size="10" letter-spacing="1.2">AVX-512</text><path fill="none" stroke="#5F6E73" stroke-width="1.4" d="M200,347 H320 M200,353 H320 M200,359 H320 M200,365 H320 M200,371 H320 M200,377 H320 M200,383 H320 M200,389 H320"/><path class="bus" stroke="#9A3412" d="M320,240 H344 V368 H320 M320,300 H344"/><g><path class="bus" stroke="#9A3412" d="M344,368 V404"/><path class="cm k718" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="-108" d="M322,240 H344 V400"/><path class="cm k719" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="-80" d="M322,240 H344 V400"/><path class="cm k720" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="-58" d="M322,240 H344 V400"/></g><rect x="200" y="404" width="160" height="36" rx="8" fill="none" stroke="#9A3412" stroke-width="1.6"/><text x="212" y="426" class="ts" font-size="11.5" letter-spacing="1.3">BENCHDOT/256</text><g><path class="bus" stroke="#9A3412" d="M280,440 V464"/><path class="cm k721" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="-21" d="M280,442.5 V459.5"/><path class="cm k722" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="7" d="M280,442.5 V459.5"/><path class="cm k723" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="29" d="M280,442.5 V459.5"/></g><rect x="200" y="464" width="196" height="36" rx="8" fill="none" stroke="#5F6E73" stroke-width="1.6"/><text x="212" y="486" class="ts" font-size="11.5" letter-spacing="1.3">WASM_SIMD128 · 43,751 B</text><text x="200" y="522" class="ts dim" font-size="10" letter-spacing="1.1">BYTE-IDENTICAL TO MAIN</text><text x="200" y="537" class="ts dim" font-size="10" letter-spacing="1.1">CHECKED DAILY IN CI</text><rect x="92" y="556" width="4" height="16" fill="#9A3412"/><text x="106" y="569" class="mid" font-size="13">the same flags run 10.7× slower on</text><text x="106" y="588" class="mid" font-size="13">benchAxpy/128 — below the size floor,</text><text x="106" y="608" class="dim" font-size="12">where threading costs more than it pays.</text><text x="106" y="625" class="dim" font-size="12">and 97.01% is a training-time number:</text><text x="106" y="642" class="dim" font-size="12">the test set that graded the net</text><text x="106" y="659" class="dim" font-size="12">also picked its checkpoint.</text></svg>

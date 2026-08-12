@@ -10,17 +10,17 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#E4E9E9}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#1A2224;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k418{to{stroke-dashoffset:-188}}
-.k418{animation:k418 2100ms linear infinite}
-@keyframes k419{to{stroke-dashoffset:-160}}
-.k419{animation:k419 2100ms linear infinite}
-@keyframes k420{to{stroke-dashoffset:-138}}
-.k420{animation:k420 2100ms linear infinite}
-@keyframes k421{to{stroke-dashoffset:-293}}
-.k421{animation:k421 2100ms linear infinite}
-@keyframes k422{to{stroke-dashoffset:-265}}
-.k422{animation:k422 2100ms linear infinite}
-@keyframes k423{to{stroke-dashoffset:-243}}
-.k423{animation:k423 2100ms linear infinite}
+@keyframes k427{to{stroke-dashoffset:-188}}
+.k427{animation:k427 2100ms linear infinite}
+@keyframes k428{to{stroke-dashoffset:-160}}
+.k428{animation:k428 2100ms linear infinite}
+@keyframes k429{to{stroke-dashoffset:-138}}
+.k429{animation:k429 2100ms linear infinite}
+@keyframes k430{to{stroke-dashoffset:-293}}
+.k430{animation:k430 2100ms linear infinite}
+@keyframes k431{to{stroke-dashoffset:-265}}
+.k431{animation:k431 2100ms linear infinite}
+@keyframes k432{to{stroke-dashoffset:-243}}
+.k432{animation:k432 2100ms linear infinite}
 </style>
-<path class="bus" stroke="#3E8E76" d="M70.5,0 V88"/><g><rect x="45.5" y="20" width="189" height="64" rx="3" fill="#0A0A0B" stroke="#79848C" stroke-width="1"/><rect x="68.0" y="20.5" width="5" height="4" fill="#4FB39A"/><rect x="68.0" y="79.5" width="5" height="4" fill="#4FB39A"/><path class="bus" stroke="#3E8E76" d="M70.5,20 V26 M70.5,54 V84"/><rect x="56.5" y="26" width="28" height="28" rx="8" fill="#0A0A0B" stroke="#6B6B76" stroke-width="1.2"/><circle transform="translate(46.5,16)" cx="24" cy="24" r="7.2" fill="none" stroke="#F7F8F8" stroke-width="1.7"/><path transform="translate(46.5,16)" d="M16.8,24 H31.2" fill="none" stroke="#F7F8F8" stroke-width="1.5"/><path transform="translate(46.5,16)" d="M24,16.8 C20.6,20.4 20.6,27.6 24,31.2 C27.4,27.6 27.4,20.4 24,16.8" fill="none" stroke="#F7F8F8" stroke-width="1.5"/><text x="91" y="44.5" class="ts" font-size="11.5" letter-spacing="1.3">AYUSH-YADAV.COM</text></g><path class="cm k418" stroke="#A9EFD9" stroke-dasharray="34 176" stroke-dashoffset="22" d="M70.5,58 V80"/><path class="cm k419" stroke="#83D6BC" stroke-dasharray="28 182" stroke-dashoffset="50" d="M70.5,58 V80"/><path class="cm k420" stroke="#66C2A8" stroke-dasharray="22 188" stroke-dashoffset="72" d="M70.5,58 V80"/><path class="cm k421" stroke="#A9EFD9" stroke-dasharray="34 176" stroke-dashoffset="-83" d="M70.5,58 V80"/><path class="cm k422" stroke="#83D6BC" stroke-dasharray="28 182" stroke-dashoffset="-55" d="M70.5,58 V80"/><path class="cm k423" stroke="#66C2A8" stroke-dasharray="22 188" stroke-dashoffset="-33" d="M70.5,58 V80"/></svg>
+<path class="bus" stroke="#3E8E76" d="M70.5,0 V88"/><g><rect x="45.5" y="20" width="189" height="64" rx="3" fill="#0A0A0B" stroke="#79848C" stroke-width="1"/><rect x="68.0" y="20.5" width="5" height="4" fill="#4FB39A"/><rect x="68.0" y="79.5" width="5" height="4" fill="#4FB39A"/><path class="bus" stroke="#3E8E76" d="M70.5,20 V26 M70.5,54 V84"/><rect x="56.5" y="26" width="28" height="28" rx="8" fill="#0A0A0B" stroke="#6B6B76" stroke-width="1.2"/><circle transform="translate(46.5,16)" cx="24" cy="24" r="7.2" fill="none" stroke="#F7F8F8" stroke-width="1.7"/><path transform="translate(46.5,16)" d="M16.8,24 H31.2" fill="none" stroke="#F7F8F8" stroke-width="1.5"/><path transform="translate(46.5,16)" d="M24,16.8 C20.6,20.4 20.6,27.6 24,31.2 C27.4,27.6 27.4,20.4 24,16.8" fill="none" stroke="#F7F8F8" stroke-width="1.5"/><text x="91" y="44.5" class="ts" font-size="11.5" letter-spacing="1.3">AYUSH-YADAV.COM</text></g><path class="cm k427" stroke="#A9EFD9" stroke-dasharray="34 176" stroke-dashoffset="22" d="M70.5,58 V80"/><path class="cm k428" stroke="#83D6BC" stroke-dasharray="28 182" stroke-dashoffset="50" d="M70.5,58 V80"/><path class="cm k429" stroke="#66C2A8" stroke-dasharray="22 188" stroke-dashoffset="72" d="M70.5,58 V80"/><path class="cm k430" stroke="#A9EFD9" stroke-dasharray="34 176" stroke-dashoffset="-83" d="M70.5,58 V80"/><path class="cm k431" stroke="#83D6BC" stroke-dasharray="28 182" stroke-dashoffset="-55" d="M70.5,58 V80"/><path class="cm k432" stroke="#66C2A8" stroke-dasharray="22 188" stroke-dashoffset="-33" d="M70.5,58 V80"/></svg>
