@@ -114,7 +114,6 @@
       "id": "glyph.test_set_size",
       "value": "10000",
       "drawn_on": [
-        "plate-1-glyph.svg",
         "README.md"
       ],
       "repo": "glyph",
@@ -194,7 +193,6 @@
       "value": "422",
       "unit": "MB/s",
       "drawn_on": [
-        "plate-2-jetpack.svg",
         "README.md"
       ],
       "repo": "jetpack",
@@ -206,7 +204,6 @@
       "value": "66.2",
       "unit": "MB/s",
       "drawn_on": [
-        "plate-2-jetpack.svg",
         "README.md"
       ],
       "repo": "jetpack",
@@ -302,7 +299,6 @@
       "id": "jetpack.forks",
       "value": "3",
       "drawn_on": [
-        "plate-2-jetpack.svg",
         "README.md"
       ],
       "repo": "jetpack",
@@ -469,7 +465,6 @@
       "id": "applied.ci_floor",
       "value": "0.95",
       "drawn_on": [
-        "plate-4-applied.svg",
         "README.md"
       ],
       "repo": "applied",
@@ -482,7 +477,6 @@
       "value": "90.4",
       "unit": "MB",
       "drawn_on": [
-        "plate-4-applied.svg",
         "README.md"
       ],
       "repo": "applied",
@@ -496,7 +490,6 @@
       "value": "22.8",
       "unit": "MB",
       "drawn_on": [
-        "plate-4-applied.svg",
         "README.md"
       ],
       "repo": "applied",
@@ -557,7 +550,6 @@
       "id": "cadence.idor_services",
       "value": "6",
       "drawn_on": [
-        "plate-5-refusal.svg",
         "README.md"
       ],
       "repo": "cadence",
@@ -570,7 +562,7 @@
         "lib/services/TaskService.ts"
       ],
       "extractor": "grep -lE 'AND \"userId\" = [$]' $BLOBS | grep -c .",
-      "note": "Counted from the guard in the QUERY, not from a comment about it. The previous row here counted the word IDOR in docstrings and returned 7; four different methods return 7, 8, 9 and 15, so the count of vulnerabilities is an audit finding and belongs in prose. How many services now scope by owner is a property of the code."
+      "note": "Counted from the guard in the QUERY, not from a comment about it. The previous row here counted the word IDOR in docstrings and returned 7; four different methods return 7, 8, 9 and 15, so the count of vulnerabilities is an audit finding and belongs in prose. How many services now scope by owner is a property of the code. Round 27: plate-5 left this row's drawn_on — the rebuilt plate draws the six services as six row-pairs, marks rather than a word, and a mark is not a token this gate can read. The README still says six and this row still holds it."
     },
     {
       "id": "glyph.deployed_wasm_sha256",
@@ -610,7 +602,6 @@
       "id": "automl.license",
       "value": "GPL-3.0",
       "drawn_on": [
-        "plate-6b-automl.svg",
         "README.md"
       ],
       "repo": "automl",
@@ -658,9 +649,7 @@
     {
       "id": "automl.tools_phase",
       "value": "29",
-      "drawn_on": [
-        "plate-6b-automl.svg"
-      ],
+      "drawn_on": [],
       "repo": "automl",
       "paths": [
         "backend/src/services/llm/tools/featureTools.ts",
@@ -669,30 +658,20 @@
         "backend/src/services/llm/tools/uiTools.ts"
       ],
       "extractor": "cat $BLOBS | grep -cE \"^\\s+name: '\"",
-      "anchors": {
-        "plate-6b-automl.svg": [
-          "THE OTHER 29"
-        ],
-        "light/plate-6b-automl.svg": [
-          "THE OTHER 29"
-        ]
-      },
-      "note": "The tools NOT in the base set: the four phase files, counted by the same extractor [automl.tools] and [automl.tools_general] use, on the four paths the general row leaves out. 6 feature + 14 preprocessing + 6 training + 3 ui = 29. Counted DIRECTLY at the pinned commit rather than taken as 44 minus 15 — the arithmetic agrees, but a row whose evidence is two other rows re-derives nothing and would go on agreeing with itself after the source moved. This row exists because plate-6b draws 29 twice for unrelated nouns and [automl.tables] was licensing both; see its note."
+      "note": "The tools NOT in the base set: the four phase files, counted by the same extractor [automl.tools] and [automl.tools_general] use, on the four paths the general row leaves out. 6 feature + 14 preprocessing + 6 training + 3 ui = 29. Counted DIRECTLY at the pinned commit rather than taken as 44 minus 15 — the arithmetic agrees, but a row whose evidence is two other rows re-derives nothing and would go on agreeing with itself after the source moved. drawn_on emptied in round 28: the plate now draws these 29 as 29 hollow marks in the registry strip, not as a numeral, and no other surface prints the count. The row stays so the set difference is still re-derived on every push and a future numeral has a row waiting."
     },
     {
       "id": "automl.tool_sets",
       "value": "7",
       "drawn_on": [
-        "plate-6b-automl.svg",
         "README.md"
       ],
       "repo": "automl",
       "path": "backend/src/services/llm/tools/index.ts",
       "extractor": "grep -E '^export const LLM_[A-Z_]+_TOOLS' \"$BLOB\" | grep -vc LLM_ALL_TOOLS",
-      "note": "Seven exported phase sets: onboarding, preprocessing, feature proposal, feature continue, feature engineering, feature lifecycle, training lifecycle. LLM_ALL_TOOLS is excluded because it is the union, not a phase. WARNING — this extractor counts EXPORTS, not ROUTES, and the two are not the same number. A source audit at this pin found LLM_PREPROCESSING_TOOLS (index.ts:124) and LLM_FEATURE_ENGINEERING_TOOLS (index.ts:61) are exported and never imported: their only other occurrence in the tree is the barrel re-export at toolRegistry.ts:18,23, there is no phase->set lookup table (BY_PHASE|PHASE_TOOLS|TOOL_SETS|toolsForPhase all return nothing repo-wide), and no `export *` or namespace import can be hiding a consumer. The preprocessing phase does receive its tools, assembled ad hoc from PREPROCESSING_ORCHESTRATION_TOOLS + CELL_TOOL_DEFINITIONS at phases/preprocessing/stageConfig.ts:21. So five of the seven names are live routes. The README said 'the other 29 arrive with the phase that needs them, through seven exported sets' — a true count describing a false mechanism, the same shape as the count-noun trap that produced AutoML's 44-vs-12 error. The prose now names the two dead exports; this row keeps gating the export count, which is all a grep of one file can honestly gate.",
+      "note": "Seven exported phase sets: onboarding, preprocessing, feature proposal, feature continue, feature engineering, feature lifecycle, training lifecycle. LLM_ALL_TOOLS is excluded because it is the union, not a phase. WARNING — this extractor counts EXPORTS, not ROUTES, and the two are not the same number. A source audit at this pin found LLM_PREPROCESSING_TOOLS (index.ts:124) and LLM_FEATURE_ENGINEERING_TOOLS (index.ts:61) are exported and never imported: their only other occurrence in the tree is the barrel re-export at toolRegistry.ts:18,23, there is no phase->set lookup table (BY_PHASE|PHASE_TOOLS|TOOL_SETS|toolsForPhase all return nothing repo-wide), and no `export *` or namespace import can be hiding a consumer. The preprocessing phase does receive its tools, assembled ad hoc from PREPROCESSING_ORCHESTRATION_TOOLS + CELL_TOOL_DEFINITIONS at phases/preprocessing/stageConfig.ts:21. So five of the seven names are live routes. The README said 'the other 29 arrive with the phase that needs them, through seven exported sets' — a true count describing a false mechanism, the same shape as the count-noun trap that produced AutoML's 44-vs-12 error. The prose now names the two dead exports; this row keeps gating the export count, which is all a grep of one file can honestly gate. Round 27 dropped a second anchor, 'Of the seven declared per-phase sets', because it pinned a sentence that lived in a plate's <img alt> rather than in the body: the plate was recomposed, the alt text was rewritten with it, and the anchor went orphaned. The gate failed closed, which is right — but an anchor into alt text pins generated prose, so pin the body text instead.",
       "anchors": {
         "README.md": [
-          "Of the seven declared per-phase sets",
           "**Seven** named per-phase sets are declared"
         ]
       }
@@ -701,7 +680,6 @@
       "id": "automl.tables",
       "value": "29",
       "drawn_on": [
-        "plate-6b-automl.svg",
         "README.md"
       ],
       "repo": "automl",
@@ -719,21 +697,12 @@
         "backend/migrations/019_email_verification_tokens.sql"
       ],
       "extractor": "cat $BLOBS | grep -ciE '^create table'",
-      "anchors": {
-        "plate-6b-automl.svg": [
-          "29 TABLES"
-        ],
-        "light/plate-6b-automl.svg": [
-          "29 TABLES"
-        ]
-      },
-      "note": "Two methods agree: 29 CREATE TABLE statements, and 29 distinct table names after lowercasing and deduplicating. Eleven of the 24 migrations create tables (7+3+3+6+1+1+1+1+1+4+1); the other thirteen alter, backfill or index, and listing them would only pad the fetch. ANCHORED TO THE PLATE 2026-08-11, for the count-noun trap rather than for anything wrong with the number: plate-6b draws 29 TWICE, for unrelated nouns — the tables in this schema, and the registry tools the base set excludes — and a row's value is permitted FILE-WIDE, so this single row was accounting for both occurrences and either could have been falsified into the other's meaning with the gate green. This row accounts for the tables occurrence and nothing else now; [automl.tools_phase] derives the other from the source it actually comes from. Both themes are anchored on purpose: the light twin inherits its permitted-value pool from the unthemed name, but masking is keyed to the exact filename, so anchoring the dark plate alone would have left the light one's 29s unaccounted."
+      "note": "Two methods agree: 29 CREATE TABLE statements, and 29 distinct table names after lowercasing and deduplicating. Eleven of the 24 migrations create tables (7+3+3+6+1+1+1+1+1+4+1); the other thirteen alter, backfill or index, and listing them would only pad the fetch. The 2026-08-11 plate anchors ('29 TABLES', both themes) were added for the count-noun trap — plate-6b drew 29 twice for unrelated nouns and this row was licensing both — and were REMOVED with the round-28 redraw in the same change that cut the schema line from the plate: the plate now draws no 29 at all, so there is no occurrence left to pin and the trap is structurally gone. README's 29-table sentence rides this row's value pool, as every unanchored README number does."
     },
     {
       "id": "automl.sandbox_tmpfs",
       "value": "5",
       "drawn_on": [
-        "plate-6b-automl.svg",
         "README.md"
       ],
       "repo": "automl",
@@ -768,7 +737,6 @@
       "value": "10.7",
       "unit": "x slower",
       "drawn_on": [
-        "plate-1-glyph.svg",
         "README.md"
       ],
       "repo": "glyph",
@@ -783,7 +751,6 @@
       "id": "visualassist.swift_lines",
       "value": "7177",
       "drawn_on": [
-        "plate-8-visualassist.svg",
         "README.md"
       ],
       "repo": "visualassist",
@@ -834,7 +801,6 @@
       "id": "visualassist.swift_files",
       "value": "38",
       "drawn_on": [
-        "plate-8-visualassist.svg",
         "README.md"
       ],
       "repo": "visualassist",
@@ -925,7 +891,6 @@
       "id": "visualassist.workflows",
       "value": "5",
       "drawn_on": [
-        "plate-8-visualassist.svg",
         "README.md"
       ],
       "repo": "visualassist",
@@ -995,16 +960,10 @@
       "the document. claims.mjs also fails on an exemption no plate uses, so this",
       "list cannot quietly accumulate excuses for numbers that are already gone."
     ],
-    "plate-1-glyph.svg:512": "AVX-512 — an instruction-set name. (AVX2, e5, int8 and 1pm need no entry: there is no word boundary before those digits, so they are never read as numbers.)",
-    "plate-1-glyph.svg:4": "'4 BUILDS · 1 PATH COMPILED', counting the four build targets drawn directly above it",
-    "plate-1-glyph.svg:1": "'4 BUILDS · 1 PATH COMPILED' and '3 BY HAND, 1 AUTO' — the same four targets, counted",
-    "plate-1-glyph.svg:3": "'3 BY HAND, 1 AUTO'",
     "plate-2-jetpack.svg:32": "the name of the Adler-32 algorithm",
     "plate-2-jetpack.svg:25": "JDK 25 — a toolchain version, not a measurement",
-    "plate-6b-automl.svg:3.0": "the version field of the licence identifier GPL-3.0, which automl.license derives whole from the pinned LICENSE file",
     "README.md:3.0": "the version field of the licence identifier GPL-3.0 (see automl.license)",
     "m-2-jetpack.svg:25": "JDK 25 — a toolchain version, not a measurement",
-    "plate-2-jetpack.svg:3": "'3 JMH FORKS' — the fork count of the run, recorded in the same JSON the scores come from",
     "README.md:512": "AVX-512 — an instruction-set name",
     "README.md:32": "the name of the Adler-32 algorithm",
     "README.md:1": "the placeholder in the SQL literal `WHERE id = $1`",
@@ -1012,21 +971,17 @@
     "README.md:219": "the first line of the early-stopping block cited as apps/train_model.cpp:219-243. A line RANGE has no single extractor; the citation is verified by reading it, and glyph.msimd128_line pins the one line citation that a machine can check.",
     "README.md:243": "the last line of that same cited range",
     "README.md:03.23": "part of the contact address aesh.03.23@gmail.com",
-    "m-0-thesis.svg:6": "'6 systems' — a count of this page's own contents, drawn as the mobile thesis hero. This sentence used to cite matching exemptions on README.md and plate-7-colophon.svg as though they still stood; both are gone, and it kept naming them until 2026-08-10. A justification is prose, the gate reads numbers, and so a note explaining an exemption outlived two of the three things it described — the same failure the colophon now names on the page itself.",
     "README.md:256": "the '256' in `shasum -a 256` — the name of the hash algorithm in a command the reader is invited to run — and the benchDot/256 case name",
     "plate-0-thesis.svg:03.23": "part of the contact address aesh.03.23@gmail.com",
     "README.md:2026": "the graduation date, May 2026 — a fact about the author, not a measurement of a repository",
     "plate-0b-work.svg:2025": "'Jun 2025 – May 2026' — the dates of the role",
     "plate-0b-work.svg:2026": "'Jun 2025 – May 2026', and 'DATAFEST 2026'",
-    "plate-0b-work.svg:5": "'5 years' — the span of query logs ingested",
     "plate-0b-work.svg:0": "'FROM 0' — the compliance baseline the 96.72% is measured against",
-    "plate-0b-work.svg:3": "'3-PERSON' — the DataFest team size",
+    "plate-0b-work.svg:3": "'TEAM LEAD OF 3' — the DataFest team size",
     "README.md:2025": "'June 2025 to May 2026' — the dates of the role",
     "README.md:0": "'from 0% to 96.72%' — the compliance baseline",
     "README.md:3": "'a three-layer cascade' — the count of the tiers named in the same sentence; 'three committed runs' in section III, which BENCHMARKS.md documents; and section V's 'three carry it in the query and the other three check ownership first', the guard split the plate draws as filled and hollow marks",
-    "plate-1-glyph.svg:256": "benchDot/256 — the benchmark case's size parameter, part of its name in bench_summary.csv (glyph.dot256_speedup derives the ratio itself)",
-    "plate-1-glyph.svg:128": "benchAxpy/128 — likewise the case's size parameter (glyph.axpy128_slowdown derives the ratio)",
-    "README.md:128": "benchAxpy/128 — the benchmark case name (see plate-1-glyph.svg:128)"
+    "README.md:128": "benchAxpy/128 — the benchmark case name in section III's prose (the plate stopped drawing it in round 28; glyph.axpy128_slowdown derives the ratio itself)"
   },
   "$attested_note": [
     "Facts about the AUTHOR rather than measurements of a repository.",
@@ -1072,7 +1027,6 @@
       "value": "10453",
       "unit": "row master asset inventory",
       "drawn_on": [
-        "plate-0b-work.svg",
         "README.md"
       ],
       "source": "Ayush Yadav CV, July 2026",
@@ -1127,7 +1081,6 @@
       "value": "7.7",
       "unit": "M encounters, 1.4 GB",
       "drawn_on": [
-        "plate-0b-work.svg",
         "README.md"
       ],
       "source": "Ayush Yadav CV, July 2026",

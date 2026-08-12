@@ -705,9 +705,32 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
     //      Three ways to make the ground a phantom, all three closed here:
     //      an alpha channel in the fill, a fill-opacity beside it, and an
     //      opacity on the rect or any ancestor of it.
+    // 21 — A TRANSPARENT PLATE DECLARES THE CANVAS IT IS GRADED AGAINST.
+    //
+    //      Round 27's two frontispieces (title page, colophon) paint no sheet
+    //      at all: pure ink on GitHub's own canvas. Check 20 below exists
+    //      precisely to refuse a ground that declares and does not paint, so
+    //      transparency cannot ride through it — it has to be a declaration
+    //      of its own. data-canvas names the hex every ratio on the plate is
+    //      graded against, and plates.py declares the WORST canvas GitHub
+    //      serves that theme on (#22272e, the lightest of the three dark
+    //      canvases, and #ffffff for light — see F1_CANVAS there), so a pass
+    //      here is a pass on all of them. A plate that declares a canvas AND
+    //      paints a full-canvas sheet is claiming to be two things at once,
+    //      and fails — mutations.mjs probes exactly that.
+    const declaredCanvas = svgEl.getAttribute('data-canvas');
+    const canvasOK = declaredCanvas && /^#[0-9a-f]{6}$/i.test(declaredCanvas);
+    if (declaredCanvas && !canvasOK)
+      out.push(`data-canvas="${declaredCanvas}" is not a 6-digit hex — every ratio on this plate needs a real ground`);
     const slabEl = svgEl.querySelector('rect');
-    if (!slabEl) out.push('no <rect> to take a contrast ground from — every ratio below would be meaningless');
-    const slabStyle = slabEl ? getComputedStyle(slabEl) : null;
+    if (canvasOK && slabEl) {
+      const sb = slabEl.getBBox();
+      if (sb.width >= W - 2 && sb.height >= H - 2)
+        out.push(`declares data-canvas="${declaredCanvas}" and also paints a full-canvas sheet `
+               + `— it cannot be both paper and transparency`);
+    }
+    if (!declaredCanvas && !slabEl) out.push('no <rect> to take a contrast ground from — every ratio below would be meaningless');
+    const slabStyle = slabEl && !declaredCanvas ? getComputedStyle(slabEl) : null;
     if (slabStyle) {
       const fo = parseFloat(slabStyle.fillOpacity);
       const ao = opacityOf(slabEl);
@@ -734,7 +757,9 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
                + `canvas — it is a mark, not the sheet, and every contrast ratio on this plate is `
                + `being measured against it`);
     }
-    const SLABRGB = parse(slabStyle ? slabStyle.fill : 'rgb(0, 0, 0)');
+    const SLABRGB = canvasOK
+      ? [1, 3, 5].map(i => parseInt(declaredCanvas.slice(i, i + 2), 16))
+      : parse(slabStyle ? slabStyle.fill : 'rgb(0, 0, 0)');
     const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
 
     for (const m of meta) {

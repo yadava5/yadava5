@@ -48,7 +48,13 @@ const MUTATIONS = [
   // right failure mode — but a probe that only works until someone edits a
   // class is not much of a probe. This one keys on the SHAPE of any left-column
   // label and injects a second run of type at the same coordinates.
-  ['text collides with text', /collides with/,
+  // Round 27: the expectation was a bare /collides with/, and the redesign
+  // proved why that is not a probe. plate-4-applied shipped a real collision,
+  // so every temp copy printed "collides with" before this mutation touched
+  // anything — and this line reported a pass while its injection was never
+  // read. The injected run is the only thing on the page that says OVERLAP, so
+  // the expectation names it. Either side of the pair may print first.
+  ['text collides with text', /"OVERLAP" collides with|collides with "OVERLAP"/,
     (s) => s.replace(/<text x="150" y="(\d+)" class="(\w+)">/,
       (m, y, c) => `<text x="150" y="${y}" class="${c}">OVERLAP</text>${m}`)],
   ['ink leaves the canvas', /leaves the canvas/,
@@ -58,8 +64,20 @@ const MUTATIONS = [
   // authored frame, which check 6 must call out. Keys on the element style,
   // NOT the .ink class default: the same "-7.6s" appears there too, and
   // mutating the class is a no-op because every element overrides it.
-  ['a draw-on is blank at frame zero', /undrawn at frame zero/,
-    (s) => s.replace(/pathLength="1" style="animation-delay:-7\.6s"/, 'pathLength="1" style="animation-delay:0s"')],
+  // Round 27: this probe went stale in a way re-anchoring cannot fix — the
+  // redesign removed the hand-drawn strokes, and `pathLength` now appears in
+  // ZERO of the 36 files. Check 6 has no subject left on the page. That does
+  // not make the check worthless (it guards the next draw-on someone adds), but
+  // a probe cannot borrow a subject that does not exist, so it SYNTHESISES one:
+  // a single-value dasharray whose offset is still pulled fully back at t=0,
+  // which is the exact condition check 6 reads. Injected before </svg> as a
+  // top-level sibling, 1u stroke so it counts as a hairline and does not also
+  // trip check 3 with noise. Keyed to nothing in the page, so no future edit
+  // can silence it.
+  ['a draw-on is blank at frame zero', /<path\.probe6 [^>]*> is undrawn at frame zero/,
+    (s) => s.replace('</svg>',
+      '<path class="probe6" d="M160 24 L 260 24" fill="none" stroke="#f6efe2" '
+      + 'stroke-width="1" style="stroke-dasharray:100;stroke-dashoffset:100"/></svg>')],
   // Applied's refused message rests beside the human for the first 30% of
   // its loop; flipping that hold to opacity:0 hides it for most of the cycle.
   // (Round 21 re-anchor: the sieve became the sifting channel and the hold
@@ -120,22 +138,47 @@ const MUTATIONS = [
   // token went with the table's decorative ripple.)
   // (Round 20 re-anchor: jetpack's bench sub-header — the old benchmark-table
   // row went with the table when the lanes became bars.)
+  // (Round 27: the y="82" literal died with the plate that carried it — the
+  // SAME y-literal trap already fixed on the fill-opacity probe below, one
+  // instance missed. Keys on the shape of any left-column label now.)
   ['contrast is destroyed by an ancestor group opacity', /on the slab \(needs 4.5/,
-    (s) => s.replace(/(<text x="150" y="82" class="lbl">[^<]*<\/text>)/, '<g opacity="0.5">$1</g>')],
+    (s) => s.replace(/(<text x="150" y="\d+" class="lbl">[^<]*<\/text>)/, '<g opacity="0.5">$1</g>')],
   // Check 9 compared the accessible description to the plate with
   // String.includes, so any number that is a PREFIX of one the plate draws
   // passed: "29" is a substring of "299". The desc is the only thing a screen
   // reader gets, and it was the least guarded string in the repo.
+  // (Round 27: keyed on the sentence "which means 299 wrong", which the rewrite
+  // rephrased. The DEFECT is the shape — a desc number truncated to a prefix of
+  // one the plate draws — so the mutation now takes the first three-digit number
+  // in the description and drops its last digit, whatever that number happens
+  // to be. There is nothing left here for a copy edit to break.)
   ['a description number is falsified to a prefix', /description says/,
-    (s) => s.replace(/which means 299 wrong/g, 'which means 29 wrong')],
+    // [\s\S]*? did not stop at </desc>: on a plate whose description holds no
+    // three-digit number the lazy match ran on into <style> and truncated
+    // font-weight:400 to 40. The gate caught THAT — as a missing-face defect —
+    // so the probe reported "not caught" while the corruption was in fact
+    // noticed, for a reason that had nothing to do with check 9. [^<]*? keeps
+    // the match inside the text node, so a plate without one simply declines.
+    (s) => s.replace(/(<desc>[^<]*?)\b(\d\d)\d\b/, '$1$2')],
   // Three ways to make ink transparent in SVG and check 10 read only two.
   // fill-opacity and stroke-opacity are sibling presentation attributes, not
   // `opacity` and not an rgba alpha, and they are exactly what an exported
   // logo carries — two of the six product marks shipped at 1.49:1 and 2.68:1
   // because of it.
-  // (Round 20 re-anchor: the refusal's SIX SERVICES say-line.)
+  // (Round 20 re-anchor: the refusal's SIX SERVICES say-line. Round 27: that
+  // line went with the audit table it headed, so this keys on the SHAPE — the
+  // first left-column .say in the sorted set, which is jetpack's bench
+  // header. A y-literal was the third stale-probe pattern in one week.)
   ['contrast is destroyed by fill-opacity', /on the slab \(needs 4.5/,
-    (s) => s.replace(/(<text x="150" y="88" class="say")/, '$1 fill-opacity="0.12"')],
+    (s) => s.replace(/(<text x="150" y="\d+" class="say")/, '$1 fill-opacity="0.12"')],
+  // Check 21 (data-canvas) is new in round 27 and gets its probe in the same
+  // change — this file's whole history is checks trusted before they were
+  // watched to fail. Paints a full-canvas sheet onto a plate that declares
+  // itself transparent; keyed to the attribute rather than a filename, so it
+  // follows the frontispieces wherever they move.
+  ['a transparent frontispiece paints a sheet anyway', /cannot be both paper and transparency/,
+    (s) => s.includes('data-canvas') ? s.replace(/(<desc>)/,
+      '<rect x="86" y="0" width="708" height="100%" fill="#43372f"/>$1') : s],
   // Check 13 fires when a plate declares animations NONE of which moves
   // anything — dead code on the reader's compositor wearing the name of a
   // gesture. Round 21 anchored this on the title page's two carriers; round
@@ -151,8 +194,41 @@ const MUTATIONS = [
   // Check 14 is the surviving motion-quality check (a stagger is a wave, not a
   // queue), so it keeps a probe: stretching the middle pen stroke's delay on
   // Glyph opens a 400ms hole in a 150ms wave.
-  ['a stagger step is too wide to read as one gesture', /too slow to read as one gesture/,
-    (s) => s.replace(/animation-delay:-7\.45s/, 'animation-delay:-6.9s')],
+  // (Round 27: Glyph's pen stagger went with the pen. The wave now lives on the
+  // refusal's redaction rows. Rather than name that plate — the mistake this
+  // probe has made twice — the mutation asks each file in turn whether it holds
+  // a stagger at all: fewer than three distinct delays and it declines, so the
+  // runner moves on. Then it pushes the LAST step 600ms past the others, which
+  // is a hole no averaging can hide, against a 200ms ceiling.)
+  ['a stagger step is too wide to read as one gesture',
+    /has a \d+ms step across \d+ elements \(ceiling 200ms\) — too slow/,
+    (s) => {
+      // Counting delays FILE-WIDE was wrong and the first run caught it: check 5
+      // groups by animation NAME (gate.mjs:641), and plate-4-applied's four
+      // delays sit on four different names — four groups of one, which the check
+      // skips at `delays.size < 2`. The mutation landed on a plate the check has
+      // no jurisdiction over and the corrupted file passed clean. So group the
+      // same way the check does: by animation name when the element declares
+      // one, by first class token otherwise.
+      const groups = new Map();
+      for (const tag of s.match(/<[^>]*animation-delay:[^>]*>/g) || []) {
+        const d = /animation-delay:(-?[\d.]+)s/.exec(tag)?.[1];
+        const key = /animation:\s*([\w-]+)/.exec(tag)?.[1]
+                 ?? /class="([\w-]+)/.exec(tag)?.[1];
+        if (d === undefined || !key) continue;
+        if (!groups.has(key)) groups.set(key, new Set());
+        groups.get(key).add(d);
+      }
+      const wave = [...groups.values()].find(v => v.size >= 3);
+      if (!wave) return s;                       // no stagger here — try the next plate
+      // gate.mjs:643 reads Math.abs(delay), so widen the MAGNITUDE. Adding 0.6
+      // to the largest of a negative set (-3.1 -> -2.5) narrows the step instead.
+      const far = [...wave].reduce((a, b) =>
+        (Math.abs(parseFloat(b)) > Math.abs(parseFloat(a)) ? b : a));
+      const v = parseFloat(far);
+      return s.replace(`animation-delay:${far}s`,
+        `animation-delay:${(v < 0 ? v - 0.6 : v + 0.6).toFixed(2)}s`);
+    }],
   // Check 3 exempted every hairline from crossing type — "rules pass under
   // type" — so a rule that TRAVELLED across a word passed 40 samples a loop
   // while rendering it struck out. Two plates were shipping exactly that. The
@@ -388,8 +464,13 @@ const CLAIM_MUTATIONS = [
       s.replace('## I · Work', '## I · Work 8675309'))],
   // 4. the anchor half — anchors exist because README.md's permitted-value pool
   //    is nearly vacuous, so an anchored sentence must fail closed when edited.
+  // Round 27: same defect as the collision probe above. The expectation named
+  // no row, so while automl.tool_sets held an anchor into alt text that a plate
+  // rewrite had deleted, the claims baseline printed this exact sentence for a
+  // row this mutation never touches — and the probe passed without discriminating.
+  // Keyed to the sentence it actually rewords now.
   ['an anchored sentence is quietly reworded',
-    /anchor .* no longer appears in README\.md/,
+    /anchor "[^"]*seven\*\* tenant tables" no longer appears in README\.md/,
     (root) => editReadme(root, (s) =>
       s.replace('on all **seven** tenant tables', 'on all **nineteen** tenant tables'))],
   // 5. the SCOPE of the sweep, rather than anything inside it. The light plates
