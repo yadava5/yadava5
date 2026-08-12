@@ -789,14 +789,41 @@ def plate_work() -> str:
                  f'stroke-opacity="0.55" stroke-width="4" stroke-dasharray="2 4"/></g>')
         s.append(f'<text x="602" y="{yy+11}" class="fine">{tag}</text>')
 
-    # the account closes
-    s.append(f'<path d="M{L} 564H{R}M{L} 568H{R}" stroke="{RULE}"/>')
+    # ── the account closes, and the closing rule RUNS INTO THE STAMP.
+    #
+    # It used to run the full 150-730 and the stamp was hollow, so both
+    # hairlines passed straight through the stamp's upper corner: they met its
+    # -7 degree top edge at a shallow angle, tapered into a sliver against it
+    # for ~130u, and came out the far side as a 23u stub of double rule floating
+    # to the right of the stamp. Two near-parallel lines converging into a point
+    # is the one figure a drawing cannot mean on purpose, and the stub had
+    # nothing at either end. Neither object yielded because neither had been
+    # told which was in front.
+    #
+    # A stamp is applied to the sheet, so it is in front. The rules are drawn to
+    # x=600 — the stamp's own centre, far enough inside that no future nudge
+    # uncovers them — and the stamp's body is opaque paper, so each rule ends
+    # exactly where the stamp's edge crosses it. The upper one surfaces ~33u
+    # further right than the lower, and that is the occlusion reading itself off
+    # the rake: it is what tells a reader the stamp is on top rather than
+    # tangled in the ruling. The ledger opens on a double rule at full width and
+    # closes on one that meets its attestation, which is what a hand-ruled
+    # account does when a signature holds the end of the closing line.
+    s.append(f'<path d="M{L} 564H600M{L} 568H600" stroke="{RULE}"/>')
 
-    # ── the stamp. Rotated, hollow, struck over the closing rule — the whole
-    # section's warrant in one device. Its two texts share the stamp's <g>,
-    # which is what makes the composition legal to the collision checks.
+    # ── the stamp. Rotated, struck over the closing rule — the whole section's
+    # warrant in one device. Its two texts share the stamp's <g>, which is what
+    # makes the composition legal to the collision checks (gate.mjs:353).
+    #
+    # The GROUND fill is the occluder and it is free of the contrast gate twice
+    # over: a non-text fill is skipped outright when the shape's own stroke
+    # clears 3.0 (INK3 measures 6.39:1 night / 4.74:1 day), and paper-on-paper
+    # computes 1.00:1, which the gate waves through explicitly as "it IS the
+    # slab". The rules that pass beneath are 1u paths — hairlines, and hairlines
+    # are exempt from the graphic-on-graphic rule — so nothing here is legal by
+    # luck.
     s.append(f'<g transform="translate(600,592) rotate(-7)"><g>'
-             f'<rect x="-110" y="-31" width="220" height="62" rx="8" fill="none" stroke="{INK3}" stroke-width="2"/>'
+             f'<rect x="-110" y="-31" width="220" height="62" rx="8" fill="{GROUND}" stroke="{INK3}" stroke-width="2"/>'
              f'<text x="0" y="-2" text-anchor="middle" class="say" style="fill:{INK3};letter-spacing:4px">ATTESTED</text>'
              f'<text x="0" y="22" text-anchor="middle" class="kick">ON MY WORD</text>'
              f'</g></g>')
@@ -969,14 +996,22 @@ def plate_glyph() -> str:
     homework: ruled baselines edge to edge, an amber margin line, every mark
     the true label of one missed image — the 220 in grey ink, the 79 the net
     was SURE about in heavy amber, so the field's own hue count is the 79.
-    The plate's ONE motion (round 24's budget) is the one that re-derives a
-    claim: the pen draws the hero 3.5 stroke by stroke once per loop, over a
-    half-ink ghost of itself, so the answer is never absent. The nib that
-    used to ride the field is gone — ambient travel, meaningless on the
-    arbitrary frame a camo-served <img> actually shows a reader.
+
+    Two motions, and they divide the room's two hands between them. The pen
+    draws the hero 3.5 stroke by stroke once per loop over a half-ink ghost of
+    itself, so the answer is never absent — that is the gesture, the thing
+    written. A caret runs a closed circuit of the clear bands and lifts each
+    row's ink as it passes — that is the carrier, the thing marked. An earlier
+    round deleted the travelling mark as "ambient travel, meaningless on the
+    arbitrary frame a camo-served <img> shows a reader" and the note outlived
+    the deletion by several rounds while the mark was back in the file. It has
+    to be back: the row-lift alone changes ink for about 17% of the loop, and
+    build/motion.mjs asks a desktop plate for a carrier alive in 95%. The
+    honest fix was never removal, it was giving the mark a shape that means
+    something at every frame — see the caret below.
     """
     H, LOOP, SET, a = 576, 9.1, 7.6, CLAY_G
-    NIB = 18.2                     # the nib's circuit — 2 x LOOP, commensurate
+    READ = 18.2                    # the caret's circuit — 2 x LOOP, commensurate
     s = [head(H, "Glyph — borrowed code made 3.5x faster, same 97.01%",
               "Glyph: a course-provided C++ MNIST network, hand-optimised — AVX-512, AVX2 and "
               "NEON kernels over a scalar fallback, written with Shree Chaturvedi; the React "
@@ -988,7 +1023,19 @@ def plate_glyph() -> str:
               "labels it missed, and the 79 it was most confident about drawn heavier and "
               "in the accent.", key="plate-1-glyph.svg",
               col=(96, 770), frame=(61, 10, 17))]
-    s.append(f""".ink{{fill:none;stroke:{a};stroke-width:7;stroke-linecap:round;stroke-linejoin:round;
+    # THE HAND WRITES IN INK; THE MARKING IS IN THE ACCENT. Round 26, and it is
+    # a colour SEMANTIC rather than a preference. The hero was the only one in
+    # the set painted in the accent — every other plate's headline claim is INK
+    # (6.4x, 0.979, 15/44, "B only") — and on a copybook the accent was already
+    # spoken for twice over: the margin rule and the 79 misses the net was sure
+    # of. One hue meaning both "the answer I got" and "the mistakes it made" is
+    # the same collision as a number used for two nouns. So: INK is what was
+    # written, the accent is what was marked, and nothing on this plate carries
+    # both meanings. Measured on this paper — INK 10.06:1 night / 12.48:1 day
+    # against the accent's 7.08 / 5.76, APCA Lc -90.1 / 87.5 against -67.4 /
+    # 69.2 — so the claim that was hardest to read is now the easiest, which is
+    # the right way round for a hero.
+    s.append(f""".ink{{fill:none;stroke:{INK};stroke-width:7;stroke-linecap:round;stroke-linejoin:round;
   stroke-dasharray:1;stroke-dashoffset:0;animation:draw {LOOP}s linear infinite;animation-delay:{-SET}s}}
 /* 4% a glyph (round 19): at 17% the pen laid ink below the perceptual floor;
    at 4% each 100ms sample lays visible ink and the gesture reads as what the
@@ -1002,19 +1049,24 @@ def plate_glyph() -> str:
    every gesture on this page owes to the .fil chip that taught it */
 .stl{{transform-box:fill-box;transform-origin:center;animation:stl {LOOP}s {BREATHE} infinite}}
 @keyframes stl{{0%,5%{{transform:scale(1)}}7.5%{{transform:scale(1.07)}}10%,100%{{transform:scale(1)}}}}
-/* the nib: one closed boustrophedon circuit of the WHOLE field — up the
+/* the caret: one closed boustrophedon circuit of the WHOLE field — up the
    margin, then every clear band between the ink rows, out and back. Closed
    path, so there is no wrap to hide and no reset to fade. Constant speed;
    the row groups below lift as it passes them.
    RESTORED at its authored coordinates. I first "corrected" these 8u upward
    on the theory that the field had moved when the plate grew 556 -> 576; it
    had not — the rails were always 288 + r*28, and the circuit deliberately
-   rides 8u BELOW each rail, in the clear band. Shifting it put the nib
+   rides 8u BELOW each rail, in the clear band. Shifting it put the mark
    straight through the digit rows, which gate.mjs reported as eight collisions
-   against the miss marks. The measurement is the field, not the plate. */
-.nib{{offset-path:path('M146 436V296H773V324H146V352H773V380H146V408H773V436H146');
-  offset-rotate:auto;animation:nib {NIB}s linear infinite;animation-delay:-9.3s}}
-@keyframes nib{{from{{offset-distance:0%}}to{{offset-distance:100%}}}}
+   against the miss marks. The measurement is the field, not the plate.
+   offset-rotate is 0deg, NOT auto, and that is the whole reason the mark
+   reads. `auto` turns the shape to the tangent, so on a boustrophedon it
+   points up the margin, right along one band and DOWN-flipped along the next
+   — a mark whose meaning inverts every row. Held upright it points at the
+   same thing on every run: the line above it. */
+.car{{offset-path:path('M146 436V296H773V324H146V352H773V380H146V408H773V436H146');
+  offset-rotate:0deg;animation:car {READ}s linear infinite;animation-delay:-9.3s}}
+@keyframes car{{from{{offset-distance:0%}}to{{offset-distance:100%}}}}
 """)
     # the read: while the nib runs the band under row r, that row's grey ink
     # lifts to full — colour on the row group's `color`, the digits stroked
@@ -1024,17 +1076,35 @@ def plate_glyph() -> str:
         s0 = (140 + r * 655) / 4042 * 100
         e0 = s0 + 627 / 4042 * 100
         if r < 5:
-            s.append(f".rd{r}{{animation:rd{r} {NIB}s linear infinite;animation-delay:-9.3s}}"
+            s.append(f".rd{r}{{animation:rd{r} {READ}s linear infinite;animation-delay:-9.3s}}"
                      f"@keyframes rd{r}{{0%,{s0-1:.1f}%{{color:{INK2}}}{s0+1:.1f}%,{e0-1:.1f}%{{color:{INK}}}"
                      f"{e0+1:.1f}%,100%{{color:{INK2}}}}}")
         else:  # the last band ends exactly at the wrap, so it stays lit across it
-            s.append(f".rd{r}{{animation:rd{r} {NIB}s linear infinite;animation-delay:-9.3s}}"
+            s.append(f".rd{r}{{animation:rd{r} {READ}s linear infinite;animation-delay:-9.3s}}"
                      f"@keyframes rd{r}{{0%{{color:{INK}}}1.5%,{s0-1:.1f}%{{color:{INK2}}}"
                      f"{s0+1:.1f}%,100%{{color:{INK}}}}}")
     s.append(f"</style>{ground(H)}")
 
-    # the binder tab — chapter identification, rotated up the left edge
-    s.append(f'<text transform="rotate(-90 112 480)" x="112" y="480" class="kick">III · GLYPH</text>')
+    # ── the binder tab — chapter identification, rotated up the left edge.
+    #
+    # MOVED INTO THE TOP BAND, round 26, and only moved. The section marker
+    # wears a different treatment on every plate — a ledger's folio top right,
+    # a bench sheet's boxed badge, a copybook's binder tab, a channel's centred
+    # caption — and that variation is not a defect to average away: it is the
+    # same bet as the armature itself, that a reader placing a 200px crop does
+    # it from the ROOM and not from a uniform chrome. Standardising the eight
+    # markers would buy consistency by spending the one thing the set is built
+    # on, and would land the page on exactly the numbered-marker chrome the
+    # house doctrine warns is a default rather than a choice.
+    #
+    # What is NOT free to vary is findability, and this one broke it: at y=480
+    # the tab sat two thirds down a 576u plate, below the copybook field, with
+    # no sibling anywhere near it — the only marker in the set a reader had to
+    # hunt for. Its foot now shares the 97.01% baseline at y=206, so the left
+    # column reads as one stack, and the tab runs up to ~108 — inside the top
+    # band every other marker occupies, and clear of the plate's declared top
+    # ink at 61 by enough that data-frame does not move.
+    s.append(f'<text transform="rotate(-90 112 206)" x="112" y="206" class="kick">III · GLYPH</text>')
 
     # ── the answer block: the pen DRAWS the answer — the question is about
     # work done by hand, and the hero is laid down by one. "3.5", stroke by
@@ -1139,9 +1209,59 @@ def plate_glyph() -> str:
                        f'<path d="{DIGITS[errs[i]]}" fill="none" {stroke} stroke-linecap="round"/></g>')
     for r in range(6):
         s.append(f'<g class="rd{r}" style="color:{INK2}">' + "".join(rowg[r]) + '</g>')
-    # the nib, riding the clear bands between the ink rows — the whole field
-    s.append(f'<g class="nib"><path d="M-16 0H0" stroke="{a}" stroke-width="3" stroke-linecap="round"/>'
-             f'<circle cx="0" cy="0" r="3" fill="{a}"/></g>')
+    # ── the caret, riding the clear bands between the ink rows — the whole
+    # field. It was a 16u bar with a ball on the end, and at the arbitrary
+    # frame camo hands a reader it read as a stray mark: horizontal, in a field
+    # of horizontal rules, so it looked like a fragment of one; round-ended, so
+    # the ball read as a bullet; and floating in the middle of a clear band with
+    # nothing tying it to the row it was lifting. Three ways to be dirt.
+    #
+    # A caret is none of those. It is the one mark in this room's own
+    # vernacular — a page of marked homework — that means exactly "here", it
+    # cannot be mistaken for a rule because it is not horizontal, and it POINTS
+    # at the row whose ink it lifts, which is the relationship the old mark left
+    # for the reader to guess. The accent is right for it now in a way it was
+    # not before: with the hero moved to INK, the accent on this plate means
+    # only marking, and a caret running the line is marking.
+    #
+    # IT IS CLOSED, and that is a motion decision as much as a drawn one. An
+    # open chevron was the first shape here and it reads perfectly well — but
+    # this mark is the plate's CARRIER, and build/motion.mjs counts changed
+    # pixels: it wants a desktop plate alive in 95% of 100ms intervals at a
+    # floor of 0.02% of the canvas, and the row-lift below covers only about
+    # 17%. So the swept ink of whatever travels here is the entire margin, and
+    # the right test is not "does it read" but "does it sweep at least what the
+    # mark it replaces swept". The old bar-and-ball painted ~72u²; the open
+    # chevron ~55u²; closing it with the base takes it to ~70u². The mark
+    # advances 22u per interval and is 11.5u across, so consecutive footprints
+    # are disjoint and changed area is simply twice the mark — 0.034% of this
+    # canvas against the old ~0.035%. Parity, not a hope.
+    #
+    # An arrow — chevron plus stem — would have swept more, and is impossible
+    # here: three 3u strokes cannot fit inside an 8.5u base without merging
+    # into a blob. The base can, and it earns its place twice, because a closed
+    # figure reads as an OBJECT sliding along the page rather than a mark made
+    # on it, which is what an instrument should be.
+    #
+    # Every dimension is a clearance, not a taste, and all four are derived
+    # from the digits' PAINTED extents rather than their nominal cells. A glyph
+    # is centred in an 11.4u cell and stroked, so column 0 paints from ~151.9,
+    # not from x=150; and a row's ink runs rail-10.8 to rail+0.88, leaving a
+    # 16.3u band. Against gate.mjs's 1.5u tolerance: 2.0u to the margin rule,
+    # 2.4u to the first digit column, 2.1u to the feet above, 2.7u to the heads
+    # below. Stroke 3.0 matches the bar it replaces and keeps the mark out of
+    # the hairline class (<=2), where it would be judged by the moving-rule
+    # check — the wrong instrument for something that never crosses type.
+    # Filled, and the fill is honesty rather than weight: a 3u stroke on an
+    # 8.5u triangle leaves an interior about 2u across, which rendered as a
+    # solid mark with one dark notch in it — a shape that looks filled and is
+    # not reads as a rendering fault. It carries the stroke as well as the fill
+    # because the stroke is where the swept area lives (it grows the footprint
+    # 1.5u on every side) and because round joins are what every other mark on
+    # this page has.
+    s.append(f'<g class="car"><path d="M-6.5 5L-2.25 -3.5L2 5Z" fill="{a}" '
+             f'stroke="{a}" stroke-width="3" stroke-linecap="round" '
+             f'stroke-linejoin="round"/></g>')
     s.append(f'<text x="150" y="490" class="fine" style="fill:{INK3}">each mark — the true label of one missed image, from the pinned CSV</text>')
     s.append(f'<text x="150" y="512" class="fine">course-provided net, after Nielsen — optimised with Shree Chaturvedi</text>')
     s.append(f'<text x="150" y="532" class="fine">the browser app is mine alone</text>')
@@ -1276,10 +1396,25 @@ def plate_automl() -> str:
     s.append(f'<text x="{L}" y="452" class="fine mach" style="fill:{INK}">--internal network — no route out by default · non-root user</text>')
     s.append(f'<text x="{L}" y="472" class="fine mach" style="fill:{INK}">read-only root · /datasets:ro · 5 tmpfs — the only writable surface</text>')
 
-    # ── the stores behind it, and the imprint
-    s.append(f'<text x="{L}" y="514" class="sub">29</text>')
-    s.append(f'<text x="206" y="514" class="lbl">TABLES · POSTGRES + PGVECTOR</text>')
-    s.append(f'<text x="206" y="534" class="fine">public · GPL-3.0 · written with Shree Chaturvedi</text>')
+    # ── the stores behind it, and the imprint.
+    #
+    # THE SCHEMA SIZE STOPS BEING A HEADLINE. Round 26. This plate draws 29
+    # twice for two unrelated nouns — the registry tools the base set excludes
+    # (44 minus 15) and the tables in the Postgres schema — and both are
+    # claim-bearing, so neither value can move. What could move is the WEIGHT.
+    # The tables figure was set at .sub, 34px in the display face: the same
+    # register as the heroes on every other plate, on a fact that is not this
+    # plate's claim and barely its evidence. So the page offered a reader two
+    # 29s, one of them shouting, and invited them to be the same 29.
+    #
+    # Demoted to the label register, the collision cannot happen: "THE OTHER 29"
+    # is the only 29 on the plate with any emphasis, it sits inside the drawn
+    # set difference that derives it, and the schema size reads as what it is —
+    # a line of imprint at the foot of a stores ledger, beside the licence and
+    # the co-author. It also leaves 15/44 as the plate's only display numeral,
+    # which is the composition this plate was redrawn for.
+    s.append(f'<text x="{L}" y="514" class="lbl">29 TABLES · POSTGRES + PGVECTOR</text>')
+    s.append(f'<text x="{L}" y="534" class="fine">public · GPL-3.0 · written with Shree Chaturvedi</text>')
     s.append(f'<text x="{L}" y="558" class="fine mach" style="fill:{INK3}">source: backend/src/services/llm/tools/index.ts</text>')
     return "".join(s) + "</svg>"
 
@@ -1525,16 +1660,56 @@ def plate_applied() -> str:
     # gate, stream and the human, in a single <g> so the stream may pass
     # through the screens (which is the diagram's whole point).
     ch = []
-    # walls — the left one drawn in three lengths, because the chutes leave
-    # through real openings at their crossing heights; the right one stops
-    # short of the foot, and that opening is the door to the human
     # walls at 3u — a full weight above the 2u screens, because a wall is the
     # thing the stream cannot pass and the drawing should say so (round 21
     # called the 1-2u channel "the most timid drawing in the set")
     wx = lambda y: 320 + 70 * (y - 104) / 292
-    ch.append(f'<path d="M320 104L{wx(198):.1f} 198M{wx(220):.1f} 220L{wx(274):.1f} 274'
-              f'M{wx(296):.1f} 296L390 396" stroke="{WIRE}" stroke-width="3"/>')
+    # ── THE PORTS. Round 26. The openings were authored 198-220 and 274-296
+    # while the chutes cross the wall at 198.0 and 283.6 — so the upper one let
+    # its chute out at its TOP EDGE and the remaining 21 of its 22 units were
+    # plain missing wall. That is what read as a broken wall: not the ratio of a
+    # 22u opening to a 1u dotted line, which is fine, but 21u of opening with
+    # nothing passing through it. The openings are DERIVED from the crossings
+    # now, so a chute and its port cannot drift apart again.
+    #
+    # The crossings are the parameters at which P1 and P2 leave x > wx(y):
+    # P1 exits at its own endpoint (342,198), and P2 at t≈0.985 of its last
+    # cubic, y≈283.6. Authored rather than solved — a cubic/line intersection
+    # in the generator would be more machinery than two numbers deserve — but
+    # gate.mjs check 3 sees the result, and a port that missed its chute would
+    # leave the token crossing 3u of wall.
+    #
+    # 22u is the port width and it is derived too: an 18u token plus 2u of
+    # clearance each side, so a port is exactly as wide as the mail that leaves
+    # through it, measured on the wall's own 13.5-degree rake.
+    PORT_W, PORTS = 22, (198.0, 283.6)
+    edges = [104]
+    for c in PORTS:
+        edges += [c - PORT_W / 2, c + PORT_W / 2]
+    edges.append(396)
+    ch.append('<path d="' + "".join(
+        f'M{wx(y0):.1f} {y0:g}L{wx(y1):.1f} {y1:g}'
+        for y0, y1 in zip(edges[0::2], edges[1::2]))
+        + f'" stroke="{WIRE}" stroke-width="3"/>')
     ch.append(f'<path d="M560 104L{560 - 70 * 274 / 292:.1f} 378" stroke="{WIRE}" stroke-width="3"/>')
+    # ── the jambs, and they are the whole of this round's correction to the
+    # drawing. A member that simply STOPS reads as broken; an opening whose ends
+    # turn outward reads as a machined port, which is the one convention that
+    # separates an aperture from a fracture in any sectioned instrument. Six
+    # units along the outward normal, at both ends of both ports and at the foot
+    # of the right wall — the door the refused message leaves by, which until
+    # now was also just a stroke that ran out. No member moved; five ends got a
+    # lip, and the channel reads as one wall with two ports and a door.
+    JAMB = 6.0
+    _lw = (70 ** 2 + 292 ** 2) ** 0.5          # left wall, running down-right
+    lnx, lny = -292 / _lw * JAMB, 70 / _lw * JAMB      # outward normal, to -x
+    for y in edges[1:5]:
+        ch.append(f'<path d="M{wx(y):.1f} {y:g}l{lnx:.1f} {lny:.1f}" '
+                  f'stroke="{WIRE}" stroke-width="3" stroke-linecap="round"/>')
+    _rw = (65.6849 ** 2 + 274 ** 2) ** 0.5     # right wall, running down-left
+    ch.append(f'<path d="M{560 - 70 * 274 / 292:.1f} 378'
+              f'l{274 / _rw * JAMB:.1f} {65.6849 / _rw * JAMB:.1f}" '
+              f'stroke="{WIRE}" stroke-width="3" stroke-linecap="round"/>')
     # screens: wall-to-wall at their depth, perforated
     for sy in (168, 244, 320):
         wl = 320 + 70 * (sy - 104) / 292
