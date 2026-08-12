@@ -177,5 +177,15 @@ if (!GATE) {
   console.error('\nMOTION GATE FAILED\n' + fail.map(s => '  ' + s).join('\n'));
   process.exit(1);
 } else {
-  console.log(`\nMOTION GATE PASSED — every plate sustains its carrier and lands its gesture.`);
+  // This said "every plate sustains its carrier and lands its gesture", which
+  // was not true of the second half: mobile cards are excused the gesture
+  // clause above (`!r.mobile && !glance`) for the reason documented at the top
+  // of this file, and four of them legitimately report `gesture in 0/N`. A
+  // success line that claims coverage the run did not have is the same defect
+  // as a check that cannot fail — it just fails upward. So it now counts what
+  // was actually graded.
+  const exempt = rows.filter(([, r]) => r.mobile).length;
+  console.log(`\nMOTION GATE PASSED — all ${rows.length} plates sustain a carrier; `
+    + `${rows.length - exempt} are also held to the gesture clause and land one. `
+    + `${exempt} mobile cards are excused it by design, not by accident.`);
 }
