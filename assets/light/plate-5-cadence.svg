@@ -12,50 +12,50 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#1A2224}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#1A2224;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k397{to{stroke-dashoffset:-188}}
-.k397{animation:k397 2100ms linear infinite}
-@keyframes k398{to{stroke-dashoffset:-160}}
-.k398{animation:k398 2100ms linear infinite}
-@keyframes k399{to{stroke-dashoffset:-138}}
-.k399{animation:k399 2100ms linear infinite}
-@keyframes k400{to{stroke-dashoffset:-351}}
-.k400{animation:k400 2450ms linear infinite}
-@keyframes k401{to{stroke-dashoffset:-323}}
-.k401{animation:k401 2450ms linear infinite}
-@keyframes k402{to{stroke-dashoffset:-301}}
-.k402{animation:k402 2450ms linear infinite}
-@keyframes k403{to{stroke-dashoffset:-266}}
-.k403{animation:k403 2750ms linear infinite}
-@keyframes k404{to{stroke-dashoffset:-238}}
-.k404{animation:k404 2750ms linear infinite}
-@keyframes k405{to{stroke-dashoffset:-216}}
-.k405{animation:k405 2750ms linear infinite}
-@keyframes k406{to{stroke-dashoffset:-206}}
-.k406{animation:k406 2100ms linear infinite}
-@keyframes k407{to{stroke-dashoffset:-178}}
-.k407{animation:k407 2100ms linear infinite}
-@keyframes k408{to{stroke-dashoffset:-156}}
-.k408{animation:k408 2100ms linear infinite}
-@keyframes k409{to{stroke-dashoffset:-308}}
+@keyframes k409{to{stroke-dashoffset:-188}}
 .k409{animation:k409 2100ms linear infinite}
-@keyframes k410{to{stroke-dashoffset:-280}}
+@keyframes k410{to{stroke-dashoffset:-160}}
 .k410{animation:k410 2100ms linear infinite}
-@keyframes k411{to{stroke-dashoffset:-258}}
+@keyframes k411{to{stroke-dashoffset:-138}}
 .k411{animation:k411 2100ms linear infinite}
-@keyframes k412{to{stroke-dashoffset:-242}}
-.k412{animation:k412 2100ms linear infinite}
-@keyframes k413{to{stroke-dashoffset:-214}}
-.k413{animation:k413 2100ms linear infinite}
-@keyframes k414{to{stroke-dashoffset:-192}}
-.k414{animation:k414 2100ms linear infinite}
-@keyframes k415{to{stroke-dashoffset:-366}}
-.k415{animation:k415 2100ms linear infinite}
-@keyframes k416{to{stroke-dashoffset:-338}}
-.k416{animation:k416 2100ms linear infinite}
-@keyframes k417{to{stroke-dashoffset:-316}}
-.k417{animation:k417 2100ms linear infinite}
+@keyframes k412{to{stroke-dashoffset:-351}}
+.k412{animation:k412 2450ms linear infinite}
+@keyframes k413{to{stroke-dashoffset:-323}}
+.k413{animation:k413 2450ms linear infinite}
+@keyframes k414{to{stroke-dashoffset:-301}}
+.k414{animation:k414 2450ms linear infinite}
+@keyframes k415{to{stroke-dashoffset:-266}}
+.k415{animation:k415 2750ms linear infinite}
+@keyframes k416{to{stroke-dashoffset:-238}}
+.k416{animation:k416 2750ms linear infinite}
+@keyframes k417{to{stroke-dashoffset:-216}}
+.k417{animation:k417 2750ms linear infinite}
+@keyframes k418{to{stroke-dashoffset:-206}}
+.k418{animation:k418 2100ms linear infinite}
+@keyframes k419{to{stroke-dashoffset:-178}}
+.k419{animation:k419 2100ms linear infinite}
+@keyframes k420{to{stroke-dashoffset:-156}}
+.k420{animation:k420 2100ms linear infinite}
+@keyframes k421{to{stroke-dashoffset:-308}}
+.k421{animation:k421 2100ms linear infinite}
+@keyframes k422{to{stroke-dashoffset:-280}}
+.k422{animation:k422 2100ms linear infinite}
+@keyframes k423{to{stroke-dashoffset:-258}}
+.k423{animation:k423 2100ms linear infinite}
+@keyframes k424{to{stroke-dashoffset:-242}}
+.k424{animation:k424 2100ms linear infinite}
+@keyframes k425{to{stroke-dashoffset:-214}}
+.k425{animation:k425 2100ms linear infinite}
+@keyframes k426{to{stroke-dashoffset:-192}}
+.k426{animation:k426 2100ms linear infinite}
+@keyframes k427{to{stroke-dashoffset:-366}}
+.k427{animation:k427 2100ms linear infinite}
+@keyframes k428{to{stroke-dashoffset:-338}}
+.k428{animation:k428 2100ms linear infinite}
+@keyframes k429{to{stroke-dashoffset:-316}}
+.k429{animation:k429 2100ms linear infinite}
 </style>
-<g><path class="bus" stroke="#1F6D5C" d="M63,0 V440"/><path class="cm k397" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="22" d="M63,2.5 V437.5"/><path class="cm k398" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="50" d="M63,2.5 V437.5"/><path class="cm k399" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="72" d="M63,2.5 V437.5"/></g><g><path class="bus" stroke="#9A3412" d="M90,0 V440"/><path class="cm k400" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="-141" d="M90,2.5 V437.5"/><path class="cm k401" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="-113" d="M90,2.5 V437.5"/><path class="cm k402" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="-91" d="M90,2.5 V437.5"/></g><g><path class="bus" stroke="#5F6E73" d="M117,0 V440"/><path class="cm k403" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-56" d="M117,2.5 V437.5"/><path class="cm k404" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="-28" d="M117,2.5 V437.5"/><path class="cm k405" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="-6" d="M117,2.5 V437.5"/></g><g><path class="bus" stroke="#1F6D5C" d="M63,120 H150"/><path class="cm k406" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="4" d="M67,120 H145"/><path class="cm k407" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="32" d="M67,120 H145"/><path class="cm k408" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="54" d="M67,120 H145"/></g><g><path class="bus" stroke="#1F6D5C" d="M198,120 H252 V330"/><path class="cm k409" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-98" d="M202,120 H252 V326"/><path class="cm k410" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="-70" d="M202,120 H252 V326"/><path class="cm k411" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="-48" d="M202,120 H252 V326"/></g><path fill="none" stroke="#1F6D5C" stroke-width="1.4" d="M252,150 H300 M252,155 H300 M252,160 H300 M252,165 H300 M252,170 H300 M252,175 H300 M252,180 H300 M252,185 H300 M252,190 H300 M252,195 H300 M252,200 H300 M252,205 H300 M252,210 H300 M252,215 H300 M252,220 H300 M252,225 H300 M252,230 H300 M252,235 H300 M252,240 H300 M252,245 H300 M252,250 H300 M252,255 H300 M252,260 H300 M252,265 H300 M252,270 H300 M252,275 H300 M252,280 H300 M252,285 H300 M252,290 H300 M252,295 H300 M252,300 H300 M252,305 H300 M252,310 H300 M252,315 H300 M252,320 H300 M252,325 H300 M252,330 H300"/><rect x="300" y="140" width="170" height="200" rx="8" fill="none" stroke="#1F6D5C" stroke-width="1.6"/><text x="312" y="222" class="ts" font-size="10" letter-spacing="1.1">ONE SERVERLESS</text><text x="312" y="238" class="ts" font-size="10" letter-spacing="1.1">FUNCTION</text><text x="312" y="258" class="ts dim" font-size="10" letter-spacing="1.1">37 ROUTE HANDLERS</text><g><path class="bus" stroke="#1F6D5C" d="M496,235 H600"/><path class="cm k412" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-32" d="M500,235 H596"/><path class="cm k413" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="-4" d="M500,235 H596"/><path class="cm k414" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="18" d="M500,235 H596"/></g><path class="bus" stroke="#1F6D5C" d="M560,150 V223 M560,247 V330"/><path class="bus" stroke="#1F6D5C" d="M566,150 V223 M566,247 V330"/><text x="563" y="140" class="ts dim" font-size="10.5" letter-spacing="1.4" text-anchor="middle">RLS · FORCED</text><g><path class="bus" stroke="#1F6D5C" d="M600,165 V315"/><path class="cm k415" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-156" d="M600,168 V312"/><path class="cm k416" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="-128" d="M600,168 V312"/><path class="cm k417" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="-106" d="M600,168 V312"/></g><path fill="none" stroke="#1F6D5C" stroke-width="1.4" d="M600,165 H628 M600,190 H628 M600,215 H628 M600,240 H628 M600,265 H628 M600,290 H628 M600,315 H628"/><rect x="628" y="156" width="120" height="18" rx="3" fill="none" stroke="#5F6E73" stroke-width="1.3"/><rect x="628" y="181" width="120" height="18" rx="3" fill="none" stroke="#5F6E73" stroke-width="1.3"/><rect x="628" y="206" width="120" height="18" rx="3" fill="none" stroke="#5F6E73" stroke-width="1.3"/><rect x="628" y="231" width="120" height="18" rx="3" fill="none" stroke="#5F6E73" stroke-width="1.3"/><rect x="628" y="256" width="120" height="18" rx="3" fill="none" stroke="#5F6E73" stroke-width="1.3"/><rect x="628" y="281" width="120" height="18" rx="3" fill="none" stroke="#5F6E73" stroke-width="1.3"/><rect x="628" y="306" width="120" height="18" rx="3" fill="none" stroke="#5F6E73" stroke-width="1.3"/><g transform="translate(150,96) scale(1.0000)"><rect x="0.75" y="0.75" width="46.5" height="46.5" rx="12" fill="#0A0A0B" stroke="#6E7A80" stroke-width="1"/>
+<g><path class="bus" stroke="#1F6D5C" d="M63,0 V440"/><path class="cm k409" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="22" d="M63,2.5 V437.5"/><path class="cm k410" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="50" d="M63,2.5 V437.5"/><path class="cm k411" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="72" d="M63,2.5 V437.5"/></g><g><path class="bus" stroke="#9A3412" d="M90,0 V440"/><path class="cm k412" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="-141" d="M90,2.5 V437.5"/><path class="cm k413" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="-113" d="M90,2.5 V437.5"/><path class="cm k414" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="-91" d="M90,2.5 V437.5"/></g><g><path class="bus" stroke="#5F6E73" d="M117,0 V440"/><path class="cm k415" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-56" d="M117,2.5 V437.5"/><path class="cm k416" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="-28" d="M117,2.5 V437.5"/><path class="cm k417" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="-6" d="M117,2.5 V437.5"/></g><g><path class="bus" stroke="#1F6D5C" d="M63,120 H150"/><path class="cm k418" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="4" d="M67,120 H145"/><path class="cm k419" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="32" d="M67,120 H145"/><path class="cm k420" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="54" d="M67,120 H145"/></g><g><path class="bus" stroke="#1F6D5C" d="M198,120 H252 V330"/><path class="cm k421" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-98" d="M202,120 H252 V326"/><path class="cm k422" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="-70" d="M202,120 H252 V326"/><path class="cm k423" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="-48" d="M202,120 H252 V326"/></g><path fill="none" stroke="#1F6D5C" stroke-width="1.4" d="M252,150 H300 M252,155 H300 M252,160 H300 M252,165 H300 M252,170 H300 M252,175 H300 M252,180 H300 M252,185 H300 M252,190 H300 M252,195 H300 M252,200 H300 M252,205 H300 M252,210 H300 M252,215 H300 M252,220 H300 M252,225 H300 M252,230 H300 M252,235 H300 M252,240 H300 M252,245 H300 M252,250 H300 M252,255 H300 M252,260 H300 M252,265 H300 M252,270 H300 M252,275 H300 M252,280 H300 M252,285 H300 M252,290 H300 M252,295 H300 M252,300 H300 M252,305 H300 M252,310 H300 M252,315 H300 M252,320 H300 M252,325 H300 M252,330 H300"/><rect x="300" y="140" width="170" height="200" rx="8" fill="none" stroke="#1F6D5C" stroke-width="1.6"/><text x="312" y="222" class="ts" font-size="10" letter-spacing="1.1">ONE SERVERLESS</text><text x="312" y="238" class="ts" font-size="10" letter-spacing="1.1">FUNCTION</text><text x="312" y="258" class="ts dim" font-size="10" letter-spacing="1.1">37 ROUTE HANDLERS</text><g><path class="bus" stroke="#1F6D5C" d="M496,235 H600"/><path class="cm k424" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-32" d="M500,235 H596"/><path class="cm k425" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="-4" d="M500,235 H596"/><path class="cm k426" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="18" d="M500,235 H596"/></g><path class="bus" stroke="#1F6D5C" d="M560,150 V223 M560,247 V330"/><path class="bus" stroke="#1F6D5C" d="M566,150 V223 M566,247 V330"/><text x="563" y="140" class="ts dim" font-size="10.5" letter-spacing="1.4" text-anchor="middle">RLS · FORCED</text><g><path class="bus" stroke="#1F6D5C" d="M600,165 V315"/><path class="cm k427" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-156" d="M600,168 V312"/><path class="cm k428" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="-128" d="M600,168 V312"/><path class="cm k429" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="-106" d="M600,168 V312"/></g><path fill="none" stroke="#1F6D5C" stroke-width="1.4" d="M600,165 H628 M600,190 H628 M600,215 H628 M600,240 H628 M600,265 H628 M600,290 H628 M600,315 H628"/><rect x="628" y="156" width="120" height="18" rx="3" fill="none" stroke="#5F6E73" stroke-width="1.3"/><rect x="628" y="181" width="120" height="18" rx="3" fill="none" stroke="#5F6E73" stroke-width="1.3"/><rect x="628" y="206" width="120" height="18" rx="3" fill="none" stroke="#5F6E73" stroke-width="1.3"/><rect x="628" y="231" width="120" height="18" rx="3" fill="none" stroke="#5F6E73" stroke-width="1.3"/><rect x="628" y="256" width="120" height="18" rx="3" fill="none" stroke="#5F6E73" stroke-width="1.3"/><rect x="628" y="281" width="120" height="18" rx="3" fill="none" stroke="#5F6E73" stroke-width="1.3"/><rect x="628" y="306" width="120" height="18" rx="3" fill="none" stroke="#5F6E73" stroke-width="1.3"/><g transform="translate(150,96) scale(1.0000)"><rect x="0.75" y="0.75" width="46.5" height="46.5" rx="12" fill="#0A0A0B" stroke="#6E7A80" stroke-width="1"/>
 <path d="M10,33 H38" fill="none" stroke="#F7F8F8" stroke-opacity="0.82" stroke-width="2" stroke-linecap="round"/>
 <path d="M15,30.5 V33 M22,30.5 V33 M36,30.5 V33" fill="none" stroke="#F7F8F8" stroke-opacity="0.42" stroke-width="1.5" stroke-linecap="round"/>
 <path d="M25.6,15.2 L29,18.6 L32.4,15.2 M29,18.6 V33" fill="none" stroke="#34D399" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></g><text x="150" y="54" class="d" font-size="30" letter-spacing="0.5">V — CADENCE</text><text x="150" y="76" class="dim" font-size="14.5">every route into one function; every row behind RLS.</text><text x="680" y="70" class="d" font-size="62">37</text><text x="680" y="108" class="dim" font-size="13">route handlers, one function;</text><text x="680" y="126" class="dim" font-size="13">RLS FORCEd on all 7 tables.</text><rect x="150" y="374" width="4" height="16" fill="#1F6D5C"/><text x="164" y="387" class="mid" font-size="14">five of six app-side guards begin if (context?.userId) — conditional.</text><text x="164" y="407" class="dim" font-size="13">a caller that forgets the identity still sends the query; the database&#8217;s refusal cannot be forgotten.</text></svg>

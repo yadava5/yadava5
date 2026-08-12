@@ -1175,6 +1175,109 @@ def m_hero() -> str:
     ) + css_close() + body + "</svg>"
 
 
+# ══════════════════════════════════════════════════ the mobile sections
+#
+# One 440u twin per published surface — a REDESIGN for the width, not the
+# desktop composition shrunk. On a phone the desktop plate would render at
+# ~0.43 and its 13px captions at 5.6px; the client's rule is that nothing is
+# downscaled, so every section is recomposed: the same vocabulary (three
+# buses, a tap, the mark, the diagram, the claim figure, the accent-barred
+# admission) rotated into one column. Every sentence is reflowed against
+# MEASURED widths (scratchpad/measure.mjs, 2026-08-12) — the 440 canvas is
+# where "about right" line lengths go to overrun.
+#   * THE BUSES SURVIVE WHOLE. All three run every plate at MBUS_X, same
+#     speeds, same comets, phases varied per plate — the phone page is the
+#     same board, not a reduced print of it. 28u of bus corridor on a 440
+#     canvas is the desktop's own proportion (54/900).
+#   * content column: x 92..~404 (the 8u doctrine clearance off the zinc
+#     comet at 69, in the direction platform advance-skew cannot close,
+#     because left-anchored text grows rightward).
+#   * type: titles Syne 24 (the phone hero's name is 30 and stays the
+#     largest voice), figures 44, text 13/12, silkscreen 10-11.5. Rendered
+#     at the phone column's ~0.89 these sit near desktop's own rendered
+#     sizes — larger, not smaller, than the desktop plate would give a
+#     phone reader.
+#   * the FOUR LINK CHIPS have no mobile twin BY DESIGN: a chip is a
+#     fixed-px component (natural size, no <picture> possible inside a
+#     link — see the link-row doctrine above), so at 440 the row wraps to
+#     two rows of ports and every chip keeps its size. m-link-return
+#     resumes the lanes below the wrapped row.
+def m_sec(h: int, C: tuple[float, float, float],
+          tap: tuple[str, float] | None = None) -> str:
+    """The three page buses crossing a mobile plate, plus the section's tap.
+    The tap runs bus -> tile edge at y=120, crossing its sibling buses the
+    way every desktop tap does: hairline over hairline is board routing."""
+    out = (bus("verd", f"M40,0 V{h}", C=C[0], cd=f"M40,2.5 V{h - 2.5}")
+           + bus("rust", f"M54,0 V{h}", C=C[1], cd=f"M54,2.5 V{h - 2.5}")
+           + bus("zinc", f"M68,0 V{h}", C=C[2], cd=f"M68,2.5 V{h - 2.5}"))
+    if tap:
+        bk, tc = tap
+        out += bus(bk, f"M{MBUS_X[bk]},120 H92.5", C=tc,
+                   cd=f"M{MBUS_X[bk] + 4},120 H88")
+    return out
+
+
+def m_fig(fig: str, c1: str, c2: str) -> str:
+    """The claim figure block, right of the mark: Syne 44 over two measured
+    12px caption lines. 172 leaves 12u to the x=160 feeder spine the denser
+    plates run — above the 8u floor, in the safe direction (see above)."""
+    return (f'<text x="172" y="140" class="d" font-size="44">{fig}</text>'
+            f'<text x="172" y="162" class="dim" font-size="12">{c1}</text>'
+            f'<text x="172" y="179" class="dim" font-size="12">{c2}</text>')
+
+
+def m_adm(y: float, accent: str, mids: list[str], dims: list[str]) -> str:
+    """The against-self admission, reflowed for 306u of measure."""
+    out = f'<rect x="92" y="{y:g}" width="4" height="16" fill="{T[accent]}"/>'
+    b = y + 13
+    for s in mids:
+        out += f'<text x="106" y="{b:g}" class="mid" font-size="13">{s}</text>'
+        b += 19
+    b += 1
+    for s in dims:
+        out += f'<text x="106" y="{b:g}" class="dim" font-size="12">{s}</text>'
+        b += 17
+    return out
+
+
+# ── I · work, phone cut. The footprint keeps its desktop reading whole:
+# tap to the pad and no further, the slot empty. The eyebrow loses only
+# "FIRST," — at 10.5 the full line's start would land 4u off the zinc comet
+# once Linux's +4% advance grows an end-anchored label leftward.
+def m_work() -> str:
+    body = (
+        m_sec(380, (95, 10, 160))
+        + bus("zinc", "M68,120 H90.5", C=48, cd="M72,120 H86")
+        + f'<g><rect x="92.75" y="96.75" width="46.5" height="46.5" rx="12" '
+          f'fill="none" stroke="{T["zinc"]}" stroke-width="1.4" stroke-dasharray="5 4"/>'
+          f'<rect x="90.25" y="118" width="5" height="4" fill="{T["zinc"]}"/></g>'
+        + lbl(92, 163, "NO PRODUCT MARK — THE WORK IS OFF-REPO", size=10, ls=1.1)
+        + f'<text x="92" y="54" class="d" font-size="24" letter-spacing="0.5">I — WORK</text>'
+        + f'<text x="92" y="74" class="dim" font-size="13">twelve months of production data work —</text>'
+        + f'<text x="92" y="90" class="dim" font-size="13">none of it public.</text>'
+        + lbl(404, 30, "THE EXCEPTION — ATTESTED, NOT DERIVED", size=10.5, anchor="end")
+        + f'<text x="92" y="224" class="d" font-size="44">57.8M</text>'
+        + f'<text x="92" y="248" class="dim" font-size="12">rows in one field-usage table,</text>'
+        + f'<text x="92" y="264" class="dim" font-size="12">from 1.6M Oracle Analytics query logs.</text>'
+        + m_adm(300, "zinc",
+                ["none of these numbers can be re-derived by you."],
+                ["the data belongs to Miami University",
+                 "and to a competition — this section is my word."])
+    )
+    return head(
+        380,
+        "I · Work — the empty footprint, phone cut",
+        "I · Work, phone cut — the empty footprint: the slot for a component "
+        "the board expects but does not fit, because the year of paid work is "
+        "off-repo. A 57.8M-row field-usage table, distilled from 1.6M Oracle "
+        "Analytics query logs at Miami University. None of it can be "
+        "re-derived by a reader — the data belongs to Miami University and to "
+        "a competition; this section is attested, not derived.",
+        key="m-1-work.svg",
+        col=(88, 412), frame=(2.5, 36, 2.5), w=440,
+    ) + css_close() + body + "</svg>"
+
+
 # ── declared frames (top, rightGap, bottomGap), baked from gate.mjs
 # measurement on this machine; tolerance 4 absorbs the CI ascent skew.
 HERO_FRAME = (30, 37.7, 0)
@@ -1220,7 +1323,10 @@ PLATES = {
     "plate-7-visualassist.svg": plate_visualassist,
     "plate-colophon.svg": plate_colophon,
 }
-MOBILE = {"m-0-hero.svg": m_hero}
+MOBILE = {
+    "m-0-hero.svg": m_hero,
+    "m-1-work.svg": m_work,
+}
 
 _re = re
 _fail: list[str] = []
@@ -1296,6 +1402,20 @@ if not _readme.exists():
 else:
     _md = _readme.read_text()
     for _fn, _desc in ALT.items():
+        # The mobile twins are served as <source srcset> inside each section's
+        # <picture>, and a <source> cannot carry an alt — the <img> in the same
+        # picture is the desktop plate, checked below. A mobile description
+        # still ships twice (the SVG's own <desc>/aria-label, and alt.json,
+        # written from this same dict), so what README owes each mobile file
+        # is SERVICE: a phone media query, in both themes. Asserted per file,
+        # not assumed from the sweep — the sweep cannot see which media a
+        # reference rides.
+        if _fn.startswith("m-"):
+            if not _re.search(rf'<source media="\(max-width: 500px\)" srcset="\./assets/{_re.escape(_fn)}"', _md):
+                _fail.append(f"{_fn}: no <source media=\"(max-width: 500px)\"> serves it in README.md")
+            if not _re.search(rf'<source[^>]*srcset="\./assets/light/{_re.escape(_fn)}"', _md):
+                _fail.append(f"{_fn}: no <source> serves its light twin in README.md")
+            continue
         _m = _re.search(rf'<img src="\./assets/{_re.escape(_fn)}"[^>]*?alt="([^"]*)"', _md)
         if not _m:
             _fail.append(f"{_fn}: no <img> with an alt in README.md")
@@ -1308,6 +1428,14 @@ else:
     # through `.svg` and reads as present.
     _want = {f"./assets/{_d}{_f}" for _f in set(PLATES) | set(MOBILE)
              for _d in ("", "light/")}
+    # The four chips are ONE dark artwork in the README — GitHub's markdown
+    # pipeline splits a <picture> inside a link (see the link-row doctrine),
+    # so no theme switch is possible there and README rightly never serves
+    # their light/ files. Those twins are still authored on purpose: gate.mjs
+    # refuses a set with a missing twin, and the light file (same art,
+    # data-canvas #ffffff) is exactly how the one artwork gets MEASURED on
+    # the light canvas. A harness, not a served asset.
+    _want -= {f"./assets/light/plate-link-{_k}.svg" for _k in CHIPS}
     _have = set(_re.findall(r'\./assets/(?:light/)?[\w.-]+\.svg(?![\w.-])', _md))
     for _p in sorted(_want - _have):
         _fail.append(f"{_p}: this build authors it and README.md references it nowhere")
