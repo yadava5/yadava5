@@ -1333,6 +1333,68 @@ def m_jetpack() -> str:
     ) + css_close() + body + "</svg>"
 
 
+# ── III · glyph, phone cut. The bundles keep their one load-bearing ratio —
+# 2/4/8 rules for 128/256/512-bit registers — stacked down the column, the
+# collector gathering them into the benchmark chip and the chip dropping to
+# the package that ships. The admission still runs longest: this section
+# owes the same two sentences at every width.
+def m_glyph() -> str:
+    lanes = ""
+    for label, n, yc in (("NEON", 2, 240), ("AVX2", 4, 300), ("AVX-512", 8, 368)):
+        y0 = yc - 3 * (n - 1)
+        rules = " ".join(f"M200,{y0 + i * 6} H320" for i in range(n))
+        lanes += (lbl(200, y0 - 10, label, size=10, ls=1.2)
+                  + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="1.4" d="{rules}"/>')
+    body = (
+        m_sec(690, (40, 130, 8), tap=("rust", 88))
+        + mark("glyph", 92, 96, 48)
+        + f'<text x="92" y="54" class="d" font-size="24" letter-spacing="0.5">III — GLYPH</text>'
+        + f'<text x="92" y="76" class="dim" font-size="13">SIMD kernels over a net the course provided.</text>'
+        + m_fig("3.5×", "benchDot/256 — course baseline,",
+                "reference machine, committed run.")
+        + bus("rust", "M140,120 H160 V368", C=30, cd="M144,120 H160 V365")
+        + f'<circle cx="160" cy="240" r="2.6" fill="{T["rust"]}"/>'
+        + f'<circle cx="160" cy="300" r="2.6" fill="{T["rust"]}"/>'
+        + bus("rust", "M160,240 H200", C=60, cd="M162.5,240 H197")
+        + bus("rust", "M160,300 H200", C=115, cd="M162.5,300 H197")
+        + bus("rust", "M160,368 H200", C=170, cd="M162.5,368 H197")
+        + lanes
+        + f'<path class="bus" stroke="{T["rust"]}" d="M320,240 H344 V368 H320 M320,300 H344"/>'
+        + bus("rust", "M344,368 V404", C=142, cd="M322,240 H344 V400")
+        + f'<rect x="200" y="404" width="160" height="36" rx="8" fill="none" '
+          f'stroke="{T["rust"]}" stroke-width="1.6"/>'
+        + lbl(212, 426, "BENCHDOT/256", cls="ts", size=11.5, ls=1.3)
+        + bus("rust", "M280,440 V464", C=55, cd="M280,442.5 V459.5")
+        + f'<rect x="200" y="464" width="196" height="36" rx="8" fill="none" '
+          f'stroke="{T["zinc"]}" stroke-width="1.6"/>'
+        + lbl(212, 486, "WASM_SIMD128 · 43,751 B", cls="ts", size=11.5, ls=1.3)
+        + lbl(200, 522, "BYTE-IDENTICAL TO MAIN", size=10, ls=1.1)
+        + lbl(200, 537, "CHECKED DAILY IN CI", size=10, ls=1.1)
+        + m_adm(556, "rust",
+                ["the same flags run 10.7× slower on",
+                 "benchAxpy/128 — below the size floor,"],
+                ["where threading costs more than it pays.",
+                 "and 97.01% is a training-time number:",
+                 "the test set that graded the net",
+                 "also picked its checkpoint."])
+    )
+    return head(
+        690,
+        "III · Glyph — register lanes to one benchmark, phone cut",
+        "III · Glyph, phone cut — SIMD kernels over a course-provided MNIST "
+        "net: three register-lane bundles — NEON, AVX2, AVX-512 — converge on "
+        "benchDot/256, 3.5× over the course baseline on the reference "
+        "machine, and drop to the package that ships: WASM_SIMD128, 43,751 "
+        "bytes, byte-identical to main, checked daily in CI. The against-self "
+        "results are printed: the same flags run 10.7× slower on "
+        "benchAxpy/128, below the size floor, and 97.01% is a training-time "
+        "number — the test set that graded the net also picked its "
+        "checkpoint.",
+        key="m-3-glyph.svg",
+        col=(88, 412), frame=(2.5, 43, 2.5), w=440,
+    ) + css_close() + body + "</svg>"
+
+
 # ── declared frames (top, rightGap, bottomGap), baked from gate.mjs
 # measurement on this machine; tolerance 4 absorbs the CI ascent skew.
 HERO_FRAME = (30, 37.7, 0)
@@ -1382,6 +1444,7 @@ MOBILE = {
     "m-0-hero.svg": m_hero,
     "m-1-work.svg": m_work,
     "m-2-jetpack.svg": m_jetpack,
+    "m-3-glyph.svg": m_glyph,
 }
 
 _re = re
