@@ -371,14 +371,25 @@ def lbl(x: float, y: float, text: str, cls: str = "ts dim", size: float = 11,
 #                          the automl tile clears the comet by >= 4u with
 #                          the +4% Linux advance applied — measured, not
 #                          estimated, gate check 2 samples it 40x per loop)
-#   collectors  y=400/415/430, exits at BUS_X 63/90/117
+#   collectors  y=400/415/430
+#   fan band    y=470-534: the collectors do NOT stop at the old bottom edge
+#               — each continues into a drop aimed at a link-row lead (see
+#               the link row's calibration block). verd's collector column at
+#               x=75 IS the portfolio drop, dead straight; rust tees at y498
+#               (resume branch + linkedin corner); zinc turns at y486 above
+#               rust's tier, so the two trees nest and nothing crosses.
 def plate_hero() -> str:
-    d_verd = "M766,80 V388 Q766,400 754,400 H87 Q75,400 75,412 V470"
-    d_rust = "M744,216 V403 Q744,415 732,415 H102 Q90,415 90,427 V470"
-    d_zinc = "M612,130 V418 Q612,430 600,430 H129 Q117,430 117,442 V470"
-    c_verd = "M766,84 V388 Q766,400 754,400 H87 Q75,400 75,412 V467.5"
-    c_rust = "M744,220 V403 Q744,415 732,415 H102 Q90,415 90,427 V467.5"
-    c_zinc = "M612,134 V418 Q612,430 600,430 H129 Q117,430 117,442 V467.5"
+    pr, pl, pe = DROP["resume"], DROP["linkedin"], DROP["email"]
+    d_verd = "M766,80 V388 Q766,400 754,400 H87 Q75,400 75,412 V534"
+    d_rust = ("M744,216 V403 Q744,415 732,415 H102 Q90,415 90,427 V486 "
+              f"Q90,498 102,498 H{pl - 12} Q{pl},498 {pl},510 V534")
+    d_zinc = ("M612,130 V418 Q612,430 600,430 H129 Q117,430 117,442 V474 "
+              f"Q117,486 129,486 H{pe - 12} Q{pe},486 {pe},498 V534")
+    c_verd = "M766,84 V388 Q766,400 754,400 H87 Q75,400 75,412 V531.5"
+    c_rust = ("M744,220 V403 Q744,415 732,415 H102 Q90,415 90,427 V486 "
+              f"Q90,498 102,498 H{pl - 12} Q{pl},498 {pl},510 V531.5")
+    c_zinc = ("M612,134 V418 Q612,430 600,430 H129 Q117,430 117,442 V474 "
+              f"Q117,486 129,486 H{pe - 12} Q{pe},486 {pe},498 V531.5")
     body = (
         # the name block — anchored left, grown right and down. One <text>,
         # two lines: Syne's em box is ~1.29 of the size, so two separate
@@ -404,7 +415,10 @@ def plate_hero() -> str:
         + bus("verd", d_verd, C=0, cd=c_verd)
         + bus("rust", d_rust, C=87, cd=c_rust)
         + bus("zinc", d_zinc, C=41, cd=c_zinc)
-        + pulse(c_verd, 1200, 400) + pulse(c_rust, 1050, 530) + pulse(c_zinc, 950, 680)
+        # the resume branch tees off rust's fan tier; junction dot = connected
+        + bus("rust", f"M{pr},498 V534", C=55, cd=f"M{pr},500.5 V531.5")
+        + f'<circle cx="{pr}" cy="498" r="2.6" fill="{T["rust"]}"/>'
+        + pulse(c_verd, 1200, 400) + pulse(c_rust, 1200, 530) + pulse(c_zinc, 1400, 680)
         # the marks — automl deliberately BETWEEN the rows (see the registry
         # above): its tile at (520,140) is what makes the board uneven, and
         # the zinc feed out of its right flank at y=168 is only connected
@@ -429,7 +443,7 @@ def plate_hero() -> str:
         + lbl(48, 391, "NO URL — IT NEEDS AN IPHONE WITH LIDAR, IN YOUR HAND", cls="ts dim", size=10, ls=1.1)
     )
     return head(
-        470,
+        534,
         "Ayush Yadav — the estate as one board; every edge is a checkable claim",
         "Ayush Yadav — the estate drawn as one circuit board. Six product marks "
         "sit on a shared bus and every printed edge is a checkable claim: "
@@ -443,57 +457,98 @@ def plate_hero() -> str:
     ) + css_close() + body + "</svg>"
 
 
-# ══════════════════════════════════════════════════ the connector strip
+# ══════════════════════════════════════════════════ the link row
 #
 # Four ports on the bus, each its own SVG so each is its own link in the
-# README — the way out of "an SVG in an <img> cannot hold a link". The three
-# lanes run edge-to-edge at the same y in all four chips; GitHub renders a
-# 3.8px gap between adjacent linked images separated by one space (measured
-# on the live profile page, 2026-08-12), so the lanes align across the gaps
-# and the strip reads as one bus threading a row of edge connectors. Chips
-# render at natural size (they never scale — total width ~550 fits the 590px
-# column GitHub serves at 1024 viewports), which is also why the strip makes
-# no claim of x-registration with the scaled plates above and below it: it
-# is a crossing structure, not a continuation of their verticals.
+# README — the way out of "an SVG in an <img> cannot hold a link". EACH CHIP
+# IS AN OPAQUE MODULE, and that is forced by the medium, not chosen: GitHub's
+# markdown pipeline SPLITS a <picture> inside a link — the <source> stays in
+# the author's <a>, the <img> is extracted and auto-linked to the asset file
+# itself (probed against the real /markdown API, 2026-08-12). So a chip
+# cannot be both clickable and theme-switched. A component is a physical
+# object that does not recolour with the room: the chip is a near-black
+# module in the marks' own family language, self-grounded, ONE artwork
+# legible on every canvas, linked as [<img>](url) — the nesting that
+# survives. Everything inside grades against the module via check 10's local
+# grounds; only ink that rides the changing canvas (the module hairline, the
+# leads) uses tones measured on BOTH grounds.
 #
-# EACH CHIP IS AN OPAQUE MODULE, and that is forced by the medium, not
-# chosen: GitHub's markdown pipeline SPLITS a <picture> inside a link — the
-# <source> stays in the author's <a>, the <img> is extracted and auto-linked
-# to the asset file itself (probed against the real /markdown API,
-# 2026-08-12). So a chip cannot be both clickable and theme-switched. A
-# component is a physical object that does not recolour with the room: the
-# chip is a near-black module in the marks' own family language, self-
-# grounded, ONE artwork legible on every canvas, linked as [<img>](url) —
-# the nesting that survives. Only the module's hairline rides the canvas, in
-# the one grey that clears 3:1 on all of them (#79848C: 3.89 on #212830,
-# 3.82 on #ffffff, 5.37 on #010409 — measured). Everything inside grades
-# against the module via check 10's local grounds, and the traces keep the
-# dark palette on both themes because their ground never changes.
-LANES = (44, 53, 62)          # connector pitch 9u — tighter than the board's 27
-CHIP_H = 72
-CHIP_EDGE = "#79848C"
+# HOW THE ROW SITS ON THE BOARD — re-authored 2026-08-13. The previous strip
+# ran three self-contained horizontal lanes edge-to-edge through the chips;
+# they continued nothing above or below, so the row read as a foreign object
+# breaking the page bus. Now each chip is a COMPONENT ON A TRACE: the hero's
+# fan band (its bottom 64u) drops one lane per port; the lead enters the
+# chip's top edge at the badge column, dives under the opaque package,
+# re-emerges below the badge carrying the comet, and exits the bottom edge;
+# plate-link-return.svg merges the four drops back to BUS_X and lands the
+# page bus on plate II at the x it left the hero. The README contract is one
+# line of adjacent links, IN ROUTING ORDER:
+#
+#   [portfolio][resume][linkedin][email]     GAP = 3.8px between adjacent
+#                                            linked images (measured on the
+#                                            live profile, 2026-08-12)
+#
+# CALIBRATION. Chips render at natural size; every 900-wide plate scales to
+# the profile column. Registration between a fixed-px image and a scaled one
+# is exact at ONE width, so the row is calibrated to the canonical 846px
+# column (900 × PAGE, the wide-desktop measurement; the demo renders at it).
+# At narrower columns the two seams drift by the scale difference — a small
+# jog, never a collision — and the 580.4px row still clears the 590px column
+# GitHub serves at 1024 viewports without wrapping. The row's left edge is
+# the portfolio module at x=45.5 ≈ the hero's content margin (48 × PAGE).
+#
+# The LEAD tones are the buses' component-land register: one artwork means a
+# lead crosses both canvases, so each is measured on #ffffff / #212830 / the
+# tile (scratchpad, 2026-08-13): verd #3E8E76 3.94/3.78/5.03, rust #C1663A
+# 4.02/3.71/4.93, zinc #79848C 3.82/3.89/5.18. Comets keep the dark ramps
+# but run ONLY on the module, below the badge: a ramp head is ~1.3:1 on
+# white canvas, and a travelling dash may never cross the '@' badge text
+# (gate check 3 reads that as a strikethrough) — which is also why the badge
+# is opaque tile now: it occludes the static lead instead of wearing it.
+PAGE = 846 / 900              # canonical profile column / authored width
+GAP = 3.8                     # measured inter-image gap, adjacent links
+CHIP_H = 88
+CHIP_EDGE = "#79848C"         # 3.89:1 on #212830, 3.82 on #fff, 5.37 on #010409
+LEAD = {"verd": "#3E8E76", "rust": "#C1663A", "zinc": "#79848C"}
+
+# the row layout, in page px: (module width, left inset). Portfolio's inset
+# puts its module edge on the content margin, and its lead at 70.5 = board
+# 75 × PAGE — the hero's verd collector column runs dead straight through it.
+ROW = {"portfolio": (190, 45), "resume": (108, 0),
+       "linkedin": (124, 0), "email": (102, 0)}
+_rx, CHIP_LEAD = 0.0, {}
+for _k, (_w, _pad) in ROW.items():
+    CHIP_LEAD[_k] = _rx + (_pad + 25.5 if _pad else 24)
+    _rx += _pad + _w + GAP
+# where the hero's fan band drops each lead, in board units
+DROP = {k: round(v / PAGE, 1) for k, v in CHIP_LEAD.items()}
 
 
-def _port_glyphs(kind: str) -> str:
+def _port_glyphs(kind: str, dx: float, dy: float) -> str:
     """The port marks, drawn here in the family language. White ink only —
-    colour on this page belongs to the products and the buses."""
+    colour on this page belongs to the products and the buses. The offset
+    rides EVERY element's own transform, never a wrapping <g>: gate.mjs
+    composes by nearest enclosing group, and these must stay in the module's.
+    """
+    tr = f' transform="translate({dx},{dy})"'
     if kind == "www":       # a globe: equator and one meridian
-        return ('<circle cx="24" cy="24" r="7.2" fill="none" stroke="#F7F8F8" stroke-width="1.7"/>'
-                '<path d="M16.8,24 H31.2" fill="none" stroke="#F7F8F8" stroke-width="1.5"/>'
-                '<path d="M24,16.8 C20.6,20.4 20.6,27.6 24,31.2 C27.4,27.6 27.4,20.4 24,16.8"'
+        return (f'<circle{tr} cx="24" cy="24" r="7.2" fill="none" stroke="#F7F8F8" stroke-width="1.7"/>'
+                f'<path{tr} d="M16.8,24 H31.2" fill="none" stroke="#F7F8F8" stroke-width="1.5"/>'
+                f'<path{tr} d="M24,16.8 C20.6,20.4 20.6,27.6 24,31.2 C27.4,27.6 27.4,20.4 24,16.8"'
                 ' fill="none" stroke="#F7F8F8" stroke-width="1.5"/>')
     if kind == "doc":       # a sheet with three set lines
-        return ('<rect x="18" y="16" width="12" height="16" rx="2" fill="none" stroke="#F7F8F8" stroke-width="1.7"/>'
-                '<path d="M21,21.5 H27 M21,25 H27 M21,28.5 H25" fill="none" stroke="#F7F8F8" stroke-width="1.5" stroke-linecap="round"/>')
+        return (f'<rect{tr} x="18" y="16" width="12" height="16" rx="2" fill="none" stroke="#F7F8F8" stroke-width="1.7"/>'
+                f'<path{tr} d="M21,21.5 H27 M21,25 H27 M21,28.5 H25" fill="none" stroke="#F7F8F8" stroke-width="1.5" stroke-linecap="round"/>')
     if kind == "at":
-        return ('<text x="24" y="29.5" class="ts" font-size="17" text-anchor="middle" style="fill:#F7F8F8">@</text>')
+        return (f'<text{tr} x="24" y="29.5" class="ts" font-size="17" text-anchor="middle" style="fill:#F7F8F8">@</text>')
     if kind == "in":
-        return ('<text x="24" y="29" class="ts" font-size="15.5" text-anchor="middle" style="fill:#F7F8F8">in</text>')
+        return (f'<text{tr} x="24" y="29" class="ts" font-size="15.5" text-anchor="middle" style="fill:#F7F8F8">in</text>')
     raise SystemExit(f"unknown port glyph {kind}")
 
 
-def chip(w: int, label: str, glyph: str, tap_bus: str, phases: tuple[float, float, float],
-         title: str, desc: str, key: str, frame: tuple[float, float, float]) -> str:
+def chip(kind: str, label: str, glyph: str, tap_bus: str,
+         phases: tuple[float, float], title: str, desc: str, key: str,
+         frame: tuple[float, float, float]) -> str:
     global T
     saved = T
     # the module carries the dark surface on every canvas: only data-canvas,
@@ -502,55 +557,94 @@ def chip(w: int, label: str, glyph: str, tap_bus: str, phases: tuple[float, floa
              verd=DARK["verd"], rust=DARK["rust"], zinc=DARK["zinc"],
              ramp=DARK["ramp"], edge=CHIP_EDGE)
     try:
-        tap_y = LANES[{"verd": 0, "rust": 1, "zinc": 2}[tap_bus]]
-        lanes = ""
-        for (name, y), C in zip(zip(("verd", "rust", "zinc"), LANES), phases):
-            lanes += bus(name, f"M0.5,{y} H{w - 0.5}", C=C, cd=f"M3,{y} H{w - 3}")
+        w_mod, pad = ROW[kind]
+        w = pad + w_mod
+        sx = pad + 25.5 if pad else 24          # the lead = the badge column
+        lead = LEAD[tap_bus]
+        # the through-lead: the trace this component sits on, canvas-to-canvas
+        track = f'<path class="bus" stroke="{lead}" d="M{sx},0 V{CHIP_H}"/>'
         module = (
             # the module and its fittings, one composed object; the rect is
             # FIRST in document order so it is the plate's contrast ground
-            f'<g><rect x="0.5" y="4" width="{w - 1}" height="64" rx="3" fill="{TILE}" '
-            f'stroke="{CHIP_EDGE}" stroke-width="1"/>'
-            # connector fingers at both edges frame the 3.8px inter-image gap
-            + "".join(f'<rect x="{fx}" y="{y - 2}" width="5" height="4" fill="{T[n]}"/>'
-                      for n, y in zip(("verd", "rust", "zinc"), LANES)
-                      for fx in (1.5, w - 6.5))
-            # the tap: this port hangs off one lane, junction dot = connected
-            + f'<path class="bus" stroke="{T[tap_bus]}" d="M24,38 V{tap_y}"/>'
-            + f'<circle cx="24" cy="{tap_y}" r="2.6" fill="{T[tap_bus]}"/>'
-            # the port badge, outlined in structure grey like the marks' rules
-            + f'<rect x="10" y="10" width="28" height="28" rx="8" fill="none" '
-            f'stroke="{STRUCT}" stroke-width="1.2"/>' + _port_glyphs(glyph)
-            + lbl(46, 28.5, label, cls="ts", size=11.5, ls=1.3) + "</g>"
+            f'<g><rect x="{pad + 0.5}" y="20" width="{w_mod - 1}" height="64" rx="3" '
+            f'fill="{TILE}" stroke="{CHIP_EDGE}" stroke-width="1"/>'
+            # entry and exit pads, just inside the edges the lead pierces —
+            # vivid on the tile, where the true bus colours are legal
+            + "".join(f'<rect x="{sx - 2.5}" y="{py}" width="5" height="4" fill="{T[tap_bus]}"/>'
+                      for py in (20.5, 79.5))
+            # the trace where it is VISIBLE on the package: a stub above the
+            # badge, and the run below it that carries the comet
+            + f'<path class="bus" stroke="{lead}" d="M{sx},20 V26 M{sx},54 V84"/>'
+            # the port badge: OPAQUE tile, occluding the lead (see the note
+            # above on the '@' strikethrough), ruled like the marks
+            + f'<rect x="{sx - 14}" y="26" width="28" height="28" rx="8" fill="{TILE}" '
+            f'stroke="{STRUCT}" stroke-width="1.2"/>' + _port_glyphs(glyph, sx - 24, 16)
+            + lbl(pad + 46, 44.5, label, cls="ts", size=11.5, ls=1.3) + "</g>"
         )
-        return head(CHIP_H, title, desc, key=key, col=(8, w - 4), frame=frame,
-                    faces="6", w=w) + css_close() + module + lanes + "</svg>"
+        # two comets 105 pattern-units apart: on the 22u visible run one of
+        # them is always on-path, so the carrier never blinks (motion.mjs)
+        current = "".join(comet(tap_bus, f"M{sx},58 V80", C=c) for c in phases)
+        return head(CHIP_H, title, desc, key=key, col=(pad + 8, w - 4), frame=frame,
+                    faces="6", w=w) + css_close() + track + module + current + "</svg>"
     finally:
         T = saved
 
 
 CHIPS = {
-    # filename fragment: (width, label, glyph, tap bus, comet phases)
-    "portfolio": (190, "AYUSH-YADAV.COM", "www", "verd", (12, 96, 170),
+    # filename fragment: (label, glyph, tap bus, comet phases — 105 apart)
+    "portfolio": ("AYUSH-YADAV.COM", "www", "verd", (12, 117),
                   "ayush-yadav.com — the portfolio",
                   "Port one of four on the link bus: ayush-yadav.com, the portfolio."),
-    "resume":    (116, "RÉSUMÉ", "doc", "rust", (140, 58, 15),
+    "resume":    ("RÉSUMÉ", "doc", "rust", (140, 35),
                   "résumé — PDF",
                   "Port two of four on the link bus: the résumé, as a PDF."),
-    "email":     (106, "EMAIL", "at", "zinc", (66, 190, 118),
-                  "email — aesh at gmail",
-                  "Port three of four on the link bus: email; opens a mail draft."),
-    "linkedin":  (132, "LINKEDIN", "in", "rust", (200, 30, 84),
+    "linkedin":  ("LINKEDIN", "in", "rust", (200, 95),
                   "linkedin — profile",
-                  "Port four of four on the link bus: the LinkedIn profile."),
+                  "Port three of four on the link bus: the LinkedIn profile."),
+    "email":     ("EMAIL", "at", "zinc", (66, 171),
+                  "email — aesh at gmail",
+                  "Port four of four on the link bus: email; opens a mail draft."),
 }
 
 
 def make_chip(kind: str):
-    w, label, glyph, tap, phases, title, desc = CHIPS[kind]
+    label, glyph, tap, phases, title, desc = CHIPS[kind]
     fn = f"plate-link-{kind}.svg"
-    return lambda: chip(w, label, glyph, tap, phases, title, desc, fn,
+    return lambda: chip(kind, label, glyph, tap, phases, title, desc, fn,
                         CHIP_FRAME[kind])
+
+
+# ══════════════════════════════════════════════════ the return plate
+#
+# Below the link row the four drops merge back into the page bus and land on
+# plate II at BUS_X — the other half of "the buses visibly survive the row".
+# Tier order mirrors the hero's fan band (verd y=14, rust y=32, zinc y=50):
+# with the ports in routing order the three trees nest and nothing crosses.
+# The one line of silkscreen is wayfinding, not decoration — it names what
+# the bus runs into next, and it is the only text between the ports and
+# section II.
+def plate_return() -> str:
+    pv, pr, pl, pe = (DROP[k] for k in ("portfolio", "resume", "linkedin", "email"))
+    body = (
+        bus("verd", f"M{pv},0 V9 Q{pv},14 {pv - 5},14 H68 Q63,14 63,19 V64",
+            C=30, cd=f"M{pv},2.5 V9 Q{pv},14 {pv - 5},14 H68 Q63,14 63,19 V61.5")
+        + bus("rust", f"M{pl},0 V20 Q{pl},32 {pl - 12},32 H102 Q90,32 90,44 V64",
+              C=150, cd=f"M{pl},2.5 V20 Q{pl},32 {pl - 12},32 H102 Q90,32 90,44 V61.5")
+        # the resume drop joins rust's tier; junction dot = connected
+        + bus("rust", f"M{pr},0 V32", C=64, cd=f"M{pr},2.5 V29.5")
+        + f'<circle cx="{pr}" cy="32" r="2.6" fill="{T["rust"]}"/>'
+        + bus("zinc", f"M{pe},0 V38 Q{pe},50 {pe - 12},50 H129 Q117,50 117,62 V64",
+              C=100, cd=f"M{pe},2.5 V38 Q{pe},50 {pe - 12},50 H129 Q117,50 117,62 V61.5")
+        + lbl(640, 58, "THE EVIDENCE · SECTIONS II — VII", size=10.5)
+    )
+    return head(
+        64,
+        "the link ports rejoin the page bus",
+        "The four link ports hand back to the page bus — the three lanes "
+        "merge and continue into the evidence, sections two to seven.",
+        key="plate-link-return.svg",
+        col=(44, 886), frame=RET_FRAME,
+    ) + css_close() + body + "</svg>"
 
 
 # ══════════════════════════════════════════════════ II · jetpack
@@ -664,17 +758,19 @@ def m_hero() -> str:
 HERO_FRAME = (30, 37.7, 0)
 JET_FRAME = (2.5, 55.9, 2.5)
 MOB_FRAME = (36, 58, 0)
+RET_FRAME = (0, 30, 0)
 CHIP_FRAME = {
-    "portfolio": (4, 0.5, 4), "resume": (4, 0.5, 4),
-    "email": (4, 0.5, 4), "linkedin": (4, 0.5, 4),
+    "portfolio": (0, 0.5, 0), "resume": (0, 0.5, 0),
+    "linkedin": (0, 0.5, 0), "email": (0, 0.5, 0),
 }
 
 PLATES = {
     "plate-0-hero.svg": plate_hero,
     "plate-link-portfolio.svg": make_chip("portfolio"),
     "plate-link-resume.svg": make_chip("resume"),
-    "plate-link-email.svg": make_chip("email"),
     "plate-link-linkedin.svg": make_chip("linkedin"),
+    "plate-link-email.svg": make_chip("email"),
+    "plate-link-return.svg": plate_return,
     "plate-2-jetpack.svg": plate_jetpack,
 }
 MOBILE = {"m-0-hero.svg": m_hero}
