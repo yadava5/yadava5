@@ -1080,6 +1080,46 @@ def plate_visualassist() -> str:
     ) + css_close() + body + "</svg>"
 
 
+# ══════════════════════════════════════════════════ the colophon
+#
+# The board's edge. The three buses land on their pads and leave the page —
+# an edge connector, because the page plugs into CI, not a footer. The one
+# line of silkscreen is DERIVED, not asserted: the claim count is read out
+# of build/claims.json in this very build, so the page's warrant for itself
+# ("N claims, each a command") is true by construction and cannot drift
+# from the file that makes it true. No derivation date is printed: the
+# honest date lives in CI's own logs, and a baked one would be stale by
+# the first morning.
+CLAIMS_N = len(json.loads((ROOT / "claims.json").read_text())["claims"])
+
+
+def plate_colophon() -> str:
+    body = (
+        bus("verd", "M63,0 V140", C=150, cd="M63,2.5 V136")
+        + bus("rust", "M90,0 V140", C=30, cd="M90,2.5 V136")
+        + bus("zinc", "M117,0 V140", C=100, cd="M117,2.5 V136")
+        + f'<rect x="58" y="140" width="10" height="22" fill="{T["verd"]}"/>'
+        + f'<rect x="85" y="140" width="10" height="22" fill="{T["rust"]}"/>'
+        + f'<rect x="112" y="140" width="10" height="22" fill="{T["zinc"]}"/>'
+        + f'<path class="bus" stroke="{T["zinc"]}" d="M48,166 L56,166 M48,166 L44,160 M852,166 L844,166 M852,166 L856,160 M56,166 H844"/>'
+        + lbl(852, 120, f"{CLAIMS_N} CLAIMS · {CLAIMS_N} COMMANDS · RE-RUN IN CI FROM PINNED COMMITS",
+              cls="ts mid", size=10.5, anchor="end")
+        + lbl(852, 140, "what is my word rather than a derivation says so where it stands",
+              cls="dim", size=10, ls=0.2, anchor="end")
+    )
+    return head(
+        170,
+        "colophon — the board's edge; every claim is a command",
+        f"Colophon — the board's edge connector: the three buses land on "
+        f"their pads and leave the page. {CLAIMS_N} claims, {CLAIMS_N} "
+        f"commands, re-run in CI from pinned commits; what is my word "
+        f"rather than a derivation says so where it stands.",
+        key="plate-colophon.svg",
+        col=(44, 886), frame=COLO_FRAME,
+        faces="T6",
+    ) + css_close() + body + "</svg>"
+
+
 # ══════════════════════════════════════════════════ the mobile hero
 #
 # 440u canvas, its own bus at MBUS_X. No email line here: the mobile set's
@@ -1145,6 +1185,7 @@ AUTOML_FRAME = (2.5, 60.8, 2.5)
 CADENCE_FRAME = (2.5, 51.7, 2.5)
 APPLIED_FRAME = (2.5, 37, 2.5)
 VA_FRAME = (2.5, 150, 2.5)
+COLO_FRAME = (2.5, 48, 4)
 MOB_FRAME = (36, 58, 0)
 # The return plate's right edge is its one silkscreen line, which now ends
 # 47.2u short of the canvas — 30 was authored against a longer string. Measured
@@ -1177,6 +1218,7 @@ PLATES = {
     "plate-5-cadence.svg": plate_cadence,
     "plate-6-applied.svg": plate_applied,
     "plate-7-visualassist.svg": plate_visualassist,
+    "plate-colophon.svg": plate_colophon,
 }
 MOBILE = {"m-0-hero.svg": m_hero}
 
