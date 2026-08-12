@@ -113,7 +113,7 @@ An iPhone app for low-vision users, in Swift: ARKit LiDAR depth becomes speech a
   <source media="(prefers-color-scheme: light) and (max-width: 500px)" srcset="./assets/light/m-colophon.svg">
   <source media="(prefers-color-scheme: light)" srcset="./assets/light/plate-colophon.svg">
   <source media="(max-width: 500px)" srcset="./assets/m-colophon.svg">
-  <img src="./assets/plate-colophon.svg" width="100%" alt="Colophon — the board's edge connector: the three buses land on their pads and leave the page. 58 claims, 58 commands, re-run in CI from pinned commits; what is my word rather than a derivation says so where it stands.">
+  <img src="./assets/plate-colophon.svg" width="100%" alt="Colophon — the board's edge connector: the three buses land on their pads and leave the page. 28 claims, 28 commands, re-run in CI from pinned commits; what is my word rather than a derivation says so where it stands.">
 </picture>
 
 [`build/claims.json`](https://github.com/yadava5/yadava5/blob/main/build/claims.json) ties every derived number to a commit SHA and to the shell command that re-derives it from the blob at that SHA. [The gate](https://github.com/yadava5/yadava5/blob/main/.github/workflows/gate.yml) runs those commands on every push and once a day, rejects any number no row accounts for, and closes with a negative test that breaks the plates on purpose and fails if a check sleeps through it.
