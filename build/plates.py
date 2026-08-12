@@ -1220,10 +1220,14 @@ def m_sec(h: int, C: tuple[float, float, float],
 def m_fig(fig: str, c1: str, c2: str) -> str:
     """The claim figure block, right of the mark: Syne 44 over two measured
     12px caption lines. 172 leaves 12u to the x=160 feeder spine the denser
-    plates run — above the 8u floor, in the safe direction (see above)."""
+    plates run — above the 8u floor, in the safe direction (see above).
+    Caption leading is set by Syne's em box, not its ink: the 44px figure's
+    box reaches ~13u below the baseline, so the first caption sits 32 down.
+    Mobile prose never uses &#8217; — the entity's own digits would enter
+    the drawn ⊆ description check — the literal ’ is in TEXT_CHARS."""
     return (f'<text x="172" y="140" class="d" font-size="44">{fig}</text>'
-            f'<text x="172" y="162" class="dim" font-size="12">{c1}</text>'
-            f'<text x="172" y="179" class="dim" font-size="12">{c2}</text>')
+            f'<text x="172" y="172" class="dim" font-size="12">{c1}</text>'
+            f'<text x="172" y="189" class="dim" font-size="12">{c2}</text>')
 
 
 def m_adm(y: float, accent: str, mids: list[str], dims: list[str]) -> str:
@@ -1257,8 +1261,8 @@ def m_work() -> str:
         + f'<text x="92" y="90" class="dim" font-size="13">none of it public.</text>'
         + lbl(404, 30, "THE EXCEPTION — ATTESTED, NOT DERIVED", size=10.5, anchor="end")
         + f'<text x="92" y="224" class="d" font-size="44">57.8M</text>'
-        + f'<text x="92" y="248" class="dim" font-size="12">rows in one field-usage table,</text>'
-        + f'<text x="92" y="264" class="dim" font-size="12">from 1.6M Oracle Analytics query logs.</text>'
+        + f'<text x="92" y="256" class="dim" font-size="12">rows in one field-usage table,</text>'
+        + f'<text x="92" y="273" class="dim" font-size="12">from 1.6M Oracle Analytics query logs.</text>'
         + m_adm(300, "zinc",
                 ["none of these numbers can be re-derived by you."],
                 ["the data belongs to Miami University",
@@ -1275,6 +1279,57 @@ def m_work() -> str:
         "a competition; this section is attested, not derived.",
         key="m-1-work.svg",
         col=(88, 412), frame=(2.5, 36, 2.5), w=440,
+    ) + css_close() + body + "</svg>"
+
+
+# ── II · jetpack, phone cut. The fan turns vertical: spine down from the
+# mark, four deflate blocks stacked (unlabelled — four frames ARE the count,
+# and four repeated captions at 440u are noise), collector down the right
+# edge, and the gzip member back at the content margin. The block digits are
+# deliberately not drawn: the mobile gate direction is drawn ⊆ description,
+# and numbering the blocks would oblige the desc to recite 0 1 2 3.
+def m_jetpack() -> str:
+    lanes = ""
+    for y, C in zip((246, 284, 322, 360), (0, 64, 128, 176)):
+        lanes += (bus("rust", f"M160,{y} H196", C=C, cd=f"M164,{y} H192")
+                  + f'<rect x="196" y="{y - 13}" width="140" height="26" rx="6" '
+                  + f'fill="none" stroke="{T["zinc"]}" stroke-width="1.3"/>'
+                  + bus("rust", f"M336,{y} H372", C=C + 30, cd=f"M340,{y} H368"))
+    body = (
+        m_sec(600, (140, 55, 190), tap=("rust", 18))
+        + mark("jetpack", 92, 96, 48)
+        + f'<text x="92" y="54" class="d" font-size="24" letter-spacing="0.5">II — JETPACK</text>'
+        + f'<text x="92" y="76" class="dim" font-size="13">is hand-vectorised code actually faster?</text>'
+        + m_fig("6.4×", "422 vs 66.2 MB/s, single thread",
+                "M1 Pro · 3-fork JMH, committed")
+        + bus("rust", "M140,120 H160 V360", C=70, cd="M144,120 H160 V357")
+        + lanes
+        + lbl(196, 208, "DEFLATE · JDK 25", size=10, ls=1.1)
+        + lbl(196, 224, "VIRTUAL THREADS", size=10, ls=1.1)
+        + bus("rust", "M372,246 V445 H252", C=100, cd="M372,248.5 V445 H256.5")
+        + f'<rect x="92" y="424" width="160" height="42" rx="8" fill="none" '
+          f'stroke="{T["rust"]}" stroke-width="1.6"/>'
+        + lbl(104, 449, "ONE GZIP MEMBER", cls="ts", size=11.5, ls=1.3)
+        + lbl(92, 484, "STITCHED BYTE-ALIGNED · ONE CRC", size=10, ls=1.1)
+        + m_adm(506, "rust",
+                ["the JDK’s own Adler-32 intrinsic",
+                 "does 14.06 GB/s — not beaten."],
+                ["mine reaches 4.26 GB/s hand-vectorised,",
+                 "bit-identical to java.util.zip."])
+    )
+    return head(
+        600,
+        "II · jetpack — the SIMD fan, phone cut: 6.4× over one thread",
+        "II · jetpack, phone cut — parallel gzip on JDK 25: the SIMD bus fans "
+        "into four deflate blocks collected back to one gzip member, stitched "
+        "byte-aligned under one CRC. 422 against 66.2 MB per second "
+        "single-threaded — 6.4 times, on an M1 Pro, from a committed 3-fork "
+        "JMH run. The against-self result is printed: the JDK's own Adler-32 "
+        "intrinsic does 14.06 GB per second and is not beaten; the "
+        "hand-vectorised checksum reaches 4.26, bit-identical to "
+        "java.util.zip.",
+        key="m-2-jetpack.svg",
+        col=(88, 412), frame=(2.5, 67, 2.5), w=440,
     ) + css_close() + body + "</svg>"
 
 
@@ -1326,6 +1381,7 @@ PLATES = {
 MOBILE = {
     "m-0-hero.svg": m_hero,
     "m-1-work.svg": m_work,
+    "m-2-jetpack.svg": m_jetpack,
 }
 
 _re = re
