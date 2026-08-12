@@ -1395,6 +1395,52 @@ def m_glyph() -> str:
     ) + css_close() + body + "</svg>"
 
 
+# ── IV · automl, phone cut. The registry keeps its one un-negotiable
+# property: 44 pins in ONE strip, emitted by loop so the count stays true by
+# construction. The pitch tightens to 5.9u — a denser comb, not a shorter
+# one — because splitting the strip would redraw "one part, 44 pins" as two
+# parts. Seven set-taps below, exactly as wide as the strip they tap.
+def m_automl() -> str:
+    pins = " ".join(f"M{140 + i * (392 - 140) / 43:.1f},222 V242" for i in range(44))
+    drops = " ".join(f"M{152 + i * 40},258 V294" for i in range(7))
+    sets = "".join(f'<circle cx="{152 + i * 40}" cy="300" r="5" fill="none" '
+                   f'stroke="{T["zinc"]}" stroke-width="2"/>' for i in range(7))
+    body = (
+        m_sec(490, (170, 85, 25), tap=("zinc", 55))
+        + mark("automl", 92, 96, 48)
+        + f'<text x="92" y="54" class="d" font-size="24" letter-spacing="0.5">IV — AUTOML</text>'
+        + f'<text x="92" y="76" class="dim" font-size="13">a LangGraph agent, dealt its tools phase by phase.</text>'
+        + m_fig("44", "defined across the dispatcher;",
+                "no phase’s hand holds them all.")
+        + bus("zinc", "M116,144 V236 H128", C=96, cd="M116,148 V236 H124")
+        + lbl(128, 206, "THE REGISTRY · 44 TOOLS DEFINED", size=10, ls=1.1)
+        + f'<rect x="128" y="214" width="276" height="44" rx="4" fill="none" '
+          f'stroke="{T["zinc"]}" stroke-width="1.3"/>'
+        + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="2" d="{pins}"/>'
+        + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="1.4" d="{drops}"/>'
+        + sets
+        + lbl(92, 334, "SEVEN TOOL SETS — NO PHASE IS HANDED ALL 44", size=10, ls=1.1)
+        + m_adm(376, "zinc",
+                ["the sandbox guards against accidents,",
+                 "not adversaries."],
+                ["the network is an env var — the beta template",
+                 "renders it bridge; no cap-drop, no pids-limit,",
+                 "no seccomp."])
+    )
+    return head(
+        490,
+        "IV · AutoML — the 44-pin registry, phone cut",
+        "IV · AutoML, phone cut — the dispatcher as its registry: a 44-pin "
+        "strip, one pin per tool the graph defines, seven tool-set taps below "
+        "it — no phase is handed all 44. The against-self line is the "
+        "sandbox: it guards against accidents, not adversaries — the network "
+        "is an env var the beta template renders as bridge, with no cap-drop, "
+        "no pids-limit, no seccomp.",
+        key="m-4-automl.svg",
+        col=(88, 412), frame=(2.5, 35, 2.5), w=440,
+    ) + css_close() + body + "</svg>"
+
+
 # ── declared frames (top, rightGap, bottomGap), baked from gate.mjs
 # measurement on this machine; tolerance 4 absorbs the CI ascent skew.
 HERO_FRAME = (30, 37.7, 0)
@@ -1445,6 +1491,7 @@ MOBILE = {
     "m-1-work.svg": m_work,
     "m-2-jetpack.svg": m_jetpack,
     "m-3-glyph.svg": m_glyph,
+    "m-4-automl.svg": m_automl,
 }
 
 _re = re
