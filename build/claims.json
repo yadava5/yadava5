@@ -656,6 +656,30 @@
       "note": "LLM_TOOL_DEFINITIONS in tools/index.ts is data + cell + package only: 4 data + 8 cell + 3 package. CORRECTED 2026-08-10 — this row previously read 'the general set the model carries everywhere is 15 of them', and the README said the same. It is not carried everywhere. No phase receives all 15: training admits only FEATURE_DISCOVERY_TOOLS union NOTEBOOK_EXECUTION_TOOLS (tools/index.ts:117-119), which excludes all three package tools, and re-adds install_package at the generate_code/write_code stages only; onboarding takes four (index.ts:130-137); preprocessing takes none, building its own list instead. The array length is still exactly what this extractor gates and is still worth drawing — what changed is the sentence around it. Same failure mode as [automl.tool_sets]: the count was right and the verb was wrong."
     },
     {
+      "id": "automl.tools_phase",
+      "value": "29",
+      "drawn_on": [
+        "plate-6b-automl.svg"
+      ],
+      "repo": "automl",
+      "paths": [
+        "backend/src/services/llm/tools/featureTools.ts",
+        "backend/src/services/llm/tools/preprocessingTools.ts",
+        "backend/src/services/llm/tools/trainingTools.ts",
+        "backend/src/services/llm/tools/uiTools.ts"
+      ],
+      "extractor": "cat $BLOBS | grep -cE \"^\\s+name: '\"",
+      "anchors": {
+        "plate-6b-automl.svg": [
+          "THE OTHER 29"
+        ],
+        "light/plate-6b-automl.svg": [
+          "THE OTHER 29"
+        ]
+      },
+      "note": "The tools NOT in the base set: the four phase files, counted by the same extractor [automl.tools] and [automl.tools_general] use, on the four paths the general row leaves out. 6 feature + 14 preprocessing + 6 training + 3 ui = 29. Counted DIRECTLY at the pinned commit rather than taken as 44 minus 15 — the arithmetic agrees, but a row whose evidence is two other rows re-derives nothing and would go on agreeing with itself after the source moved. This row exists because plate-6b draws 29 twice for unrelated nouns and [automl.tables] was licensing both; see its note."
+    },
+    {
       "id": "automl.tool_sets",
       "value": "7",
       "drawn_on": [
@@ -695,7 +719,15 @@
         "backend/migrations/019_email_verification_tokens.sql"
       ],
       "extractor": "cat $BLOBS | grep -ciE '^create table'",
-      "note": "Two methods agree: 29 CREATE TABLE statements, and 29 distinct table names after lowercasing and deduplicating. Eleven of the 24 migrations create tables (7+3+3+6+1+1+1+1+1+4+1); the other thirteen alter, backfill or index, and listing them would only pad the fetch."
+      "anchors": {
+        "plate-6b-automl.svg": [
+          "29 TABLES"
+        ],
+        "light/plate-6b-automl.svg": [
+          "29 TABLES"
+        ]
+      },
+      "note": "Two methods agree: 29 CREATE TABLE statements, and 29 distinct table names after lowercasing and deduplicating. Eleven of the 24 migrations create tables (7+3+3+6+1+1+1+1+1+4+1); the other thirteen alter, backfill or index, and listing them would only pad the fetch. ANCHORED TO THE PLATE 2026-08-11, for the count-noun trap rather than for anything wrong with the number: plate-6b draws 29 TWICE, for unrelated nouns — the tables in this schema, and the registry tools the base set excludes — and a row's value is permitted FILE-WIDE, so this single row was accounting for both occurrences and either could have been falsified into the other's meaning with the gate green. This row accounts for the tables occurrence and nothing else now; [automl.tools_phase] derives the other from the source it actually comes from. Both themes are anchored on purpose: the light twin inherits its permitted-value pool from the unthemed name, but masking is keyed to the exact filename, so anchoring the dark plate alone would have left the light one's 29s unaccounted."
     },
     {
       "id": "automl.sandbox_tmpfs",
