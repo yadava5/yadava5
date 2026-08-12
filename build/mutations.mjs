@@ -655,13 +655,22 @@ const editFile = (root, rel, fn) => {
   return true;
 };
 
+// Round 28 (BOARD): six of the nine named a file, a name or a line of Python
+// that the rebuild replaced, and every one of them reported "?? stale". They
+// are re-aimed at the SHAPE of what plates.py checks — the first <img> alt in
+// the README, the first light mobile reference, the character sets by name
+// rather than by member, the </svg> the writer appends — so a rename cannot
+// silence them again. The seventh is DELETED rather than re-aimed: see below.
 const PLATE_MUTATIONS = [
   // 1-2. the accessibility contract, in its two failure modes. Drift is the one
   //      that was already checked; absence is the one that used to pass.
+  //      Anchored on plate-0-thesis.svg until the redraw renamed it
+  //      plate-0-hero.svg; it takes whichever desktop plate the README serves
+  //      first now, which is the same assertion with nothing to rot.
   ['an alt drifts from the description its plate authored',
-    /plate-0-thesis\.svg: README alt has drifted/,
+    /plate-[\w-]+\.svg: README alt has drifted from the plate's own description/,
     (root) => editFile(root, 'README.md', (s) => s.replace(
-      /(<img src="\.\/assets\/plate-0-thesis\.svg"[^>]*?alt=")/, '$1Not what the plate says. '))],
+      /(<img src="\.\/assets\/plate-[\w-]+\.svg"[^>]*?alt=")/, '$1Not what the plate says. '))],
   ['README.md is not there at all',
     /README\.md: not found/,
     (root) => { rmSync(join(root, 'README.md')); return true; }],
@@ -669,50 +678,75 @@ const PLATE_MUTATIONS = [
   //      filename rather than deleting the line, because that is the mistake a
   //      person actually makes — and because the first draft of the check used
   //      an unanchored regex that still matched `…svgX` through its `.svg` and
-  //      called the reference present.
+  //      called the reference present. It takes the first light-theme mobile
+  //      reference in the file rather than naming m-4-applied.svg, which the
+  //      redraw retired.
   ['a published plate is referenced nowhere in the README',
-    /m-4-applied\.svg: this build authors it and README\.md references it nowhere/,
+    /\.\/assets\/light\/m-[\w-]+\.svg: this build authors it and README\.md references it nowhere/,
     (root) => editFile(root, 'README.md', (s) =>
-      s.replace('./assets/light/m-4-applied.svg', './assets/light/m-4-applied.svgX'))],
+      s.replace(/(\.\/assets\/light\/m-[\w-]+\.svg)(?=")/, '$1X'))],
+  // Probe 4 used to rename a real reference, which trips three checks at once
+  // and named a plate (m-5-refusal.svg) that no longer exists. It ADDS a
+  // reference now: the only defect is the one the expectation names, and the
+  // filename is this probe's own invention, so no redraw can retire it.
   ['the README reaches for a plate no build authors',
-    /m-5-refusalZZ\.svg: README\.md references it and no build authors it/,
+    /\.\/assets\/plate-zz-unauthored\.svg: README\.md references it and no build authors it/,
     (root) => editFile(root, 'README.md', (s) =>
-      s.replace('./assets/m-5-refusal.svg"', './assets/m-5-refusalZZ.svg"'))],
+      `${s}\n<img src="./assets/plate-zz-unauthored.svg" alt="a reference no build answers">\n`)],
   // 5-6. charset coverage: a glyph the subset does not carry falls back to a
   //      platform font, and nothing downstream can see it — gate.mjs measures
-  //      the geometry of the FALLBACK and passes. Only the 600 and the serif are
-  //      probed: TEXT_CHARS is MONO_CHARS, the same object, so a probe of the
-  //      mach-vs-text arm would be asserting nothing. That is a true statement
-  //      about the check, not a working probe, and it is not scored as one.
+  //      the geometry of the FALLBACK and passes.
+  //
+  //      BOARD retired the mono and the serif; the faces are Syne 800
+  //      (DISPLAY_CHARS) and Commissioner 400/600 (TEXT_CHARS). The old probes
+  //      named BOLD_CHARS and SERIF_CHARS, neither of which exists, so both
+  //      arms of the only check standing between this page and a platform font
+  //      mid-word were unexercised. LABEL_CHARS is still TEXT_CHARS — the same
+  //      object, charsets.py:32 — so a probe of the label-vs-text arm would be
+  //      asserting nothing; the expectation below accepts whichever of the two
+  //      names the check happens to print, and there is no third probe for a
+  //      distinction the source does not make.
+  //
+  //      Probe 5 strips EVERY digit rather than one: which digits the display
+  //      face draws is a design decision (the section romans carry none), and a
+  //      probe that pins one is the stale-probe shape this file documents.
   ['a digit leaves the display face and falls back to a platform font',
-    /draws '4' in the 600 face/,
+    /draws '\d' in the display face, which does not carry it/,
     (root) => editFile(root, 'build/charsets.py', (s) =>
-      s.replace(/^(BOLD_CHARS = ")([^"]*)"/m, (_m, head, set) => `${head}${set.replace('4', '')}"`))],
-  ['a letter leaves the serif face',
-    /draws 't' in the serif face/,
+      s.replace(/^(DISPLAY_CHARS = \(?")([^"]*)"/m,
+        (_m, head, set) => `${head}${set.replace(/\d/g, '')}"`))],
+  ['a letter leaves the text face',
+    /draws 't' in the (?:text|label) face, which does not carry it/,
     (root) => editFile(root, 'build/charsets.py', (s) =>
-      s.replace(/^(SERIF_CHARS = ")([^"]*)"/m, (_m, head, set) => `${head}${set.replace('t', '')}"`))],
-  // 7. the pairing that keeps check 12 honest on the phone canvas. Sliced from
-  //    MFRAME's own text rather than searched for globally: MOBILE is declared
-  //    first and holds a tuple under the same key, so an unscoped match would
-  //    delete the plate instead of its frame and trip the guard for the wrong
-  //    reason.
-  ['a mobile plate loses the frame declaration check 12 measures it against',
-    /MFRAME\/MOBILE disagree/,
-    (root) => editFile(root, 'build/plates.py', (s) => {
-      const i = s.indexOf('MFRAME = {');
-      if (i < 0) return undefined;
-      const head = s.slice(0, i), tail = s.slice(i);
-      const cut = tail.replace(/"m-1-glyph\.svg":\s*\([^)]*\),\s*/, '');
-      return cut === tail ? undefined : head + cut;
-    })],
+      s.replace(/^(TEXT_CHARS = \(?")([^"]*)"/m,
+        (_m, head, set) => `${head}${set.replace('t', '')}"`))],
+  // 7. DELETED, 2026-08-12, and the deletion is the finding.
+  //
+  //    The probe here asserted `MFRAME/MOBILE disagree` — the pairing that kept
+  //    check 12 honest on the phone canvas by requiring every mobile plate to
+  //    declare a frame. There is no MFRAME in plates.py any more and no such
+  //    assertion: the rebuilt mobile plates all take one MOB_FRAME
+  //    (plates.py:1698, 1174), so there is no per-file table left to disagree
+  //    with. A probe cannot be re-aimed at a check that is gone, and leaving it
+  //    printing "?? stale" would have gone on implying a build-time guard that
+  //    does not exist. gate.mjs check 12 still asserts the DRAWN edge against
+  //    the declaration on every mobile file, in both themes, and the two mobile
+  //    probes in the first family above are pointed at it.
+  //
+  //    Two plates.py checks arrived where this one stood and have no probe:
+  //    the `<source media="(max-width: 500px)">` service check (plates.py:1829)
+  //    and its light-twin counterpart (1831). Naming them here rather than
+  //    quietly leaving the count at nine, because an unprobed check that nobody
+  //    has written down is exactly how this file's four dead gates happened.
   // 8. well-formedness. A plate that is not parseable XML is not a plate;
   //    GitHub serves it as a torn image and every other gate here reads the
-  //    file as text and never notices.
+  //    file as text and never notices. Keyed to the closing tag every writer
+  //    appends rather than to one `return` line, which the rebuild split
+  //    fourteen ways.
   ['a plate emits markup that is not well-formed',
     /plate-[\w-]+\.svg: MALFORMED XML/,
     (root) => editFile(root, 'build/plates.py', (s) =>
-      s.replace('return "".join(s) + "</svg>"', 'return "".join(s) + "</svgg>"'))],
+      s.replace(/\+ "<\/svg>"/g, '+ "</svgg>"'))],
   // 9. the sweep, and the only probe here that requires the build to SUCCEED.
   //    A plate dropped from PLATES survives in assets/ unless something deletes
   //    it, and a stale file on disk is a stale claim surface: the gates sweep
