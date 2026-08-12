@@ -12,92 +12,92 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#E4E9E9}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k61{to{stroke-dashoffset:-176}}
-.k61{animation:k61 2450ms linear infinite}
-@keyframes k62{to{stroke-dashoffset:-148}}
-.k62{animation:k62 2450ms linear infinite}
-@keyframes k63{to{stroke-dashoffset:-126}}
-.k63{animation:k63 2450ms linear infinite}
-@keyframes k64{to{stroke-dashoffset:-206}}
-.k64{animation:k64 2450ms linear infinite}
-@keyframes k65{to{stroke-dashoffset:-178}}
-.k65{animation:k65 2450ms linear infinite}
-@keyframes k66{to{stroke-dashoffset:-156}}
-.k66{animation:k66 2450ms linear infinite}
-@keyframes k67{to{stroke-dashoffset:-240}}
-.k67{animation:k67 2450ms linear infinite}
-@keyframes k68{to{stroke-dashoffset:-212}}
-.k68{animation:k68 2450ms linear infinite}
-@keyframes k69{to{stroke-dashoffset:-190}}
-.k69{animation:k69 2450ms linear infinite}
-@keyframes k70{to{stroke-dashoffset:-270}}
-.k70{animation:k70 2450ms linear infinite}
-@keyframes k71{to{stroke-dashoffset:-242}}
-.k71{animation:k71 2450ms linear infinite}
-@keyframes k72{to{stroke-dashoffset:-220}}
-.k72{animation:k72 2450ms linear infinite}
-@keyframes k73{to{stroke-dashoffset:-304}}
+@keyframes k73{to{stroke-dashoffset:-176}}
 .k73{animation:k73 2450ms linear infinite}
-@keyframes k74{to{stroke-dashoffset:-276}}
+@keyframes k74{to{stroke-dashoffset:-148}}
 .k74{animation:k74 2450ms linear infinite}
-@keyframes k75{to{stroke-dashoffset:-254}}
+@keyframes k75{to{stroke-dashoffset:-126}}
 .k75{animation:k75 2450ms linear infinite}
-@keyframes k76{to{stroke-dashoffset:-334}}
+@keyframes k76{to{stroke-dashoffset:-206}}
 .k76{animation:k76 2450ms linear infinite}
-@keyframes k77{to{stroke-dashoffset:-306}}
+@keyframes k77{to{stroke-dashoffset:-178}}
 .k77{animation:k77 2450ms linear infinite}
-@keyframes k78{to{stroke-dashoffset:-284}}
+@keyframes k78{to{stroke-dashoffset:-156}}
 .k78{animation:k78 2450ms linear infinite}
-@keyframes k79{to{stroke-dashoffset:-352}}
+@keyframes k79{to{stroke-dashoffset:-240}}
 .k79{animation:k79 2450ms linear infinite}
-@keyframes k80{to{stroke-dashoffset:-324}}
+@keyframes k80{to{stroke-dashoffset:-212}}
 .k80{animation:k80 2450ms linear infinite}
-@keyframes k81{to{stroke-dashoffset:-302}}
+@keyframes k81{to{stroke-dashoffset:-190}}
 .k81{animation:k81 2450ms linear infinite}
-@keyframes k82{to{stroke-dashoffset:-382}}
+@keyframes k82{to{stroke-dashoffset:-270}}
 .k82{animation:k82 2450ms linear infinite}
-@keyframes k83{to{stroke-dashoffset:-354}}
+@keyframes k83{to{stroke-dashoffset:-242}}
 .k83{animation:k83 2450ms linear infinite}
-@keyframes k84{to{stroke-dashoffset:-332}}
+@keyframes k84{to{stroke-dashoffset:-220}}
 .k84{animation:k84 2450ms linear infinite}
-@keyframes k85{to{stroke-dashoffset:-316}}
-.k85{animation:k85 2100ms linear infinite}
-@keyframes k86{to{stroke-dashoffset:-288}}
-.k86{animation:k86 2100ms linear infinite}
-@keyframes k87{to{stroke-dashoffset:-266}}
-.k87{animation:k87 2100ms linear infinite}
-@keyframes k88{to{stroke-dashoffset:-231}}
+@keyframes k85{to{stroke-dashoffset:-304}}
+.k85{animation:k85 2450ms linear infinite}
+@keyframes k86{to{stroke-dashoffset:-276}}
+.k86{animation:k86 2450ms linear infinite}
+@keyframes k87{to{stroke-dashoffset:-254}}
+.k87{animation:k87 2450ms linear infinite}
+@keyframes k88{to{stroke-dashoffset:-334}}
 .k88{animation:k88 2450ms linear infinite}
-@keyframes k89{to{stroke-dashoffset:-203}}
+@keyframes k89{to{stroke-dashoffset:-306}}
 .k89{animation:k89 2450ms linear infinite}
-@keyframes k90{to{stroke-dashoffset:-181}}
+@keyframes k90{to{stroke-dashoffset:-284}}
 .k90{animation:k90 2450ms linear infinite}
-@keyframes k91{to{stroke-dashoffset:-366}}
-.k91{animation:k91 2750ms linear infinite}
-@keyframes k92{to{stroke-dashoffset:-338}}
-.k92{animation:k92 2750ms linear infinite}
-@keyframes k93{to{stroke-dashoffset:-316}}
-.k93{animation:k93 2750ms linear infinite}
-@keyframes k94{to{stroke-dashoffset:-194}}
+@keyframes k91{to{stroke-dashoffset:-352}}
+.k91{animation:k91 2450ms linear infinite}
+@keyframes k92{to{stroke-dashoffset:-324}}
+.k92{animation:k92 2450ms linear infinite}
+@keyframes k93{to{stroke-dashoffset:-302}}
+.k93{animation:k93 2450ms linear infinite}
+@keyframes k94{to{stroke-dashoffset:-382}}
 .k94{animation:k94 2450ms linear infinite}
-@keyframes k95{to{stroke-dashoffset:-166}}
+@keyframes k95{to{stroke-dashoffset:-354}}
 .k95{animation:k95 2450ms linear infinite}
-@keyframes k96{to{stroke-dashoffset:-144}}
+@keyframes k96{to{stroke-dashoffset:-332}}
 .k96{animation:k96 2450ms linear infinite}
-@keyframes k97{to{stroke-dashoffset:-246}}
-.k97{animation:k97 2450ms linear infinite}
-@keyframes k98{to{stroke-dashoffset:-218}}
-.k98{animation:k98 2450ms linear infinite}
-@keyframes k99{to{stroke-dashoffset:-196}}
-.k99{animation:k99 2450ms linear infinite}
-@keyframes k100{to{stroke-dashoffset:-276}}
+@keyframes k97{to{stroke-dashoffset:-316}}
+.k97{animation:k97 2100ms linear infinite}
+@keyframes k98{to{stroke-dashoffset:-288}}
+.k98{animation:k98 2100ms linear infinite}
+@keyframes k99{to{stroke-dashoffset:-266}}
+.k99{animation:k99 2100ms linear infinite}
+@keyframes k100{to{stroke-dashoffset:-231}}
 .k100{animation:k100 2450ms linear infinite}
-@keyframes k101{to{stroke-dashoffset:-248}}
+@keyframes k101{to{stroke-dashoffset:-203}}
 .k101{animation:k101 2450ms linear infinite}
-@keyframes k102{to{stroke-dashoffset:-226}}
+@keyframes k102{to{stroke-dashoffset:-181}}
 .k102{animation:k102 2450ms linear infinite}
+@keyframes k103{to{stroke-dashoffset:-366}}
+.k103{animation:k103 2750ms linear infinite}
+@keyframes k104{to{stroke-dashoffset:-338}}
+.k104{animation:k104 2750ms linear infinite}
+@keyframes k105{to{stroke-dashoffset:-316}}
+.k105{animation:k105 2750ms linear infinite}
+@keyframes k106{to{stroke-dashoffset:-194}}
+.k106{animation:k106 2450ms linear infinite}
+@keyframes k107{to{stroke-dashoffset:-166}}
+.k107{animation:k107 2450ms linear infinite}
+@keyframes k108{to{stroke-dashoffset:-144}}
+.k108{animation:k108 2450ms linear infinite}
+@keyframes k109{to{stroke-dashoffset:-246}}
+.k109{animation:k109 2450ms linear infinite}
+@keyframes k110{to{stroke-dashoffset:-218}}
+.k110{animation:k110 2450ms linear infinite}
+@keyframes k111{to{stroke-dashoffset:-196}}
+.k111{animation:k111 2450ms linear infinite}
+@keyframes k112{to{stroke-dashoffset:-276}}
+.k112{animation:k112 2450ms linear infinite}
+@keyframes k113{to{stroke-dashoffset:-248}}
+.k113{animation:k113 2450ms linear infinite}
+@keyframes k114{to{stroke-dashoffset:-226}}
+.k114{animation:k114 2450ms linear infinite}
 </style>
-<g><path class="bus" stroke="#4FB39A" d="M63,0 V400"/><path class="cm k85" stroke="#A9EFD9" stroke-dasharray="34 176" stroke-dashoffset="-106" d="M63,2.5 V397.5"/><path class="cm k86" stroke="#83D6BC" stroke-dasharray="28 182" stroke-dashoffset="-78" d="M63,2.5 V397.5"/><path class="cm k87" stroke="#66C2A8" stroke-dasharray="22 188" stroke-dashoffset="-56" d="M63,2.5 V397.5"/></g><g><path class="bus" stroke="#E0703A" d="M90,0 V400"/><path class="cm k88" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-21" d="M90,2.5 V397.5"/><path class="cm k89" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="7" d="M90,2.5 V397.5"/><path class="cm k90" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="29" d="M90,2.5 V397.5"/></g><g><path class="bus" stroke="#8A9599" d="M117,0 V400"/><path class="cm k91" stroke="#C9D3D6" stroke-dasharray="34 176" stroke-dashoffset="-156" d="M117,2.5 V397.5"/><path class="cm k92" stroke="#AEB9BD" stroke-dasharray="28 182" stroke-dashoffset="-128" d="M117,2.5 V397.5"/><path class="cm k93" stroke="#9AA5A9" stroke-dasharray="22 188" stroke-dashoffset="-106" d="M117,2.5 V397.5"/></g><g><path class="bus" stroke="#E0703A" d="M90,120 H150"/><path class="cm k94" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="16" d="M94,120 H146"/><path class="cm k95" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="44" d="M94,120 H146"/><path class="cm k96" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="66" d="M94,120 H146"/></g><g><path class="bus" stroke="#E0703A" d="M198,120 H228 V264"/><path class="cm k97" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-36" d="M202,120 H228 V262"/><path class="cm k98" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-8" d="M202,120 H228 V262"/><path class="cm k99" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="14" d="M202,120 H228 V262"/></g><g><path class="bus" stroke="#E0703A" d="M228,150 H300"/><path class="cm k61" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="34" d="M230,150 H296"/><path class="cm k62" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="62" d="M230,150 H296"/><path class="cm k63" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="84" d="M230,150 H296"/></g><rect x="300" y="137" width="170" height="26" rx="6" fill="none" stroke="#8A9599" stroke-width="1.3"/><text x="312" y="153.5" class="ts dim" font-size="10.5" letter-spacing="1.2">BLOCK 0 · DEFLATE</text><g><path class="bus" stroke="#E0703A" d="M470,150 H520"/><path class="cm k64" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="4" d="M474,150 H516"/><path class="cm k65" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="32" d="M474,150 H516"/><path class="cm k66" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="54" d="M474,150 H516"/></g><g><path class="bus" stroke="#E0703A" d="M228,188 H300"/><path class="cm k67" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-30" d="M230,188 H296"/><path class="cm k68" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-2" d="M230,188 H296"/><path class="cm k69" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="20" d="M230,188 H296"/></g><rect x="300" y="175" width="170" height="26" rx="6" fill="none" stroke="#8A9599" stroke-width="1.3"/><text x="312" y="191.5" class="ts dim" font-size="10.5" letter-spacing="1.2">BLOCK 1 · DEFLATE</text><g><path class="bus" stroke="#E0703A" d="M470,188 H520"/><path class="cm k70" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-60" d="M474,188 H516"/><path class="cm k71" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-32" d="M474,188 H516"/><path class="cm k72" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-10" d="M474,188 H516"/></g><g><path class="bus" stroke="#E0703A" d="M228,226 H300"/><path class="cm k73" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-94" d="M230,226 H296"/><path class="cm k74" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-66" d="M230,226 H296"/><path class="cm k75" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-44" d="M230,226 H296"/></g><rect x="300" y="213" width="170" height="26" rx="6" fill="none" stroke="#8A9599" stroke-width="1.3"/><text x="312" y="229.5" class="ts dim" font-size="10.5" letter-spacing="1.2">BLOCK 2 · DEFLATE</text><g><path class="bus" stroke="#E0703A" d="M470,226 H520"/><path class="cm k76" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-124" d="M474,226 H516"/><path class="cm k77" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-96" d="M474,226 H516"/><path class="cm k78" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-74" d="M474,226 H516"/></g><g><path class="bus" stroke="#E0703A" d="M228,264 H300"/><path class="cm k79" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-142" d="M230,264 H296"/><path class="cm k80" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-114" d="M230,264 H296"/><path class="cm k81" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-92" d="M230,264 H296"/></g><rect x="300" y="251" width="170" height="26" rx="6" fill="none" stroke="#8A9599" stroke-width="1.3"/><text x="312" y="267.5" class="ts dim" font-size="10.5" letter-spacing="1.2">BLOCK 3 · DEFLATE</text><g><path class="bus" stroke="#E0703A" d="M470,264 H520"/><path class="cm k82" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-172" d="M474,264 H516"/><path class="cm k83" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-144" d="M474,264 H516"/><path class="cm k84" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-122" d="M474,264 H516"/></g><path class="bus" stroke="#E0703A" d="M520,150 V282"/><g><path class="bus" stroke="#E0703A" d="M520,225 H556"/><path class="cm k100" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-66" d="M524,225 H552"/><path class="cm k101" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-38" d="M524,225 H552"/><path class="cm k102" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-16" d="M524,225 H552"/></g><rect x="556" y="204" width="160" height="42" rx="8" fill="none" stroke="#E0703A" stroke-width="1.6"/><text x="568" y="229" class="ts" font-size="11.5" letter-spacing="1.3">ONE GZIP MEMBER</text><text x="556" y="264" class="ts dim" font-size="10" letter-spacing="1.1">STITCHED BYTE-ALIGNED · ONE CRC</text><text x="300" y="128" class="ts dim" font-size="10" letter-spacing="1.1">DEFLATE · JDK 25 · VIRTUAL THREADS</text><g transform="translate(150,96) scale(1.0000)"><rect x="0.75" y="0.75" width="46.5" height="46.5" rx="10" fill="#0A0A0B" stroke="#7A828A" stroke-width="1"/>
+<g><path class="bus" stroke="#4FB39A" d="M63,0 V400"/><path class="cm k97" stroke="#A9EFD9" stroke-dasharray="34 176" stroke-dashoffset="-106" d="M63,2.5 V397.5"/><path class="cm k98" stroke="#83D6BC" stroke-dasharray="28 182" stroke-dashoffset="-78" d="M63,2.5 V397.5"/><path class="cm k99" stroke="#66C2A8" stroke-dasharray="22 188" stroke-dashoffset="-56" d="M63,2.5 V397.5"/></g><g><path class="bus" stroke="#E0703A" d="M90,0 V400"/><path class="cm k100" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-21" d="M90,2.5 V397.5"/><path class="cm k101" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="7" d="M90,2.5 V397.5"/><path class="cm k102" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="29" d="M90,2.5 V397.5"/></g><g><path class="bus" stroke="#8A9599" d="M117,0 V400"/><path class="cm k103" stroke="#C9D3D6" stroke-dasharray="34 176" stroke-dashoffset="-156" d="M117,2.5 V397.5"/><path class="cm k104" stroke="#AEB9BD" stroke-dasharray="28 182" stroke-dashoffset="-128" d="M117,2.5 V397.5"/><path class="cm k105" stroke="#9AA5A9" stroke-dasharray="22 188" stroke-dashoffset="-106" d="M117,2.5 V397.5"/></g><g><path class="bus" stroke="#E0703A" d="M90,120 H150"/><path class="cm k106" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="16" d="M94,120 H146"/><path class="cm k107" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="44" d="M94,120 H146"/><path class="cm k108" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="66" d="M94,120 H146"/></g><g><path class="bus" stroke="#E0703A" d="M198,120 H228 V264"/><path class="cm k109" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-36" d="M202,120 H228 V262"/><path class="cm k110" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-8" d="M202,120 H228 V262"/><path class="cm k111" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="14" d="M202,120 H228 V262"/></g><g><path class="bus" stroke="#E0703A" d="M228,150 H300"/><path class="cm k73" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="34" d="M230,150 H296"/><path class="cm k74" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="62" d="M230,150 H296"/><path class="cm k75" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="84" d="M230,150 H296"/></g><rect x="300" y="137" width="170" height="26" rx="6" fill="none" stroke="#8A9599" stroke-width="1.3"/><text x="312" y="153.5" class="ts dim" font-size="10.5" letter-spacing="1.2">BLOCK 0 · DEFLATE</text><g><path class="bus" stroke="#E0703A" d="M470,150 H520"/><path class="cm k76" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="4" d="M474,150 H516"/><path class="cm k77" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="32" d="M474,150 H516"/><path class="cm k78" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="54" d="M474,150 H516"/></g><g><path class="bus" stroke="#E0703A" d="M228,188 H300"/><path class="cm k79" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-30" d="M230,188 H296"/><path class="cm k80" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-2" d="M230,188 H296"/><path class="cm k81" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="20" d="M230,188 H296"/></g><rect x="300" y="175" width="170" height="26" rx="6" fill="none" stroke="#8A9599" stroke-width="1.3"/><text x="312" y="191.5" class="ts dim" font-size="10.5" letter-spacing="1.2">BLOCK 1 · DEFLATE</text><g><path class="bus" stroke="#E0703A" d="M470,188 H520"/><path class="cm k82" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-60" d="M474,188 H516"/><path class="cm k83" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-32" d="M474,188 H516"/><path class="cm k84" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-10" d="M474,188 H516"/></g><g><path class="bus" stroke="#E0703A" d="M228,226 H300"/><path class="cm k85" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-94" d="M230,226 H296"/><path class="cm k86" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-66" d="M230,226 H296"/><path class="cm k87" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-44" d="M230,226 H296"/></g><rect x="300" y="213" width="170" height="26" rx="6" fill="none" stroke="#8A9599" stroke-width="1.3"/><text x="312" y="229.5" class="ts dim" font-size="10.5" letter-spacing="1.2">BLOCK 2 · DEFLATE</text><g><path class="bus" stroke="#E0703A" d="M470,226 H520"/><path class="cm k88" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-124" d="M474,226 H516"/><path class="cm k89" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-96" d="M474,226 H516"/><path class="cm k90" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-74" d="M474,226 H516"/></g><g><path class="bus" stroke="#E0703A" d="M228,264 H300"/><path class="cm k91" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-142" d="M230,264 H296"/><path class="cm k92" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-114" d="M230,264 H296"/><path class="cm k93" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-92" d="M230,264 H296"/></g><rect x="300" y="251" width="170" height="26" rx="6" fill="none" stroke="#8A9599" stroke-width="1.3"/><text x="312" y="267.5" class="ts dim" font-size="10.5" letter-spacing="1.2">BLOCK 3 · DEFLATE</text><g><path class="bus" stroke="#E0703A" d="M470,264 H520"/><path class="cm k94" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-172" d="M474,264 H516"/><path class="cm k95" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-144" d="M474,264 H516"/><path class="cm k96" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-122" d="M474,264 H516"/></g><path class="bus" stroke="#E0703A" d="M520,150 V282"/><g><path class="bus" stroke="#E0703A" d="M520,225 H556"/><path class="cm k112" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-66" d="M524,225 H552"/><path class="cm k113" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-38" d="M524,225 H552"/><path class="cm k114" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-16" d="M524,225 H552"/></g><rect x="556" y="204" width="160" height="42" rx="8" fill="none" stroke="#E0703A" stroke-width="1.6"/><text x="568" y="229" class="ts" font-size="11.5" letter-spacing="1.3">ONE GZIP MEMBER</text><text x="556" y="264" class="ts dim" font-size="10" letter-spacing="1.1">STITCHED BYTE-ALIGNED · ONE CRC</text><text x="300" y="128" class="ts dim" font-size="10" letter-spacing="1.1">DEFLATE · JDK 25 · VIRTUAL THREADS</text><g transform="translate(150,96) scale(1.0000)"><rect x="0.75" y="0.75" width="46.5" height="46.5" rx="10" fill="#0A0A0B" stroke="#7A828A" stroke-width="1"/>
 <path transform="translate(2.4,2.4) scale(1.35)"
   d="M7 10 H14.5 M7 16 H19 M7 22 H14.5 M14.5 10 L20 16 L14.5 22 M20 16 H25"
   fill="none" stroke="#FF9E2C" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></g><text x="150" y="54" class="d" font-size="30" letter-spacing="0.5">II — JETPACK</text><text x="150" y="76" class="dim" font-size="14.5">is hand-vectorised code actually faster?</text><text x="640" y="138" class="d" font-size="62">6.4×</text><text x="640" y="176" class="dim" font-size="13">422 vs 66.2 MB/s, single thread —</text><text x="640" y="194" class="dim" font-size="13">M1 Pro · 3-fork JMH, committed</text><rect x="150" y="318" width="4" height="16" fill="#E0703A"/><text x="164" y="331" class="mid" font-size="14">the JDK&#8217;s own Adler-32 intrinsic does 14.06 GB/s — not beaten.</text><text x="164" y="351" class="dim" font-size="13">mine reaches 4.26 GB/s hand-vectorised, bit-identical to java.util.zip.</text></svg>
