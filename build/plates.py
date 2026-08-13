@@ -1240,39 +1240,103 @@ def plate_work() -> str:
 
 # ══════════════════════════════════════════════════ III · glyph
 #
-# The section drawn as its own part: three register-lane bundles — NEON,
-# AVX2, AVX-512, the ISAs the kernels were written for — fed off the SIMD
-# bus and converging on the one benchmark chip, then dropping to the package
-# that actually ships: the wasm_simd128 build, byte-counted and checked
-# daily. The admission block runs three lines, the longest on the page,
-# because this section owes two of them: the size-floor slowdown and the
-# checkpoint the test set picked.
+# The section drawn as its own part: ONE register-lane bundle carrying
+# current — NEON — and two UNPOPULATED FOOTPRINTS beside it, the board's own
+# way of drawing a part it does not have (the idiom §I gives the page, and
+# §VI and §VII repeat: outline dashed, lead left open). All three kernel
+# families are written in glyph's source; the family is chosen at COMPILE
+# time by #if on __AVX512F__ / __AVX2__ / __ARM_NEON, there is no runtime
+# dispatch anywhere in the library, ci/release/sanitizers all build with
+# -DFAST_MNIST_ENABLE_NATIVE=OFF, and the reference machine is an M1 Pro —
+# arm64. So exactly one of the three could have produced 3.5×, and the
+# drawing said all three did until 2026-08-13.
+#
+# The silkscreen reads WRITTEN · NOT MEASURED and not NOT COMPILED, which
+# would assert a universal the evidence does not carry: those kernels were
+# not compiled HERE, on this machine, in this CI. Not measured is exactly
+# what the evidence shows.
+#
+# Then the one measured lane drops to the package that actually ships: the
+# wasm_simd128 build, byte-counted and checked daily. The admission block
+# runs three lines, the longest on the page, because this section owes two
+# of them: the size-floor slowdown and the checkpoint the test set picked.
+def isa_slot(x: float, y: float, w: float, label: str, n: int,
+             C: float | None = None) -> str:
+    """One kernel family, drawn as the slot the board keeps for it.
+
+    ONE emitter for all three, and that is the point: the outline, the
+    designator, the 6u lane pitch and the lane COUNT — 2/4/8, the lanes a
+    128/256/512-bit register holds — are identical whether or not the part
+    is fitted, so the only difference a reader has to read is the one the
+    evidence carries. `C` is a comet phase: pass none and the slot prints as
+    a FOOTPRINT (outline dashed, pads bare, nothing driving them); pass one
+    and the part is fitted (outline solid, lanes carrying the current at that
+    phase, and both lanes on the SAME phase because that is what SIMD is —
+    one instruction, the lanes in lockstep).
+
+    The lanes' vertical span is (n-1)*6 either way, so the register-width
+    claim survives the fitting: it is the pad rows and the lane rows that are
+    countable, not the outline, whose height only follows them.
+
+    The lane rows start 24u down — under the designator, which is printed in
+    the slot the way silkscreen prints it — and clear the bottom edge by 10.
+    A 2-lane part is the reason the bottom figure is not 6: at 6 the fitted
+    track ran 4u off the outline and read as the edge of the box rather than
+    as a lane inside it. The electrical centre a feeder must arrive at is
+    y+24+3(n-1).
+    """
+    h = 34 + 6 * (n - 1)
+    ys = [y + 24 + i * 6 for i in range(n)]
+    out = (f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="8" fill="none" '
+           f'stroke="{T["zinc"]}" stroke-width="1.4"'
+           + ('' if C is not None else ' stroke-dasharray="5 4"')
+           + '/>' + lbl(x + 10, y + 15, label, size=10, ls=1.2))
+    if C is None:
+        # bare pads: short and FILLED where a live lane is stroked and
+        # continuous. The gap between the two pad columns is where the part
+        # would sit, and it is the whole of what makes the slot read empty.
+        # One <g>, like §I's footprint — a pad inside the outline it serves
+        # is composition, not collision.
+        return "<g>" + out + "".join(
+            f'<rect x="{x + 6}" y="{v - 1}" width="13" height="2" fill="{T["zinc"]}"/>'
+            f'<rect x="{x + w - 19}" y="{v - 1}" width="13" height="2" fill="{T["zinc"]}"/>'
+            for v in ys) + "</g>"
+    # fitted: 6u of lead out of each side, tied off into one net by the bars
+    # the feeder and the collector actually land on.
+    out += (f'<path class="bus" stroke="{T["rust"]}" '
+            f'd="M{x - 6},{ys[0]} V{ys[-1]} M{x + w + 6},{ys[0]} V{ys[-1]}"/>')
+    for v in ys:
+        out += bus("rust", f"M{x - 6},{v} H{x + w + 6}", C=C,
+                   cd=f"M{x - 4},{v} H{x + w + 4}")
+    return out
+
+
 def plate_glyph() -> str:
-    # lane counts are the ISAs' own: 128/256/512-bit registers hold 2/4/8
-    # 64-bit lanes, and the 1:2:4 ratio holds for any element width — the
-    # bundle heights ARE the claim the section makes about register width.
-    lanes = ""
-    for label, n, yc in (("NEON", 2, 175), ("AVX2", 4, 235), ("AVX-512", 8, 295)):
-        y0 = yc - 3 * (n - 1)
-        rules = " ".join(f"M300,{y0 + i * 6} H420" for i in range(n))
-        lanes += (lbl(300, y0 - 10, label, size=10, ls=1.2)
-                  + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="1.4" d="{rules}"/>')
     body = (
         bus("verd", "M63,0 V448", C=40, cd="M63,2.5 V445.5")
         + bus("rust", "M90,0 V448", C=130, cd="M90,2.5 V445.5")
         + bus("zinc", "M117,0 V448", C=8, cd="M117,2.5 V445.5")
-        # SIMD tap into the mark, then the feeder down the bundle column
+        # SIMD tap into the mark, then the feeder down to the ONE junction
+        # the current reaches. Rust ends and zinc continues at that dot: the
+        # dot is the #if, and the colour change is the branch not taken.
         + bus("rust", "M90,120 H150", C=88, cd="M94,120 H145")
-        + bus("rust", "M198,120 H264 V295", C=30, cd="M202,120 H264 V292")
-        + f'<circle cx="264" cy="175" r="2.6" fill="{T["rust"]}"/>'
-        + f'<circle cx="264" cy="235" r="2.6" fill="{T["rust"]}"/>'
-        + bus("rust", "M264,175 H300", C=60, cd="M266.5,175 H297")
-        + bus("rust", "M264,235 H300", C=115, cd="M266.5,235 H297")
-        + bus("rust", "M264,295 H300", C=170, cd="M266.5,295 H297")
-        + lanes
-        # the collector gathers the three bundles into the benchmark chip
-        + f'<path class="bus" stroke="{T["rust"]}" d="M420,175 H456 V295 H420 M420,235 H456"/>'
-        + bus("rust", "M456,235 H492", C=142, cd="M422,175 H456 V235 H489")
+        + bus("rust", "M198,120 H264 V168", C=30, cd="M202,120 H264 V165")
+        + f'<circle cx="264" cy="168" r="2.6" fill="{T["rust"]}"/>'
+        + bus("rust", "M264,168 H288", C=60, cd="M266.5,168 H285")
+        + isa_slot(294, 141, 132, "NEON", 2, C=96)
+        # the two written-but-unbuilt families: routed to, never energised.
+        # Each lead stops in an open ring short of its pads (§VI's severed
+        # cascade, same construction) — the net exists, nothing drives it.
+        + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="1.4" '
+          f'd="M264,168 V308 M264,232 H272 M264,308 H272"/>'
+        + f'<circle cx="264" cy="232" r="2.2" fill="{T["zinc"]}"/>'
+        + f'<circle cx="278.5" cy="232" r="3.5" fill="none" stroke="{T["zinc"]}" stroke-width="2"/>'
+        + f'<circle cx="278.5" cy="308" r="3.5" fill="none" stroke="{T["zinc"]}" stroke-width="2"/>'
+        + isa_slot(294, 199, 132, "AVX2", 4)
+        + isa_slot(294, 263, 132, "AVX-512", 8)
+        + lbl(294, 360, "WRITTEN · NOT MEASURED", size=10, ls=1.1)
+        # one part in, one measurement out: the collector is a single run now
+        + bus("rust", "M432,168 H456 V235 H492", C=142, cd="M434,168 H456 V235 H489")
         + f'<rect x="492" y="214" width="170" height="42" rx="8" fill="none" '
           f'stroke="{T["rust"]}" stroke-width="1.6"/>'
         + lbl(504, 240, "BENCHDOT/256", cls="ts", size=11.5, ls=1.3)
@@ -1295,14 +1359,20 @@ def plate_glyph() -> str:
     )
     return head(
         448,
-        "III · Glyph — SIMD kernels over a course-provided net: 3.5× from OpenMP threading; 10.7× slower where memory bandwidth is the wall",
+        "III · Glyph — SIMD kernels over a course-provided net: 3.5× from OpenMP threading on the NEON build, the one kernel family the reference machine compiled; 10.7× slower where memory bandwidth is the wall",
         "III · Glyph — SIMD kernels over a course-provided MNIST net, drawn "
-        "as three register-lane bundles — NEON, AVX2, AVX-512 — converging "
-        "on benchDot/256: 3.5× from OpenMP threading over the same kernels "
-        "— its own single-threaded build — on the reference machine, from "
-        "committed runs. The package that ships is WASM_SIMD128, 43,751 "
-        "bytes, byte-identical to main and checked daily by this page's own "
-        "CI. The against-self results are printed: the same flags run 10.7× "
+        "as one register-lane bundle carrying current and two unpopulated "
+        "footprints beside it. Kernels are written for NEON, AVX2 and "
+        "AVX-512, but the family is chosen at compile time, there is no "
+        "runtime dispatch, and the reference machine is arm64 — so only the "
+        "NEON bundle was built, and only its lanes run to benchDot/256: "
+        "3.5× from OpenMP threading over the same kernels, its own "
+        "single-threaded build, from committed runs. The AVX2 and AVX-512 "
+        "slots are printed with their pads bare and their leads left open, "
+        "silkscreened: written, not measured. The package that ships is "
+        "WASM_SIMD128, 43,751 bytes, byte-identical to main and checked "
+        "daily by this page's own CI. The against-self results are printed: "
+        "the same flags run 10.7× "
         "slower on benchAxpy/128, memory-bandwidth-bound, where threading "
         "never pays at any size measured, and 97.01% is a training-time "
         "number — the test set that graded the net also picked its "
@@ -1841,44 +1911,49 @@ def m_jetpack() -> str:
     ) + css_close() + body + "</svg>"
 
 
-# ── III · glyph, phone cut. The bundles keep their one load-bearing ratio —
-# 2/4/8 rules for 128/256/512-bit registers — stacked down the column, the
-# collector gathering them into the benchmark chip and the chip dropping to
-# the package that ships. The admission still runs longest: this section
-# owes the same two sentences at every width.
+# ── III · glyph, phone cut. The same argument, one column wide: NEON fed and
+# collected, the two written-but-unbuilt families printed as unpopulated
+# footprints under it, leads open. The load-bearing ratio survives the cut —
+# 2/4/8 pads for 128/256/512-bit registers — because the pads are emitted by
+# the same helper the desktop uses, so a family cannot lose a lane on the
+# phone alone. The plate is 22u taller than it was: that is the silkscreen
+# line the footprints need, and it is the only thing that moved below them.
+# The admission still runs longest: this section owes the same two sentences
+# at every width.
 def m_glyph() -> str:
-    lanes = ""
-    for label, n, yc in (("NEON", 2, 240), ("AVX2", 4, 300), ("AVX-512", 8, 368)):
-        y0 = yc - 3 * (n - 1)
-        rules = " ".join(f"M200,{y0 + i * 6} H320" for i in range(n))
-        lanes += (lbl(200, y0 - 10, label, size=10, ls=1.2)
-                  + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="1.4" d="{rules}"/>')
     body = (
-        m_sec(690, (40, 130, 8), tap=("rust", 88))
+        m_sec(712, (40, 130, 8), tap=("rust", 88))
         + mark("glyph", 92, 96, 48)
         + sec_roman(92, 54, "III — GLYPH", 24)
         + sec_sub(92, 76, "SIMD kernels over a net the course provided.", 13)
         + m_fig("3.5×", "benchDot/256 — OpenMP threads,",
                 "same kernels · committed runs.")
-        + bus("rust", "M140,120 H160 V368", C=30, cd="M144,120 H160 V365")
+        + bus("rust", "M140,120 H160 V240", C=30, cd="M144,120 H160 V237")
         + f'<circle cx="160" cy="240" r="2.6" fill="{T["rust"]}"/>'
-        + f'<circle cx="160" cy="300" r="2.6" fill="{T["rust"]}"/>'
-        + bus("rust", "M160,240 H200", C=60, cd="M162.5,240 H197")
-        + bus("rust", "M160,300 H200", C=115, cd="M162.5,300 H197")
-        + bus("rust", "M160,368 H200", C=170, cd="M162.5,368 H197")
-        + lanes
-        + f'<path class="bus" stroke="{T["rust"]}" d="M320,240 H344 V368 H320 M320,300 H344"/>'
-        + bus("rust", "M344,368 V404", C=142, cd="M322,240 H344 V400")
-        + f'<rect x="200" y="404" width="160" height="36" rx="8" fill="none" '
+        + bus("rust", "M160,240 H188", C=60, cd="M162.5,240 H185")
+        + isa_slot(194, 213, 132, "NEON", 2, C=96)
+        + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="1.4" '
+          f'd="M160,240 V366 M160,292 H169 M160,366 H169"/>'
+        + f'<circle cx="160" cy="292" r="2.2" fill="{T["zinc"]}"/>'
+        + f'<circle cx="175.5" cy="292" r="3.5" fill="none" stroke="{T["zinc"]}" stroke-width="2"/>'
+        + f'<circle cx="175.5" cy="366" r="3.5" fill="none" stroke="{T["zinc"]}" stroke-width="2"/>'
+        + isa_slot(194, 259, 132, "AVX2", 4)
+        + isa_slot(194, 321, 132, "AVX-512", 8)
+        + lbl(194, 418, "WRITTEN · NOT MEASURED", size=10, ls=1.1)
+        # the collector runs OUTSIDE the slot column and enters the chip from
+        # the side: at x=344 it dropped straight through the silkscreen line,
+        # and a moving trace across type is a strikethrough (gate check 3).
+        + bus("rust", "M332,240 H380 V452 H360", C=142, cd="M334,240 H380 V452 H363")
+        + f'<rect x="200" y="434" width="160" height="36" rx="8" fill="none" '
           f'stroke="{T["rust"]}" stroke-width="1.6"/>'
-        + lbl(212, 426, "BENCHDOT/256", cls="ts", size=11.5, ls=1.3)
-        + bus("rust", "M280,440 V464", C=55, cd="M280,442.5 V459.5")
-        + f'<rect x="200" y="464" width="196" height="36" rx="8" fill="none" '
+        + lbl(212, 456, "BENCHDOT/256", cls="ts", size=11.5, ls=1.3)
+        + bus("rust", "M280,470 V494", C=55, cd="M280,472.5 V489.5")
+        + f'<rect x="200" y="494" width="196" height="36" rx="8" fill="none" '
           f'stroke="{T["zinc"]}" stroke-width="1.6"/>'
-        + lbl(212, 486, "WASM_SIMD128 · 43,751 B", cls="ts", size=11.5, ls=1.3)
-        + lbl(200, 522, "BYTE-IDENTICAL TO MAIN", size=10, ls=1.1)
-        + lbl(200, 537, "CHECKED DAILY BY THIS PAGE", size=10, ls=1.1)
-        + m_adm(556, "rust",
+        + lbl(212, 516, "WASM_SIMD128 · 43,751 B", cls="ts", size=11.5, ls=1.3)
+        + lbl(200, 552, "BYTE-IDENTICAL TO MAIN", size=10, ls=1.1)
+        + lbl(200, 567, "CHECKED DAILY BY THIS PAGE", size=10, ls=1.1)
+        + m_adm(586, "rust",
                 ["the same flags run 10.7× slower on",
                  "benchAxpy/128 — memory-bandwidth-bound;"],
                 ["threading never pays, at any size measured.",
@@ -1887,14 +1962,18 @@ def m_glyph() -> str:
                  "also picked its checkpoint."])
     )
     return head(
-        690,
-        "III · Glyph — register lanes to one benchmark, phone cut",
+        712,
+        "III · Glyph — one register-lane bundle to the benchmark, two unpopulated footprints, phone cut",
         "III · Glyph, phone cut — SIMD kernels over a course-provided MNIST "
-        "net: three register-lane bundles — NEON, AVX2, AVX-512 — converge on "
-        "benchDot/256, 3.5× from OpenMP threading over the same kernels — its "
-        "own single-threaded build — on the reference machine, from committed "
-        "runs, and drop to the package that ships: WASM_SIMD128, 43,751 "
-        "bytes, byte-identical to main, checked daily by this page's own CI. "
+        "net. Kernels are written for NEON, AVX2 and AVX-512, but the family "
+        "is chosen at compile time, there is no runtime dispatch, and the "
+        "reference machine is arm64 — so only the NEON bundle carries "
+        "current, into benchDot/256: 3.5× from OpenMP threading over the "
+        "same kernels, its own single-threaded build, from committed runs, "
+        "dropping to the package that ships: WASM_SIMD128, 43,751 bytes, "
+        "byte-identical to main, checked daily by this page's own CI. The "
+        "AVX2 and AVX-512 slots are printed with their pads bare and their "
+        "leads left open, silkscreened: written, not measured. "
         "The against-self results are printed: the same flags run 10.7× "
         "slower on benchAxpy/128, memory-bandwidth-bound, where threading "
         "never pays at any size measured, and 97.01% is a training-time "
