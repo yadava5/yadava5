@@ -551,4 +551,9 @@ if (fails.length) {
   for (const f of fails) console.log(`  · ${f}`);
   process.exit(1);
 }
-console.log(`\nCLAIMS GATE PASSED — ${derived} numbers re-derived from pinned commits; every number drawn is accounted for.`);
+// Two provenances, said apart. Reporting one total "re-derived from pinned
+// commits" was the same overstatement the colophon used to draw: the rows that
+// curl the LIVE deployment are not derived from frozen history, and they are
+// the ones that would catch a deployment drifting from its pin.
+const liveN = spec.claims.filter(c => "live" in c).length;
+console.log(`\nCLAIMS GATE PASSED — ${derived} numbers accounted for: ${derived - liveN} re-derived from pinned commits, ${liveN} checked against the live deployment.`);

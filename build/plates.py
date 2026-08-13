@@ -1584,7 +1584,16 @@ def plate_visualassist() -> str:
 # from the file that makes it true. No derivation date is printed: the
 # honest date lives in CI's own logs, and a baked one would be stale by
 # the first morning.
-CLAIMS_N = len(json.loads((ROOT / "claims.json").read_text())["claims"])
+_CLAIMS_ROWS = json.loads((ROOT / "claims.json").read_text())["claims"]
+CLAIMS_N = len(_CLAIMS_ROWS)
+# Two of the rows do not derive from a pinned commit at all: they curl the
+# LIVE deployment, which is the only way a claim about what is SERVED can be
+# true. Drawing one number over both provenances told the reader every figure
+# came from frozen history, and the two that matter most -- the bytes and the
+# sha256 of the wasm a visitor actually downloads -- did not. Both counts are
+# DERIVED here rather than typed, so adding a row moves the drawing.
+CLAIMS_LIVE = sum(1 for _c in _CLAIMS_ROWS if "live" in _c)
+CLAIMS_PINNED = CLAIMS_N - CLAIMS_LIVE
 
 
 def plate_colophon() -> str:
@@ -1596,7 +1605,8 @@ def plate_colophon() -> str:
         + f'<rect x="85" y="140" width="10" height="22" fill="{T["rust"]}"/>'
         + f'<rect x="112" y="140" width="10" height="22" fill="{T["zinc"]}"/>'
         + f'<path class="bus" stroke="{T["zinc"]}" d="M48,166 L56,166 M48,166 L44,160 M852,166 L844,166 M852,166 L856,160 M56,166 H844"/>'
-        + lbl(852, 120, f"{CLAIMS_N} CLAIMS · {CLAIMS_N} COMMANDS · RE-RUN IN CI FROM PINNED COMMITS",
+        + lbl(852, 120, f"{CLAIMS_N} CLAIMS · {CLAIMS_N} COMMANDS · RE-RUN IN CI · "
+                      f"{CLAIMS_PINNED} PINNED · {CLAIMS_LIVE} LIVE",
               cls="ts mid", size=10.5, anchor="end")
         + lbl(852, 140, "what is my word rather than a derivation says so where it stands",
               cls="dim", size=10, ls=0.2, anchor="end")
@@ -1606,7 +1616,8 @@ def plate_colophon() -> str:
         "colophon — the board's edge; every claim is a command",
         f"Colophon — the board's edge connector: the three buses land on "
         f"their pads and leave the page. {CLAIMS_N} claims, {CLAIMS_N} "
-        f"commands, re-run in CI from pinned commits; what is my word "
+        f"commands: {CLAIMS_PINNED} re-run in CI from pinned commits and "
+        f"{CLAIMS_LIVE} against the live deployment; what is my word "
         f"rather than a derivation says so where it stands.",
         key="plate-colophon.svg",
         col=(44, 886), frame=COLO_FRAME,
@@ -2171,7 +2182,7 @@ def m_colophon() -> str:
           f'M408,126 L400,126 M408,126 L412,120 M40,126 H400"/>'
         + lbl(404, 40, f"{CLAIMS_N} CLAIMS · {CLAIMS_N} COMMANDS",
               cls="ts mid", size=10.5, anchor="end")
-        + lbl(404, 58, "RE-RUN IN CI FROM PINNED COMMITS",
+        + lbl(404, 58, f"RE-RUN IN CI · {CLAIMS_PINNED} PINNED · {CLAIMS_LIVE} LIVE",
               cls="ts mid", size=10.5, anchor="end")
         + lbl(404, 78, "what is my word rather than a derivation",
               cls="dim", size=10, ls=0.2, anchor="end")
@@ -2183,8 +2194,9 @@ def m_colophon() -> str:
         "colophon — the board's edge, phone cut",
         f"Colophon, phone cut — the board's edge connector: the three buses "
         f"land on their pads and leave the page. {CLAIMS_N} claims, "
-        f"{CLAIMS_N} commands, re-run in CI from pinned commits; what is my "
-        f"word rather than a derivation says so where it stands.",
+        f"{CLAIMS_N} commands: {CLAIMS_PINNED} from pinned commits and "
+        f"{CLAIMS_LIVE} against the live deployment; what is my word "
+        f"rather than a derivation says so where it stands.",
         key="m-colophon.svg",
         col=(28, 414), frame=(0, 27, 22), w=440,
         faces="T6",

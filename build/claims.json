@@ -514,6 +514,10 @@
   "unpinnable": [],
   "external": [],
   "exempt": {
+    "plate-colophon.svg:27": "the colophon draws its own provenance split — the number of claim rows that derive from a pinned commit. NOT a measurement of any repository: it is DERIVED in plates.py from this file (CLAIMS_PINNED = CLAIMS_N - CLAIMS_LIVE), so adding a row moves the drawing and this reason with it. The page used to draw one number over both provenances and say all 29 re-run from pinned commits, which was false for the two live rows.",
+    "plate-colophon.svg:2": "the other half of that split — the claim rows checked against the LIVE deployment rather than a pinned commit (glyph.deployed_wasm_bytes and glyph.served_wasm_sha256). A claim about what is SERVED cannot be derived from frozen history, which is exactly why it must not be counted as if it were. Derived, not typed. File-scoped on purpose: a global exemption for 2 would wave through an unsourced 2 anywhere on the page.",
+    "m-colophon.svg:27": "see plate-colophon.svg:27 — the phone cut draws the same derived split, and exemptions are per file.",
+    "m-colophon.svg:2": "see plate-colophon.svg:2 — the phone cut draws the same derived split, and exemptions are per file.",
     "$comment": [
       "Numbers a plate draws that are not measurements of a repository — names,",
       "versions, viewBox geometry, and the glyphs of a hex constant. Each needs a",
