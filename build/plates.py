@@ -90,7 +90,14 @@ ALT: dict[str, str] = {}
 # (scratchpad/p1-palette.py, 2026-08-12): text >= 4.5:1, structure >= 3.0:1,
 # and the dark set re-checked on #010409 (dark-high-contrast), where light
 # ink only gains. ramp = comet colours head->tail; the tail is deliberately
-# near the track so the pulse decays into the line.
+# near the track so the pulse decays into the line — but each step must ALSO
+# clear its neighbour by >24 summed |dRGB|, motion.mjs's changed-pixel
+# threshold: a boundary under it does not exist to the gate or, by the
+# gate's proxy, to the eye. Light rust shipped flat (29/22/20 internal
+# edges, dE2000 3.8/3.0/2.9 — four short-rail plates read frozen) and was
+# widened 2026-08-13 to 44/38/36 (dE 5.5/5.0/4.8, zinc's band; every step
+# 9.0-14.0:1 on white), holding hue 13-15 deg with saturation rising to a
+# fully-saturated head, the same shape dark rust already has (0.73->1.00).
 TILE = "#0A0A0B"   # the product marks' own ground, from their repos
 DARK = dict(
     canvas="#212830", ink="#E4E9E9", mid="#C7D1D6", dim="#B0BAC0",
@@ -105,7 +112,7 @@ LIGHT = dict(
     verd="#1F6D5C", rust="#9A3412", zinc="#5F6E73",
     edge="#6E7A80", pulse="#1A2224",
     ramp=dict(verd=("#0C4A3C", "#14584A", "#1A6253"),
-              rust=("#6E2209", "#7F2A0D", "#8D2F10"),
+              rust=("#571300", "#6F1F08", "#852A0D"),
               zinc=("#39464B", "#48565B", "#535F64")),
 )
 T = DARK
@@ -617,18 +624,34 @@ def plate_hero() -> str:
 # ══════════════════════════════════════════════════ the link row
 #
 # Four ports on the bus, each its own SVG so each is its own link in the
-# README — the way out of "an SVG in an <img> cannot hold a link". EACH CHIP
-# IS AN OPAQUE MODULE, and that is forced by the medium, not chosen: GitHub's
-# markdown pipeline SPLITS a <picture> inside a link — the <source> stays in
-# the author's <a>, the <img> is extracted and auto-linked to the asset file
-# itself (probed against the real /markdown API, 2026-08-12). So a chip
-# cannot be both clickable and theme-switched. A component is a physical
-# object that does not recolour with the room: the chip is a near-black
-# module in the marks' own family language, self-grounded, ONE artwork
-# legible on every canvas, linked as [<img>](url) — the nesting that
-# survives. Everything inside grades against the module via check 10's local
-# grounds; only ink that rides the changing canvas (the module hairline, the
-# leads) uses tones measured on BOTH grounds.
+# README — the way out of "an SVG in an <img> cannot hold a link".
+#
+# THE PLATFORM RULE, corrected 2026-08-13. This block used to state, as a
+# measured law, that GitHub's pipeline splits a <picture> inside a link, "so
+# a chip cannot be both clickable and theme-switched". That is FALSE, and
+# the 2026-08-12 probe that produced it was measuring its own artifact: the
+# probe's <picture> spanned several source lines, and it is the NEWLINE the
+# pipeline splits raw inline HTML on, not the nesting. Re-probed against the
+# real /markdown API (2026-08-13):
+#
+#   · <a href><picture><source…><img…></picture></a> on ONE source line
+#     survives intact — clickable AND theme-switched. The interval strips
+#     below (`the intervals`) ship exactly this and are the live proof.
+#   · The same element spread across lines is re-parented per line, which is
+#     what the old probe saw and misread as a law about nesting.
+#   · An HTML block ends at a BLANK line; markdown after it renders with
+#     live links inside the still-open element. The interval stacks lean on
+#     the first half of that (no blank line inside a stack).
+#
+# The chips remain ONE dark artwork for now — a near-black module in the
+# marks' own family language, self-grounded, legible on every canvas, linked
+# as [<img>](url). That is a design choice a component can defend (a part
+# does not recolour with the room), no longer a medium's ultimatum, and the
+# connector-row change (real brand logos on the four ports; portfolio mark
+# in design) decides whether it stands. Everything inside grades against the
+# module via check 10's local grounds; only ink that rides the changing
+# canvas (the module hairline, the leads) uses tones measured on BOTH
+# grounds.
 #
 # HOW THE ROW SITS ON THE BOARD — re-authored 2026-08-13. The previous strip
 # ran three self-contained horizontal lanes edge-to-edge through the chips;
@@ -645,14 +668,19 @@ def plate_hero() -> str:
 #                                            linked images (measured on the
 #                                            live profile, 2026-08-12)
 #
-# CALIBRATION. Chips render at natural size; every 900-wide plate scales to
-# the profile column. Registration between a fixed-px image and a scaled one
-# is exact at ONE width, so the row is calibrated to the canonical 846px
-# column (900 × PAGE, the wide-desktop measurement; the demo renders at it).
-# At narrower columns the two seams drift by the scale difference — a small
-# jog, never a collision — and the 580.4px row still clears the 590px column
-# GitHub serves at 1024 viewports without wrapping. The row's left edge is
-# the portfolio module at x=45.5 ≈ the hero's content margin (48 × PAGE).
+# CALIBRATION — SUPERSEDED DOCTRINE, kept only while the chips do. Chips
+# render at natural size; every 900-wide plate scales to the profile column.
+# Registration between a fixed-px image and a scaled one is exact at ONE
+# width, so the row is calibrated to the canonical 846px column (900 × PAGE)
+# and drifts at every other width — a small jog, never a collision — and the
+# 580.4px row still clears the 590px column GitHub serves at 1024 viewports
+# without wrapping. The row's left edge is the portfolio module at x=45.5 ≈
+# the hero's content margin (48 × PAGE). The interval strips below do NOT
+# calibrate: they are percent-width slices of a 900u artwork, so every slice
+# scales by the same factor as the plates and the lanes register at EVERY
+# column width, by construction. The connector-row change is expected to
+# move the chips onto the same construction and retire PAGE and GAP with the
+# fixed-px row they describe.
 #
 # The LEAD tones are the buses' component-land register: one artwork means a
 # lead crosses both canvases, so each is measured on #ffffff / #212830 / the
@@ -1385,11 +1413,13 @@ def m_hero() -> str:
 #     at the phone column's ~0.89 these sit near desktop's own rendered
 #     sizes — larger, not smaller, than the desktop plate would give a
 #     phone reader.
-#   * the FOUR LINK CHIPS have no mobile twin BY DESIGN: a chip is a
-#     fixed-px component (natural size, no <picture> possible inside a
-#     link — see the link-row doctrine above), so at 440 the row wraps to
-#     two rows of ports and every chip keeps its size. m-link-return
-#     resumes the lanes below the wrapped row.
+#   * the FOUR LINK CHIPS have no mobile twin: a chip is a fixed-px
+#     component (natural size), so at 440 the row wraps to two rows of
+#     ports and every chip keeps its size. A <picture> inside the link IS
+#     possible on one source line (see the corrected link-row doctrine);
+#     serving mobile twins is the connector-row change's call, not a
+#     medium's refusal. m-link-return resumes the lanes below the wrapped
+#     row.
 def m_sec(h: int, C: tuple[float, float, float],
           tap: tuple[str, float] | None = None) -> str:
     """The three page buses crossing a mobile plate, plus the section's tap.
@@ -1881,6 +1911,403 @@ def m_colophon() -> str:
     ) + css_close() + body + "</svg>"
 
 
+# ══════════════════════════════════════ the intervals — the section service
+#
+# Every `---` rule the README carried cost ~104px of dead run and drew
+# Primer's grey — the one ink on the page from nobody's palette. The
+# interval is now drawn in the board's own grammar: each section's links
+# become TEST POINTS tapped off that section's own lane (the only way to
+# recolour a link GitHub gives this page is to draw it), the three buses
+# DIVE at via pads where they meet the prose band, and RESURFACE above the
+# next plate. Registration is by construction, not calibration: a strip is
+# ONE 900u artwork cut into slices on integer-percent boundaries, each slice
+# served at exactly that percent of the column, so every slice scales by the
+# same factor as the plates around it and the lanes land on the same x at
+# EVERY column width. (Contrast the chips' fixed-px row above, exact at 846
+# only — superseded doctrine, retired when the connector-row change lands.)
+#
+# Slices are STANDALONE plates, not viewBox windows of a shared file: every
+# published plate faces the whole gate (canvas, column, frame, faces,
+# motion), and a windowed cut would hold ink outside its own canvas. So
+# nothing but the rail may cross a cut, rail segments continue across slices
+# by phase arithmetic (a sub-path starting s units along the rail carries
+# C - s), and text never straddles a boundary. Short runs go dead under
+# motion.mjs's carrier floor with one comet train per PAT — the same reason
+# the chips carry four per PAT — so every rail and every dive/resurface lane
+# carries TWO, spaced PAT/2: train (84u) + shortest window (22u) exceeds the
+# 105u spacing, so the current never leaves the wire.
+SEC_H = 108                       # strip height, desktop
+M_SEC_H = 104                     # strip height, phone cut
+RAIL_Y, TP_Y = 36, 64             # the tap rail and the probe row
+M_RAIL_Y, M_TP_Y = 24, 48
+# slice widths as integer percents of the column; boundaries in board units.
+# s1 is wide because it carries the dive (vias + TO INNER LAYER) beside the
+# lanes; a strip needs only the slices its section has links for, and a row
+# that sums under 100% simply ends — a transparent plate over the canvas and
+# no plate at all render identically.
+SEC_CUTS = {1: 26, 2: 17, 3: 20, 4: 13, 5: 24}
+SEC_X0 = {1: 0, 2: 234, 3: 387, 4: 567, 5: 684}          # 900 × cut sums
+SEC_W = {k: SEC_CUTS[k] * 9 for k in SEC_CUTS}
+TP_X = {1: 290, 2: 441, 3: 621, 4: 720}                  # probe x, global
+M_SEC_X0 = {k: round(SEC_X0[k] * 440 / 900, 1) for k in SEC_X0}
+M_SEC_W = {k: round(SEC_W[k] * 440 / 900, 1) for k in SEC_W}
+M_TP_X = {1: 142, 2: 213, 3: 300, 4: 366}                # recomposed, not scaled
+# the tap phases: C at the rail's global start (the junction on the lane)
+FAM = {
+    "rust": dict(busC=(100, 40, 170), railC=20),
+    "zinc": dict(busC=(55, 150, 10), railC=65),
+    "verd": dict(busC=(180, 90, 130), railC=45),
+}
+
+
+def _via(key: str, x: float, y: float, r: float = 5.0) -> str:
+    """A via: annular ring, open barrel — the lane ends flush on the ring."""
+    return (f'<circle cx="{x}" cy="{y}" r="{r}" fill="none" '
+            f'stroke="{T[key]}" stroke-width="2"/>')
+
+
+def _tp(key: str, x: float, y: float, r: float = 5.5) -> str:
+    """A test point: ring plus solid probe land — distinct from a via on
+    purpose (a via has a drill; a probe pad is solid). One <g>: the land
+    sits inside its own ring by composition, not collision."""
+    return (f'<g><circle cx="{x}" cy="{y}" r="{r}" fill="none" '
+            f'stroke="{T[key]}" stroke-width="2"/>'
+            f'<circle cx="{x}" cy="{y}" r="2" fill="{T[key]}"/></g>')
+
+
+def _dot(key: str, x: float, y: float, r: float = 2.6) -> str:
+    """A junction dot: this tap is CONNECTED (the schematic convention)."""
+    return f'<circle cx="{x}" cy="{y}" r="{r}" fill="{T[key]}"/>'
+
+
+def _rail(key: str, d: str, C: float, cd: str) -> str:
+    """A rail segment: static track plus TWO comet trains per PAT."""
+    return (f'<g><path class="bus" stroke="{T[key]}" d="{d}"/>'
+            + comet(key, cd, C) + comet(key, cd, C - PAT / 2) + "</g>")
+
+
+def _dbus(key: str, d: str, C: float, cd: str) -> str:
+    """A dive/resurface lane: a run this short (~30u) needs both trains."""
+    return _rail(key, d, C, cd)
+
+
+def _tp_lbl(x: float, tp: str, label: str) -> str:
+    return (lbl(x + 14, 52, tp, size=8.5, ls=1.2)
+            + lbl(x + 14, 68, label, cls="ts", size=11.5, ls=1.3))
+
+
+def _m_tp_lbl(x: float, label: str) -> str:
+    return lbl(x, 66, label, cls="ts", size=10, ls=1, anchor="middle")
+
+
+def _s1(fam: str) -> str:
+    """Slice one: the three lanes dive at via pads, and the section's rail
+    taps off its own lane at a junction dot."""
+    bx, f = BUS_X[fam], FAM[fam]
+    w = SEC_W[1]
+    body = ""
+    for k, C in zip(("verd", "rust", "zinc"), f["busC"]):
+        x = BUS_X[k]
+        body += (bus(k, f"M{x},0 V91", C=C, cd=f"M{x},2.5 V88.5")
+                 + _via(k, x, 96))
+    body += lbl(134, 99.5, "TO INNER LAYER", size=9, ls=1.1)
+    body += _dot(fam, bx, RAIL_Y)
+    body += _rail(fam, f"M{bx},{RAIL_Y} H{w}", f["railC"],
+                  f"M{bx + 4},{RAIL_Y} H{w}")
+    return body
+
+
+def _mid(fam: str, n: int, tp: str, label: str) -> str:
+    """A pass-through slice: the rail crosses whole; a stub drops to the
+    probe at a junction dot."""
+    f = FAM[fam]
+    w, x = SEC_W[n], TP_X[n - 1] - SEC_X0[n]
+    C = f["railC"] - (SEC_X0[n] - BUS_X[fam])
+    return (_rail(fam, f"M0,{RAIL_Y} H{w}", C, f"M0,{RAIL_Y} H{w}")
+            + _dot(fam, x, RAIL_Y)
+            + f'<path class="bus" stroke="{T[fam]}" d="M{x},{RAIL_Y} V58"/>'
+            + _tp(fam, x, TP_Y) + _tp_lbl(x, tp, label))
+
+
+def _end(fam: str, n: int, tp: str, label: str) -> str:
+    """The rail's last slice: it turns down into the final probe."""
+    f = FAM[fam]
+    x = TP_X[n - 1] - SEC_X0[n]
+    C = f["railC"] - (SEC_X0[n] - BUS_X[fam])
+    return (_rail(fam, f"M0,{RAIL_Y} H{x} V58", C, f"M0,{RAIL_Y} H{x} V55.5")
+            + _tp(fam, x, TP_Y) + _tp_lbl(x, tp, label))
+
+
+def _m_s1(fam: str) -> str:
+    bx, f = MBUS_X[fam], FAM[fam]
+    w = M_SEC_W[1]
+    body = ""
+    for k, C in zip(("verd", "rust", "zinc"), (30, 140, 80)):
+        x = MBUS_X[k]
+        body += (bus(k, f"M{x},0 V78", C=C, cd=f"M{x},2.5 V75.5")
+                 + _via(k, x, 84, r=4))
+    body += lbl(28, 99, "TO INNER LAYER", size=8.5, ls=0.8)
+    body += _dot(fam, bx, M_RAIL_Y, r=2.4)
+    body += _rail(fam, f"M{bx},{M_RAIL_Y} H{w}", 55, f"M{bx + 4},{M_RAIL_Y} H{w}")
+    return body
+
+
+def _m_mid(fam: str, n: int, label: str) -> str:
+    w, x = M_SEC_W[n], M_TP_X[n - 1] - M_SEC_X0[n]
+    C = 55 - (M_SEC_X0[n] - MBUS_X[fam])
+    return (_rail(fam, f"M0,{M_RAIL_Y} H{w}", C, f"M0,{M_RAIL_Y} H{w}")
+            + _dot(fam, x, M_RAIL_Y, r=2.4)
+            + f'<path class="bus" stroke="{T[fam]}" d="M{x},{M_RAIL_Y} V43.5"/>'
+            + _tp(fam, x, M_TP_Y, r=4.5) + _m_tp_lbl(x, label))
+
+
+def _m_end(fam: str, n: int, label: str) -> str:
+    x = M_TP_X[n - 1] - M_SEC_X0[n]
+    C = 55 - (M_SEC_X0[n] - MBUS_X[fam])
+    return (_rail(fam, f"M0,{M_RAIL_Y} H{x} V43.5", C, f"M0,{M_RAIL_Y} H{x} V41")
+            + _tp(fam, x, M_TP_Y, r=4.5) + _m_tp_lbl(x, label))
+
+
+def _probe_head(h: int, w: float, title: str, desc: str, key: str,
+                frame) -> str:
+    return head(h, title, desc, key=key, col=(0, w), frame=frame,
+                faces="6", w=w)
+
+
+# the VisualAssist strip: one fitted probe (the repo) and, in section I's
+# idiom, the footprint the board expects and does not have — drawn dashed,
+# its lead left open. The current still runs to the open end and dies there
+# every loop, which is the drawing doing the section's arguing (plate I).
+def _va_s2() -> str:
+    x = TP_X[1] - SEC_X0[2]                              # 56
+    C = FAM["rust"]["railC"] - (SEC_X0[2] - BUS_X["rust"])
+    return (_rail("rust", f"M0,{RAIL_Y} H{x} V58", C, f"M0,{RAIL_Y} H{x} V55.5")
+            + _dot("rust", x, RAIL_Y)
+            + _rail("rust", f"M{x},{RAIL_Y} H{SEC_W[2]}", 115,
+                    f"M{x},{RAIL_Y} H{SEC_W[2]}")
+            + _tp("rust", x, TP_Y) + _tp_lbl(x, "TP1", "REPO"))
+
+
+def _va_s3() -> str:
+    w = SEC_W[3]
+    x = TP_X[2] - SEC_X0[3]                              # 54
+    return (_rail("rust", f"M0,{RAIL_Y} H42", 115 - (SEC_W[2] - 56),
+                  f"M0,{RAIL_Y} H39")
+            + f'<g><circle cx="{x}" cy="{TP_Y}" r="5.5" fill="none" '
+            f'stroke="{T["rust"]}" stroke-width="2" stroke-dasharray="5 4"/></g>'
+            + lbl(x + 14, 52, "TP2", size=8.5, ls=1.2)
+            + lbl(x + 14, 68, "NOT FITTED", size=11.5, ls=1.3))
+
+
+def _m_va_s2() -> str:
+    x = M_TP_X[1] - M_SEC_X0[2]                          # 27.6
+    C = 55 - (M_SEC_X0[2] - MBUS_X["rust"])
+    return (_rail("rust", f"M0,{M_RAIL_Y} H{x} V43.5", C,
+                  f"M0,{M_RAIL_Y} H{x} V41")
+            + _dot("rust", x, M_RAIL_Y, r=2.4)
+            + _rail("rust", f"M{x},{M_RAIL_Y} H{M_SEC_W[2]}", 115,
+                    f"M{x},{M_RAIL_Y} H{M_SEC_W[2]}")
+            + _tp("rust", x, M_TP_Y, r=4.5) + _m_tp_lbl(x, "REPO"))
+
+
+def _m_va_s3() -> str:
+    x = 233 - M_SEC_X0[3]                                # 43.8
+    return (_rail("rust", f"M0,{M_RAIL_Y} H30", 115 - (M_SEC_W[2] - 27.6),
+                  f"M0,{M_RAIL_Y} H27")
+            + f'<g><circle cx="{x}" cy="{M_TP_Y}" r="4.5" fill="none" '
+            f'stroke="{T["rust"]}" stroke-width="2" stroke-dasharray="5 4"/></g>'
+            + lbl(x, 66, "NOT FITTED", size=10, ls=1, anchor="middle"))
+
+
+# ── the dive and the resurface, full-width. The dive also carries the
+# page's one legend for the whole idiom, beside the return plate's own
+# wayfinding line: the reader meets both at the threshold of the evidence.
+DIVE_H, M_DIVE_H = 44, 36
+
+
+def plate_dive() -> str:
+    body = ""
+    for k, C in (("verd", 10), ("rust", 120), ("zinc", 60)):
+        x = BUS_X[k]
+        body += (_dbus(k, f"M{x},0 V29", C, f"M{x},2.5 V26.5")
+                 + _via(k, x, 34))
+    body += (lbl(134, 37.5, "TO INNER LAYER", size=9, ls=1.1)
+             + lbl(886, 37.5, "TEST POINTS — PROBE THE CLAIM", size=10,
+                   anchor="end"))
+    return head(
+        DIVE_H,
+        "the buses dive beneath the prose",
+        "The three page buses dive to an inner layer at via pads and run "
+        "beneath the prose; the silkscreen legend says what the drawn links "
+        "are: test points — probe the claim.",
+        key="plate-dive.svg", col=(44, 886), frame=DIVE_FRAME, faces="6",
+    ) + css_close() + body + "</svg>"
+
+
+def m_dive() -> str:
+    body = ""
+    for k, C in (("verd", 10), ("rust", 120), ("zinc", 60)):
+        x = MBUS_X[k]
+        body += (_dbus(k, f"M{x},0 V23", C, f"M{x},2.5 V20.5")
+                 + _via(k, x, 27, r=4))
+    body += (lbl(82, 30.5, "TO INNER LAYER", size=8.5, ls=0.8)
+             + lbl(404, 30.5, "TEST POINTS — PROBE THE CLAIM", size=8.5,
+                   ls=0.8, anchor="end"))
+    return head(
+        M_DIVE_H,
+        "the buses dive beneath the prose, phone cut",
+        "The three page buses dive to an inner layer at via pads and run "
+        "beneath the prose; the silkscreen legend says what the drawn links "
+        "are: test points — probe the claim.",
+        key="m-dive.svg", col=(28, 414), frame=M_DIVE_FRAME, faces="6", w=440,
+    ) + css_close() + body + "</svg>"
+
+
+def plate_resurface() -> str:
+    body = ""
+    for k, C in (("verd", 150), ("rust", 30), ("zinc", 100)):
+        x = BUS_X[k]
+        body += (_via(k, x, 9)
+                 + _dbus(k, f"M{x},14 V44", C, f"M{x},16.5 V41.5"))
+    body += lbl(134, 12.5, "FROM INNER LAYER", size=9, ls=1.1)
+    return head(
+        DIVE_H,
+        "the buses resurface",
+        "The three buses resurface from the inner layer at their via pads "
+        "and enter the next plate.",
+        key="plate-resurface.svg", col=(44, 886), frame=RESURF_FRAME,
+        faces="6",
+    ) + css_close() + body + "</svg>"
+
+
+def m_resurface() -> str:
+    body = ""
+    for k, C in (("verd", 150), ("rust", 30), ("zinc", 100)):
+        x = MBUS_X[k]
+        body += (_via(k, x, 8, r=4)
+                 + _dbus(k, f"M{x},12 V36", C, f"M{x},14.5 V33.5"))
+    body += lbl(82, 11.5, "FROM INNER LAYER", size=8.5, ls=0.8)
+    return head(
+        M_DIVE_H,
+        "the buses resurface, phone cut",
+        "The three buses resurface from the inner layer at their via pads "
+        "and enter the next plate.",
+        key="m-resurface.svg", col=(28, 414), frame=M_RESURF_FRAME,
+        faces="6", w=440,
+    ) + css_close() + body + "</svg>"
+
+
+# ── descriptions, authored once; the same words serve both cuts.
+_D_S1 = ("The three page buses dive to an inner layer at via pads beneath "
+         "the prose, and the section's test-point rail taps off the %s lane.")
+_D_S2 = "Test point one — probe the section live, in the browser."
+_D_S3 = ("Test point two — the system card, a print-format walkthrough of "
+         "the architecture and the evidence.")
+_D_S4 = "Test point three — the source repository."
+_D_C5 = ("Test point four — the row-level-security isolation suite, run "
+         "against real Postgres.")
+_D_A5 = "Test point four — the in-browser demo of the mail classifier."
+_D_V2 = "Test point one — the source repository, the one probe this section has."
+_D_V3 = ("The next test point is an unpopulated footprint, drawn dashed with "
+         "its lead open — there is no live deployment to probe; VisualAssist "
+         "needs an iPhone with LiDAR in your hand.")
+_LANE = {"rust": "rust", "zinc": "zinc", "verd": "verdigris"}
+
+
+def _probe(fn: str, h: int, w: float, title: str, desc: str, body_fn):
+    def gen():
+        # THE BODY RUNS FIRST, and that is the whole of this function.
+        # css_close() DRAINS the shared `_CSS` accumulator, so a plate's
+        # keyframes reach its own file only if the calls that append to _CSS
+        # have already happened. `head + css_close() + body_fn()` reads left
+        # to right in Python exactly as it does in the output, and the output
+        # order is the reverse of the evaluation order this needs: every one
+        # of these 64 slices shipped the PREVIOUSLY emitted slice's keyframes
+        # and 516 class references to keyframes that were in another file.
+        # Every other generator in this file already binds `body` to a local
+        # on the line above its `return`; this one inlined the call and lost
+        # the ordering with it. Keep the binding.
+        body = body_fn()
+        return (_probe_head(h, w, title, desc, fn, PROBE_FRAME.get(fn))
+                + css_close() + body + "</svg>")
+    return gen
+
+
+INTERVAL_PLATES: dict = {}
+INTERVAL_MOBILE: dict = {}
+for _f in ("rust", "zinc", "verd"):
+    _fam = _f
+    INTERVAL_PLATES[f"plate-probe-{_f}-s1.svg"] = _probe(
+        f"plate-probe-{_f}-s1.svg", SEC_H, SEC_W[1],
+        "the buses dive; the section rail taps off its lane",
+        _D_S1 % _LANE[_f], (lambda ff: lambda: _s1(ff))(_fam))
+    INTERVAL_MOBILE[f"m-probe-{_f}-s1.svg"] = _probe(
+        f"m-probe-{_f}-s1.svg", M_SEC_H, M_SEC_W[1],
+        "the buses dive; the section rail taps off its lane, phone cut",
+        _D_S1 % _LANE[_f], (lambda ff: lambda: _m_s1(ff))(_fam))
+    INTERVAL_PLATES[f"plate-probe-{_f}-s2.svg"] = _probe(
+        f"plate-probe-{_f}-s2.svg", SEC_H, SEC_W[2],
+        "test point one — live", _D_S2,
+        (lambda ff: lambda: _mid(ff, 2, "TP1", "LIVE"))(_fam))
+    INTERVAL_MOBILE[f"m-probe-{_f}-s2.svg"] = _probe(
+        f"m-probe-{_f}-s2.svg", M_SEC_H, M_SEC_W[2],
+        "test point one — live, phone cut", _D_S2,
+        (lambda ff: lambda: _m_mid(ff, 2, "LIVE"))(_fam))
+    INTERVAL_PLATES[f"plate-probe-{_f}-s3.svg"] = _probe(
+        f"plate-probe-{_f}-s3.svg", SEC_H, SEC_W[3],
+        "test point two — the system card", _D_S3,
+        (lambda ff: lambda: _mid(ff, 3, "TP2", "SYSTEM CARD"))(_fam))
+    INTERVAL_MOBILE[f"m-probe-{_f}-s3.svg"] = _probe(
+        f"m-probe-{_f}-s3.svg", M_SEC_H, M_SEC_W[3],
+        "test point two — the system card, phone cut", _D_S3,
+        (lambda ff: lambda: _m_mid(ff, 3, "CARD"))(_fam))
+for _f in ("rust", "zinc"):
+    _fam = _f
+    INTERVAL_PLATES[f"plate-probe-{_f}-s4.svg"] = _probe(
+        f"plate-probe-{_f}-s4.svg", SEC_H, SEC_W[4],
+        "test point three — the repository", _D_S4,
+        (lambda ff: lambda: _end(ff, 4, "TP3", "REPO"))(_fam))
+    INTERVAL_MOBILE[f"m-probe-{_f}-s4.svg"] = _probe(
+        f"m-probe-{_f}-s4.svg", M_SEC_H, M_SEC_W[4],
+        "test point three — the repository, phone cut", _D_S4,
+        (lambda ff: lambda: _m_end(ff, 4, "REPO"))(_fam))
+INTERVAL_PLATES["plate-probe-verd-s4.svg"] = _probe(
+    "plate-probe-verd-s4.svg", SEC_H, SEC_W[4],
+    "test point three — the repository", _D_S4,
+    lambda: _mid("verd", 4, "TP3", "REPO"))
+INTERVAL_MOBILE["m-probe-verd-s4.svg"] = _probe(
+    "m-probe-verd-s4.svg", M_SEC_H, M_SEC_W[4],
+    "test point three — the repository, phone cut", _D_S4,
+    lambda: _m_mid("verd", 4, "REPO"))
+INTERVAL_PLATES["plate-probe-cadence-s5.svg"] = _probe(
+    "plate-probe-cadence-s5.svg", SEC_H, SEC_W[5],
+    "test point four — the isolation suite", _D_C5,
+    lambda: _end("verd", 5, "TP4", "THE ISOLATION SUITE"))
+INTERVAL_MOBILE["m-probe-cadence-s5.svg"] = _probe(
+    "m-probe-cadence-s5.svg", M_SEC_H, M_SEC_W[5],
+    "test point four — the isolation suite, phone cut", _D_C5,
+    lambda: _m_end("verd", 5, "RLS SUITE"))
+INTERVAL_PLATES["plate-probe-applied-s5.svg"] = _probe(
+    "plate-probe-applied-s5.svg", SEC_H, SEC_W[5],
+    "test point four — the in-browser demo", _D_A5,
+    lambda: _end("verd", 5, "TP4", "IN-BROWSER DEMO"))
+INTERVAL_MOBILE["m-probe-applied-s5.svg"] = _probe(
+    "m-probe-applied-s5.svg", M_SEC_H, M_SEC_W[5],
+    "test point four — the in-browser demo, phone cut", _D_A5,
+    lambda: _m_end("verd", 5, "DEMO"))
+INTERVAL_PLATES["plate-probe-va-s2.svg"] = _probe(
+    "plate-probe-va-s2.svg", SEC_H, SEC_W[2],
+    "test point one — the repository", _D_V2, _va_s2)
+INTERVAL_MOBILE["m-probe-va-s2.svg"] = _probe(
+    "m-probe-va-s2.svg", M_SEC_H, M_SEC_W[2],
+    "test point one — the repository, phone cut", _D_V2, _m_va_s2)
+INTERVAL_PLATES["plate-probe-va-s3.svg"] = _probe(
+    "plate-probe-va-s3.svg", SEC_H, SEC_W[3],
+    "the footprint the board expects, not fitted", _D_V3, _va_s3)
+INTERVAL_MOBILE["m-probe-va-s3.svg"] = _probe(
+    "m-probe-va-s3.svg", M_SEC_H, M_SEC_W[3],
+    "the footprint the board expects, not fitted, phone cut", _D_V3, _m_va_s3)
+
 # ── declared frames (top, rightGap, bottomGap), baked from gate.mjs
 # measurement on this machine; tolerance 4 absorbs the CI ascent skew.
 HERO_FRAME = (30, 37.7, 0)
@@ -1908,6 +2335,50 @@ RET_FRAME = (0, 47.2, 0)
 CHIP_FRAME = {
     "portfolio": (20, 0.5, 4), "resume": (20, 0.5, 4),
     "linkedin": (20, 0.5, 4), "email": (20, 0.5, 4),
+}
+# the interval plates' frames, same provenance (gate.mjs measurement,
+# 2026-08-13; dark and light measured identical). While a plate is being
+# authored its entry may be absent: check 12 then fails it and prints the
+# measured values, which is the sanctioned one-round-trip workflow. The
+# resurface's huge rightGap is honest — its rightmost ink is the FROM INNER
+# LAYER silkscreen; everything right of it is deliberately bare board.
+DIVE_FRAME = (0, 14.8, 4.5)
+M_DIVE_FRAME = (0, 36.6, 3.5)
+RESURF_FRAME = (3.5, 662.1, 0)
+M_RESURF_FRAME = (2.5, 263.7, 0)
+PROBE_FRAME: dict[str, tuple[float, float, float]] = {
+    "plate-probe-rust-s1.svg": (0, 0, 6.5),
+    "plate-probe-zinc-s1.svg": (0, 0, 6.5),
+    "plate-probe-verd-s1.svg": (0, 0, 6.5),
+    "plate-probe-rust-s2.svg": (33.4, 0, 38),
+    "plate-probe-zinc-s2.svg": (33.4, 0, 38),
+    "plate-probe-verd-s2.svg": (33.4, 0, 38),
+    "plate-probe-rust-s3.svg": (33.4, 0, 38),
+    "plate-probe-zinc-s3.svg": (33.4, 0, 38),
+    "plate-probe-verd-s3.svg": (33.4, 0, 38),
+    "plate-probe-rust-s4.svg": (36, 12.4, 38),
+    "plate-probe-zinc-s4.svg": (36, 12.4, 38),
+    "plate-probe-verd-s4.svg": (33.4, 0, 38),
+    "plate-probe-cadence-s5.svg": (36, 19, 38),
+    "plate-probe-applied-s5.svg": (36, 34.5, 38),
+    "plate-probe-va-s2.svg": (33.4, 0, 38),
+    "plate-probe-va-s3.svg": (36, 31.7, 38),
+    "m-probe-rust-s1.svg": (0, 0, 3),
+    "m-probe-zinc-s1.svg": (0, 0, 3),
+    "m-probe-verd-s1.svg": (0, 0, 3),
+    "m-probe-rust-s2.svg": (21.6, 0, 36),
+    "m-probe-zinc-s2.svg": (21.6, 0, 36),
+    "m-probe-verd-s2.svg": (21.6, 0, 36),
+    "m-probe-rust-s3.svg": (21.6, 0, 36),
+    "m-probe-zinc-s3.svg": (21.6, 0, 36),
+    "m-probe-verd-s3.svg": (21.6, 0, 36),
+    "m-probe-rust-s4.svg": (24, 18.8, 36),
+    "m-probe-zinc-s4.svg": (24, 18.8, 36),
+    "m-probe-verd-s4.svg": (21.6, 0, 36),
+    "m-probe-cadence-s5.svg": (24, 45.1, 36),
+    "m-probe-applied-s5.svg": (24, 56.7, 36),
+    "m-probe-va-s2.svg": (21.6, 0, 36),
+    "m-probe-va-s3.svg": (24, 10.1, 36),
 }
 
 PLATES = {
@@ -1937,6 +2408,17 @@ MOBILE = {
     "m-7-visualassist.svg": m_visualassist,
     "m-link-return.svg": m_link_return,
     "m-colophon.svg": m_colophon,
+}
+# The interval set is generated AFTER the whole existing document, keyframe
+# counter included: inserting it mid-sequence would rename every k-class in
+# every file downstream of the insertion and rewrite 40 unchanged artworks.
+INTERVALS = {
+    "plate-dive.svg": plate_dive,
+    "plate-resurface.svg": plate_resurface,
+    **INTERVAL_PLATES,
+    "m-dive.svg": m_dive,
+    "m-resurface.svg": m_resurface,
+    **INTERVAL_MOBILE,
 }
 
 _re = re
@@ -1977,6 +2459,66 @@ def _check_coverage(fn: str, svg: str) -> None:
                                  f"(charsets.py + build/subset-fonts.py)")
 
 
+def _check_css_refs(fn: str, svg: str) -> None:
+    """A plate must be closed over its own stylesheet, in BOTH directions.
+
+    `_CSS` is a shared mutable accumulator drained by css_close(), and the
+    only thing keeping a plate's keyframes in the plate's own file is that
+    every generator computes its BODY before it calls css_close(). One
+    generator did not (`_probe`, whose `head + css_close() + body_fn()` reads
+    left to right and so drained the accumulator before the body had filled
+    it), and 64 of 120 published plates shipped with 516 class references to
+    keyframes that had gone into the PREVIOUS file — every animation on every
+    interval slice dead, and the whole set green. Nothing downstream saw it:
+    a dangling class is not a parse error, not a collision, and not a missing
+    face, and gate.mjs's dead-animation check was guarded on a duration that
+    is zero for exactly this defect.
+
+    So it is asserted here, at the point of emission, over the FILE:
+
+      · every class an element carries must be selected by some rule in this
+        plate's own stylesheet — a reference that resolves to nothing;
+      · every keyframes block must be named by some rule, and every rule that
+        names one must exist — an animation with no motion behind it;
+      · every rule that DECLARES an animation must be carried by an element —
+        the same leak seen from the other side, where the residue lands in
+        the next file and ships base64 keyframes to a reader that animate
+        nothing (assets/light/plate-0-hero.svg carried six of these).
+
+    Shape, not literal: nothing here knows that the generated names look like
+    `k463`, so a redesign is free to rename or renumber them. Both themes are
+    checked — half the broken files were the light twins, and the coverage
+    check above is theme-guarded only because TEXT is theme-invariant.
+    """
+    _style = "".join(_re.findall(r'<style>(.*?)</style>', svg, _re.S))
+    # the embedded faces are the biggest thing in the file and the only place
+    # a punctuation-heavy blob could impersonate a selector
+    _style = _re.sub(r'base64,[A-Za-z0-9+/=]+', 'base64,', _style)
+    body = _re.sub(r'<style>.*?</style>', '', svg, flags=_re.S)
+    used = {t for m in _re.findall(r'class="([^"]*)"', body) for t in m.split()}
+    # a class token in selector position: `.name` where name starts a word
+    defined = set(_re.findall(r'\.([A-Za-z_][\w-]*)', _style))
+    kfs = set(_re.findall(r'@keyframes ([\w-]+)', _style))
+    named = {n for n in _re.findall(r'animation(?:-name)?:\s*([\w-]+)', _style)
+             if n != "none"}
+    # the classes whose rule declares an animation
+    animated = {m for m in _re.findall(r'\.([A-Za-z_][\w-]*)\{[^}]*animation:', _style)}
+    for c in sorted(used - defined):
+        _fail.append(f"{fn}: an element carries class {c!r}, which no rule in this "
+                     f"plate's own <style> defines — the reference resolves to "
+                     f"nothing and whatever it was meant to do does not happen")
+    for k in sorted(kfs - named):
+        _fail.append(f"{fn}: defines @keyframes {k!r} that no rule names — "
+                     f"dead payload on every reader's compositor")
+    for n in sorted(named - kfs):
+        _fail.append(f"{fn}: a rule declares animation {n!r} with no @keyframes "
+                     f"{n!r} on this plate — the animation never runs")
+    for c in sorted(animated - used):
+        _fail.append(f"{fn}: rule .{c} declares an animation and no element on this "
+                     f"plate carries that class — keyframes shipped to every "
+                     f"reader that animate nothing")
+
+
 # One build, two documents. Dark keeps every path it has always had; light
 # lands in assets/light/ under the SAME basenames (gate.mjs keys on that).
 for _theme in ("dark", "light"):
@@ -1986,10 +2528,10 @@ for _theme in ("dark", "light"):
     # a plate this build no longer authors must not survive on disk: the
     # gates sweep the DIRECTORY, so a stale file is a stale claim surface
     for _stale in _out.glob("*.svg"):
-        if _stale.name not in PLATES and _stale.name not in MOBILE:
+        if not (_stale.name in PLATES or _stale.name in MOBILE or _stale.name in INTERVALS):
             _stale.unlink()
             print(f"{_theme:5s} {_stale.name}: removed (no longer authored)")
-    for _fn, _gen in (PLATES | MOBILE).items():
+    for _fn, _gen in (PLATES | MOBILE | INTERVALS).items():
         _path = _out / _fn
         _path.write_text(_gen())
         try:
@@ -1998,6 +2540,9 @@ for _theme in ("dark", "light"):
             _fail.append(f"{_theme}/{_fn}: MALFORMED XML — {e}")
         if _theme == "dark":                    # text is theme-invariant
             _check_coverage(_fn, _path.read_text())
+        # NOT theme-guarded: the stylesheet is generated per theme and half
+        # the dangling-class files were the light twins.
+        _check_css_refs(f"{_theme}/{_fn}", _path.read_text())
         print(f"{_theme:5s} {_fn}: {_path.stat().st_size:,} bytes")
 set_theme("dark")
 
@@ -2037,15 +2582,18 @@ else:
     # authored renders as a torn icon on the page itself. The trailing
     # lookahead is load-bearing: without it a typo'd reference matches
     # through `.svg` and reads as present.
-    _want = {f"./assets/{_d}{_f}" for _f in set(PLATES) | set(MOBILE)
+    _want = {f"./assets/{_d}{_f}" for _f in set(PLATES) | set(MOBILE) | set(INTERVALS)
              for _d in ("", "light/")}
-    # The four chips are ONE dark artwork in the README — GitHub's markdown
-    # pipeline splits a <picture> inside a link (see the link-row doctrine),
-    # so no theme switch is possible there and README rightly never serves
-    # their light/ files. Those twins are still authored on purpose: gate.mjs
-    # refuses a set with a missing twin, and the light file (same art,
-    # data-canvas #ffffff) is exactly how the one artwork gets MEASURED on
-    # the light canvas. A harness, not a served asset.
+    # The four chips are ONE dark artwork in the README. A theme switch IS
+    # possible — a one-line <a><picture>…</picture></a> survives the pipeline
+    # whole (see the link-row doctrine: the splitter is the newline, not the
+    # nesting) — but the chips have not migrated yet: that lands with the
+    # connector-row change, which redraws the ports around real brand logos.
+    # Until then README serves only their dark files, on purpose. The light
+    # twins are still authored: gate.mjs refuses a set with a missing twin,
+    # and the light file (same art, data-canvas #ffffff) is exactly how the
+    # one artwork gets MEASURED on the light canvas. A harness, not a served
+    # asset.
     _want -= {f"./assets/light/plate-link-{_k}.svg" for _k in CHIPS}
     _have = set(_re.findall(r'\./assets/(?:light/)?[\w.-]+\.svg(?![\w.-])', _md))
     for _p in sorted(_want - _have):

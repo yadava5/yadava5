@@ -10,29 +10,29 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#E4E9E9}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#1A2224;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k463{to{stroke-dashoffset:-333.0}}
-.k463{animation:k463 2450ms linear infinite}
-@keyframes k464{to{stroke-dashoffset:-319.0}}
-.k464{animation:k464 2450ms linear infinite}
-@keyframes k465{to{stroke-dashoffset:-308.0}}
-.k465{animation:k465 2450ms linear infinite}
-@keyframes k466{to{stroke-dashoffset:-385.5}}
-.k466{animation:k466 2450ms linear infinite}
-@keyframes k467{to{stroke-dashoffset:-371.5}}
-.k467{animation:k467 2450ms linear infinite}
-@keyframes k468{to{stroke-dashoffset:-360.5}}
-.k468{animation:k468 2450ms linear infinite}
-@keyframes k469{to{stroke-dashoffset:-438.0}}
-.k469{animation:k469 2450ms linear infinite}
-@keyframes k470{to{stroke-dashoffset:-424.0}}
-.k470{animation:k470 2450ms linear infinite}
-@keyframes k471{to{stroke-dashoffset:-413.0}}
-.k471{animation:k471 2450ms linear infinite}
-@keyframes k472{to{stroke-dashoffset:-490.5}}
-.k472{animation:k472 2450ms linear infinite}
-@keyframes k473{to{stroke-dashoffset:-476.5}}
-.k473{animation:k473 2450ms linear infinite}
-@keyframes k474{to{stroke-dashoffset:-465.5}}
-.k474{animation:k474 2450ms linear infinite}
+@keyframes k793{to{stroke-dashoffset:-333.0}}
+.k793{animation:k793 2450ms linear infinite}
+@keyframes k794{to{stroke-dashoffset:-319.0}}
+.k794{animation:k794 2450ms linear infinite}
+@keyframes k795{to{stroke-dashoffset:-308.0}}
+.k795{animation:k795 2450ms linear infinite}
+@keyframes k796{to{stroke-dashoffset:-385.5}}
+.k796{animation:k796 2450ms linear infinite}
+@keyframes k797{to{stroke-dashoffset:-371.5}}
+.k797{animation:k797 2450ms linear infinite}
+@keyframes k798{to{stroke-dashoffset:-360.5}}
+.k798{animation:k798 2450ms linear infinite}
+@keyframes k799{to{stroke-dashoffset:-438.0}}
+.k799{animation:k799 2450ms linear infinite}
+@keyframes k800{to{stroke-dashoffset:-424.0}}
+.k800{animation:k800 2450ms linear infinite}
+@keyframes k801{to{stroke-dashoffset:-413.0}}
+.k801{animation:k801 2450ms linear infinite}
+@keyframes k802{to{stroke-dashoffset:-490.5}}
+.k802{animation:k802 2450ms linear infinite}
+@keyframes k803{to{stroke-dashoffset:-476.5}}
+.k803{animation:k803 2450ms linear infinite}
+@keyframes k804{to{stroke-dashoffset:-465.5}}
+.k804{animation:k804 2450ms linear infinite}
 </style>
-<path class="bus" stroke="#C1663A" d="M24,0 V88"/><g><rect x="0.5" y="20" width="107" height="64" rx="3" fill="#0A0A0B" stroke="#79848C" stroke-width="1"/><rect x="21.5" y="20.5" width="5" height="4" fill="#E0703A"/><rect x="21.5" y="79.5" width="5" height="4" fill="#E0703A"/><path class="bus" stroke="#C1663A" d="M24,20 V26 M24,54 V84"/><rect x="10" y="26" width="28" height="28" rx="8" fill="#0A0A0B" stroke="#6B6B76" stroke-width="1.2"/><rect transform="translate(0,16)" x="18" y="16" width="12" height="16" rx="2" fill="none" stroke="#F7F8F8" stroke-width="1.7"/><path transform="translate(0,16)" d="M21,21.5 H27 M21,25 H27 M21,28.5 H25" fill="none" stroke="#F7F8F8" stroke-width="1.5" stroke-linecap="round"/><text x="46" y="44.5" class="ts" font-size="11.5" letter-spacing="1.3">RÉSUMÉ</text></g><path class="cm k463" stroke="#FFB287" stroke-dasharray="17 193" stroke-dashoffset="-123.0" d="M24,58 V80"/><path class="cm k464" stroke="#F29260" stroke-dasharray="14 196" stroke-dashoffset="-109.0" d="M24,58 V80"/><path class="cm k465" stroke="#E87E49" stroke-dasharray="11 199" stroke-dashoffset="-98.0" d="M24,58 V80"/><path class="cm k466" stroke="#FFB287" stroke-dasharray="17 193" stroke-dashoffset="-175.5" d="M24,58 V80"/><path class="cm k467" stroke="#F29260" stroke-dasharray="14 196" stroke-dashoffset="-161.5" d="M24,58 V80"/><path class="cm k468" stroke="#E87E49" stroke-dasharray="11 199" stroke-dashoffset="-150.5" d="M24,58 V80"/><path class="cm k469" stroke="#FFB287" stroke-dasharray="17 193" stroke-dashoffset="-228.0" d="M24,58 V80"/><path class="cm k470" stroke="#F29260" stroke-dasharray="14 196" stroke-dashoffset="-214.0" d="M24,58 V80"/><path class="cm k471" stroke="#E87E49" stroke-dasharray="11 199" stroke-dashoffset="-203.0" d="M24,58 V80"/><path class="cm k472" stroke="#FFB287" stroke-dasharray="17 193" stroke-dashoffset="-280.5" d="M24,58 V80"/><path class="cm k473" stroke="#F29260" stroke-dasharray="14 196" stroke-dashoffset="-266.5" d="M24,58 V80"/><path class="cm k474" stroke="#E87E49" stroke-dasharray="11 199" stroke-dashoffset="-255.5" d="M24,58 V80"/></svg>
+<path class="bus" stroke="#C1663A" d="M24,0 V88"/><g><rect x="0.5" y="20" width="107" height="64" rx="3" fill="#0A0A0B" stroke="#79848C" stroke-width="1"/><rect x="21.5" y="20.5" width="5" height="4" fill="#E0703A"/><rect x="21.5" y="79.5" width="5" height="4" fill="#E0703A"/><path class="bus" stroke="#C1663A" d="M24,20 V26 M24,54 V84"/><rect x="10" y="26" width="28" height="28" rx="8" fill="#0A0A0B" stroke="#6B6B76" stroke-width="1.2"/><rect transform="translate(0,16)" x="18" y="16" width="12" height="16" rx="2" fill="none" stroke="#F7F8F8" stroke-width="1.7"/><path transform="translate(0,16)" d="M21,21.5 H27 M21,25 H27 M21,28.5 H25" fill="none" stroke="#F7F8F8" stroke-width="1.5" stroke-linecap="round"/><text x="46" y="44.5" class="ts" font-size="11.5" letter-spacing="1.3">RÉSUMÉ</text></g><path class="cm k793" stroke="#FFB287" stroke-dasharray="17 193" stroke-dashoffset="-123.0" d="M24,58 V80"/><path class="cm k794" stroke="#F29260" stroke-dasharray="14 196" stroke-dashoffset="-109.0" d="M24,58 V80"/><path class="cm k795" stroke="#E87E49" stroke-dasharray="11 199" stroke-dashoffset="-98.0" d="M24,58 V80"/><path class="cm k796" stroke="#FFB287" stroke-dasharray="17 193" stroke-dashoffset="-175.5" d="M24,58 V80"/><path class="cm k797" stroke="#F29260" stroke-dasharray="14 196" stroke-dashoffset="-161.5" d="M24,58 V80"/><path class="cm k798" stroke="#E87E49" stroke-dasharray="11 199" stroke-dashoffset="-150.5" d="M24,58 V80"/><path class="cm k799" stroke="#FFB287" stroke-dasharray="17 193" stroke-dashoffset="-228.0" d="M24,58 V80"/><path class="cm k800" stroke="#F29260" stroke-dasharray="14 196" stroke-dashoffset="-214.0" d="M24,58 V80"/><path class="cm k801" stroke="#E87E49" stroke-dasharray="11 199" stroke-dashoffset="-203.0" d="M24,58 V80"/><path class="cm k802" stroke="#FFB287" stroke-dasharray="17 193" stroke-dashoffset="-280.5" d="M24,58 V80"/><path class="cm k803" stroke="#F29260" stroke-dasharray="14 196" stroke-dashoffset="-266.5" d="M24,58 V80"/><path class="cm k804" stroke="#E87E49" stroke-dasharray="11 199" stroke-dashoffset="-255.5" d="M24,58 V80"/></svg>

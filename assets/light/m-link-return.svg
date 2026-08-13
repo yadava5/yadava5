@@ -10,23 +10,23 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#1A2224}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#1A2224;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k835{to{stroke-dashoffset:-206}}
-.k835{animation:k835 2100ms linear infinite}
-@keyframes k836{to{stroke-dashoffset:-178}}
-.k836{animation:k836 2100ms linear infinite}
-@keyframes k837{to{stroke-dashoffset:-156}}
-.k837{animation:k837 2100ms linear infinite}
-@keyframes k838{to{stroke-dashoffset:-326}}
-.k838{animation:k838 2450ms linear infinite}
-@keyframes k839{to{stroke-dashoffset:-298}}
-.k839{animation:k839 2450ms linear infinite}
-@keyframes k840{to{stroke-dashoffset:-276}}
-.k840{animation:k840 2450ms linear infinite}
-@keyframes k841{to{stroke-dashoffset:-276}}
-.k841{animation:k841 2750ms linear infinite}
-@keyframes k842{to{stroke-dashoffset:-248}}
-.k842{animation:k842 2750ms linear infinite}
-@keyframes k843{to{stroke-dashoffset:-226}}
-.k843{animation:k843 2750ms linear infinite}
+@keyframes k1165{to{stroke-dashoffset:-206}}
+.k1165{animation:k1165 2100ms linear infinite}
+@keyframes k1166{to{stroke-dashoffset:-178}}
+.k1166{animation:k1166 2100ms linear infinite}
+@keyframes k1167{to{stroke-dashoffset:-156}}
+.k1167{animation:k1167 2100ms linear infinite}
+@keyframes k1168{to{stroke-dashoffset:-326}}
+.k1168{animation:k1168 2450ms linear infinite}
+@keyframes k1169{to{stroke-dashoffset:-298}}
+.k1169{animation:k1169 2450ms linear infinite}
+@keyframes k1170{to{stroke-dashoffset:-276}}
+.k1170{animation:k1170 2450ms linear infinite}
+@keyframes k1171{to{stroke-dashoffset:-276}}
+.k1171{animation:k1171 2750ms linear infinite}
+@keyframes k1172{to{stroke-dashoffset:-248}}
+.k1172{animation:k1172 2750ms linear infinite}
+@keyframes k1173{to{stroke-dashoffset:-226}}
+.k1173{animation:k1173 2750ms linear infinite}
 </style>
-<rect x="35" y="0" width="10" height="22" fill="#1F6D5C"/><rect x="49" y="0" width="10" height="22" fill="#9A3412"/><rect x="63" y="0" width="10" height="22" fill="#5F6E73"/><g><path class="bus" stroke="#1F6D5C" d="M40,22 V72"/><path class="cm k835" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="4" d="M40,24.5 V69.5"/><path class="cm k836" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="32" d="M40,24.5 V69.5"/><path class="cm k837" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="54" d="M40,24.5 V69.5"/></g><g><path class="bus" stroke="#9A3412" d="M54,22 V72"/><path class="cm k838" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="-116" d="M54,24.5 V69.5"/><path class="cm k839" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="-88" d="M54,24.5 V69.5"/><path class="cm k840" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="-66" d="M54,24.5 V69.5"/></g><g><path class="bus" stroke="#5F6E73" d="M68,22 V72"/><path class="cm k841" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-66" d="M68,24.5 V69.5"/><path class="cm k842" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="-38" d="M68,24.5 V69.5"/><path class="cm k843" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="-16" d="M68,24.5 V69.5"/></g><text x="404" y="46" class="ts dim" font-size="10.5" letter-spacing="1.4" text-anchor="end">THE EVIDENCE · SECTIONS II — VII</text></svg>
+<rect x="35" y="0" width="10" height="22" fill="#1F6D5C"/><rect x="49" y="0" width="10" height="22" fill="#9A3412"/><rect x="63" y="0" width="10" height="22" fill="#5F6E73"/><g><path class="bus" stroke="#1F6D5C" d="M40,22 V72"/><path class="cm k1165" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="4" d="M40,24.5 V69.5"/><path class="cm k1166" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="32" d="M40,24.5 V69.5"/><path class="cm k1167" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="54" d="M40,24.5 V69.5"/></g><g><path class="bus" stroke="#9A3412" d="M54,22 V72"/><path class="cm k1168" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="-116" d="M54,24.5 V69.5"/><path class="cm k1169" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="-88" d="M54,24.5 V69.5"/><path class="cm k1170" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="-66" d="M54,24.5 V69.5"/></g><g><path class="bus" stroke="#5F6E73" d="M68,22 V72"/><path class="cm k1171" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-66" d="M68,24.5 V69.5"/><path class="cm k1172" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="-38" d="M68,24.5 V69.5"/><path class="cm k1173" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="-16" d="M68,24.5 V69.5"/></g><text x="404" y="46" class="ts dim" font-size="10.5" letter-spacing="1.4" text-anchor="end">THE EVIDENCE · SECTIONS II — VII</text></svg>

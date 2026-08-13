@@ -567,6 +567,71 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
                + `${dur ? ` at t=${(dur * at / steps / 1000).toFixed(2)}s` : ''}`);
     }
 
+    // 22 — A CLASS THAT RESOLVES TO NOTHING.
+    //
+    // Check 13 below exists to catch dead animation code, and it sat inside
+    // `if (dur)` — where `dur` comes from document.getAnimations(). So the
+    // condition that switched it OFF was the defect it was written to find:
+    // when an element's class matches no rule, no animation is ever created,
+    // getAnimations() returns empty, `dur` is 0, and check 13 does not run.
+    // 64 of 120 published plates shipped that way and this gate said PASSED
+    // over every one of them — 516 class references to keyframes that a
+    // generator ordering bug had put in the PREVIOUS file (plates.py,
+    // `_probe`). Every check here measured plates whose current was dead and
+    // found nothing wrong, because a dangling class is not a parse error, not
+    // a collision, not a missing face, and not a frame that moved.
+    //
+    // A dangling reference is therefore its OWN condition, and it must not
+    // depend on anything the dangling reference itself suppresses: not on
+    // `dur`, not on getAnimations(), not on anything measured across the
+    // loop. It is decidable from the document at rest, and that is the point.
+    //
+    // Read off the CSSOM rather than the source text, so it judges what the
+    // browser resolved rather than what a regex thought it saw, and so a
+    // selector nested in @media counts as defining its classes (recursed
+    // below — `*{animation:none!important}` inside the reduced-motion block
+    // has no class token and contributes nothing, which is correct).
+    //
+    // It knows NOTHING about what the classes are called. The generated
+    // names on this page are k1, k2, k3 … — one per animated element, because
+    // dash animation is absolute — and a check keyed to `/^k\d+$/` would have
+    // been the seventeenth probe in this repository to die of naming a
+    // literal that design work is free to change. The rule is structural: a
+    // class an element CARRIES must be a class some rule DEFINES. Every one
+    // of the 120 plates satisfies it — measured, not assumed, over every
+    // class token on every element in both themes.
+    {
+      const defined = new Set();
+      const walk = (rules) => {
+        for (const r of rules) {
+          if (r.selectorText)
+            for (const m of r.selectorText.matchAll(/\.(-?[_a-zA-Z][\w-]*)/g))
+              defined.add(m[1]);
+          if (r.cssRules) walk(r.cssRules);      // @media, @supports, @keyframes
+        }
+      };
+      // A stylesheet this cannot read is not a stylesheet whose classes are
+      // all fine — say so rather than silently treating it as empty, which
+      // would turn every class on the plate into a false finding OR, if the
+      // sheet were the only one, hide a real one.
+      for (const s of document.styleSheets) {
+        try { walk(s.cssRules); }
+        catch (e) { out.push(`a <style> on this plate cannot be read (${e.name}) — its classes cannot be resolved`); }
+      }
+      const dangling = new Set();
+      for (const el of svgEl.querySelectorAll('*'))
+        for (const t of (el.getAttribute('class') || '').split(/\s+/).filter(Boolean))
+          if (!defined.has(t)) dangling.add(t);
+      if (dangling.size) {
+        const names = [...dangling].sort();
+        out.push(`carries ${names.length} class ${names.length === 1 ? 'name' : 'names'} `
+               + `that no rule on this plate defines — ${names.slice(0, 4).join(', ')}`
+               + `${names.length > 4 ? ` and ${names.length - 4} more` : ''} — so whatever `
+               + `${names.length === 1 ? 'it was' : 'they were'} meant to declare is not on `
+               + `this plate at all`);
+      }
+    }
+
     // 13 — DECLARED MOTION MUST MOVE SOMETHING. RE-AUTHORED, round 19, in the
     //      same change as the design it measures.
     //
@@ -599,6 +664,12 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
     //
     // The division of labour: motion.mjs decides how much a plate must move,
     // in pixels. This decides that whatever it declares must be real.
+    //
+    // The `dur` guard below is CORRECT for what this check asks — a plate with
+    // no animations at all is a different (and legal) thing here — but it was
+    // load-bearing in a way it never advertised: it also switched this check
+    // off for a plate whose animations failed to exist, which is the very
+    // defect it names. That case is check 22's now, above and unguarded.
     if (dur) {
       let alive = 0;
       for (let i = 1; i < frames.length; i++) {
