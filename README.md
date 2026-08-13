@@ -18,8 +18,6 @@
 
 Seven systems. Every number is drawn on the plate beside it and re-derived in CI from a pinned commit, except §I and §VII's grant, which are my word and say so where they stand. Four of them ship a **system card**, a print-format walkthrough of the architecture and the evidence.
 
----
-
 <picture>
   <source media="(prefers-color-scheme: light) and (max-width: 500px)" srcset="./assets/light/m-1-work.svg">
   <source media="(prefers-color-scheme: light)" srcset="./assets/light/plate-1-work.svg">
@@ -28,8 +26,6 @@ Seven systems. Every number is drawn on the plate beside it and re-derived in CI
 </picture>
 
 ITSM Data Integration Intern at Miami University, June 2025 to May 2026, and team lead of three at DataFest 2026. This is the only section whose numbers you cannot check for yourself, and the plate says so on its face.
-
----
 
 <picture>
   <source media="(prefers-color-scheme: light) and (max-width: 500px)" srcset="./assets/light/m-2-jetpack.svg">
@@ -42,8 +38,6 @@ Parallel gzip on JDK 25 — one virtual thread per block, a bounded in-flight wi
 
 [live](https://jetpack-compress.vercel.app) · [system card](https://jetpack-compress.vercel.app/system-card) · [repo](https://github.com/yadava5/jetpack-compress)
 
----
-
 <picture>
   <source media="(prefers-color-scheme: light) and (max-width: 500px)" srcset="./assets/light/m-3-glyph.svg">
   <source media="(prefers-color-scheme: light)" srcset="./assets/light/plate-3-glyph.svg">
@@ -54,8 +48,6 @@ Parallel gzip on JDK 25 — one virtual thread per block, a bounded in-flight wi
 The network is not mine: a course-provided C++ MNIST net. The work is what happened to it — hand-written SIMD kernels over a scalar fallback, with **Shree Chaturvedi** credited for kernel contributions. The React browser application is mine.
 
 [live](https://getglyph.vercel.app) · [system card](https://getglyph.vercel.app/system-card) · [repo](https://github.com/yadava5/glyph)
-
----
 
 <picture>
   <source media="(prefers-color-scheme: light) and (max-width: 500px)" srcset="./assets/light/m-4-automl.svg">
@@ -68,8 +60,6 @@ A dataset and a sentence in, a trained model out, over a LangGraph state machine
 
 [live](https://agentic-automl-platform.vercel.app) · [system card](https://agentic-automl-platform.vercel.app/system-card) · [repo](https://github.com/yadava5/ai-augmented-auto-ml-toolchain)
 
----
-
 <picture>
   <source media="(prefers-color-scheme: light) and (max-width: 500px)" srcset="./assets/light/m-5-cadence.svg">
   <source media="(prefers-color-scheme: light)" srcset="./assets/light/plate-5-cadence.svg">
@@ -80,8 +70,6 @@ A dataset and a sentence in, a trained model out, over a LangGraph state machine
 Type *lunch with sam friday 1pm* and get a calendar entry. The engineering is what the audit turned up: application code that filters by user is code that has to remember to filter, so the database enforces it instead.
 
 [live](https://usecadenceapp.vercel.app) · [system card](https://usecadenceapp.vercel.app/system-card) · [repo](https://github.com/yadava5/cadence) · [the isolation suite](https://github.com/yadava5/cadence/blob/main/lib/__tests__/rls.postgres.test.ts)
-
----
 
 <picture>
   <source media="(prefers-color-scheme: light) and (max-width: 500px)" srcset="./assets/light/m-6-applied.svg">
@@ -94,8 +82,6 @@ Your inbox already holds the verdict on most applications you have sent. Three l
 
 [live](https://getapplied.vercel.app) · [system card](https://getapplied.vercel.app/system-card) · [in-browser demo](https://huggingface.co/spaces/yadava5/jobtracker-classifier) · [repo](https://github.com/yadava5/applied)
 
----
-
 <picture>
   <source media="(prefers-color-scheme: light) and (max-width: 500px)" srcset="./assets/light/m-7-visualassist.svg">
   <source media="(prefers-color-scheme: light)" srcset="./assets/light/plate-7-visualassist.svg">
@@ -106,8 +92,6 @@ Your inbox already holds the verdict on most applications you have sent. Three l
 An iPhone app for low-vision users, in Swift: ARKit LiDAR depth becomes speech and haptics, so the phone tells you what is in front of you before you reach it. MUCAT Design Innovation finalist, with a **$2,500** prototyping grant — attested, like §I. It is the one system here you cannot click into; it needs an iPhone with a lidar sensor in your hand.
 
 [repo](https://github.com/yadava5/VisualAssist)
-
----
 
 <picture>
   <source media="(prefers-color-scheme: light) and (max-width: 500px)" srcset="./assets/light/m-colophon.svg">
