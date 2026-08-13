@@ -454,6 +454,35 @@
       "note": "The answer that went against the author, printed on purpose: the same openmp+native flags that win benchDot/256 LOSE benchAxpy/128. It is NOT a size floor, and until 2026-08-13 this note asserted the false claim the row exists to check. benchAxpy/128 is 16,384 elements — four times ABOVE the rows_*cols_ >= 4096 gate that decides whether to thread at all. BENCHMARKS.md: the gate fires in all four cases and loses in all four; the kernel is memory-bandwidth-bound, so more threads buy more contention for the same bus. The measured ratios never cross 1.0 at ANY size on record — 0.093, 0.302, 0.883, 0.922 — so nothing here supports 'parallelism pays past a size'. Threading never pays this kernel, at any size measured. This read 6.9x until 2026-08-10, sourced to docs/benchmarks/bench_summary.csv. That figure was arithmetically correct and pointed at the wrong machine: bench_summary.csv is the December record, taken on Shrees-MacBook.local, and glyph's own docs/benchmarks/ENVIRONMENT.md retires it in one line -- 'The 2026-08-02 runs on the M1 Pro are the reference. The December runs are history.' For an OpenMP scaling ratio a fanless 4-performance-core machine is a different ceiling, not a noisier reading of the same one, which is why the two baselines agree within 8% while the two parallel numbers differ by 69%. Both glyph ratios now derive from the 2026-08-02 reference machine. They come from two runs on it because only one of them measures axpy: the dot20x pair carries no benchAxpy rows at all."
     },
     {
+      "id": "glyph.losing_matrix_cases",
+      "value": "8",
+      "unit": "of 12 matrix ops",
+      "drawn_on": [
+        "plate-3-glyph.svg",
+        "m-3-glyph.svg"
+      ],
+      "repo": "glyph",
+      "paths": [
+        "docs/benchmarks/runs/bench-20260802-aggregated-baseline.json",
+        "docs/benchmarks/runs/bench-20260802-aggregated-openmp-native.json"
+      ],
+      "extractor": "jq -s -r '([.[0].benchmarks[] | select(.name|test(\"^bench(Dot|Transpose|Axpy)/[0-9]+_median$\")) | {(.name): .real_time}] | add) as $b | ([.[1].benchmarks[] | select(.name|test(\"^bench(Dot|Transpose|Axpy)/[0-9]+_median$\")) | {(.name): .real_time}] | add) as $o | [$b | keys[] | select($b[.] < $o[.])] | length' $BLOBS",
+      "note": "The score, not a representative loss. Added 2026-08-13 because glyph's own README was disclosing MORE than this page: it prints the whole 14-row ratio table and says the openmp+native change loses in 8 of the 12 matrix ops, while section III printed exactly one loss. A page whose thesis is that the against-self results are printed cannot be out-disclosed by the repository it summarises -- one exemplary loss reads as curation the moment a reader clicks through. The counting rule is glyph's own: median real_time, ratio below 1.00 against the same kernel built without OpenMP and without -march=native. Both sides are COUNTED from the artifacts and never typed, so a 13th case at a future pin moves the drawn 12 rather than quietly rebasing the 8. MUST derive from the 2026-08-02 aggregated pair and NOT from docs/benchmarks/bench_summary.csv, which answers 6-win/6-lose and shows axpy crossing over at 512 and 1024 -- it is the retired December record on Shrees-MacBook.local, and glyph's ENVIRONMENT.md retires it in one line. See glyph.axpy128_slowdown; the CSV was consulted first while building this row and gave the wrong answer, exactly as that note predicts. The dot20x pair cannot serve either: it carries no axpy or transpose rows at all. dot/32 at 0.986x is counted as a loss although it is inside run-to-run noise and below the rows_*cols_ >= 4096 gate, because the error direction is against the author. benchLearn and benchClassify are deliberately EXCLUDED from this count: at 0.998x and 0.995x against per-case CVs of 1.1-1.6% they are a wash, not a regression, and glyph's table caption bolds them only because it thresholds mechanically at 1.00. The plate states that end-to-end result in words instead -- 'threading buys nothing' -- which is true in both directions and needs no row. Positive-controlled before shipping: dropping Axpy from the family list moves this to 4 and the total to 8, misspelling the prefix answers 0, and reversing the comparison answers 4, which is the complement."
+    },
+    {
+      "id": "glyph.matrix_op_cases",
+      "value": "12",
+      "unit": "matrix-op cases",
+      "drawn_on": [
+        "plate-3-glyph.svg",
+        "m-3-glyph.svg"
+      ],
+      "repo": "glyph",
+      "path": "docs/benchmarks/runs/bench-20260802-aggregated-baseline.json",
+      "extractor": "jq -r '[.benchmarks[] | select(.name|test(\"^bench(Dot|Transpose|Axpy)/[0-9]+_median$\"))] | length' \"$BLOB\"",
+      "note": "The denominator, counted from the same artifact that supplies the numerator rather than written down beside it. dot, transpose and axpy at four sizes each. This exists so that '8 of 12' cannot drift into a half-truth: if a future pin adds or drops a matrix-op benchmark, this row fails and forces the drawn text to move with the evidence, instead of the 8 silently becoming a fraction of something else. Same artifact and same rule as glyph.losing_matrix_cases -- derive from the 2026-08-02 aggregated pair, never from the retired bench_summary.csv. benchLearn and benchClassify are excluded here for the same reason they are excluded there: they are throughput rows, not matrix ops, and the page says what happened to them in words."
+    },
+    {
       "id": "visualassist.critical_m",
       "value": "0.5",
       "unit": "m",
@@ -515,9 +544,9 @@
   "unpinnable": [],
   "external": [],
   "exempt": {
-    "plate-colophon.svg:27": "the colophon draws its own provenance split — the number of claim rows that derive from a pinned commit. NOT a measurement of any repository: it is DERIVED in plates.py from this file (CLAIMS_PINNED = CLAIMS_N - CLAIMS_LIVE), so adding a row moves the drawing and this reason with it. The page used to draw one number over both provenances and say all 29 re-run from pinned commits, which was false for the two live rows.",
+    "plate-colophon.svg:29": "the colophon draws its own provenance split — the number of claim rows that derive from a pinned commit. NOT a measurement of any repository: it is DERIVED in plates.py from this file (CLAIMS_PINNED = CLAIMS_N - CLAIMS_LIVE), so adding a row moves the drawing and this reason with it. The page used to draw one number over both provenances and say all 29 re-run from pinned commits, which was false for the two live rows.",
     "plate-colophon.svg:2": "the other half of that split — the claim rows checked against the LIVE deployment rather than a pinned commit (glyph.deployed_wasm_bytes and glyph.served_wasm_sha256). A claim about what is SERVED cannot be derived from frozen history, which is exactly why it must not be counted as if it were. Derived, not typed. File-scoped on purpose: a global exemption for 2 would wave through an unsourced 2 anywhere on the page.",
-    "m-colophon.svg:27": "see plate-colophon.svg:27 — the phone cut draws the same derived split, and exemptions are per file.",
+    "m-colophon.svg:29": "see plate-colophon.svg:29 — the phone cut draws the same derived split, and exemptions are per file.",
     "m-colophon.svg:2": "see plate-colophon.svg:2 — the phone cut draws the same derived split, and exemptions are per file.",
     "$comment": [
       "Numbers a plate draws that are not measurements of a repository — names,",
@@ -544,8 +573,8 @@
     "m-3-glyph.svg:512": "AVX-512 — see plate-3-glyph.svg:512",
     "m-3-glyph.svg:256": "benchDot/256 — see plate-3-glyph.svg:256",
     "m-3-glyph.svg:128": "benchAxpy/128 and WASM_SIMD128 — see plate-3-glyph.svg:128",
-    "plate-colophon.svg:29": "SELF-REFERENTIAL, on purpose. The colophon draws \"N CLAIMS · N COMMANDS\", where N is len(claims) in this very file, computed by plates.py at build time. A claims row would have to count itself and would change its own value on being added, so the honest form is an exemption whose reason names the mechanism. It cannot go stale silently: add or delete a row, plates.py redraws a different number, and this key stops matching.",
-    "m-colophon.svg:29": "SELF-REFERENTIAL — the mobile colophon draws the same count; see the plate-colophon key above for the mechanism. Cited by name rather than by key, because the key carries a number that moves whenever a row is added or deleted.",
+    "plate-colophon.svg:31": "SELF-REFERENTIAL, on purpose. The colophon draws \"N CLAIMS · N COMMANDS\", where N is len(claims) in this very file, computed by plates.py at build time. A claims row would have to count itself and would change its own value on being added, so the honest form is an exemption whose reason names the mechanism. It cannot go stale silently: add or delete a row, plates.py redraws a different number, and this key stops matching.",
+    "m-colophon.svg:31": "SELF-REFERENTIAL — the mobile colophon draws the same count; see the plate-colophon key above for the mechanism. Cited by name rather than by key, because the key carries a number that moves whenever a row is added or deleted.",
     "README.md:2025": "'June 2025 to May 2026' — the dates of the role",
     "README.md:2026": "'May 2026' as the graduation date and the end of the role, and 'DataFest 2026' — dates, not measurements",
     "README.md:3": "'Three layers read it locally, cheapest first' — the count of tiers named in the same sentence. The other three in the prose, 'team lead of three at DataFest', is pinned by datafest.team_size's anchor and masked out before this exemption is consulted.",

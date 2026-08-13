@@ -1258,8 +1258,11 @@ def plate_work() -> str:
 #
 # Then the one measured lane drops to the package that actually ships: the
 # wasm_simd128 build, byte-counted and checked daily. The admission block
-# runs three lines, the longest on the page, because this section owes two
-# of them: the size-floor slowdown and the checkpoint the test set picked.
+# runs four lines, the longest on the page, because this section owes three
+# of them: the score (8 of 12 matrix ops lose, and the win never reaches the
+# product), the bandwidth-bound worst case, and the checkpoint the test set
+# picked. It is deliberately NOT a size floor — benchAxpy/128 is 16,384
+# elements, four times above the gate that decides whether to thread at all.
 def isa_slot(x: float, y: float, w: float, label: str, n: int,
              C: float | None = None) -> str:
     """One kernel family, drawn as the slot the board keeps for it.
@@ -1313,9 +1316,9 @@ def isa_slot(x: float, y: float, w: float, label: str, n: int,
 
 def plate_glyph() -> str:
     body = (
-        bus("verd", "M63,0 V448", C=40, cd="M63,2.5 V445.5")
-        + bus("rust", "M90,0 V448", C=130, cd="M90,2.5 V445.5")
-        + bus("zinc", "M117,0 V448", C=8, cd="M117,2.5 V445.5")
+        bus("verd", "M63,0 V468", C=40, cd="M63,2.5 V465.5")
+        + bus("rust", "M90,0 V468", C=130, cd="M90,2.5 V465.5")
+        + bus("zinc", "M117,0 V468", C=8, cd="M117,2.5 V465.5")
         # SIMD tap into the mark, then the feeder down to the ONE junction
         # the current reaches. Rust ends and zinc continues at that dot: the
         # dot is the #if, and the colour change is the branch not taken.
@@ -1353,13 +1356,14 @@ def plate_glyph() -> str:
         + f'<text x="660" y="188" class="dim" font-size="13">benchDot/256 — OpenMP threads,</text>'
         + f'<text x="660" y="206" class="dim" font-size="13">same kernels · committed runs.</text>'
         + f'<rect x="150" y="382" width="4" height="16" fill="{T["rust"]}"/>'
-        + f'<text x="164" y="395" class="mid" font-size="14">the same flags run 10.7× slower on benchAxpy/128 — memory-bandwidth-bound;</text>'
-        + f'<text x="164" y="415" class="dim" font-size="13">threading never pays, at any size measured. and 97.01% is a training-time</text>'
-        + f'<text x="164" y="433" class="dim" font-size="13">number: the test set that graded the net also picked its checkpoint.</text>'
+        + f'<text x="164" y="395" class="mid" font-size="14">the same flags lose 8 of 12 matrix-op cases — worst, benchAxpy/128, 10.7× slower,</text>'
+        + f'<text x="164" y="415" class="dim" font-size="13">memory-bandwidth-bound; axpy never pays at any size measured, and end-to-end,</text>'
+        + f'<text x="164" y="433" class="dim" font-size="13">threading buys nothing. and 97.01% is a training-time number: the test set</text>'
+        + f'<text x="164" y="451" class="dim" font-size="13">that graded the net also picked its checkpoint.</text>'
     )
     return head(
-        448,
-        "III · Glyph — SIMD kernels over a course-provided net: 3.5× from OpenMP threading on the NEON build, the one kernel family the reference machine compiled; 10.7× slower where memory bandwidth is the wall",
+        468,
+        "III · Glyph — SIMD kernels over a course-provided net: 3.5× from OpenMP threading on the NEON build, the one kernel family the reference machine compiled; the same flags lose 8 of 12 matrix-op cases, 10.7× slower at the worst, where memory bandwidth is the wall",
         "III · Glyph — SIMD kernels over a course-provided MNIST net, drawn "
         "as one register-lane bundle carrying current and two unpopulated "
         "footprints beside it. Kernels are written for NEON, AVX2 and "
@@ -1372,9 +1376,10 @@ def plate_glyph() -> str:
         "silkscreened: written, not measured. The package that ships is "
         "WASM_SIMD128, 43,751 bytes, byte-identical to main and checked "
         "daily by this page's own CI. The against-self results are printed: "
-        "the same flags run 10.7× "
-        "slower on benchAxpy/128, memory-bandwidth-bound, where threading "
-        "never pays at any size measured, and 97.01% is a training-time "
+        "the same flags lose 8 of 12 matrix-op cases and buy nothing "
+        "end-to-end — worst is benchAxpy/128, 10.7× slower, "
+        "memory-bandwidth-bound, where axpy never pays at any size measured "
+        "— and 97.01% is a training-time "
         "number — the test set that graded the net also picked its "
         "checkpoint.",
         key="plate-3-glyph.svg",
@@ -1918,11 +1923,11 @@ def m_jetpack() -> str:
 # the same helper the desktop uses, so a family cannot lose a lane on the
 # phone alone. The plate is 22u taller than it was: that is the silkscreen
 # line the footprints need, and it is the only thing that moved below them.
-# The admission still runs longest: this section owes the same two sentences
-# at every width.
+# The admission still runs longest: this section owes the same three
+# sentences at every width.
 def m_glyph() -> str:
     body = (
-        m_sec(712, (40, 130, 8), tap=("rust", 88))
+        m_sec(730, (40, 130, 8), tap=("rust", 88))
         + mark("glyph", 92, 96, 48)
         + sec_roman(92, 54, "III — GLYPH", 24)
         + sec_sub(92, 76, "SIMD kernels over a net the course provided.", 13)
@@ -1954,15 +1959,16 @@ def m_glyph() -> str:
         + lbl(200, 552, "BYTE-IDENTICAL TO MAIN", size=10, ls=1.1)
         + lbl(200, 567, "CHECKED DAILY BY THIS PAGE", size=10, ls=1.1)
         + m_adm(586, "rust",
-                ["the same flags run 10.7× slower on",
-                 "benchAxpy/128 — memory-bandwidth-bound;"],
-                ["threading never pays, at any size measured.",
-                 "and 97.01% is a training-time number:",
-                 "the test set that graded the net",
-                 "also picked its checkpoint."])
+                ["the same flags lose 8 of 12 matrix-op",
+                 "cases — worst, benchAxpy/128, 10.7× slower;"],
+                ["memory-bandwidth-bound. axpy never pays",
+                 "at any size measured; end-to-end,",
+                 "threading buys nothing. and 97.01% is a",
+                 "training-time number: the test set that",
+                 "graded the net also picked its checkpoint."])
     )
     return head(
-        712,
+        730,
         "III · Glyph — one register-lane bundle to the benchmark, two unpopulated footprints, phone cut",
         "III · Glyph, phone cut — SIMD kernels over a course-provided MNIST "
         "net. Kernels are written for NEON, AVX2 and AVX-512, but the family "
@@ -1974,9 +1980,10 @@ def m_glyph() -> str:
         "byte-identical to main, checked daily by this page's own CI. The "
         "AVX2 and AVX-512 slots are printed with their pads bare and their "
         "leads left open, silkscreened: written, not measured. "
-        "The against-self results are printed: the same flags run 10.7× "
-        "slower on benchAxpy/128, memory-bandwidth-bound, where threading "
-        "never pays at any size measured, and 97.01% is a training-time "
+        "The against-self results are printed: the same flags lose 8 of 12 "
+        "matrix-op cases and buy nothing end-to-end — worst is "
+        "benchAxpy/128, 10.7× slower, memory-bandwidth-bound, where axpy "
+        "never pays at any size measured — and 97.01% is a training-time "
         "number — the test set that graded the net also picked its "
         "checkpoint.",
         key="m-3-glyph.svg",
