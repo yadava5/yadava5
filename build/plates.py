@@ -339,11 +339,43 @@ def head(h: int, title: str, desc: str, key: str = "",
           f"src:url(data:font/woff2;base64,{FONT_T}) format('woff2')}}\n") if "T" in faces else ""
     f6 = (f"@font-face{{font-family:'T';font-weight:600;"
           f"src:url(data:font/woff2;base64,{FONT_TS}) format('woff2')}}\n") if "6" in faces else ""
+    # ── .d ASKS FOR TABULAR LINING FIGURES, AND BOTH FEATURES ARE LOAD-BEARING.
+    #
+    # Syne's DEFAULT figures are old-style. 3 4 5 7 9 hang below the baseline,
+    # 0 1 2 stop near x-height, and only 6 8 reach cap height, so "57.8M" drew
+    # its 5 and 7 with their tops 9.5u below its 8 and its M at 56px — the
+    # thing that was reported as "57 is placed a bit lower in height compared
+    # to the rest". It was never a layout bug; nothing was misplaced. The page
+    # was drawing text figures at display size.
+    #
+    # The order these are WRITTEN in is cosmetic — HarfBuzz applies lookups in
+    # LookupList order, not in the order CSS names them — but the order they
+    # APPLY in is the whole fix, so they are written in it. In Syne, 'lnum' is
+    # lookup 26 (digit -> digit.lf) and 'tnum' is lookup 28, which carries TWO
+    # mappings: digit -> digit.tosf, and digit.lf -> digit.tf. lnum runs first
+    # and leaves no bare digit for tnum's first mapping to see, so the pair
+    # lands on .tf, tabular lining.
+    #
+    # Asking for 'tnum' alone would land on .tosf — tabular OLDSTYLE. Uniform
+    # widths, and the staggered heights entirely intact: the reported defect,
+    # shipped, behind a change that looks like the fix and measures like it on
+    # any width check. subset-fonts.py's assert_tabular_lining bounds the ink
+    # top and the baseline for exactly that reason.
+    #
+    # Tabular, not merely lining, because these six figures head a column of
+    # sections and are read down the page against each other. Uniform advances
+    # cost nothing here — no figure on this page is set to a width — and they
+    # are what makes the column agree with itself.
+    #
+    # Set on .d only. Commissioner's figures were measured and are already
+    # lining (yMin 0/-22, yMax 1371..1398 on a 2000 em, i.e. flat 1 4 7 and
+    # overshoot on the rest); it carries no figure features at all, so there
+    # is nothing to ask it for and nothing to fix.
     return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" width="{w}" height="{h}" role="img" aria-label="{desc}" data-col="{col[0]},{col[1]}"{fr} data-canvas="{T['canvas']}">
 <title>{title}</title><desc>{desc}</desc>
 <style>
 {fd}{ft}{f6}text{{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:{T['ink']}}}
-.d{{font-family:'D',sans-serif;font-weight:800;fill:{T['ink']}}}
+.d{{font-family:'D',sans-serif;font-weight:800;font-feature-settings:'lnum' 1,'tnum' 1;fill:{T['ink']}}}
 .ts{{font-weight:600}}
 .mid{{fill:{T['mid']}}} .dim{{fill:{T['dim']}}}
 .bus{{fill:none;stroke-width:2;stroke-linejoin:round}}
@@ -2310,13 +2342,22 @@ INTERVAL_MOBILE["m-probe-va-s3.svg"] = _probe(
 
 # ── declared frames (top, rightGap, bottomGap), baked from gate.mjs
 # measurement on this machine; tolerance 4 absorbs the CI ascent skew.
+#
+# Three rightGaps moved with the figure fix (2026-08-13) and were re-baked from
+# what check 12 measured, which is the one direction this is allowed to go: the
+# declaration follows the drawing. Tabular figures are one width, and on these
+# three plates the claim figure IS the rightmost ink, so the plate's right edge
+# moved when the digits stopped being proportional. "0.979" is the largest:
+# 0+9+7+9 advanced 4889/1000 em as text figures and 4582 as tabular, 19u
+# narrower at 62px, and APPLIED_FRAME went 37 -> 59.3 to say so. Nothing was
+# nudged to make a number fit; the numbers were re-read after the type changed.
 HERO_FRAME = (30, 37.7, 0)
-JET_FRAME = (2.5, 55.9, 2.5)
-WORK_FRAME = (2.5, 28, 2.5)
+JET_FRAME = (2.5, 64.7, 2.5)
+WORK_FRAME = (2.5, 35.7, 2.5)
 GLYPH_FRAME = (2.5, 35.5, 2.5)
 AUTOML_FRAME = (2.5, 60.8, 2.5)
 CADENCE_FRAME = (2.5, 51.7, 2.5)
-APPLIED_FRAME = (2.5, 37, 2.5)
+APPLIED_FRAME = (2.5, 59.3, 2.5)
 VA_FRAME = (2.5, 150, 2.5)
 COLO_FRAME = (2.5, 48, 4)
 MOB_FRAME = (36, 58, 0)
