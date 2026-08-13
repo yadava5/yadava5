@@ -10,59 +10,59 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#1A2224}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#1A2224;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k880{to{stroke-dashoffset:-311}}
-.k880{animation:k880 2100ms linear infinite}
-@keyframes k881{to{stroke-dashoffset:-283}}
-.k881{animation:k881 2100ms linear infinite}
-@keyframes k882{to{stroke-dashoffset:-261}}
-.k882{animation:k882 2100ms linear infinite}
-@keyframes k883{to{stroke-dashoffset:-216}}
-.k883{animation:k883 2450ms linear infinite}
-@keyframes k884{to{stroke-dashoffset:-188}}
-.k884{animation:k884 2450ms linear infinite}
-@keyframes k885{to{stroke-dashoffset:-166}}
-.k885{animation:k885 2450ms linear infinite}
-@keyframes k886{to{stroke-dashoffset:-366}}
-.k886{animation:k886 2750ms linear infinite}
-@keyframes k887{to{stroke-dashoffset:-338}}
-.k887{animation:k887 2750ms linear infinite}
-@keyframes k888{to{stroke-dashoffset:-316}}
-.k888{animation:k888 2750ms linear infinite}
-@keyframes k889{to{stroke-dashoffset:-196}}
-.k889{animation:k889 2100ms linear infinite}
-@keyframes k890{to{stroke-dashoffset:-168}}
-.k890{animation:k890 2100ms linear infinite}
-@keyframes k891{to{stroke-dashoffset:-146}}
-.k891{animation:k891 2100ms linear infinite}
-@keyframes k892{to{stroke-dashoffset:-91.0}}
-.k892{animation:k892 2100ms linear infinite}
-@keyframes k893{to{stroke-dashoffset:-63.0}}
-.k893{animation:k893 2100ms linear infinite}
-@keyframes k894{to{stroke-dashoffset:-41.0}}
-.k894{animation:k894 2100ms linear infinite}
-@keyframes k895{to{stroke-dashoffset:-266}}
-.k895{animation:k895 2450ms linear infinite}
-@keyframes k896{to{stroke-dashoffset:-238}}
-.k896{animation:k896 2450ms linear infinite}
-@keyframes k897{to{stroke-dashoffset:-216}}
-.k897{animation:k897 2450ms linear infinite}
-@keyframes k898{to{stroke-dashoffset:-161.0}}
-.k898{animation:k898 2450ms linear infinite}
-@keyframes k899{to{stroke-dashoffset:-133.0}}
-.k899{animation:k899 2450ms linear infinite}
-@keyframes k900{to{stroke-dashoffset:-111.0}}
-.k900{animation:k900 2450ms linear infinite}
-@keyframes k901{to{stroke-dashoffset:-336}}
-.k901{animation:k901 2750ms linear infinite}
-@keyframes k902{to{stroke-dashoffset:-308}}
-.k902{animation:k902 2750ms linear infinite}
-@keyframes k903{to{stroke-dashoffset:-286}}
-.k903{animation:k903 2750ms linear infinite}
-@keyframes k904{to{stroke-dashoffset:-231.0}}
-.k904{animation:k904 2750ms linear infinite}
-@keyframes k905{to{stroke-dashoffset:-203.0}}
-.k905{animation:k905 2750ms linear infinite}
-@keyframes k906{to{stroke-dashoffset:-181.0}}
-.k906{animation:k906 2750ms linear infinite}
+@keyframes k886{to{stroke-dashoffset:-311}}
+.k886{animation:k886 2100ms linear infinite}
+@keyframes k887{to{stroke-dashoffset:-283}}
+.k887{animation:k887 2100ms linear infinite}
+@keyframes k888{to{stroke-dashoffset:-261}}
+.k888{animation:k888 2100ms linear infinite}
+@keyframes k889{to{stroke-dashoffset:-216}}
+.k889{animation:k889 2450ms linear infinite}
+@keyframes k890{to{stroke-dashoffset:-188}}
+.k890{animation:k890 2450ms linear infinite}
+@keyframes k891{to{stroke-dashoffset:-166}}
+.k891{animation:k891 2450ms linear infinite}
+@keyframes k892{to{stroke-dashoffset:-366}}
+.k892{animation:k892 2750ms linear infinite}
+@keyframes k893{to{stroke-dashoffset:-338}}
+.k893{animation:k893 2750ms linear infinite}
+@keyframes k894{to{stroke-dashoffset:-316}}
+.k894{animation:k894 2750ms linear infinite}
+@keyframes k895{to{stroke-dashoffset:-196}}
+.k895{animation:k895 2100ms linear infinite}
+@keyframes k896{to{stroke-dashoffset:-168}}
+.k896{animation:k896 2100ms linear infinite}
+@keyframes k897{to{stroke-dashoffset:-146}}
+.k897{animation:k897 2100ms linear infinite}
+@keyframes k898{to{stroke-dashoffset:-91.0}}
+.k898{animation:k898 2100ms linear infinite}
+@keyframes k899{to{stroke-dashoffset:-63.0}}
+.k899{animation:k899 2100ms linear infinite}
+@keyframes k900{to{stroke-dashoffset:-41.0}}
+.k900{animation:k900 2100ms linear infinite}
+@keyframes k901{to{stroke-dashoffset:-266}}
+.k901{animation:k901 2450ms linear infinite}
+@keyframes k902{to{stroke-dashoffset:-238}}
+.k902{animation:k902 2450ms linear infinite}
+@keyframes k903{to{stroke-dashoffset:-216}}
+.k903{animation:k903 2450ms linear infinite}
+@keyframes k904{to{stroke-dashoffset:-161.0}}
+.k904{animation:k904 2450ms linear infinite}
+@keyframes k905{to{stroke-dashoffset:-133.0}}
+.k905{animation:k905 2450ms linear infinite}
+@keyframes k906{to{stroke-dashoffset:-111.0}}
+.k906{animation:k906 2450ms linear infinite}
+@keyframes k907{to{stroke-dashoffset:-336}}
+.k907{animation:k907 2750ms linear infinite}
+@keyframes k908{to{stroke-dashoffset:-308}}
+.k908{animation:k908 2750ms linear infinite}
+@keyframes k909{to{stroke-dashoffset:-286}}
+.k909{animation:k909 2750ms linear infinite}
+@keyframes k910{to{stroke-dashoffset:-231.0}}
+.k910{animation:k910 2750ms linear infinite}
+@keyframes k911{to{stroke-dashoffset:-203.0}}
+.k911{animation:k911 2750ms linear infinite}
+@keyframes k912{to{stroke-dashoffset:-181.0}}
+.k912{animation:k912 2750ms linear infinite}
 </style>
-<g><path class="bus" stroke="#1F6D5C" d="M63,0 V110"/><path class="cm k880" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-101" d="M63,2.5 V107.5"/><path class="cm k881" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="-73" d="M63,2.5 V107.5"/><path class="cm k882" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="-51" d="M63,2.5 V107.5"/></g><g><path class="bus" stroke="#9A3412" d="M90,0 V110"/><path class="cm k883" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="-6" d="M90,2.5 V107.5"/><path class="cm k884" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="22" d="M90,2.5 V107.5"/><path class="cm k885" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="44" d="M90,2.5 V107.5"/></g><g><path class="bus" stroke="#5F6E73" d="M117,0 V110"/><path class="cm k886" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-156" d="M117,2.5 V107.5"/><path class="cm k887" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="-128" d="M117,2.5 V107.5"/><path class="cm k888" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="-106" d="M117,2.5 V107.5"/></g><circle cx="63" cy="70" r="2.6" fill="#1F6D5C"/><circle cx="90" cy="30" r="2.6" fill="#9A3412"/><circle cx="117" cy="16" r="2.6" fill="#5F6E73"/><g><path class="bus" stroke="#1F6D5C" d="M63,70 H140"/><path class="cm k889" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="14" d="M63,70 H137.5"/><path class="cm k890" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="42" d="M63,70 H137.5"/><path class="cm k891" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="64" d="M63,70 H137.5"/><path class="cm k892" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="119.0" d="M63,70 H137.5"/><path class="cm k893" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="147.0" d="M63,70 H137.5"/><path class="cm k894" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="169.0" d="M63,70 H137.5"/></g><g><path class="bus" stroke="#9A3412" d="M90,30 H333"/><path class="cm k895" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="-56" d="M90,30 H333"/><path class="cm k896" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="-28" d="M90,30 H333"/><path class="cm k897" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="-6" d="M90,30 H333"/><path class="cm k898" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="49.0" d="M90,30 H333"/><path class="cm k899" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="77.0" d="M90,30 H333"/><path class="cm k900" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="99.0" d="M90,30 H333"/></g><g><path class="bus" stroke="#5F6E73" d="M117,16 H333"/><path class="cm k901" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-126" d="M117,16 H333"/><path class="cm k902" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="-98" d="M117,16 H333"/><path class="cm k903" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="-76" d="M117,16 H333"/><path class="cm k904" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-21.0" d="M117,16 H333"/><path class="cm k905" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="7.0" d="M117,16 H333"/><path class="cm k906" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="29.0" d="M117,16 H333"/></g><g><rect x="140.5" y="38" width="187" height="64" rx="3" fill="#0A0A0B" stroke="#6E7A80" stroke-width="1"/><path class="bus" stroke="#4FB39A" d="M140,70 H145"/><circle cx="149" cy="70" r="4.0" fill="none" stroke="#4FB39A" stroke-width="2"/><circle cx="149" cy="70" r="1.8" fill="#4FB39A"/><path transform="translate(160,51) scale(0.074219)" d="M-2 293.9 H514" fill="none" stroke="#e08a5f" stroke-width="44"/><path transform="translate(160,51) scale(0.074219) translate(91.86,412) scale(0.22857,-0.22857)" d="M468.7969970703125 47.19873046875Q468.7969970703125 25.79931640625 453.8973388671875 12.899658203125Q438.9976806640625 0 406.598388671875 0H92.998779296875Q61.199462890625 0 45.7998046875 12.69964599609375Q30.400146484375 25.3992919921875 30.400146484375 46.7987060546875Q30.400146484375 62.3983154296875 39.10003662109375 73.29803466796875Q47.7999267578125 84.19775390625 70.1998291015625 95.197509765625L102.800537109375 108.197509765625Q133.0003662109375 122.9971923828125 148.7001953125 146.8968505859375Q164.4000244140625 170.7965087890625 183.599853515625 231.7957763671875L503.2037353515625 1206.40478515625Q517.2034912109375 1250.203857421875 511.20343017578125 1269.50341796875Q505.203369140625 1288.802978515625 469.6033935546875 1300.6026611328125Q441.6033935546875 1310.202392578125 430.30340576171875 1322.8020629882812Q419.00341796875 1335.4017333984375 419.00341796875 1353.601318359375Q419.00341796875 1375.6007080078125 434.60308837890625 1387.8003540039062Q450.2027587890625 1400 482.2020263671875 1400H973.5927734375Q1005.9920654296875 1400 1021.1917114257812 1387.8003540039062Q1036.391357421875 1375.6007080078125 1036.391357421875 1354.0013427734375Q1036.391357421875 1334.601806640625 1025.0914306640625 1322.1021118164062Q1013.79150390625 1309.6024169921875 988.391357421875 1301.8026123046875Q960.9912109375 1293.40283203125 955.8911743164062 1278.3031616210938Q950.7911376953125 1263.2034912109375 961.5909423828125 1229.6041259765625L1300.19482421875 210.5950927734375Q1315.9945068359375 160.3961181640625 1334.194580078125 136.49658203125Q1352.3946533203125 112.5970458984375 1385.594970703125 102.197265625Q1415.794677734375 90.59765625 1425.9945678710938 78.59796142578125Q1436.1944580078125 66.5982666015625 1436.1944580078125 47.19873046875Q1436.1944580078125 25.79931640625 1420.5947875976562 12.899658203125Q1404.9951171875 0 1372.995849609375 0H931.8011474609375Q899.6019287109375 0 884.30224609375 12.899658203125Q869.0025634765625 25.79931640625 869.0025634765625 47.19873046875Q869.0025634765625 64.998291015625 879.6024169921875 76.29803466796875Q890.2022705078125 87.5977783203125 912.60205078125 95.197509765625L970.20361328125 107.3973388671875Q996.20361328125 115.3970947265625 995.2037963867188 133.29693603515625Q994.2039794921875 151.19677734375 981.404052734375 191.1964111328125L628.6004638671875 1279.8033447265625L662.199951171875 1298.4027099609375L319.196533203125 247.795166015625Q305.9967041015625 206.395751953125 305.69671630859375 180.49609375Q305.396728515625 154.596435546875 321.39654541015625 137.896728515625Q337.3963623046875 121.197021484375 371.7958984375 106.7974853515625L425.7974853515625 93.99755859375Q446.79736328125 85.997802734375 457.79718017578125 75.69805908203125Q468.7969970703125 65.3983154296875 468.7969970703125 47.19873046875Z" fill="#f6efe2"/><text x="206" y="74" class="ts" font-size="10.5" letter-spacing="0.8" style="fill:#E4E9E9">AYUSH-YADAV.COM</text><text x="148" y="96" class="ts" font-size="8.5" letter-spacing="1.2" style="fill:#B0BAC0">J1</text></g><rect x="137" y="67.5" width="3" height="5" fill="#1F6D5C"/><rect x="140" y="67.5" width="3" height="5" fill="#4FB39A"/></svg>
+<g><path class="bus" stroke="#1F6D5C" d="M63,0 V110"/><path class="cm k886" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-101" d="M63,2.5 V107.5"/><path class="cm k887" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="-73" d="M63,2.5 V107.5"/><path class="cm k888" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="-51" d="M63,2.5 V107.5"/></g><g><path class="bus" stroke="#9A3412" d="M90,0 V110"/><path class="cm k889" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="-6" d="M90,2.5 V107.5"/><path class="cm k890" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="22" d="M90,2.5 V107.5"/><path class="cm k891" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="44" d="M90,2.5 V107.5"/></g><g><path class="bus" stroke="#5F6E73" d="M117,0 V110"/><path class="cm k892" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-156" d="M117,2.5 V107.5"/><path class="cm k893" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="-128" d="M117,2.5 V107.5"/><path class="cm k894" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="-106" d="M117,2.5 V107.5"/></g><circle cx="63" cy="70" r="2.6" fill="#1F6D5C"/><circle cx="90" cy="30" r="2.6" fill="#9A3412"/><circle cx="117" cy="16" r="2.6" fill="#5F6E73"/><g><path class="bus" stroke="#1F6D5C" d="M63,70 H140"/><path class="cm k895" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="14" d="M63,70 H137.5"/><path class="cm k896" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="42" d="M63,70 H137.5"/><path class="cm k897" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="64" d="M63,70 H137.5"/><path class="cm k898" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="119.0" d="M63,70 H137.5"/><path class="cm k899" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="147.0" d="M63,70 H137.5"/><path class="cm k900" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="169.0" d="M63,70 H137.5"/></g><g><path class="bus" stroke="#9A3412" d="M90,30 H333"/><path class="cm k901" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="-56" d="M90,30 H333"/><path class="cm k902" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="-28" d="M90,30 H333"/><path class="cm k903" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="-6" d="M90,30 H333"/><path class="cm k904" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="49.0" d="M90,30 H333"/><path class="cm k905" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="77.0" d="M90,30 H333"/><path class="cm k906" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="99.0" d="M90,30 H333"/></g><g><path class="bus" stroke="#5F6E73" d="M117,16 H333"/><path class="cm k907" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-126" d="M117,16 H333"/><path class="cm k908" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="-98" d="M117,16 H333"/><path class="cm k909" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="-76" d="M117,16 H333"/><path class="cm k910" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-21.0" d="M117,16 H333"/><path class="cm k911" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="7.0" d="M117,16 H333"/><path class="cm k912" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="29.0" d="M117,16 H333"/></g><g><rect x="140.5" y="38" width="187" height="64" rx="3" fill="#0A0A0B" stroke="#6E7A80" stroke-width="1"/><path class="bus" stroke="#4FB39A" d="M140,70 H145"/><circle cx="149" cy="70" r="4.0" fill="none" stroke="#4FB39A" stroke-width="2"/><circle cx="149" cy="70" r="1.8" fill="#4FB39A"/><path transform="translate(160,51) scale(0.074219)" d="M-2 293.9 H514" fill="none" stroke="#e08a5f" stroke-width="44"/><path transform="translate(160,51) scale(0.074219) translate(91.86,412) scale(0.22857,-0.22857)" d="M468.7969970703125 47.19873046875Q468.7969970703125 25.79931640625 453.8973388671875 12.899658203125Q438.9976806640625 0 406.598388671875 0H92.998779296875Q61.199462890625 0 45.7998046875 12.69964599609375Q30.400146484375 25.3992919921875 30.400146484375 46.7987060546875Q30.400146484375 62.3983154296875 39.10003662109375 73.29803466796875Q47.7999267578125 84.19775390625 70.1998291015625 95.197509765625L102.800537109375 108.197509765625Q133.0003662109375 122.9971923828125 148.7001953125 146.8968505859375Q164.4000244140625 170.7965087890625 183.599853515625 231.7957763671875L503.2037353515625 1206.40478515625Q517.2034912109375 1250.203857421875 511.20343017578125 1269.50341796875Q505.203369140625 1288.802978515625 469.6033935546875 1300.6026611328125Q441.6033935546875 1310.202392578125 430.30340576171875 1322.8020629882812Q419.00341796875 1335.4017333984375 419.00341796875 1353.601318359375Q419.00341796875 1375.6007080078125 434.60308837890625 1387.8003540039062Q450.2027587890625 1400 482.2020263671875 1400H973.5927734375Q1005.9920654296875 1400 1021.1917114257812 1387.8003540039062Q1036.391357421875 1375.6007080078125 1036.391357421875 1354.0013427734375Q1036.391357421875 1334.601806640625 1025.0914306640625 1322.1021118164062Q1013.79150390625 1309.6024169921875 988.391357421875 1301.8026123046875Q960.9912109375 1293.40283203125 955.8911743164062 1278.3031616210938Q950.7911376953125 1263.2034912109375 961.5909423828125 1229.6041259765625L1300.19482421875 210.5950927734375Q1315.9945068359375 160.3961181640625 1334.194580078125 136.49658203125Q1352.3946533203125 112.5970458984375 1385.594970703125 102.197265625Q1415.794677734375 90.59765625 1425.9945678710938 78.59796142578125Q1436.1944580078125 66.5982666015625 1436.1944580078125 47.19873046875Q1436.1944580078125 25.79931640625 1420.5947875976562 12.899658203125Q1404.9951171875 0 1372.995849609375 0H931.8011474609375Q899.6019287109375 0 884.30224609375 12.899658203125Q869.0025634765625 25.79931640625 869.0025634765625 47.19873046875Q869.0025634765625 64.998291015625 879.6024169921875 76.29803466796875Q890.2022705078125 87.5977783203125 912.60205078125 95.197509765625L970.20361328125 107.3973388671875Q996.20361328125 115.3970947265625 995.2037963867188 133.29693603515625Q994.2039794921875 151.19677734375 981.404052734375 191.1964111328125L628.6004638671875 1279.8033447265625L662.199951171875 1298.4027099609375L319.196533203125 247.795166015625Q305.9967041015625 206.395751953125 305.69671630859375 180.49609375Q305.396728515625 154.596435546875 321.39654541015625 137.896728515625Q337.3963623046875 121.197021484375 371.7958984375 106.7974853515625L425.7974853515625 93.99755859375Q446.79736328125 85.997802734375 457.79718017578125 75.69805908203125Q468.7969970703125 65.3983154296875 468.7969970703125 47.19873046875Z" fill="#f6efe2"/><text x="206" y="74" class="ts" font-size="10.5" letter-spacing="0.8" style="fill:#E4E9E9">AYUSH-YADAV.COM</text><text x="148" y="96" class="ts" font-size="8.5" letter-spacing="1.2" style="fill:#B0BAC0">J1</text></g><rect x="137" y="67.5" width="3" height="5" fill="#1F6D5C"/><rect x="140" y="67.5" width="3" height="5" fill="#4FB39A"/></svg>

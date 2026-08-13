@@ -12,68 +12,68 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#1A2224}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#1A2224;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k1021{to{stroke-dashoffset:-216}}
-.k1021{animation:k1021 2100ms linear infinite}
-@keyframes k1022{to{stroke-dashoffset:-188}}
-.k1022{animation:k1022 2100ms linear infinite}
-@keyframes k1023{to{stroke-dashoffset:-166}}
-.k1023{animation:k1023 2100ms linear infinite}
-@keyframes k1024{to{stroke-dashoffset:-306}}
-.k1024{animation:k1024 2450ms linear infinite}
-@keyframes k1025{to{stroke-dashoffset:-278}}
-.k1025{animation:k1025 2450ms linear infinite}
-@keyframes k1026{to{stroke-dashoffset:-256}}
-.k1026{animation:k1026 2450ms linear infinite}
-@keyframes k1027{to{stroke-dashoffset:-184}}
-.k1027{animation:k1027 2750ms linear infinite}
-@keyframes k1028{to{stroke-dashoffset:-156}}
-.k1028{animation:k1028 2750ms linear infinite}
-@keyframes k1029{to{stroke-dashoffset:-134}}
-.k1029{animation:k1029 2750ms linear infinite}
-@keyframes k1030{to{stroke-dashoffset:-264}}
+@keyframes k1027{to{stroke-dashoffset:-216}}
+.k1027{animation:k1027 2100ms linear infinite}
+@keyframes k1028{to{stroke-dashoffset:-188}}
+.k1028{animation:k1028 2100ms linear infinite}
+@keyframes k1029{to{stroke-dashoffset:-166}}
+.k1029{animation:k1029 2100ms linear infinite}
+@keyframes k1030{to{stroke-dashoffset:-306}}
 .k1030{animation:k1030 2450ms linear infinite}
-@keyframes k1031{to{stroke-dashoffset:-236}}
+@keyframes k1031{to{stroke-dashoffset:-278}}
 .k1031{animation:k1031 2450ms linear infinite}
-@keyframes k1032{to{stroke-dashoffset:-214}}
+@keyframes k1032{to{stroke-dashoffset:-256}}
 .k1032{animation:k1032 2450ms linear infinite}
-@keyframes k1033{to{stroke-dashoffset:-206}}
-.k1033{animation:k1033 2450ms linear infinite}
-@keyframes k1034{to{stroke-dashoffset:-178}}
-.k1034{animation:k1034 2450ms linear infinite}
-@keyframes k1035{to{stroke-dashoffset:-156}}
-.k1035{animation:k1035 2450ms linear infinite}
-@keyframes k1036{to{stroke-dashoffset:-236}}
+@keyframes k1033{to{stroke-dashoffset:-184}}
+.k1033{animation:k1033 2750ms linear infinite}
+@keyframes k1034{to{stroke-dashoffset:-156}}
+.k1034{animation:k1034 2750ms linear infinite}
+@keyframes k1035{to{stroke-dashoffset:-134}}
+.k1035{animation:k1035 2750ms linear infinite}
+@keyframes k1036{to{stroke-dashoffset:-264}}
 .k1036{animation:k1036 2450ms linear infinite}
-@keyframes k1037{to{stroke-dashoffset:-208}}
+@keyframes k1037{to{stroke-dashoffset:-236}}
 .k1037{animation:k1037 2450ms linear infinite}
-@keyframes k1038{to{stroke-dashoffset:-186}}
+@keyframes k1038{to{stroke-dashoffset:-214}}
 .k1038{animation:k1038 2450ms linear infinite}
-@keyframes k1039{to{stroke-dashoffset:-291}}
+@keyframes k1039{to{stroke-dashoffset:-206}}
 .k1039{animation:k1039 2450ms linear infinite}
-@keyframes k1040{to{stroke-dashoffset:-263}}
+@keyframes k1040{to{stroke-dashoffset:-178}}
 .k1040{animation:k1040 2450ms linear infinite}
-@keyframes k1041{to{stroke-dashoffset:-241}}
+@keyframes k1041{to{stroke-dashoffset:-156}}
 .k1041{animation:k1041 2450ms linear infinite}
-@keyframes k1042{to{stroke-dashoffset:-346}}
+@keyframes k1042{to{stroke-dashoffset:-236}}
 .k1042{animation:k1042 2450ms linear infinite}
-@keyframes k1043{to{stroke-dashoffset:-318}}
+@keyframes k1043{to{stroke-dashoffset:-208}}
 .k1043{animation:k1043 2450ms linear infinite}
-@keyframes k1044{to{stroke-dashoffset:-296}}
+@keyframes k1044{to{stroke-dashoffset:-186}}
 .k1044{animation:k1044 2450ms linear infinite}
-@keyframes k1045{to{stroke-dashoffset:-318}}
+@keyframes k1045{to{stroke-dashoffset:-291}}
 .k1045{animation:k1045 2450ms linear infinite}
-@keyframes k1046{to{stroke-dashoffset:-290}}
+@keyframes k1046{to{stroke-dashoffset:-263}}
 .k1046{animation:k1046 2450ms linear infinite}
-@keyframes k1047{to{stroke-dashoffset:-268}}
+@keyframes k1047{to{stroke-dashoffset:-241}}
 .k1047{animation:k1047 2450ms linear infinite}
-@keyframes k1048{to{stroke-dashoffset:-231}}
+@keyframes k1048{to{stroke-dashoffset:-346}}
 .k1048{animation:k1048 2450ms linear infinite}
-@keyframes k1049{to{stroke-dashoffset:-203}}
+@keyframes k1049{to{stroke-dashoffset:-318}}
 .k1049{animation:k1049 2450ms linear infinite}
-@keyframes k1050{to{stroke-dashoffset:-181}}
+@keyframes k1050{to{stroke-dashoffset:-296}}
 .k1050{animation:k1050 2450ms linear infinite}
+@keyframes k1051{to{stroke-dashoffset:-318}}
+.k1051{animation:k1051 2450ms linear infinite}
+@keyframes k1052{to{stroke-dashoffset:-290}}
+.k1052{animation:k1052 2450ms linear infinite}
+@keyframes k1053{to{stroke-dashoffset:-268}}
+.k1053{animation:k1053 2450ms linear infinite}
+@keyframes k1054{to{stroke-dashoffset:-231}}
+.k1054{animation:k1054 2450ms linear infinite}
+@keyframes k1055{to{stroke-dashoffset:-203}}
+.k1055{animation:k1055 2450ms linear infinite}
+@keyframes k1056{to{stroke-dashoffset:-181}}
+.k1056{animation:k1056 2450ms linear infinite}
 </style>
-<g><path class="bus" stroke="#1F6D5C" d="M63,0 V448"/><path class="cm k1021" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-6" d="M63,2.5 V445.5"/><path class="cm k1022" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="22" d="M63,2.5 V445.5"/><path class="cm k1023" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="44" d="M63,2.5 V445.5"/></g><g><path class="bus" stroke="#9A3412" d="M90,0 V448"/><path class="cm k1024" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="-96" d="M90,2.5 V445.5"/><path class="cm k1025" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="-68" d="M90,2.5 V445.5"/><path class="cm k1026" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="-46" d="M90,2.5 V445.5"/></g><g><path class="bus" stroke="#5F6E73" d="M117,0 V448"/><path class="cm k1027" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="26" d="M117,2.5 V445.5"/><path class="cm k1028" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="54" d="M117,2.5 V445.5"/><path class="cm k1029" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="76" d="M117,2.5 V445.5"/></g><g><path class="bus" stroke="#9A3412" d="M90,120 H150"/><path class="cm k1030" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="-54" d="M94,120 H145"/><path class="cm k1031" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="-26" d="M94,120 H145"/><path class="cm k1032" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="-4" d="M94,120 H145"/></g><g><path class="bus" stroke="#9A3412" d="M198,120 H264 V295"/><path class="cm k1033" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="4" d="M202,120 H264 V292"/><path class="cm k1034" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="32" d="M202,120 H264 V292"/><path class="cm k1035" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="54" d="M202,120 H264 V292"/></g><circle cx="264" cy="175" r="2.6" fill="#9A3412"/><circle cx="264" cy="235" r="2.6" fill="#9A3412"/><g><path class="bus" stroke="#9A3412" d="M264,175 H300"/><path class="cm k1036" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="-26" d="M266.5,175 H297"/><path class="cm k1037" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="2" d="M266.5,175 H297"/><path class="cm k1038" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="24" d="M266.5,175 H297"/></g><g><path class="bus" stroke="#9A3412" d="M264,235 H300"/><path class="cm k1039" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="-81" d="M266.5,235 H297"/><path class="cm k1040" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="-53" d="M266.5,235 H297"/><path class="cm k1041" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="-31" d="M266.5,235 H297"/></g><g><path class="bus" stroke="#9A3412" d="M264,295 H300"/><path class="cm k1042" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="-136" d="M266.5,295 H297"/><path class="cm k1043" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="-108" d="M266.5,295 H297"/><path class="cm k1044" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="-86" d="M266.5,295 H297"/></g><text x="300" y="162" class="ts dim" font-size="10" letter-spacing="1.2">NEON</text><path fill="none" stroke="#5F6E73" stroke-width="1.4" d="M300,172 H420 M300,178 H420"/><text x="300" y="216" class="ts dim" font-size="10" letter-spacing="1.2">AVX2</text><path fill="none" stroke="#5F6E73" stroke-width="1.4" d="M300,226 H420 M300,232 H420 M300,238 H420 M300,244 H420"/><text x="300" y="264" class="ts dim" font-size="10" letter-spacing="1.2">AVX-512</text><path fill="none" stroke="#5F6E73" stroke-width="1.4" d="M300,274 H420 M300,280 H420 M300,286 H420 M300,292 H420 M300,298 H420 M300,304 H420 M300,310 H420 M300,316 H420"/><path class="bus" stroke="#9A3412" d="M420,175 H456 V295 H420 M420,235 H456"/><g><path class="bus" stroke="#9A3412" d="M456,235 H492"/><path class="cm k1045" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="-108" d="M422,175 H456 V235 H489"/><path class="cm k1046" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="-80" d="M422,175 H456 V235 H489"/><path class="cm k1047" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="-58" d="M422,175 H456 V235 H489"/></g><rect x="492" y="214" width="170" height="42" rx="8" fill="none" stroke="#9A3412" stroke-width="1.6"/><text x="504" y="240" class="ts" font-size="11.5" letter-spacing="1.3">BENCHDOT/256</text><g><path class="bus" stroke="#9A3412" d="M577,256 V300"/><path class="cm k1048" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="-21" d="M577,258.5 V296"/><path class="cm k1049" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="7" d="M577,258.5 V296"/><path class="cm k1050" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="29" d="M577,258.5 V296"/></g><rect x="492" y="300" width="208" height="42" rx="8" fill="none" stroke="#5F6E73" stroke-width="1.6"/><text x="504" y="326" class="ts" font-size="11.5" letter-spacing="1.3">WASM_SIMD128 · 43,751 B</text><text x="492" y="360" class="ts dim" font-size="10" letter-spacing="1.1">BYTE-IDENTICAL TO MAIN · CHECKED DAILY IN CI</text><g transform="translate(150,96) scale(1.0000)"><rect x="0.75" y="0.75" width="46.5" height="46.5" rx="12" fill="#0A0A0B" stroke="#6E7A80" stroke-width="1"/>
+<g><path class="bus" stroke="#1F6D5C" d="M63,0 V448"/><path class="cm k1027" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-6" d="M63,2.5 V445.5"/><path class="cm k1028" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="22" d="M63,2.5 V445.5"/><path class="cm k1029" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="44" d="M63,2.5 V445.5"/></g><g><path class="bus" stroke="#9A3412" d="M90,0 V448"/><path class="cm k1030" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="-96" d="M90,2.5 V445.5"/><path class="cm k1031" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="-68" d="M90,2.5 V445.5"/><path class="cm k1032" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="-46" d="M90,2.5 V445.5"/></g><g><path class="bus" stroke="#5F6E73" d="M117,0 V448"/><path class="cm k1033" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="26" d="M117,2.5 V445.5"/><path class="cm k1034" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="54" d="M117,2.5 V445.5"/><path class="cm k1035" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="76" d="M117,2.5 V445.5"/></g><g><path class="bus" stroke="#9A3412" d="M90,120 H150"/><path class="cm k1036" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="-54" d="M94,120 H145"/><path class="cm k1037" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="-26" d="M94,120 H145"/><path class="cm k1038" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="-4" d="M94,120 H145"/></g><g><path class="bus" stroke="#9A3412" d="M198,120 H264 V295"/><path class="cm k1039" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="4" d="M202,120 H264 V292"/><path class="cm k1040" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="32" d="M202,120 H264 V292"/><path class="cm k1041" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="54" d="M202,120 H264 V292"/></g><circle cx="264" cy="175" r="2.6" fill="#9A3412"/><circle cx="264" cy="235" r="2.6" fill="#9A3412"/><g><path class="bus" stroke="#9A3412" d="M264,175 H300"/><path class="cm k1042" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="-26" d="M266.5,175 H297"/><path class="cm k1043" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="2" d="M266.5,175 H297"/><path class="cm k1044" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="24" d="M266.5,175 H297"/></g><g><path class="bus" stroke="#9A3412" d="M264,235 H300"/><path class="cm k1045" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="-81" d="M266.5,235 H297"/><path class="cm k1046" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="-53" d="M266.5,235 H297"/><path class="cm k1047" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="-31" d="M266.5,235 H297"/></g><g><path class="bus" stroke="#9A3412" d="M264,295 H300"/><path class="cm k1048" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="-136" d="M266.5,295 H297"/><path class="cm k1049" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="-108" d="M266.5,295 H297"/><path class="cm k1050" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="-86" d="M266.5,295 H297"/></g><text x="300" y="162" class="ts dim" font-size="10" letter-spacing="1.2">NEON</text><path fill="none" stroke="#5F6E73" stroke-width="1.4" d="M300,172 H420 M300,178 H420"/><text x="300" y="216" class="ts dim" font-size="10" letter-spacing="1.2">AVX2</text><path fill="none" stroke="#5F6E73" stroke-width="1.4" d="M300,226 H420 M300,232 H420 M300,238 H420 M300,244 H420"/><text x="300" y="264" class="ts dim" font-size="10" letter-spacing="1.2">AVX-512</text><path fill="none" stroke="#5F6E73" stroke-width="1.4" d="M300,274 H420 M300,280 H420 M300,286 H420 M300,292 H420 M300,298 H420 M300,304 H420 M300,310 H420 M300,316 H420"/><path class="bus" stroke="#9A3412" d="M420,175 H456 V295 H420 M420,235 H456"/><g><path class="bus" stroke="#9A3412" d="M456,235 H492"/><path class="cm k1051" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="-108" d="M422,175 H456 V235 H489"/><path class="cm k1052" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="-80" d="M422,175 H456 V235 H489"/><path class="cm k1053" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="-58" d="M422,175 H456 V235 H489"/></g><rect x="492" y="214" width="170" height="42" rx="8" fill="none" stroke="#9A3412" stroke-width="1.6"/><text x="504" y="240" class="ts" font-size="11.5" letter-spacing="1.3">BENCHDOT/256</text><g><path class="bus" stroke="#9A3412" d="M577,256 V300"/><path class="cm k1054" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="-21" d="M577,258.5 V296"/><path class="cm k1055" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="7" d="M577,258.5 V296"/><path class="cm k1056" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="29" d="M577,258.5 V296"/></g><rect x="492" y="300" width="208" height="42" rx="8" fill="none" stroke="#5F6E73" stroke-width="1.6"/><text x="504" y="326" class="ts" font-size="11.5" letter-spacing="1.3">WASM_SIMD128 · 43,751 B</text><text x="492" y="360" class="ts dim" font-size="10" letter-spacing="1.1">BYTE-IDENTICAL TO MAIN · CHECKED DAILY IN CI</text><g transform="translate(150,96) scale(1.0000)"><rect x="0.75" y="0.75" width="46.5" height="46.5" rx="12" fill="#0A0A0B" stroke="#6E7A80" stroke-width="1"/>
 <path transform="translate(4.8,4.8) scale(0.96)" d="M8,11 H32 M8,17 H32 M8,23 H32 M8,29 H32"
   fill="none" stroke="#6B6B76" stroke-width="1.4"/>
 <path transform="translate(4.8,4.8) scale(0.96)"

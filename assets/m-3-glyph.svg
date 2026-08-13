@@ -12,70 +12,70 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#E4E9E9}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k409{to{stroke-dashoffset:-216}}
-.k409{animation:k409 2100ms linear infinite}
-@keyframes k410{to{stroke-dashoffset:-188}}
-.k410{animation:k410 2100ms linear infinite}
-@keyframes k411{to{stroke-dashoffset:-166}}
-.k411{animation:k411 2100ms linear infinite}
-@keyframes k412{to{stroke-dashoffset:-306}}
-.k412{animation:k412 2450ms linear infinite}
-@keyframes k413{to{stroke-dashoffset:-278}}
-.k413{animation:k413 2450ms linear infinite}
-@keyframes k414{to{stroke-dashoffset:-256}}
-.k414{animation:k414 2450ms linear infinite}
-@keyframes k415{to{stroke-dashoffset:-184}}
-.k415{animation:k415 2750ms linear infinite}
-@keyframes k416{to{stroke-dashoffset:-156}}
-.k416{animation:k416 2750ms linear infinite}
-@keyframes k417{to{stroke-dashoffset:-134}}
-.k417{animation:k417 2750ms linear infinite}
-@keyframes k418{to{stroke-dashoffset:-264}}
+@keyframes k415{to{stroke-dashoffset:-216}}
+.k415{animation:k415 2100ms linear infinite}
+@keyframes k416{to{stroke-dashoffset:-188}}
+.k416{animation:k416 2100ms linear infinite}
+@keyframes k417{to{stroke-dashoffset:-166}}
+.k417{animation:k417 2100ms linear infinite}
+@keyframes k418{to{stroke-dashoffset:-306}}
 .k418{animation:k418 2450ms linear infinite}
-@keyframes k419{to{stroke-dashoffset:-236}}
+@keyframes k419{to{stroke-dashoffset:-278}}
 .k419{animation:k419 2450ms linear infinite}
-@keyframes k420{to{stroke-dashoffset:-214}}
+@keyframes k420{to{stroke-dashoffset:-256}}
 .k420{animation:k420 2450ms linear infinite}
-@keyframes k421{to{stroke-dashoffset:-206}}
-.k421{animation:k421 2450ms linear infinite}
-@keyframes k422{to{stroke-dashoffset:-178}}
-.k422{animation:k422 2450ms linear infinite}
-@keyframes k423{to{stroke-dashoffset:-156}}
-.k423{animation:k423 2450ms linear infinite}
-@keyframes k424{to{stroke-dashoffset:-236}}
+@keyframes k421{to{stroke-dashoffset:-184}}
+.k421{animation:k421 2750ms linear infinite}
+@keyframes k422{to{stroke-dashoffset:-156}}
+.k422{animation:k422 2750ms linear infinite}
+@keyframes k423{to{stroke-dashoffset:-134}}
+.k423{animation:k423 2750ms linear infinite}
+@keyframes k424{to{stroke-dashoffset:-264}}
 .k424{animation:k424 2450ms linear infinite}
-@keyframes k425{to{stroke-dashoffset:-208}}
+@keyframes k425{to{stroke-dashoffset:-236}}
 .k425{animation:k425 2450ms linear infinite}
-@keyframes k426{to{stroke-dashoffset:-186}}
+@keyframes k426{to{stroke-dashoffset:-214}}
 .k426{animation:k426 2450ms linear infinite}
-@keyframes k427{to{stroke-dashoffset:-291}}
+@keyframes k427{to{stroke-dashoffset:-206}}
 .k427{animation:k427 2450ms linear infinite}
-@keyframes k428{to{stroke-dashoffset:-263}}
+@keyframes k428{to{stroke-dashoffset:-178}}
 .k428{animation:k428 2450ms linear infinite}
-@keyframes k429{to{stroke-dashoffset:-241}}
+@keyframes k429{to{stroke-dashoffset:-156}}
 .k429{animation:k429 2450ms linear infinite}
-@keyframes k430{to{stroke-dashoffset:-346}}
+@keyframes k430{to{stroke-dashoffset:-236}}
 .k430{animation:k430 2450ms linear infinite}
-@keyframes k431{to{stroke-dashoffset:-318}}
+@keyframes k431{to{stroke-dashoffset:-208}}
 .k431{animation:k431 2450ms linear infinite}
-@keyframes k432{to{stroke-dashoffset:-296}}
+@keyframes k432{to{stroke-dashoffset:-186}}
 .k432{animation:k432 2450ms linear infinite}
-@keyframes k433{to{stroke-dashoffset:-318}}
+@keyframes k433{to{stroke-dashoffset:-291}}
 .k433{animation:k433 2450ms linear infinite}
-@keyframes k434{to{stroke-dashoffset:-290}}
+@keyframes k434{to{stroke-dashoffset:-263}}
 .k434{animation:k434 2450ms linear infinite}
-@keyframes k435{to{stroke-dashoffset:-268}}
+@keyframes k435{to{stroke-dashoffset:-241}}
 .k435{animation:k435 2450ms linear infinite}
-@keyframes k436{to{stroke-dashoffset:-231}}
+@keyframes k436{to{stroke-dashoffset:-346}}
 .k436{animation:k436 2450ms linear infinite}
-@keyframes k437{to{stroke-dashoffset:-203}}
+@keyframes k437{to{stroke-dashoffset:-318}}
 .k437{animation:k437 2450ms linear infinite}
-@keyframes k438{to{stroke-dashoffset:-181}}
+@keyframes k438{to{stroke-dashoffset:-296}}
 .k438{animation:k438 2450ms linear infinite}
+@keyframes k439{to{stroke-dashoffset:-318}}
+.k439{animation:k439 2450ms linear infinite}
+@keyframes k440{to{stroke-dashoffset:-290}}
+.k440{animation:k440 2450ms linear infinite}
+@keyframes k441{to{stroke-dashoffset:-268}}
+.k441{animation:k441 2450ms linear infinite}
+@keyframes k442{to{stroke-dashoffset:-231}}
+.k442{animation:k442 2450ms linear infinite}
+@keyframes k443{to{stroke-dashoffset:-203}}
+.k443{animation:k443 2450ms linear infinite}
+@keyframes k444{to{stroke-dashoffset:-181}}
+.k444{animation:k444 2450ms linear infinite}
 </style>
-<g><path class="bus" stroke="#4FB39A" d="M40,0 V690"/><path class="cm k409" stroke="#A9EFD9" stroke-dasharray="34 176" stroke-dashoffset="-6" d="M40,2.5 V687.5"/><path class="cm k410" stroke="#83D6BC" stroke-dasharray="28 182" stroke-dashoffset="22" d="M40,2.5 V687.5"/><path class="cm k411" stroke="#66C2A8" stroke-dasharray="22 188" stroke-dashoffset="44" d="M40,2.5 V687.5"/></g><g><path class="bus" stroke="#E0703A" d="M54,0 V690"/><path class="cm k412" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-96" d="M54,2.5 V687.5"/><path class="cm k413" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-68" d="M54,2.5 V687.5"/><path class="cm k414" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-46" d="M54,2.5 V687.5"/></g><g><path class="bus" stroke="#8A9599" d="M68,0 V690"/><path class="cm k415" stroke="#C9D3D6" stroke-dasharray="34 176" stroke-dashoffset="26" d="M68,2.5 V687.5"/><path class="cm k416" stroke="#AEB9BD" stroke-dasharray="28 182" stroke-dashoffset="54" d="M68,2.5 V687.5"/><path class="cm k417" stroke="#9AA5A9" stroke-dasharray="22 188" stroke-dashoffset="76" d="M68,2.5 V687.5"/></g><g><path class="bus" stroke="#E0703A" d="M54,120 H92.5"/><path class="cm k418" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-54" d="M58,120 H88"/><path class="cm k419" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-26" d="M58,120 H88"/><path class="cm k420" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-4" d="M58,120 H88"/></g><g transform="translate(92,96) scale(1.0000)"><rect x="0.75" y="0.75" width="46.5" height="46.5" rx="12" fill="#0A0A0B" stroke="#7A828A" stroke-width="1"/>
+<g><path class="bus" stroke="#4FB39A" d="M40,0 V690"/><path class="cm k415" stroke="#A9EFD9" stroke-dasharray="34 176" stroke-dashoffset="-6" d="M40,2.5 V687.5"/><path class="cm k416" stroke="#83D6BC" stroke-dasharray="28 182" stroke-dashoffset="22" d="M40,2.5 V687.5"/><path class="cm k417" stroke="#66C2A8" stroke-dasharray="22 188" stroke-dashoffset="44" d="M40,2.5 V687.5"/></g><g><path class="bus" stroke="#E0703A" d="M54,0 V690"/><path class="cm k418" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-96" d="M54,2.5 V687.5"/><path class="cm k419" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-68" d="M54,2.5 V687.5"/><path class="cm k420" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-46" d="M54,2.5 V687.5"/></g><g><path class="bus" stroke="#8A9599" d="M68,0 V690"/><path class="cm k421" stroke="#C9D3D6" stroke-dasharray="34 176" stroke-dashoffset="26" d="M68,2.5 V687.5"/><path class="cm k422" stroke="#AEB9BD" stroke-dasharray="28 182" stroke-dashoffset="54" d="M68,2.5 V687.5"/><path class="cm k423" stroke="#9AA5A9" stroke-dasharray="22 188" stroke-dashoffset="76" d="M68,2.5 V687.5"/></g><g><path class="bus" stroke="#E0703A" d="M54,120 H92.5"/><path class="cm k424" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-54" d="M58,120 H88"/><path class="cm k425" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-26" d="M58,120 H88"/><path class="cm k426" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-4" d="M58,120 H88"/></g><g transform="translate(92,96) scale(1.0000)"><rect x="0.75" y="0.75" width="46.5" height="46.5" rx="12" fill="#0A0A0B" stroke="#7A828A" stroke-width="1"/>
 <path transform="translate(4.8,4.8) scale(0.96)" d="M8,11 H32 M8,17 H32 M8,23 H32 M8,29 H32"
   fill="none" stroke="#6B6B76" stroke-width="1.4"/>
 <path transform="translate(4.8,4.8) scale(0.96)"
   d="M12.5 16 C12.5 10.5 27 9.5 27 15.5 C27 20 17 24 12 30 L29 30"
-  fill="none" stroke="#F7F8F8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g><text x="90.21" y="54" class="d" font-size="24" letter-spacing="0.5">III — GLYPH</text><text x="91.54" y="76" class="dim" font-size="13">SIMD kernels over a net the course provided.</text><text x="170.39" y="140" class="d" font-size="44">3.5×</text><text x="172" y="172" class="dim" font-size="12">benchDot/256 — course baseline,</text><text x="172" y="189" class="dim" font-size="12">reference machine, committed run.</text><g><path class="bus" stroke="#E0703A" d="M140,120 H160 V368"/><path class="cm k421" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="4" d="M144,120 H160 V365"/><path class="cm k422" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="32" d="M144,120 H160 V365"/><path class="cm k423" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="54" d="M144,120 H160 V365"/></g><circle cx="160" cy="240" r="2.6" fill="#E0703A"/><circle cx="160" cy="300" r="2.6" fill="#E0703A"/><g><path class="bus" stroke="#E0703A" d="M160,240 H200"/><path class="cm k424" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-26" d="M162.5,240 H197"/><path class="cm k425" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="2" d="M162.5,240 H197"/><path class="cm k426" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="24" d="M162.5,240 H197"/></g><g><path class="bus" stroke="#E0703A" d="M160,300 H200"/><path class="cm k427" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-81" d="M162.5,300 H197"/><path class="cm k428" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-53" d="M162.5,300 H197"/><path class="cm k429" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-31" d="M162.5,300 H197"/></g><g><path class="bus" stroke="#E0703A" d="M160,368 H200"/><path class="cm k430" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-136" d="M162.5,368 H197"/><path class="cm k431" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-108" d="M162.5,368 H197"/><path class="cm k432" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-86" d="M162.5,368 H197"/></g><text x="200" y="227" class="ts dim" font-size="10" letter-spacing="1.2">NEON</text><path fill="none" stroke="#8A9599" stroke-width="1.4" d="M200,237 H320 M200,243 H320"/><text x="200" y="281" class="ts dim" font-size="10" letter-spacing="1.2">AVX2</text><path fill="none" stroke="#8A9599" stroke-width="1.4" d="M200,291 H320 M200,297 H320 M200,303 H320 M200,309 H320"/><text x="200" y="337" class="ts dim" font-size="10" letter-spacing="1.2">AVX-512</text><path fill="none" stroke="#8A9599" stroke-width="1.4" d="M200,347 H320 M200,353 H320 M200,359 H320 M200,365 H320 M200,371 H320 M200,377 H320 M200,383 H320 M200,389 H320"/><path class="bus" stroke="#E0703A" d="M320,240 H344 V368 H320 M320,300 H344"/><g><path class="bus" stroke="#E0703A" d="M344,368 V404"/><path class="cm k433" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-108" d="M322,240 H344 V400"/><path class="cm k434" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-80" d="M322,240 H344 V400"/><path class="cm k435" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-58" d="M322,240 H344 V400"/></g><rect x="200" y="404" width="160" height="36" rx="8" fill="none" stroke="#E0703A" stroke-width="1.6"/><text x="212" y="426" class="ts" font-size="11.5" letter-spacing="1.3">BENCHDOT/256</text><g><path class="bus" stroke="#E0703A" d="M280,440 V464"/><path class="cm k436" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-21" d="M280,442.5 V459.5"/><path class="cm k437" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="7" d="M280,442.5 V459.5"/><path class="cm k438" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="29" d="M280,442.5 V459.5"/></g><rect x="200" y="464" width="196" height="36" rx="8" fill="none" stroke="#8A9599" stroke-width="1.6"/><text x="212" y="486" class="ts" font-size="11.5" letter-spacing="1.3">WASM_SIMD128 · 43,751 B</text><text x="200" y="522" class="ts dim" font-size="10" letter-spacing="1.1">BYTE-IDENTICAL TO MAIN</text><text x="200" y="537" class="ts dim" font-size="10" letter-spacing="1.1">CHECKED DAILY IN CI</text><rect x="92" y="556" width="4" height="16" fill="#E0703A"/><text x="106" y="569" class="mid" font-size="13">the same flags run 10.7× slower on</text><text x="106" y="588" class="mid" font-size="13">benchAxpy/128 — below the size floor,</text><text x="106" y="608" class="dim" font-size="12">where threading costs more than it pays.</text><text x="106" y="625" class="dim" font-size="12">and 97.01% is a training-time number:</text><text x="106" y="642" class="dim" font-size="12">the test set that graded the net</text><text x="106" y="659" class="dim" font-size="12">also picked its checkpoint.</text></svg>
+  fill="none" stroke="#F7F8F8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g><text x="90.21" y="54" class="d" font-size="24" letter-spacing="0.5">III — GLYPH</text><text x="91.54" y="76" class="dim" font-size="13">SIMD kernels over a net the course provided.</text><text x="170.39" y="140" class="d" font-size="44">3.5×</text><text x="172" y="172" class="dim" font-size="12">benchDot/256 — course baseline,</text><text x="172" y="189" class="dim" font-size="12">reference machine, committed run.</text><g><path class="bus" stroke="#E0703A" d="M140,120 H160 V368"/><path class="cm k427" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="4" d="M144,120 H160 V365"/><path class="cm k428" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="32" d="M144,120 H160 V365"/><path class="cm k429" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="54" d="M144,120 H160 V365"/></g><circle cx="160" cy="240" r="2.6" fill="#E0703A"/><circle cx="160" cy="300" r="2.6" fill="#E0703A"/><g><path class="bus" stroke="#E0703A" d="M160,240 H200"/><path class="cm k430" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-26" d="M162.5,240 H197"/><path class="cm k431" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="2" d="M162.5,240 H197"/><path class="cm k432" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="24" d="M162.5,240 H197"/></g><g><path class="bus" stroke="#E0703A" d="M160,300 H200"/><path class="cm k433" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-81" d="M162.5,300 H197"/><path class="cm k434" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-53" d="M162.5,300 H197"/><path class="cm k435" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-31" d="M162.5,300 H197"/></g><g><path class="bus" stroke="#E0703A" d="M160,368 H200"/><path class="cm k436" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-136" d="M162.5,368 H197"/><path class="cm k437" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-108" d="M162.5,368 H197"/><path class="cm k438" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-86" d="M162.5,368 H197"/></g><text x="200" y="227" class="ts dim" font-size="10" letter-spacing="1.2">NEON</text><path fill="none" stroke="#8A9599" stroke-width="1.4" d="M200,237 H320 M200,243 H320"/><text x="200" y="281" class="ts dim" font-size="10" letter-spacing="1.2">AVX2</text><path fill="none" stroke="#8A9599" stroke-width="1.4" d="M200,291 H320 M200,297 H320 M200,303 H320 M200,309 H320"/><text x="200" y="337" class="ts dim" font-size="10" letter-spacing="1.2">AVX-512</text><path fill="none" stroke="#8A9599" stroke-width="1.4" d="M200,347 H320 M200,353 H320 M200,359 H320 M200,365 H320 M200,371 H320 M200,377 H320 M200,383 H320 M200,389 H320"/><path class="bus" stroke="#E0703A" d="M320,240 H344 V368 H320 M320,300 H344"/><g><path class="bus" stroke="#E0703A" d="M344,368 V404"/><path class="cm k439" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-108" d="M322,240 H344 V400"/><path class="cm k440" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-80" d="M322,240 H344 V400"/><path class="cm k441" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-58" d="M322,240 H344 V400"/></g><rect x="200" y="404" width="160" height="36" rx="8" fill="none" stroke="#E0703A" stroke-width="1.6"/><text x="212" y="426" class="ts" font-size="11.5" letter-spacing="1.3">BENCHDOT/256</text><g><path class="bus" stroke="#E0703A" d="M280,440 V464"/><path class="cm k442" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-21" d="M280,442.5 V459.5"/><path class="cm k443" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="7" d="M280,442.5 V459.5"/><path class="cm k444" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="29" d="M280,442.5 V459.5"/></g><rect x="200" y="464" width="196" height="36" rx="8" fill="none" stroke="#8A9599" stroke-width="1.6"/><text x="212" y="486" class="ts" font-size="11.5" letter-spacing="1.3">WASM_SIMD128 · 43,751 B</text><text x="200" y="522" class="ts dim" font-size="10" letter-spacing="1.1">BYTE-IDENTICAL TO MAIN</text><text x="200" y="537" class="ts dim" font-size="10" letter-spacing="1.1">CHECKED DAILY IN CI</text><rect x="92" y="556" width="4" height="16" fill="#E0703A"/><text x="106" y="569" class="mid" font-size="13">the same flags run 10.7× slower on</text><text x="106" y="588" class="mid" font-size="13">benchAxpy/128 — below the size floor,</text><text x="106" y="608" class="dim" font-size="12">where threading costs more than it pays.</text><text x="106" y="625" class="dim" font-size="12">and 97.01% is a training-time number:</text><text x="106" y="642" class="dim" font-size="12">the test set that graded the net</text><text x="106" y="659" class="dim" font-size="12">also picked its checkpoint.</text></svg>

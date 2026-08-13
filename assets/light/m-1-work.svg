@@ -12,29 +12,29 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#1A2224}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#1A2224;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k1213{to{stroke-dashoffset:-271}}
-.k1213{animation:k1213 2100ms linear infinite}
-@keyframes k1214{to{stroke-dashoffset:-243}}
-.k1214{animation:k1214 2100ms linear infinite}
-@keyframes k1215{to{stroke-dashoffset:-221}}
-.k1215{animation:k1215 2100ms linear infinite}
-@keyframes k1216{to{stroke-dashoffset:-186}}
-.k1216{animation:k1216 2450ms linear infinite}
-@keyframes k1217{to{stroke-dashoffset:-158}}
-.k1217{animation:k1217 2450ms linear infinite}
-@keyframes k1218{to{stroke-dashoffset:-136}}
-.k1218{animation:k1218 2450ms linear infinite}
-@keyframes k1219{to{stroke-dashoffset:-336}}
-.k1219{animation:k1219 2750ms linear infinite}
-@keyframes k1220{to{stroke-dashoffset:-308}}
-.k1220{animation:k1220 2750ms linear infinite}
-@keyframes k1221{to{stroke-dashoffset:-286}}
-.k1221{animation:k1221 2750ms linear infinite}
-@keyframes k1222{to{stroke-dashoffset:-224}}
-.k1222{animation:k1222 2750ms linear infinite}
-@keyframes k1223{to{stroke-dashoffset:-196}}
-.k1223{animation:k1223 2750ms linear infinite}
-@keyframes k1224{to{stroke-dashoffset:-174}}
-.k1224{animation:k1224 2750ms linear infinite}
+@keyframes k1225{to{stroke-dashoffset:-271}}
+.k1225{animation:k1225 2100ms linear infinite}
+@keyframes k1226{to{stroke-dashoffset:-243}}
+.k1226{animation:k1226 2100ms linear infinite}
+@keyframes k1227{to{stroke-dashoffset:-221}}
+.k1227{animation:k1227 2100ms linear infinite}
+@keyframes k1228{to{stroke-dashoffset:-186}}
+.k1228{animation:k1228 2450ms linear infinite}
+@keyframes k1229{to{stroke-dashoffset:-158}}
+.k1229{animation:k1229 2450ms linear infinite}
+@keyframes k1230{to{stroke-dashoffset:-136}}
+.k1230{animation:k1230 2450ms linear infinite}
+@keyframes k1231{to{stroke-dashoffset:-336}}
+.k1231{animation:k1231 2750ms linear infinite}
+@keyframes k1232{to{stroke-dashoffset:-308}}
+.k1232{animation:k1232 2750ms linear infinite}
+@keyframes k1233{to{stroke-dashoffset:-286}}
+.k1233{animation:k1233 2750ms linear infinite}
+@keyframes k1234{to{stroke-dashoffset:-224}}
+.k1234{animation:k1234 2750ms linear infinite}
+@keyframes k1235{to{stroke-dashoffset:-196}}
+.k1235{animation:k1235 2750ms linear infinite}
+@keyframes k1236{to{stroke-dashoffset:-174}}
+.k1236{animation:k1236 2750ms linear infinite}
 </style>
-<g><path class="bus" stroke="#1F6D5C" d="M40,0 V380"/><path class="cm k1213" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-61" d="M40,2.5 V377.5"/><path class="cm k1214" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="-33" d="M40,2.5 V377.5"/><path class="cm k1215" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="-11" d="M40,2.5 V377.5"/></g><g><path class="bus" stroke="#9A3412" d="M54,0 V380"/><path class="cm k1216" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="24" d="M54,2.5 V377.5"/><path class="cm k1217" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="52" d="M54,2.5 V377.5"/><path class="cm k1218" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="74" d="M54,2.5 V377.5"/></g><g><path class="bus" stroke="#5F6E73" d="M68,0 V380"/><path class="cm k1219" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-126" d="M68,2.5 V377.5"/><path class="cm k1220" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="-98" d="M68,2.5 V377.5"/><path class="cm k1221" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="-76" d="M68,2.5 V377.5"/></g><g><path class="bus" stroke="#5F6E73" d="M68,120 H90.5"/><path class="cm k1222" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-14" d="M72,120 H86"/><path class="cm k1223" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="14" d="M72,120 H86"/><path class="cm k1224" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="36" d="M72,120 H86"/></g><g><rect x="92.75" y="96.75" width="46.5" height="46.5" rx="12" fill="none" stroke="#5F6E73" stroke-width="1.4" stroke-dasharray="5 4"/><rect x="90.25" y="118" width="5" height="4" fill="#5F6E73"/></g><text x="92" y="163" class="ts dim" font-size="10" letter-spacing="1.1">NO PRODUCT MARK — THE WORK IS OFF-REPO</text><text x="90.21" y="54" class="d" font-size="24" letter-spacing="0.5">I — WORK</text><text x="91.93" y="74" class="dim" font-size="13">twelve months of production data work —</text><text x="91.18" y="90" class="dim" font-size="13">none of it public.</text><text x="404" y="30" class="ts dim" font-size="10.5" letter-spacing="1.4" text-anchor="end">THE EXCEPTION — ATTESTED, NOT DERIVED</text><text x="89.38" y="224" class="d" font-size="44">57.8M</text><text x="92" y="256" class="dim" font-size="12">rows in one field-usage table,</text><text x="92" y="273" class="dim" font-size="12">from 1.6M Oracle Analytics query logs.</text><rect x="92" y="300" width="4" height="16" fill="#5F6E73"/><text x="106" y="313" class="mid" font-size="13">none of these numbers can be re-derived by you.</text><text x="106" y="333" class="dim" font-size="12">the data belongs to Miami University</text><text x="106" y="350" class="dim" font-size="12">and to a competition — this section is my word.</text></svg>
+<g><path class="bus" stroke="#1F6D5C" d="M40,0 V380"/><path class="cm k1225" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-61" d="M40,2.5 V377.5"/><path class="cm k1226" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="-33" d="M40,2.5 V377.5"/><path class="cm k1227" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="-11" d="M40,2.5 V377.5"/></g><g><path class="bus" stroke="#9A3412" d="M54,0 V380"/><path class="cm k1228" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="24" d="M54,2.5 V377.5"/><path class="cm k1229" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="52" d="M54,2.5 V377.5"/><path class="cm k1230" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="74" d="M54,2.5 V377.5"/></g><g><path class="bus" stroke="#5F6E73" d="M68,0 V380"/><path class="cm k1231" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-126" d="M68,2.5 V377.5"/><path class="cm k1232" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="-98" d="M68,2.5 V377.5"/><path class="cm k1233" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="-76" d="M68,2.5 V377.5"/></g><g><path class="bus" stroke="#5F6E73" d="M68,120 H90.5"/><path class="cm k1234" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-14" d="M72,120 H86"/><path class="cm k1235" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="14" d="M72,120 H86"/><path class="cm k1236" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="36" d="M72,120 H86"/></g><g><rect x="92.75" y="96.75" width="46.5" height="46.5" rx="12" fill="none" stroke="#5F6E73" stroke-width="1.4" stroke-dasharray="5 4"/><rect x="90.25" y="118" width="5" height="4" fill="#5F6E73"/></g><text x="92" y="163" class="ts dim" font-size="10" letter-spacing="1.1">NO PRODUCT MARK — THE WORK IS OFF-REPO</text><text x="90.21" y="54" class="d" font-size="24" letter-spacing="0.5">I — WORK</text><text x="91.93" y="74" class="dim" font-size="13">twelve months of production data work —</text><text x="91.18" y="90" class="dim" font-size="13">none of it public.</text><text x="404" y="30" class="ts dim" font-size="10.5" letter-spacing="1.4" text-anchor="end">THE EXCEPTION — ATTESTED, NOT DERIVED</text><text x="89.38" y="224" class="d" font-size="44">57.8M</text><text x="92" y="256" class="dim" font-size="12">rows in one field-usage table,</text><text x="92" y="273" class="dim" font-size="12">from 1.6M Oracle Analytics query logs.</text><rect x="92" y="300" width="4" height="16" fill="#5F6E73"/><text x="106" y="313" class="mid" font-size="13">none of these numbers can be re-derived by you.</text><text x="106" y="333" class="dim" font-size="12">the data belongs to Miami University</text><text x="106" y="350" class="dim" font-size="12">and to a competition — this section is my word.</text></svg>

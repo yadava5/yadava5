@@ -10,17 +10,17 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#1A2224}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#1A2224;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k1528{to{stroke-dashoffset:400}}
-.k1528{animation:k1528 2100ms linear infinite}
-@keyframes k1529{to{stroke-dashoffset:428}}
-.k1529{animation:k1529 2100ms linear infinite}
-@keyframes k1530{to{stroke-dashoffset:450}}
-.k1530{animation:k1530 2100ms linear infinite}
-@keyframes k1531{to{stroke-dashoffset:505.0}}
-.k1531{animation:k1531 2100ms linear infinite}
-@keyframes k1532{to{stroke-dashoffset:533.0}}
-.k1532{animation:k1532 2100ms linear infinite}
-@keyframes k1533{to{stroke-dashoffset:555.0}}
-.k1533{animation:k1533 2100ms linear infinite}
+@keyframes k1540{to{stroke-dashoffset:400}}
+.k1540{animation:k1540 2100ms linear infinite}
+@keyframes k1541{to{stroke-dashoffset:428}}
+.k1541{animation:k1541 2100ms linear infinite}
+@keyframes k1542{to{stroke-dashoffset:450}}
+.k1542{animation:k1542 2100ms linear infinite}
+@keyframes k1543{to{stroke-dashoffset:505.0}}
+.k1543{animation:k1543 2100ms linear infinite}
+@keyframes k1544{to{stroke-dashoffset:533.0}}
+.k1544{animation:k1544 2100ms linear infinite}
+@keyframes k1545{to{stroke-dashoffset:555.0}}
+.k1545{animation:k1545 2100ms linear infinite}
 </style>
-<g><path class="bus" stroke="#1F6D5C" d="M0,36 H36 V58"/><path class="cm k1528" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="610" d="M0,36 H36 V55.5"/><path class="cm k1529" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="638" d="M0,36 H36 V55.5"/><path class="cm k1530" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="660" d="M0,36 H36 V55.5"/><path class="cm k1531" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="715.0" d="M0,36 H36 V55.5"/><path class="cm k1532" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="743.0" d="M0,36 H36 V55.5"/><path class="cm k1533" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="765.0" d="M0,36 H36 V55.5"/></g><g><circle cx="36" cy="64" r="5.5" fill="none" stroke="#1F6D5C" stroke-width="2"/><circle cx="36" cy="64" r="2" fill="#1F6D5C"/></g><text x="50" y="52" class="ts dim" font-size="8.5" letter-spacing="1.2">TP4</text><text x="50" y="68" class="ts" font-size="11.5" letter-spacing="1.3">IN-BROWSER DEMO</text></svg>
+<g><path class="bus" stroke="#1F6D5C" d="M0,36 H36 V58"/><path class="cm k1540" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="610" d="M0,36 H36 V55.5"/><path class="cm k1541" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="638" d="M0,36 H36 V55.5"/><path class="cm k1542" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="660" d="M0,36 H36 V55.5"/><path class="cm k1543" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="715.0" d="M0,36 H36 V55.5"/><path class="cm k1544" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="743.0" d="M0,36 H36 V55.5"/><path class="cm k1545" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="765.0" d="M0,36 H36 V55.5"/></g><g><circle cx="36" cy="64" r="5.5" fill="none" stroke="#1F6D5C" stroke-width="2"/><circle cx="36" cy="64" r="2" fill="#1F6D5C"/></g><text x="50" y="52" class="ts dim" font-size="8.5" letter-spacing="1.2">TP4</text><text x="50" y="68" class="ts" font-size="11.5" letter-spacing="1.3">IN-BROWSER DEMO</text></svg>

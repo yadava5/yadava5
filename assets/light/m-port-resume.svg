@@ -10,53 +10,53 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#1A2224}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#1A2224;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k1171{to{stroke-dashoffset:-241.2}}
-.k1171{animation:k1171 2750ms linear infinite}
-@keyframes k1172{to{stroke-dashoffset:-213.2}}
-.k1172{animation:k1172 2750ms linear infinite}
-@keyframes k1173{to{stroke-dashoffset:-191.2}}
-.k1173{animation:k1173 2750ms linear infinite}
-@keyframes k1174{to{stroke-dashoffset:-136.2}}
-.k1174{animation:k1174 2750ms linear infinite}
-@keyframes k1175{to{stroke-dashoffset:-108.2}}
-.k1175{animation:k1175 2750ms linear infinite}
-@keyframes k1176{to{stroke-dashoffset:-86.2}}
-.k1176{animation:k1176 2750ms linear infinite}
-@keyframes k1177{to{stroke-dashoffset:-157.2}}
-.k1177{animation:k1177 2450ms linear infinite}
-@keyframes k1178{to{stroke-dashoffset:-129.2}}
-.k1178{animation:k1178 2450ms linear infinite}
-@keyframes k1179{to{stroke-dashoffset:-107.2}}
-.k1179{animation:k1179 2450ms linear infinite}
-@keyframes k1180{to{stroke-dashoffset:-52.19999999999999}}
-.k1180{animation:k1180 2450ms linear infinite}
-@keyframes k1181{to{stroke-dashoffset:-24.19999999999999}}
-.k1181{animation:k1181 2450ms linear infinite}
-@keyframes k1182{to{stroke-dashoffset:-2.1999999999999886}}
-.k1182{animation:k1182 2450ms linear infinite}
-@keyframes k1183{to{stroke-dashoffset:-150.0}}
+@keyframes k1177{to{stroke-dashoffset:-241.2}}
+.k1177{animation:k1177 2750ms linear infinite}
+@keyframes k1178{to{stroke-dashoffset:-213.2}}
+.k1178{animation:k1178 2750ms linear infinite}
+@keyframes k1179{to{stroke-dashoffset:-191.2}}
+.k1179{animation:k1179 2750ms linear infinite}
+@keyframes k1180{to{stroke-dashoffset:-136.2}}
+.k1180{animation:k1180 2750ms linear infinite}
+@keyframes k1181{to{stroke-dashoffset:-108.2}}
+.k1181{animation:k1181 2750ms linear infinite}
+@keyframes k1182{to{stroke-dashoffset:-86.2}}
+.k1182{animation:k1182 2750ms linear infinite}
+@keyframes k1183{to{stroke-dashoffset:-157.2}}
 .k1183{animation:k1183 2450ms linear infinite}
-@keyframes k1184{to{stroke-dashoffset:-122.0}}
+@keyframes k1184{to{stroke-dashoffset:-129.2}}
 .k1184{animation:k1184 2450ms linear infinite}
-@keyframes k1185{to{stroke-dashoffset:-100.0}}
+@keyframes k1185{to{stroke-dashoffset:-107.2}}
 .k1185{animation:k1185 2450ms linear infinite}
-@keyframes k1186{to{stroke-dashoffset:-45.0}}
+@keyframes k1186{to{stroke-dashoffset:-52.19999999999999}}
 .k1186{animation:k1186 2450ms linear infinite}
-@keyframes k1187{to{stroke-dashoffset:-17.0}}
+@keyframes k1187{to{stroke-dashoffset:-24.19999999999999}}
 .k1187{animation:k1187 2450ms linear infinite}
-@keyframes k1188{to{stroke-dashoffset:5.0}}
+@keyframes k1188{to{stroke-dashoffset:-2.1999999999999886}}
 .k1188{animation:k1188 2450ms linear infinite}
-@keyframes k1189{to{stroke-dashoffset:-76.0}}
+@keyframes k1189{to{stroke-dashoffset:-150.0}}
 .k1189{animation:k1189 2450ms linear infinite}
-@keyframes k1190{to{stroke-dashoffset:-48.0}}
+@keyframes k1190{to{stroke-dashoffset:-122.0}}
 .k1190{animation:k1190 2450ms linear infinite}
-@keyframes k1191{to{stroke-dashoffset:-26.0}}
+@keyframes k1191{to{stroke-dashoffset:-100.0}}
 .k1191{animation:k1191 2450ms linear infinite}
-@keyframes k1192{to{stroke-dashoffset:29.0}}
+@keyframes k1192{to{stroke-dashoffset:-45.0}}
 .k1192{animation:k1192 2450ms linear infinite}
-@keyframes k1193{to{stroke-dashoffset:57.0}}
+@keyframes k1193{to{stroke-dashoffset:-17.0}}
 .k1193{animation:k1193 2450ms linear infinite}
-@keyframes k1194{to{stroke-dashoffset:79.0}}
+@keyframes k1194{to{stroke-dashoffset:5.0}}
 .k1194{animation:k1194 2450ms linear infinite}
+@keyframes k1195{to{stroke-dashoffset:-76.0}}
+.k1195{animation:k1195 2450ms linear infinite}
+@keyframes k1196{to{stroke-dashoffset:-48.0}}
+.k1196{animation:k1196 2450ms linear infinite}
+@keyframes k1197{to{stroke-dashoffset:-26.0}}
+.k1197{animation:k1197 2450ms linear infinite}
+@keyframes k1198{to{stroke-dashoffset:29.0}}
+.k1198{animation:k1198 2450ms linear infinite}
+@keyframes k1199{to{stroke-dashoffset:57.0}}
+.k1199{animation:k1199 2450ms linear infinite}
+@keyframes k1200{to{stroke-dashoffset:79.0}}
+.k1200{animation:k1200 2450ms linear infinite}
 </style>
-<g><path class="bus" stroke="#5F6E73" d="M0,12 H88.0"/><path class="cm k1171" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-31.2" d="M0,12 H88.0"/><path class="cm k1172" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="-3.2" d="M0,12 H88.0"/><path class="cm k1173" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="18.8" d="M0,12 H88.0"/><path class="cm k1174" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="73.8" d="M0,12 H88.0"/><path class="cm k1175" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="101.8" d="M0,12 H88.0"/><path class="cm k1176" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="123.8" d="M0,12 H88.0"/></g><g><path class="bus" stroke="#9A3412" d="M0,22 H7.2"/><path class="cm k1177" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="52.8" d="M0,22 H4.7"/><path class="cm k1178" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="80.8" d="M0,22 H4.7"/><path class="cm k1179" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="102.8" d="M0,22 H4.7"/><path class="cm k1180" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="157.8" d="M0,22 H4.7"/><path class="cm k1181" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="185.8" d="M0,22 H4.7"/><path class="cm k1182" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="207.8" d="M0,22 H4.7"/></g><g><rect x="7.7" y="18" width="73.0" height="48" rx="3" fill="#0A0A0B" stroke="#6E7A80" stroke-width="1"/><path class="bus" stroke="#E0703A" d="M7.2,22 H81.2"/><path class="cm k1183" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="60.0" d="M7.2,22 H81.2"/><path class="cm k1184" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="88.0" d="M7.2,22 H81.2"/><path class="cm k1185" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="110.0" d="M7.2,22 H81.2"/><path class="cm k1186" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="165.0" d="M7.2,22 H81.2"/><path class="cm k1187" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="193.0" d="M7.2,22 H81.2"/><path class="cm k1188" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="215.0" d="M7.2,22 H81.2"/><circle cx="44.2" cy="22" r="3.5" fill="none" stroke="#E0703A" stroke-width="2"/><circle cx="44.2" cy="22" r="1.8" fill="#E0703A"/><path transform="translate(31.2,29) scale(0.050781)" d="M-2 293.9 H514" fill="none" stroke="#e08a5f" stroke-width="44"/><path d="M39.0,34.2 H45.5 L49.4,38.1 V50.3 H39.0 Z" fill="#f6efe2"/><path d="M45.5,34.2 V38.1 H49.4" fill="none" stroke="#0A0A0B" stroke-width="1.17"/><path d="M41.3,37.8 H47.1 M41.3,40.7 H47.1" fill="none" stroke="#0A0A0B" stroke-width="1.17"/><text x="11.2" y="62" class="ts" font-size="8" letter-spacing="1" style="fill:#B0BAC0">J2</text></g><rect x="4.2" y="19.5" width="3" height="5" fill="#9A3412"/><rect x="7.2" y="19.5" width="3" height="5" fill="#E0703A"/><rect x="81.2" y="19.5" width="3" height="5" fill="#9A3412"/><rect x="78.2" y="19.5" width="3" height="5" fill="#E0703A"/><g><path class="bus" stroke="#9A3412" d="M81.2,22 H88.0"/><path class="cm k1189" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="134.0" d="M81.2,22 H88.0"/><path class="cm k1190" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="162.0" d="M81.2,22 H88.0"/><path class="cm k1191" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="184.0" d="M81.2,22 H88.0"/><path class="cm k1192" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="239.0" d="M81.2,22 H88.0"/><path class="cm k1193" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="267.0" d="M81.2,22 H88.0"/><path class="cm k1194" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="289.0" d="M81.2,22 H88.0"/></g></svg>
+<g><path class="bus" stroke="#5F6E73" d="M0,12 H88.0"/><path class="cm k1177" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-31.2" d="M0,12 H88.0"/><path class="cm k1178" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="-3.2" d="M0,12 H88.0"/><path class="cm k1179" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="18.8" d="M0,12 H88.0"/><path class="cm k1180" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="73.8" d="M0,12 H88.0"/><path class="cm k1181" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="101.8" d="M0,12 H88.0"/><path class="cm k1182" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="123.8" d="M0,12 H88.0"/></g><g><path class="bus" stroke="#9A3412" d="M0,22 H7.2"/><path class="cm k1183" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="52.8" d="M0,22 H4.7"/><path class="cm k1184" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="80.8" d="M0,22 H4.7"/><path class="cm k1185" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="102.8" d="M0,22 H4.7"/><path class="cm k1186" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="157.8" d="M0,22 H4.7"/><path class="cm k1187" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="185.8" d="M0,22 H4.7"/><path class="cm k1188" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="207.8" d="M0,22 H4.7"/></g><g><rect x="7.7" y="18" width="73.0" height="48" rx="3" fill="#0A0A0B" stroke="#6E7A80" stroke-width="1"/><path class="bus" stroke="#E0703A" d="M7.2,22 H81.2"/><path class="cm k1189" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="60.0" d="M7.2,22 H81.2"/><path class="cm k1190" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="88.0" d="M7.2,22 H81.2"/><path class="cm k1191" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="110.0" d="M7.2,22 H81.2"/><path class="cm k1192" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="165.0" d="M7.2,22 H81.2"/><path class="cm k1193" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="193.0" d="M7.2,22 H81.2"/><path class="cm k1194" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="215.0" d="M7.2,22 H81.2"/><circle cx="44.2" cy="22" r="3.5" fill="none" stroke="#E0703A" stroke-width="2"/><circle cx="44.2" cy="22" r="1.8" fill="#E0703A"/><path transform="translate(31.2,29) scale(0.050781)" d="M-2 293.9 H514" fill="none" stroke="#e08a5f" stroke-width="44"/><path d="M39.0,34.2 H45.5 L49.4,38.1 V50.3 H39.0 Z" fill="#f6efe2"/><path d="M45.5,34.2 V38.1 H49.4" fill="none" stroke="#0A0A0B" stroke-width="1.17"/><path d="M41.3,37.8 H47.1 M41.3,40.7 H47.1" fill="none" stroke="#0A0A0B" stroke-width="1.17"/><text x="11.2" y="62" class="ts" font-size="8" letter-spacing="1" style="fill:#B0BAC0">J2</text></g><rect x="4.2" y="19.5" width="3" height="5" fill="#9A3412"/><rect x="7.2" y="19.5" width="3" height="5" fill="#E0703A"/><rect x="81.2" y="19.5" width="3" height="5" fill="#9A3412"/><rect x="78.2" y="19.5" width="3" height="5" fill="#E0703A"/><g><path class="bus" stroke="#9A3412" d="M81.2,22 H88.0"/><path class="cm k1195" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="134.0" d="M81.2,22 H88.0"/><path class="cm k1196" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="162.0" d="M81.2,22 H88.0"/><path class="cm k1197" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="184.0" d="M81.2,22 H88.0"/><path class="cm k1198" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="239.0" d="M81.2,22 H88.0"/><path class="cm k1199" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="267.0" d="M81.2,22 H88.0"/><path class="cm k1200" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="289.0" d="M81.2,22 H88.0"/></g></svg>

@@ -10,17 +10,17 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#1A2224}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#1A2224;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k1522{to{stroke-dashoffset:400}}
-.k1522{animation:k1522 2100ms linear infinite}
-@keyframes k1523{to{stroke-dashoffset:428}}
-.k1523{animation:k1523 2100ms linear infinite}
-@keyframes k1524{to{stroke-dashoffset:450}}
-.k1524{animation:k1524 2100ms linear infinite}
-@keyframes k1525{to{stroke-dashoffset:505.0}}
-.k1525{animation:k1525 2100ms linear infinite}
-@keyframes k1526{to{stroke-dashoffset:533.0}}
-.k1526{animation:k1526 2100ms linear infinite}
-@keyframes k1527{to{stroke-dashoffset:555.0}}
-.k1527{animation:k1527 2100ms linear infinite}
+@keyframes k1534{to{stroke-dashoffset:400}}
+.k1534{animation:k1534 2100ms linear infinite}
+@keyframes k1535{to{stroke-dashoffset:428}}
+.k1535{animation:k1535 2100ms linear infinite}
+@keyframes k1536{to{stroke-dashoffset:450}}
+.k1536{animation:k1536 2100ms linear infinite}
+@keyframes k1537{to{stroke-dashoffset:505.0}}
+.k1537{animation:k1537 2100ms linear infinite}
+@keyframes k1538{to{stroke-dashoffset:533.0}}
+.k1538{animation:k1538 2100ms linear infinite}
+@keyframes k1539{to{stroke-dashoffset:555.0}}
+.k1539{animation:k1539 2100ms linear infinite}
 </style>
-<g><path class="bus" stroke="#1F6D5C" d="M0,36 H36 V58"/><path class="cm k1522" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="610" d="M0,36 H36 V55.5"/><path class="cm k1523" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="638" d="M0,36 H36 V55.5"/><path class="cm k1524" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="660" d="M0,36 H36 V55.5"/><path class="cm k1525" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="715.0" d="M0,36 H36 V55.5"/><path class="cm k1526" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="743.0" d="M0,36 H36 V55.5"/><path class="cm k1527" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="765.0" d="M0,36 H36 V55.5"/></g><g><circle cx="36" cy="64" r="5.5" fill="none" stroke="#1F6D5C" stroke-width="2"/><circle cx="36" cy="64" r="2" fill="#1F6D5C"/></g><text x="50" y="52" class="ts dim" font-size="8.5" letter-spacing="1.2">TP4</text><text x="50" y="68" class="ts" font-size="11.5" letter-spacing="1.3">THE ISOLATION SUITE</text></svg>
+<g><path class="bus" stroke="#1F6D5C" d="M0,36 H36 V58"/><path class="cm k1534" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="610" d="M0,36 H36 V55.5"/><path class="cm k1535" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="638" d="M0,36 H36 V55.5"/><path class="cm k1536" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="660" d="M0,36 H36 V55.5"/><path class="cm k1537" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="715.0" d="M0,36 H36 V55.5"/><path class="cm k1538" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="743.0" d="M0,36 H36 V55.5"/><path class="cm k1539" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="765.0" d="M0,36 H36 V55.5"/></g><g><circle cx="36" cy="64" r="5.5" fill="none" stroke="#1F6D5C" stroke-width="2"/><circle cx="36" cy="64" r="2" fill="#1F6D5C"/></g><text x="50" y="52" class="ts dim" font-size="8.5" letter-spacing="1.2">TP4</text><text x="50" y="68" class="ts" font-size="11.5" letter-spacing="1.3">THE ISOLATION SUITE</text></svg>

@@ -10,29 +10,29 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#1A2224}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#1A2224;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k931{to{stroke-dashoffset:60}}
-.k931{animation:k931 2750ms linear infinite}
-@keyframes k932{to{stroke-dashoffset:88}}
-.k932{animation:k932 2750ms linear infinite}
-@keyframes k933{to{stroke-dashoffset:110}}
-.k933{animation:k933 2750ms linear infinite}
-@keyframes k934{to{stroke-dashoffset:165.0}}
-.k934{animation:k934 2750ms linear infinite}
-@keyframes k935{to{stroke-dashoffset:193.0}}
-.k935{animation:k935 2750ms linear infinite}
-@keyframes k936{to{stroke-dashoffset:215.0}}
-.k936{animation:k936 2750ms linear infinite}
-@keyframes k937{to{stroke-dashoffset:157}}
-.k937{animation:k937 2450ms linear infinite}
-@keyframes k938{to{stroke-dashoffset:185}}
-.k938{animation:k938 2450ms linear infinite}
-@keyframes k939{to{stroke-dashoffset:207}}
-.k939{animation:k939 2450ms linear infinite}
-@keyframes k940{to{stroke-dashoffset:262.0}}
-.k940{animation:k940 2450ms linear infinite}
-@keyframes k941{to{stroke-dashoffset:290.0}}
-.k941{animation:k941 2450ms linear infinite}
-@keyframes k942{to{stroke-dashoffset:312.0}}
-.k942{animation:k942 2450ms linear infinite}
+@keyframes k937{to{stroke-dashoffset:60}}
+.k937{animation:k937 2750ms linear infinite}
+@keyframes k938{to{stroke-dashoffset:88}}
+.k938{animation:k938 2750ms linear infinite}
+@keyframes k939{to{stroke-dashoffset:110}}
+.k939{animation:k939 2750ms linear infinite}
+@keyframes k940{to{stroke-dashoffset:165.0}}
+.k940{animation:k940 2750ms linear infinite}
+@keyframes k941{to{stroke-dashoffset:193.0}}
+.k941{animation:k941 2750ms linear infinite}
+@keyframes k942{to{stroke-dashoffset:215.0}}
+.k942{animation:k942 2750ms linear infinite}
+@keyframes k943{to{stroke-dashoffset:157}}
+.k943{animation:k943 2450ms linear infinite}
+@keyframes k944{to{stroke-dashoffset:185}}
+.k944{animation:k944 2450ms linear infinite}
+@keyframes k945{to{stroke-dashoffset:207}}
+.k945{animation:k945 2450ms linear infinite}
+@keyframes k946{to{stroke-dashoffset:262.0}}
+.k946{animation:k946 2450ms linear infinite}
+@keyframes k947{to{stroke-dashoffset:290.0}}
+.k947{animation:k947 2450ms linear infinite}
+@keyframes k948{to{stroke-dashoffset:312.0}}
+.k948{animation:k948 2450ms linear infinite}
 </style>
-<g><path class="bus" stroke="#5F6E73" d="M0,16 H198"/><path class="cm k931" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="270" d="M0,16 H198"/><path class="cm k932" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="298" d="M0,16 H198"/><path class="cm k933" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="320" d="M0,16 H198"/><path class="cm k934" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="375.0" d="M0,16 H198"/><path class="cm k935" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="403.0" d="M0,16 H198"/><path class="cm k936" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="425.0" d="M0,16 H198"/></g><g><path class="bus" stroke="#9A3412" d="M0,30 H47"/><path class="cm k937" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="367" d="M0,30 H44.5"/><path class="cm k938" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="395" d="M0,30 H44.5"/><path class="cm k939" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="417" d="M0,30 H44.5"/><path class="cm k940" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="472.0" d="M0,30 H44.5"/><path class="cm k941" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="500.0" d="M0,30 H44.5"/><path class="cm k942" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="522.0" d="M0,30 H44.5"/></g><g><rect x="47.5" y="22" width="129" height="64" rx="3" fill="#0A0A0B" stroke="#6E7A80" stroke-width="1"/><path class="bus" stroke="#E0703A" d="M47,30 H57"/><circle cx="61" cy="30" r="4.0" fill="none" stroke="#E0703A" stroke-width="2"/><circle cx="61" cy="30" r="1.8" fill="#E0703A"/><rect x="71" y="40" width="28" height="28" rx="2.33" fill="#0A66C2"/><circle cx="77.23" cy="46.26" r="2.41" fill="#FFFFFF"/><rect x="75.15" y="50.50" width="4.16" height="13.36" fill="#FFFFFF"/><path transform="translate(71,40) scale(1.1667)" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286z" fill="#FFFFFF"/><text x="107" y="58" class="ts" font-size="10" letter-spacing="0.7" style="fill:#E4E9E9">LINKEDIN</text><text x="55" y="80" class="ts" font-size="8.5" letter-spacing="1.2" style="fill:#B0BAC0">J3</text></g><rect x="44" y="27.5" width="3" height="5" fill="#9A3412"/><rect x="47" y="27.5" width="3" height="5" fill="#E0703A"/></svg>
+<g><path class="bus" stroke="#5F6E73" d="M0,16 H198"/><path class="cm k937" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="270" d="M0,16 H198"/><path class="cm k938" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="298" d="M0,16 H198"/><path class="cm k939" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="320" d="M0,16 H198"/><path class="cm k940" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="375.0" d="M0,16 H198"/><path class="cm k941" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="403.0" d="M0,16 H198"/><path class="cm k942" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="425.0" d="M0,16 H198"/></g><g><path class="bus" stroke="#9A3412" d="M0,30 H47"/><path class="cm k943" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="367" d="M0,30 H44.5"/><path class="cm k944" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="395" d="M0,30 H44.5"/><path class="cm k945" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="417" d="M0,30 H44.5"/><path class="cm k946" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="472.0" d="M0,30 H44.5"/><path class="cm k947" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="500.0" d="M0,30 H44.5"/><path class="cm k948" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="522.0" d="M0,30 H44.5"/></g><g><rect x="47.5" y="22" width="129" height="64" rx="3" fill="#0A0A0B" stroke="#6E7A80" stroke-width="1"/><path class="bus" stroke="#E0703A" d="M47,30 H57"/><circle cx="61" cy="30" r="4.0" fill="none" stroke="#E0703A" stroke-width="2"/><circle cx="61" cy="30" r="1.8" fill="#E0703A"/><rect x="71" y="40" width="28" height="28" rx="2.33" fill="#0A66C2"/><circle cx="77.23" cy="46.26" r="2.41" fill="#FFFFFF"/><rect x="75.15" y="50.50" width="4.16" height="13.36" fill="#FFFFFF"/><path transform="translate(71,40) scale(1.1667)" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286z" fill="#FFFFFF"/><text x="107" y="58" class="ts" font-size="10" letter-spacing="0.7" style="fill:#E4E9E9">LINKEDIN</text><text x="55" y="80" class="ts" font-size="8.5" letter-spacing="1.2" style="fill:#B0BAC0">J3</text></g><rect x="44" y="27.5" width="3" height="5" fill="#9A3412"/><rect x="47" y="27.5" width="3" height="5" fill="#E0703A"/></svg>

@@ -10,17 +10,17 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#E4E9E9}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k634{to{stroke-dashoffset:-50}}
-.k634{animation:k634 2100ms linear infinite}
-@keyframes k635{to{stroke-dashoffset:-22}}
-.k635{animation:k635 2100ms linear infinite}
-@keyframes k636{to{stroke-dashoffset:0}}
-.k636{animation:k636 2100ms linear infinite}
-@keyframes k637{to{stroke-dashoffset:55.0}}
-.k637{animation:k637 2100ms linear infinite}
-@keyframes k638{to{stroke-dashoffset:83.0}}
-.k638{animation:k638 2100ms linear infinite}
-@keyframes k639{to{stroke-dashoffset:105.0}}
-.k639{animation:k639 2100ms linear infinite}
+@keyframes k640{to{stroke-dashoffset:-50}}
+.k640{animation:k640 2100ms linear infinite}
+@keyframes k641{to{stroke-dashoffset:-22}}
+.k641{animation:k641 2100ms linear infinite}
+@keyframes k642{to{stroke-dashoffset:0}}
+.k642{animation:k642 2100ms linear infinite}
+@keyframes k643{to{stroke-dashoffset:55.0}}
+.k643{animation:k643 2100ms linear infinite}
+@keyframes k644{to{stroke-dashoffset:83.0}}
+.k644{animation:k644 2100ms linear infinite}
+@keyframes k645{to{stroke-dashoffset:105.0}}
+.k645{animation:k645 2100ms linear infinite}
 </style>
-<g><path class="bus" stroke="#4FB39A" d="M0,36 H153"/><path class="cm k634" stroke="#A9EFD9" stroke-dasharray="34 176" stroke-dashoffset="160" d="M0,36 H153"/><path class="cm k635" stroke="#83D6BC" stroke-dasharray="28 182" stroke-dashoffset="188" d="M0,36 H153"/><path class="cm k636" stroke="#66C2A8" stroke-dasharray="22 188" stroke-dashoffset="210" d="M0,36 H153"/><path class="cm k637" stroke="#A9EFD9" stroke-dasharray="34 176" stroke-dashoffset="265.0" d="M0,36 H153"/><path class="cm k638" stroke="#83D6BC" stroke-dasharray="28 182" stroke-dashoffset="293.0" d="M0,36 H153"/><path class="cm k639" stroke="#66C2A8" stroke-dasharray="22 188" stroke-dashoffset="315.0" d="M0,36 H153"/></g><circle cx="56" cy="36" r="2.6" fill="#4FB39A"/><path class="bus" stroke="#4FB39A" d="M56,36 V58"/><g><circle cx="56" cy="64" r="5.5" fill="none" stroke="#4FB39A" stroke-width="2"/><circle cx="56" cy="64" r="2" fill="#4FB39A"/></g><text x="70" y="52" class="ts dim" font-size="8.5" letter-spacing="1.2">TP1</text><text x="70" y="68" class="ts" font-size="11.5" letter-spacing="1.3">LIVE</text></svg>
+<g><path class="bus" stroke="#4FB39A" d="M0,36 H153"/><path class="cm k640" stroke="#A9EFD9" stroke-dasharray="34 176" stroke-dashoffset="160" d="M0,36 H153"/><path class="cm k641" stroke="#83D6BC" stroke-dasharray="28 182" stroke-dashoffset="188" d="M0,36 H153"/><path class="cm k642" stroke="#66C2A8" stroke-dasharray="22 188" stroke-dashoffset="210" d="M0,36 H153"/><path class="cm k643" stroke="#A9EFD9" stroke-dasharray="34 176" stroke-dashoffset="265.0" d="M0,36 H153"/><path class="cm k644" stroke="#83D6BC" stroke-dasharray="28 182" stroke-dashoffset="293.0" d="M0,36 H153"/><path class="cm k645" stroke="#66C2A8" stroke-dasharray="22 188" stroke-dashoffset="315.0" d="M0,36 H153"/></g><circle cx="56" cy="36" r="2.6" fill="#4FB39A"/><path class="bus" stroke="#4FB39A" d="M56,36 V58"/><g><circle cx="56" cy="64" r="5.5" fill="none" stroke="#4FB39A" stroke-width="2"/><circle cx="56" cy="64" r="2" fill="#4FB39A"/></g><text x="70" y="52" class="ts dim" font-size="8.5" letter-spacing="1.2">TP1</text><text x="70" y="68" class="ts" font-size="11.5" letter-spacing="1.3">LIVE</text></svg>

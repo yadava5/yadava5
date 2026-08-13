@@ -1023,8 +1023,14 @@ def m_row_s4() -> str:
     body = _rail("zinc", f"M0,12 H{x0}", cz, f"M0,12 H{x0 - 2.5}")
     body += f'<g>{_tile_mod(x0, y0, x1, y1)}'
     with _OnTile():
-        body += (f'<path class="bus" stroke="{T["zinc"]}" d="M{x0},12 H16.4"/>'
-                 + _land("zinc", 20.4, 12, r=3.5)
+        # the current crosses the package to a far-side land, J2-style: an
+        # 8u entry stub left this plate's only motion a 6u comet window and
+        # it froze under motion.mjs's 70% floor (43%/36% measured) — the
+        # 58u through-run keeps a ramp boundary in frame at every t.
+        body += (f'<path class="bus" stroke="{T["zinc"]}" d="M{x0},12 H66"/>'
+                 + comet("zinc", f"M{x0},12 H63.5", cz - x0)
+                 + comet("zinc", f"M{x0},12 H63.5", cz - x0 - PAT / 2)
+                 + _land("zinc", 70, 12, r=3.5)
                  + mark_mail(33.4, 17, 26)
                  + _tlbl(12.4, 50, "J4", size=8, ls=1, dim=True))
     body += "</g>" + _pierce("zinc", x0, 12)
