@@ -10,17 +10,17 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#1A2224}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#1A2224;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k1342{to{stroke-dashoffset:-194}}
-.k1342{animation:k1342 2450ms linear infinite}
-@keyframes k1343{to{stroke-dashoffset:-166}}
-.k1343{animation:k1343 2450ms linear infinite}
-@keyframes k1344{to{stroke-dashoffset:-144}}
-.k1344{animation:k1344 2450ms linear infinite}
-@keyframes k1345{to{stroke-dashoffset:-89.0}}
-.k1345{animation:k1345 2450ms linear infinite}
-@keyframes k1346{to{stroke-dashoffset:-61.0}}
-.k1346{animation:k1346 2450ms linear infinite}
-@keyframes k1347{to{stroke-dashoffset:-39.0}}
-.k1347{animation:k1347 2450ms linear infinite}
+@keyframes k1546{to{stroke-dashoffset:-194}}
+.k1546{animation:k1546 2450ms linear infinite}
+@keyframes k1547{to{stroke-dashoffset:-166}}
+.k1547{animation:k1547 2450ms linear infinite}
+@keyframes k1548{to{stroke-dashoffset:-144}}
+.k1548{animation:k1548 2450ms linear infinite}
+@keyframes k1549{to{stroke-dashoffset:-89.0}}
+.k1549{animation:k1549 2450ms linear infinite}
+@keyframes k1550{to{stroke-dashoffset:-61.0}}
+.k1550{animation:k1550 2450ms linear infinite}
+@keyframes k1551{to{stroke-dashoffset:-39.0}}
+.k1551{animation:k1551 2450ms linear infinite}
 </style>
-<g><path class="bus" stroke="#9A3412" d="M0,36 H42"/><path class="cm k1342" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="16" d="M0,36 H39"/><path class="cm k1343" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="44" d="M0,36 H39"/><path class="cm k1344" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="66" d="M0,36 H39"/><path class="cm k1345" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="121.0" d="M0,36 H39"/><path class="cm k1346" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="149.0" d="M0,36 H39"/><path class="cm k1347" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="171.0" d="M0,36 H39"/></g><g><circle cx="54" cy="64" r="5.5" fill="none" stroke="#9A3412" stroke-width="2" stroke-dasharray="5 4"/></g><text x="68" y="52" class="ts dim" font-size="8.5" letter-spacing="1.2">TP2</text><text x="68" y="68" class="ts dim" font-size="11.5" letter-spacing="1.3">NOT FITTED</text></svg>
+<g><path class="bus" stroke="#9A3412" d="M0,36 H42"/><path class="cm k1546" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="16" d="M0,36 H39"/><path class="cm k1547" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="44" d="M0,36 H39"/><path class="cm k1548" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="66" d="M0,36 H39"/><path class="cm k1549" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="121.0" d="M0,36 H39"/><path class="cm k1550" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="149.0" d="M0,36 H39"/><path class="cm k1551" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="171.0" d="M0,36 H39"/></g><g><circle cx="54" cy="64" r="5.5" fill="none" stroke="#9A3412" stroke-width="2" stroke-dasharray="5 4"/></g><text x="68" y="52" class="ts dim" font-size="8.5" letter-spacing="1.2">TP2</text><text x="68" y="68" class="ts dim" font-size="11.5" letter-spacing="1.3">NOT FITTED</text></svg>

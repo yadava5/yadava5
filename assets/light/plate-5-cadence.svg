@@ -12,50 +12,50 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#1A2224}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#1A2224;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k940{to{stroke-dashoffset:-188}}
-.k940{animation:k940 2100ms linear infinite}
-@keyframes k941{to{stroke-dashoffset:-160}}
-.k941{animation:k941 2100ms linear infinite}
-@keyframes k942{to{stroke-dashoffset:-138}}
-.k942{animation:k942 2100ms linear infinite}
-@keyframes k943{to{stroke-dashoffset:-351}}
-.k943{animation:k943 2450ms linear infinite}
-@keyframes k944{to{stroke-dashoffset:-323}}
-.k944{animation:k944 2450ms linear infinite}
-@keyframes k945{to{stroke-dashoffset:-301}}
-.k945{animation:k945 2450ms linear infinite}
-@keyframes k946{to{stroke-dashoffset:-266}}
-.k946{animation:k946 2750ms linear infinite}
-@keyframes k947{to{stroke-dashoffset:-238}}
-.k947{animation:k947 2750ms linear infinite}
-@keyframes k948{to{stroke-dashoffset:-216}}
-.k948{animation:k948 2750ms linear infinite}
-@keyframes k949{to{stroke-dashoffset:-206}}
-.k949{animation:k949 2100ms linear infinite}
-@keyframes k950{to{stroke-dashoffset:-178}}
-.k950{animation:k950 2100ms linear infinite}
-@keyframes k951{to{stroke-dashoffset:-156}}
-.k951{animation:k951 2100ms linear infinite}
-@keyframes k952{to{stroke-dashoffset:-308}}
-.k952{animation:k952 2100ms linear infinite}
-@keyframes k953{to{stroke-dashoffset:-280}}
-.k953{animation:k953 2100ms linear infinite}
-@keyframes k954{to{stroke-dashoffset:-258}}
-.k954{animation:k954 2100ms linear infinite}
-@keyframes k955{to{stroke-dashoffset:-242}}
-.k955{animation:k955 2100ms linear infinite}
-@keyframes k956{to{stroke-dashoffset:-214}}
-.k956{animation:k956 2100ms linear infinite}
-@keyframes k957{to{stroke-dashoffset:-192}}
-.k957{animation:k957 2100ms linear infinite}
-@keyframes k958{to{stroke-dashoffset:-366}}
-.k958{animation:k958 2100ms linear infinite}
-@keyframes k959{to{stroke-dashoffset:-338}}
-.k959{animation:k959 2100ms linear infinite}
-@keyframes k960{to{stroke-dashoffset:-316}}
-.k960{animation:k960 2100ms linear infinite}
+@keyframes k1066{to{stroke-dashoffset:-188}}
+.k1066{animation:k1066 2100ms linear infinite}
+@keyframes k1067{to{stroke-dashoffset:-160}}
+.k1067{animation:k1067 2100ms linear infinite}
+@keyframes k1068{to{stroke-dashoffset:-138}}
+.k1068{animation:k1068 2100ms linear infinite}
+@keyframes k1069{to{stroke-dashoffset:-351}}
+.k1069{animation:k1069 2450ms linear infinite}
+@keyframes k1070{to{stroke-dashoffset:-323}}
+.k1070{animation:k1070 2450ms linear infinite}
+@keyframes k1071{to{stroke-dashoffset:-301}}
+.k1071{animation:k1071 2450ms linear infinite}
+@keyframes k1072{to{stroke-dashoffset:-266}}
+.k1072{animation:k1072 2750ms linear infinite}
+@keyframes k1073{to{stroke-dashoffset:-238}}
+.k1073{animation:k1073 2750ms linear infinite}
+@keyframes k1074{to{stroke-dashoffset:-216}}
+.k1074{animation:k1074 2750ms linear infinite}
+@keyframes k1075{to{stroke-dashoffset:-206}}
+.k1075{animation:k1075 2100ms linear infinite}
+@keyframes k1076{to{stroke-dashoffset:-178}}
+.k1076{animation:k1076 2100ms linear infinite}
+@keyframes k1077{to{stroke-dashoffset:-156}}
+.k1077{animation:k1077 2100ms linear infinite}
+@keyframes k1078{to{stroke-dashoffset:-308}}
+.k1078{animation:k1078 2100ms linear infinite}
+@keyframes k1079{to{stroke-dashoffset:-280}}
+.k1079{animation:k1079 2100ms linear infinite}
+@keyframes k1080{to{stroke-dashoffset:-258}}
+.k1080{animation:k1080 2100ms linear infinite}
+@keyframes k1081{to{stroke-dashoffset:-242}}
+.k1081{animation:k1081 2100ms linear infinite}
+@keyframes k1082{to{stroke-dashoffset:-214}}
+.k1082{animation:k1082 2100ms linear infinite}
+@keyframes k1083{to{stroke-dashoffset:-192}}
+.k1083{animation:k1083 2100ms linear infinite}
+@keyframes k1084{to{stroke-dashoffset:-366}}
+.k1084{animation:k1084 2100ms linear infinite}
+@keyframes k1085{to{stroke-dashoffset:-338}}
+.k1085{animation:k1085 2100ms linear infinite}
+@keyframes k1086{to{stroke-dashoffset:-316}}
+.k1086{animation:k1086 2100ms linear infinite}
 </style>
-<g><path class="bus" stroke="#1F6D5C" d="M63,0 V440"/><path class="cm k940" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="22" d="M63,2.5 V437.5"/><path class="cm k941" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="50" d="M63,2.5 V437.5"/><path class="cm k942" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="72" d="M63,2.5 V437.5"/></g><g><path class="bus" stroke="#9A3412" d="M90,0 V440"/><path class="cm k943" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="-141" d="M90,2.5 V437.5"/><path class="cm k944" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="-113" d="M90,2.5 V437.5"/><path class="cm k945" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="-91" d="M90,2.5 V437.5"/></g><g><path class="bus" stroke="#5F6E73" d="M117,0 V440"/><path class="cm k946" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-56" d="M117,2.5 V437.5"/><path class="cm k947" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="-28" d="M117,2.5 V437.5"/><path class="cm k948" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="-6" d="M117,2.5 V437.5"/></g><g><path class="bus" stroke="#1F6D5C" d="M63,120 H150"/><path class="cm k949" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="4" d="M67,120 H145"/><path class="cm k950" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="32" d="M67,120 H145"/><path class="cm k951" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="54" d="M67,120 H145"/></g><g><path class="bus" stroke="#1F6D5C" d="M198,120 H252 V330"/><path class="cm k952" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-98" d="M202,120 H252 V326"/><path class="cm k953" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="-70" d="M202,120 H252 V326"/><path class="cm k954" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="-48" d="M202,120 H252 V326"/></g><path fill="none" stroke="#1F6D5C" stroke-width="1.4" d="M252,150 H300 M252,155 H300 M252,160 H300 M252,165 H300 M252,170 H300 M252,175 H300 M252,180 H300 M252,185 H300 M252,190 H300 M252,195 H300 M252,200 H300 M252,205 H300 M252,210 H300 M252,215 H300 M252,220 H300 M252,225 H300 M252,230 H300 M252,235 H300 M252,240 H300 M252,245 H300 M252,250 H300 M252,255 H300 M252,260 H300 M252,265 H300 M252,270 H300 M252,275 H300 M252,280 H300 M252,285 H300 M252,290 H300 M252,295 H300 M252,300 H300 M252,305 H300 M252,310 H300 M252,315 H300 M252,320 H300 M252,325 H300 M252,330 H300"/><rect x="300" y="140" width="170" height="200" rx="8" fill="none" stroke="#1F6D5C" stroke-width="1.6"/><text x="312" y="222" class="ts" font-size="10" letter-spacing="1.1">ONE SERVERLESS</text><text x="312" y="238" class="ts" font-size="10" letter-spacing="1.1">FUNCTION</text><text x="312" y="258" class="ts dim" font-size="10" letter-spacing="1.1">37 ROUTE HANDLERS</text><g><path class="bus" stroke="#1F6D5C" d="M496,235 H600"/><path class="cm k955" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-32" d="M500,235 H596"/><path class="cm k956" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="-4" d="M500,235 H596"/><path class="cm k957" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="18" d="M500,235 H596"/></g><path class="bus" stroke="#1F6D5C" d="M560,150 V223 M560,247 V330"/><path class="bus" stroke="#1F6D5C" d="M566,150 V223 M566,247 V330"/><text x="563" y="140" class="ts dim" font-size="10.5" letter-spacing="1.4" text-anchor="middle">RLS · FORCED</text><g><path class="bus" stroke="#1F6D5C" d="M600,165 V315"/><path class="cm k958" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-156" d="M600,168 V312"/><path class="cm k959" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="-128" d="M600,168 V312"/><path class="cm k960" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="-106" d="M600,168 V312"/></g><path fill="none" stroke="#1F6D5C" stroke-width="1.4" d="M600,165 H628 M600,190 H628 M600,215 H628 M600,240 H628 M600,265 H628 M600,290 H628 M600,315 H628"/><rect x="628" y="156" width="120" height="18" rx="3" fill="none" stroke="#5F6E73" stroke-width="1.3"/><rect x="628" y="181" width="120" height="18" rx="3" fill="none" stroke="#5F6E73" stroke-width="1.3"/><rect x="628" y="206" width="120" height="18" rx="3" fill="none" stroke="#5F6E73" stroke-width="1.3"/><rect x="628" y="231" width="120" height="18" rx="3" fill="none" stroke="#5F6E73" stroke-width="1.3"/><rect x="628" y="256" width="120" height="18" rx="3" fill="none" stroke="#5F6E73" stroke-width="1.3"/><rect x="628" y="281" width="120" height="18" rx="3" fill="none" stroke="#5F6E73" stroke-width="1.3"/><rect x="628" y="306" width="120" height="18" rx="3" fill="none" stroke="#5F6E73" stroke-width="1.3"/><g transform="translate(150,96) scale(1.0000)"><rect x="0.75" y="0.75" width="46.5" height="46.5" rx="12" fill="#0A0A0B" stroke="#6E7A80" stroke-width="1"/>
+<g><path class="bus" stroke="#1F6D5C" d="M63,0 V440"/><path class="cm k1066" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="22" d="M63,2.5 V437.5"/><path class="cm k1067" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="50" d="M63,2.5 V437.5"/><path class="cm k1068" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="72" d="M63,2.5 V437.5"/></g><g><path class="bus" stroke="#9A3412" d="M90,0 V440"/><path class="cm k1069" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="-141" d="M90,2.5 V437.5"/><path class="cm k1070" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="-113" d="M90,2.5 V437.5"/><path class="cm k1071" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="-91" d="M90,2.5 V437.5"/></g><g><path class="bus" stroke="#5F6E73" d="M117,0 V440"/><path class="cm k1072" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-56" d="M117,2.5 V437.5"/><path class="cm k1073" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="-28" d="M117,2.5 V437.5"/><path class="cm k1074" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="-6" d="M117,2.5 V437.5"/></g><g><path class="bus" stroke="#1F6D5C" d="M63,120 H150"/><path class="cm k1075" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="4" d="M67,120 H145"/><path class="cm k1076" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="32" d="M67,120 H145"/><path class="cm k1077" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="54" d="M67,120 H145"/></g><g><path class="bus" stroke="#1F6D5C" d="M198,120 H252 V330"/><path class="cm k1078" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-98" d="M202,120 H252 V326"/><path class="cm k1079" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="-70" d="M202,120 H252 V326"/><path class="cm k1080" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="-48" d="M202,120 H252 V326"/></g><path fill="none" stroke="#1F6D5C" stroke-width="1.4" d="M252,150 H300 M252,155 H300 M252,160 H300 M252,165 H300 M252,170 H300 M252,175 H300 M252,180 H300 M252,185 H300 M252,190 H300 M252,195 H300 M252,200 H300 M252,205 H300 M252,210 H300 M252,215 H300 M252,220 H300 M252,225 H300 M252,230 H300 M252,235 H300 M252,240 H300 M252,245 H300 M252,250 H300 M252,255 H300 M252,260 H300 M252,265 H300 M252,270 H300 M252,275 H300 M252,280 H300 M252,285 H300 M252,290 H300 M252,295 H300 M252,300 H300 M252,305 H300 M252,310 H300 M252,315 H300 M252,320 H300 M252,325 H300 M252,330 H300"/><rect x="300" y="140" width="170" height="200" rx="8" fill="none" stroke="#1F6D5C" stroke-width="1.6"/><text x="312" y="222" class="ts" font-size="10" letter-spacing="1.1">ONE SERVERLESS</text><text x="312" y="238" class="ts" font-size="10" letter-spacing="1.1">FUNCTION</text><text x="312" y="258" class="ts dim" font-size="10" letter-spacing="1.1">37 ROUTE HANDLERS</text><g><path class="bus" stroke="#1F6D5C" d="M496,235 H600"/><path class="cm k1081" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-32" d="M500,235 H596"/><path class="cm k1082" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="-4" d="M500,235 H596"/><path class="cm k1083" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="18" d="M500,235 H596"/></g><path class="bus" stroke="#1F6D5C" d="M560,150 V223 M560,247 V330"/><path class="bus" stroke="#1F6D5C" d="M566,150 V223 M566,247 V330"/><text x="563" y="140" class="ts dim" font-size="10.5" letter-spacing="1.4" text-anchor="middle">RLS · FORCED</text><g><path class="bus" stroke="#1F6D5C" d="M600,165 V315"/><path class="cm k1084" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="-156" d="M600,168 V312"/><path class="cm k1085" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="-128" d="M600,168 V312"/><path class="cm k1086" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="-106" d="M600,168 V312"/></g><path fill="none" stroke="#1F6D5C" stroke-width="1.4" d="M600,165 H628 M600,190 H628 M600,215 H628 M600,240 H628 M600,265 H628 M600,290 H628 M600,315 H628"/><rect x="628" y="156" width="120" height="18" rx="3" fill="none" stroke="#5F6E73" stroke-width="1.3"/><rect x="628" y="181" width="120" height="18" rx="3" fill="none" stroke="#5F6E73" stroke-width="1.3"/><rect x="628" y="206" width="120" height="18" rx="3" fill="none" stroke="#5F6E73" stroke-width="1.3"/><rect x="628" y="231" width="120" height="18" rx="3" fill="none" stroke="#5F6E73" stroke-width="1.3"/><rect x="628" y="256" width="120" height="18" rx="3" fill="none" stroke="#5F6E73" stroke-width="1.3"/><rect x="628" y="281" width="120" height="18" rx="3" fill="none" stroke="#5F6E73" stroke-width="1.3"/><rect x="628" y="306" width="120" height="18" rx="3" fill="none" stroke="#5F6E73" stroke-width="1.3"/><g transform="translate(150,96) scale(1.0000)"><rect x="0.75" y="0.75" width="46.5" height="46.5" rx="12" fill="#0A0A0B" stroke="#6E7A80" stroke-width="1"/>
 <path d="M10,33 H38" fill="none" stroke="#F7F8F8" stroke-opacity="0.82" stroke-width="2" stroke-linecap="round"/>
 <path d="M15,30.5 V33 M22,30.5 V33 M36,30.5 V33" fill="none" stroke="#F7F8F8" stroke-opacity="0.42" stroke-width="1.5" stroke-linecap="round"/>
 <path d="M25.6,15.2 L29,18.6 L32.4,15.2 M29,18.6 V33" fill="none" stroke="#34D399" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></g><text x="148.18" y="54" class="d" font-size="30" letter-spacing="0.5">V — CADENCE</text><text x="149.53" y="76" class="dim" font-size="14.5">every route into one function; every row behind RLS.</text><text x="677.82" y="70" class="d" font-size="62">37</text><text x="680" y="108" class="dim" font-size="13">route handlers, one function;</text><text x="680" y="126" class="dim" font-size="13">RLS FORCEd on all 7 tables.</text><rect x="150" y="374" width="4" height="16" fill="#1F6D5C"/><text x="164" y="387" class="mid" font-size="14">every one of the six services carries a conditional owner guard.</text><text x="164" y="407" class="dim" font-size="13">a caller that forgets the identity still sends the query; the database&#8217;s refusal cannot be forgotten.</text></svg>

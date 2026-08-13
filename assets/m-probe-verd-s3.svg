@@ -10,17 +10,17 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#E4E9E9}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k703{to{stroke-dashoffset:-81.80000000000001}}
-.k703{animation:k703 2100ms linear infinite}
-@keyframes k704{to{stroke-dashoffset:-53.80000000000001}}
-.k704{animation:k704 2100ms linear infinite}
-@keyframes k705{to{stroke-dashoffset:-31.80000000000001}}
-.k705{animation:k705 2100ms linear infinite}
-@keyframes k706{to{stroke-dashoffset:23.19999999999999}}
-.k706{animation:k706 2100ms linear infinite}
-@keyframes k707{to{stroke-dashoffset:51.19999999999999}}
-.k707{animation:k707 2100ms linear infinite}
-@keyframes k708{to{stroke-dashoffset:73.19999999999999}}
-.k708{animation:k708 2100ms linear infinite}
+@keyframes k805{to{stroke-dashoffset:-81.80000000000001}}
+.k805{animation:k805 2100ms linear infinite}
+@keyframes k806{to{stroke-dashoffset:-53.80000000000001}}
+.k806{animation:k806 2100ms linear infinite}
+@keyframes k807{to{stroke-dashoffset:-31.80000000000001}}
+.k807{animation:k807 2100ms linear infinite}
+@keyframes k808{to{stroke-dashoffset:23.19999999999999}}
+.k808{animation:k808 2100ms linear infinite}
+@keyframes k809{to{stroke-dashoffset:51.19999999999999}}
+.k809{animation:k809 2100ms linear infinite}
+@keyframes k810{to{stroke-dashoffset:73.19999999999999}}
+.k810{animation:k810 2100ms linear infinite}
 </style>
-<g><path class="bus" stroke="#4FB39A" d="M0,24 H88.0"/><path class="cm k703" stroke="#A9EFD9" stroke-dasharray="34 176" stroke-dashoffset="128.2" d="M0,24 H88.0"/><path class="cm k704" stroke="#83D6BC" stroke-dasharray="28 182" stroke-dashoffset="156.2" d="M0,24 H88.0"/><path class="cm k705" stroke="#66C2A8" stroke-dasharray="22 188" stroke-dashoffset="178.2" d="M0,24 H88.0"/><path class="cm k706" stroke="#A9EFD9" stroke-dasharray="34 176" stroke-dashoffset="233.2" d="M0,24 H88.0"/><path class="cm k707" stroke="#83D6BC" stroke-dasharray="28 182" stroke-dashoffset="261.2" d="M0,24 H88.0"/><path class="cm k708" stroke="#66C2A8" stroke-dasharray="22 188" stroke-dashoffset="283.2" d="M0,24 H88.0"/></g><circle cx="23.80000000000001" cy="24" r="2.4" fill="#4FB39A"/><path class="bus" stroke="#4FB39A" d="M23.80000000000001,24 V43.5"/><g><circle cx="23.80000000000001" cy="48" r="4.5" fill="none" stroke="#4FB39A" stroke-width="2"/><circle cx="23.80000000000001" cy="48" r="2" fill="#4FB39A"/></g><text x="23.80000000000001" y="66" class="ts" font-size="10" letter-spacing="1" text-anchor="middle">CARD</text></svg>
+<g><path class="bus" stroke="#4FB39A" d="M0,24 H88.0"/><path class="cm k805" stroke="#A9EFD9" stroke-dasharray="34 176" stroke-dashoffset="128.2" d="M0,24 H88.0"/><path class="cm k806" stroke="#83D6BC" stroke-dasharray="28 182" stroke-dashoffset="156.2" d="M0,24 H88.0"/><path class="cm k807" stroke="#66C2A8" stroke-dasharray="22 188" stroke-dashoffset="178.2" d="M0,24 H88.0"/><path class="cm k808" stroke="#A9EFD9" stroke-dasharray="34 176" stroke-dashoffset="233.2" d="M0,24 H88.0"/><path class="cm k809" stroke="#83D6BC" stroke-dasharray="28 182" stroke-dashoffset="261.2" d="M0,24 H88.0"/><path class="cm k810" stroke="#66C2A8" stroke-dasharray="22 188" stroke-dashoffset="283.2" d="M0,24 H88.0"/></g><circle cx="23.80000000000001" cy="24" r="2.4" fill="#4FB39A"/><path class="bus" stroke="#4FB39A" d="M23.80000000000001,24 V43.5"/><g><circle cx="23.80000000000001" cy="48" r="4.5" fill="none" stroke="#4FB39A" stroke-width="2"/><circle cx="23.80000000000001" cy="48" r="2" fill="#4FB39A"/></g><text x="23.80000000000001" y="66" class="ts" font-size="10" letter-spacing="1" text-anchor="middle">CARD</text></svg>

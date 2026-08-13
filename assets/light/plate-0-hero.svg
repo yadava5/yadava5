@@ -12,56 +12,50 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#1A2224}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#1A2224;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k757{to{stroke-dashoffset:-206}}
-.k757{animation:k757 2100ms linear infinite}
-@keyframes k758{to{stroke-dashoffset:-178}}
-.k758{animation:k758 2100ms linear infinite}
-@keyframes k759{to{stroke-dashoffset:-156}}
-.k759{animation:k759 2100ms linear infinite}
-@keyframes k760{to{stroke-dashoffset:-286}}
-.k760{animation:k760 2450ms linear infinite}
-@keyframes k761{to{stroke-dashoffset:-258}}
-.k761{animation:k761 2450ms linear infinite}
-@keyframes k762{to{stroke-dashoffset:-236}}
-.k762{animation:k762 2450ms linear infinite}
-@keyframes k763{to{stroke-dashoffset:-240}}
-.k763{animation:k763 2750ms linear infinite}
-@keyframes k764{to{stroke-dashoffset:-212}}
-.k764{animation:k764 2750ms linear infinite}
-@keyframes k765{to{stroke-dashoffset:-190}}
-.k765{animation:k765 2750ms linear infinite}
-@keyframes k766{to{stroke-dashoffset:-176}}
-.k766{animation:k766 2100ms linear infinite}
-@keyframes k767{to{stroke-dashoffset:-148}}
-.k767{animation:k767 2100ms linear infinite}
-@keyframes k768{to{stroke-dashoffset:-126}}
-.k768{animation:k768 2100ms linear infinite}
-@keyframes k769{to{stroke-dashoffset:-263}}
-.k769{animation:k769 2450ms linear infinite}
-@keyframes k770{to{stroke-dashoffset:-235}}
-.k770{animation:k770 2450ms linear infinite}
-@keyframes k771{to{stroke-dashoffset:-213}}
-.k771{animation:k771 2450ms linear infinite}
-@keyframes k772{to{stroke-dashoffset:-217}}
-.k772{animation:k772 2750ms linear infinite}
-@keyframes k773{to{stroke-dashoffset:-189}}
-.k773{animation:k773 2750ms linear infinite}
-@keyframes k774{to{stroke-dashoffset:-167}}
-.k774{animation:k774 2750ms linear infinite}
-@keyframes k775{to{stroke-dashoffset:-231}}
-.k775{animation:k775 2450ms linear infinite}
-@keyframes k776{to{stroke-dashoffset:-203}}
-.k776{animation:k776 2450ms linear infinite}
-@keyframes k777{to{stroke-dashoffset:-181}}
-.k777{animation:k777 2450ms linear infinite}
-@keyframes k778{78%{opacity:.9}100%{stroke-dashoffset:-1270;opacity:0}}
-.k778{animation:k778 2300ms cubic-bezier(.45,0,.2,1) 400ms 1 forwards}
-@keyframes k779{78%{opacity:.9}100%{stroke-dashoffset:-1270;opacity:0}}
-.k779{animation:k779 2300ms cubic-bezier(.45,0,.2,1) 530ms 1 forwards}
-@keyframes k780{78%{opacity:.9}100%{stroke-dashoffset:-1470;opacity:0}}
-.k780{animation:k780 2300ms cubic-bezier(.45,0,.2,1) 680ms 1 forwards}
+@keyframes k859{to{stroke-dashoffset:-206}}
+.k859{animation:k859 2100ms linear infinite}
+@keyframes k860{to{stroke-dashoffset:-178}}
+.k860{animation:k860 2100ms linear infinite}
+@keyframes k861{to{stroke-dashoffset:-156}}
+.k861{animation:k861 2100ms linear infinite}
+@keyframes k862{to{stroke-dashoffset:-286}}
+.k862{animation:k862 2450ms linear infinite}
+@keyframes k863{to{stroke-dashoffset:-258}}
+.k863{animation:k863 2450ms linear infinite}
+@keyframes k864{to{stroke-dashoffset:-236}}
+.k864{animation:k864 2450ms linear infinite}
+@keyframes k865{to{stroke-dashoffset:-240}}
+.k865{animation:k865 2750ms linear infinite}
+@keyframes k866{to{stroke-dashoffset:-212}}
+.k866{animation:k866 2750ms linear infinite}
+@keyframes k867{to{stroke-dashoffset:-190}}
+.k867{animation:k867 2750ms linear infinite}
+@keyframes k868{to{stroke-dashoffset:-176}}
+.k868{animation:k868 2100ms linear infinite}
+@keyframes k869{to{stroke-dashoffset:-148}}
+.k869{animation:k869 2100ms linear infinite}
+@keyframes k870{to{stroke-dashoffset:-126}}
+.k870{animation:k870 2100ms linear infinite}
+@keyframes k871{to{stroke-dashoffset:-263}}
+.k871{animation:k871 2450ms linear infinite}
+@keyframes k872{to{stroke-dashoffset:-235}}
+.k872{animation:k872 2450ms linear infinite}
+@keyframes k873{to{stroke-dashoffset:-213}}
+.k873{animation:k873 2450ms linear infinite}
+@keyframes k874{to{stroke-dashoffset:-217}}
+.k874{animation:k874 2750ms linear infinite}
+@keyframes k875{to{stroke-dashoffset:-189}}
+.k875{animation:k875 2750ms linear infinite}
+@keyframes k876{to{stroke-dashoffset:-167}}
+.k876{animation:k876 2750ms linear infinite}
+@keyframes k877{78%{opacity:.9}100%{stroke-dashoffset:-1270;opacity:0}}
+.k877{animation:k877 2300ms cubic-bezier(.45,0,.2,1) 400ms 1 forwards}
+@keyframes k878{78%{opacity:.9}100%{stroke-dashoffset:-1270;opacity:0}}
+.k878{animation:k878 2300ms cubic-bezier(.45,0,.2,1) 530ms 1 forwards}
+@keyframes k879{78%{opacity:.9}100%{stroke-dashoffset:-1470;opacity:0}}
+.k879{animation:k879 2300ms cubic-bezier(.45,0,.2,1) 680ms 1 forwards}
 </style>
-<text x="48" y="84" class="d" font-size="58" letter-spacing="1">AYUSH<tspan x="48" dy="64">YADAV</tspan></text><text x="48" y="190" font-size="16.5">Systems, from SIMD kernels to the browser they run in.</text><text x="48" y="216" class="dim" font-size="13">B.S. Computer Science, Miami University (May 2026) · Cincinnati, OH</text><text x="48" y="236" class="dim" font-size="13">open to full-time software engineering roles · aesh.03.23@gmail.com</text><rect x="48" y="258" width="9" height="9" fill="#1F6D5C"/><text x="66" y="267" class="ts mid" font-size="11" letter-spacing="1.6">EVERY EDGE ON THIS BOARD IS A CHECKABLE CLAIM</text><g><path class="bus" stroke="#1F6D5C" d="M680,80 H780"/><path class="cm k757" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="4" d="M684,80 H776"/><path class="cm k758" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="32" d="M684,80 H776"/><path class="cm k759" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="54" d="M684,80 H776"/></g><g><path class="bus" stroke="#9A3412" d="M680,216 H780"/><path class="cm k760" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="-76" d="M684,216 H776"/><path class="cm k761" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="-48" d="M684,216 H776"/><path class="cm k762" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="-26" d="M684,216 H776"/></g><g><path class="bus" stroke="#5F6E73" d="M580,168 H612 V80 H616"/><path class="cm k763" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-30" d="M584,168 H612 V84"/><path class="cm k764" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="-2" d="M584,168 H612 V84"/><path class="cm k765" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="20" d="M584,168 H612 V84"/></g><path class="bus" stroke="#5F6E73" stroke-dasharray="3 6" d="M108,328 H150"/><circle cx="157" cy="328" r="3.5" fill="none" stroke="#5F6E73" stroke-width="2"/><g><path class="bus" stroke="#1F6D5C" d="M766,80 V388 Q766,400 754,400 H87 Q75,400 75,412 V534"/><path class="cm k766" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="34" d="M766,84 V388 Q766,400 754,400 H87 Q75,400 75,412 V531.5"/><path class="cm k767" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="62" d="M766,84 V388 Q766,400 754,400 H87 Q75,400 75,412 V531.5"/><path class="cm k768" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="84" d="M766,84 V388 Q766,400 754,400 H87 Q75,400 75,412 V531.5"/></g><g><path class="bus" stroke="#9A3412" d="M744,216 V403 Q744,415 732,415 H102 Q90,415 90,427 V486 Q90,498 102,498 H386.5 Q398.5,498 398.5,510 V534"/><path class="cm k769" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="-53" d="M744,220 V403 Q744,415 732,415 H102 Q90,415 90,427 V486 Q90,498 102,498 H386.5 Q398.5,498 398.5,510 V531.5"/><path class="cm k770" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="-25" d="M744,220 V403 Q744,415 732,415 H102 Q90,415 90,427 V486 Q90,498 102,498 H386.5 Q398.5,498 398.5,510 V531.5"/><path class="cm k771" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="-3" d="M744,220 V403 Q744,415 732,415 H102 Q90,415 90,427 V486 Q90,498 102,498 H386.5 Q398.5,498 398.5,510 V531.5"/></g><g><path class="bus" stroke="#5F6E73" d="M612,130 V418 Q612,430 600,430 H129 Q117,430 117,442 V474 Q117,486 129,486 H522.5 Q534.5,486 534.5,498 V534"/><path class="cm k772" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-7" d="M612,134 V418 Q612,430 600,430 H129 Q117,430 117,442 V474 Q117,486 129,486 H522.5 Q534.5,486 534.5,498 V531.5"/><path class="cm k773" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="21" d="M612,134 V418 Q612,430 600,430 H129 Q117,430 117,442 V474 Q117,486 129,486 H522.5 Q534.5,486 534.5,498 V531.5"/><path class="cm k774" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="43" d="M612,134 V418 Q612,430 600,430 H129 Q117,430 117,442 V474 Q117,486 129,486 H522.5 Q534.5,486 534.5,498 V531.5"/></g><g><path class="bus" stroke="#9A3412" d="M279.6,498 V534"/><path class="cm k775" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="-21" d="M279.6,500.5 V531.5"/><path class="cm k776" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="7" d="M279.6,500.5 V531.5"/><path class="cm k777" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="29" d="M279.6,500.5 V531.5"/></g><circle cx="279.6" cy="498" r="2.6" fill="#9A3412"/><path class="pu k778" stroke-dasharray="70 1340" stroke-dashoffset="70" d="M766,84 V388 Q766,400 754,400 H87 Q75,400 75,412 V531.5"/><path class="pu k779" stroke-dasharray="70 1340" stroke-dashoffset="70" d="M744,220 V403 Q744,415 732,415 H102 Q90,415 90,427 V486 Q90,498 102,498 H386.5 Q398.5,498 398.5,510 V531.5"/><path class="pu k780" stroke-dasharray="70 1540" stroke-dashoffset="70" d="M612,134 V418 Q612,430 600,430 H129 Q117,430 117,442 V474 Q117,486 129,486 H522.5 Q534.5,486 534.5,498 V531.5"/><g transform="translate(520,140) scale(1.1667)"><rect x="0.75" y="0.75" width="46.5" height="46.5" rx="12" fill="#0A0A0B" stroke="#6E7A80" stroke-width="1"/>
+<text x="48" y="84" class="d" font-size="58" letter-spacing="1">AYUSH<tspan x="48" dy="64">YADAV</tspan></text><text x="48" y="190" font-size="16.5">Systems, from SIMD kernels to the browser they run in.</text><text x="48" y="216" class="dim" font-size="13">B.S. Computer Science, Miami University (May 2026) · Cincinnati, OH</text><text x="48" y="236" class="dim" font-size="13">open to full-time software engineering roles · aesh.03.23@gmail.com</text><rect x="48" y="258" width="9" height="9" fill="#1F6D5C"/><text x="66" y="267" class="ts mid" font-size="11" letter-spacing="1.6">EVERY EDGE ON THIS BOARD IS A CHECKABLE CLAIM</text><g><path class="bus" stroke="#1F6D5C" d="M680,80 H780"/><path class="cm k859" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="4" d="M684,80 H776"/><path class="cm k860" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="32" d="M684,80 H776"/><path class="cm k861" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="54" d="M684,80 H776"/></g><g><path class="bus" stroke="#9A3412" d="M680,216 H780"/><path class="cm k862" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="-76" d="M684,216 H776"/><path class="cm k863" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="-48" d="M684,216 H776"/><path class="cm k864" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="-26" d="M684,216 H776"/></g><g><path class="bus" stroke="#5F6E73" d="M580,168 H612 V80 H616"/><path class="cm k865" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-30" d="M584,168 H612 V84"/><path class="cm k866" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="-2" d="M584,168 H612 V84"/><path class="cm k867" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="20" d="M584,168 H612 V84"/></g><path class="bus" stroke="#5F6E73" stroke-dasharray="3 6" d="M108,328 H150"/><circle cx="157" cy="328" r="3.5" fill="none" stroke="#5F6E73" stroke-width="2"/><g><path class="bus" stroke="#1F6D5C" d="M766,80 V388 Q766,400 754,400 H75 Q63,400 63,412 V534"/><path class="cm k868" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="34" d="M766,84 V388 Q766,400 754,400 H75 Q63,400 63,412 V531.5"/><path class="cm k869" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="62" d="M766,84 V388 Q766,400 754,400 H75 Q63,400 63,412 V531.5"/><path class="cm k870" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="84" d="M766,84 V388 Q766,400 754,400 H75 Q63,400 63,412 V531.5"/></g><g><path class="bus" stroke="#9A3412" d="M744,216 V403 Q744,415 732,415 H102 Q90,415 90,427 V534"/><path class="cm k871" stroke="#571300" stroke-dasharray="34 176" stroke-dashoffset="-53" d="M744,220 V403 Q744,415 732,415 H102 Q90,415 90,427 V531.5"/><path class="cm k872" stroke="#6F1F08" stroke-dasharray="28 182" stroke-dashoffset="-25" d="M744,220 V403 Q744,415 732,415 H102 Q90,415 90,427 V531.5"/><path class="cm k873" stroke="#852A0D" stroke-dasharray="22 188" stroke-dashoffset="-3" d="M744,220 V403 Q744,415 732,415 H102 Q90,415 90,427 V531.5"/></g><g><path class="bus" stroke="#5F6E73" d="M612,130 V418 Q612,430 600,430 H129 Q117,430 117,442 V534"/><path class="cm k874" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-7" d="M612,134 V418 Q612,430 600,430 H129 Q117,430 117,442 V531.5"/><path class="cm k875" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="21" d="M612,134 V418 Q612,430 600,430 H129 Q117,430 117,442 V531.5"/><path class="cm k876" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="43" d="M612,134 V418 Q612,430 600,430 H129 Q117,430 117,442 V531.5"/></g><path class="pu k877" stroke-dasharray="70 1340" stroke-dashoffset="70" d="M766,84 V388 Q766,400 754,400 H75 Q63,400 63,412 V531.5"/><path class="pu k878" stroke-dasharray="70 1340" stroke-dashoffset="70" d="M744,220 V403 Q744,415 732,415 H102 Q90,415 90,427 V531.5"/><path class="pu k879" stroke-dasharray="70 1540" stroke-dashoffset="70" d="M612,134 V418 Q612,430 600,430 H129 Q117,430 117,442 V531.5"/><g transform="translate(520,140) scale(1.1667)"><rect x="0.75" y="0.75" width="46.5" height="46.5" rx="12" fill="#0A0A0B" stroke="#6E7A80" stroke-width="1"/>
 <path d="M24,12.5 A11.5,11.5 0 0 1 34.3,29.2 M31.5,33.8 A11.5,11.5 0 0 1 16.5,33.8"
   fill="none" stroke="#A78BFA" stroke-width="2.2" stroke-linecap="round"/>
 <path d="M13.7,29.2 A11.5,11.5 0 0 1 24,12.5" fill="none" stroke="#A78BFA"

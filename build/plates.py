@@ -257,9 +257,10 @@ def comet(bus: str, d: str, C: float = 0.0,
     `lens` is the ramp's segment lengths, a parameter because a comet only
     reads as one on a run LONGER than its own segments: where a segment is
     wider than the window it crosses, it fills that window edge to edge and
-    the frame stops changing for as long as it takes to cross. Long traces
-    never meet this; the link row's 22u run does, and passes a scaled set —
-    see the carrier note in chip().
+    the frame stops changing for as long as it takes to cross. Every run on
+    the page now clears the default segments; short runs buy their carrier
+    with a SECOND train per pattern instead (_rail, _dbus), which keeps the
+    ink duty cycle rather than rescaling the ramp.
     """
     out = ""
     end = C
@@ -535,25 +536,20 @@ def sec_sub(x: float, y: float, s: str, size: float) -> str:
 #                          the automl tile clears the comet by >= 4u with
 #                          the +4% Linux advance applied — measured, not
 #                          estimated, gate check 2 samples it 40x per loop)
-#   collectors  y=400/415/430
-#   fan band    y=470-534: the collectors do NOT stop at the old bottom edge
-#               — each continues into a drop aimed at a link-row lead (see
-#               the link row's calibration block). verd's collector column at
-#               x=75 IS the portfolio drop, dead straight; rust tees at y498
-#               (resume branch + linkedin corner); zinc turns at y486 above
-#               rust's tier, so the two trees nest and nothing crosses.
+#   collectors  y=400/415/430, each turning straight down into its own
+#               lane of the page bus at BUS_X. The fan band that used to
+#               fill y=470-534 — one drop aimed at each fixed-px chip in
+#               the old link row — died with those chips (2026-08-13): the
+#               row's ports tap OFF the bundle now, so the hero's job at
+#               its bottom edge is simply to land all three lanes at
+#               63/90/117, the x every plate below carries them at.
 def plate_hero() -> str:
-    pr, pl, pe = DROP["resume"], DROP["linkedin"], DROP["email"]
-    d_verd = "M766,80 V388 Q766,400 754,400 H87 Q75,400 75,412 V534"
-    d_rust = ("M744,216 V403 Q744,415 732,415 H102 Q90,415 90,427 V486 "
-              f"Q90,498 102,498 H{pl - 12} Q{pl},498 {pl},510 V534")
-    d_zinc = ("M612,130 V418 Q612,430 600,430 H129 Q117,430 117,442 V474 "
-              f"Q117,486 129,486 H{pe - 12} Q{pe},486 {pe},498 V534")
-    c_verd = "M766,84 V388 Q766,400 754,400 H87 Q75,400 75,412 V531.5"
-    c_rust = ("M744,220 V403 Q744,415 732,415 H102 Q90,415 90,427 V486 "
-              f"Q90,498 102,498 H{pl - 12} Q{pl},498 {pl},510 V531.5")
-    c_zinc = ("M612,134 V418 Q612,430 600,430 H129 Q117,430 117,442 V474 "
-              f"Q117,486 129,486 H{pe - 12} Q{pe},486 {pe},498 V531.5")
+    d_verd = "M766,80 V388 Q766,400 754,400 H75 Q63,400 63,412 V534"
+    d_rust = "M744,216 V403 Q744,415 732,415 H102 Q90,415 90,427 V534"
+    d_zinc = "M612,130 V418 Q612,430 600,430 H129 Q117,430 117,442 V534"
+    c_verd = "M766,84 V388 Q766,400 754,400 H75 Q63,400 63,412 V531.5"
+    c_rust = "M744,220 V403 Q744,415 732,415 H102 Q90,415 90,427 V531.5"
+    c_zinc = "M612,134 V418 Q612,430 600,430 H129 Q117,430 117,442 V531.5"
     body = (
         # the name block — anchored left, grown right and down. One <text>,
         # two lines: Syne's em box is ~1.29 of the size, so two separate
@@ -579,9 +575,6 @@ def plate_hero() -> str:
         + bus("verd", d_verd, C=0, cd=c_verd)
         + bus("rust", d_rust, C=87, cd=c_rust)
         + bus("zinc", d_zinc, C=41, cd=c_zinc)
-        # the resume branch tees off rust's fan tier; junction dot = connected
-        + bus("rust", f"M{pr},498 V534", C=55, cd=f"M{pr},500.5 V531.5")
-        + f'<circle cx="{pr}" cy="498" r="2.6" fill="{T["rust"]}"/>'
         + pulse(c_verd, 1200, 400) + pulse(c_rust, 1200, 530) + pulse(c_zinc, 1400, 680)
         # the marks — automl deliberately BETWEEN the rows (see the registry
         # above): its tile at (520,140) is what makes the board uneven, and
@@ -623,259 +616,444 @@ def plate_hero() -> str:
 
 # ══════════════════════════════════════════════════ the link row
 #
-# Four ports on the bus, each its own SVG so each is its own link in the
-# README — the way out of "an SVG in an <img> cannot hold a link".
+# Four ports on the page bus, served as PERCENTAGE SLICES of one artwork —
+# the interval strips' construction, ending two shipped defects at once:
 #
-# THE PLATFORM RULE, corrected 2026-08-13. This block used to state, as a
-# measured law, that GitHub's pipeline splits a <picture> inside a link, "so
-# a chip cannot be both clickable and theme-switched". That is FALSE, and
-# the 2026-08-12 probe that produced it was measuring its own artifact: the
-# probe's <picture> spanned several source lines, and it is the NEWLINE the
-# pipeline splits raw inline HTML on, not the nesting. Re-probed against the
-# real /markdown API (2026-08-13):
+#   · REGISTRATION, corrected 2026-08-13. The previous row was four fixed-px
+#     chips calibrated to the 846px column; every 900u plate scales to the
+#     column while a fixed-px image does not, so the lanes jogged at every
+#     stub at every other width. A slice served at exactly its intrinsic
+#     share of the 900 (integer percents, ROW_CUTS) scales by the same
+#     factor as the plates above and below it, so the lanes land on the same
+#     x at EVERY column width — registration by construction, not
+#     calibration. Probed upstream before authoring: percentage slices open
+#     no hairline at any width from 308 to 1200px.
+#   · THE PIPELINE, corrected in the same change, on the client's read of
+#     the render ("the pipeline through the chips is wrong"): the old row —
+#     and the first draft of this one — fanned the three-lane bundle out
+#     across the full width so each port could wear a lane at its own local
+#     x. The bundle is the page's spine, and a spine does not disperse to
+#     visit four components. Now the three buses run straight down the row
+#     at BUS_X, whole and unbent — entry x, mid-row x and exit x are the
+#     same three numbers as every plate above and below — and each port
+#     TAPS OFF its lane at a junction dot: a horizontal rail at its own
+#     tier, the way a component hangs off a trace. 63/90/117 all fall
+#     inside slice one, so the bundle's continuity is owned by one slice
+#     and cannot be broken by a cut. The hero hands the bundle over at
+#     BUS_X (its fan band died with the chips) and the return plate passes
+#     it on unchanged.
 #
-#   · <a href><picture><source…><img…></picture></a> on ONE source line
-#     survives intact — clickable AND theme-switched. The interval strips
-#     below (`the intervals`) ship exactly this and are the live proof.
-#   · The same element spread across lines is re-parented per line, which is
-#     what the old probe saw and misread as a law about nesting.
-#   · An HTML block ends at a BLANK line; markdown after it renders with
-#     live links inside the still-open element. The interval stacks lean on
-#     the first half of that (no blank line inside a stack).
+# THE GEOMETRY. Rails leave the bundle at three tiers — verd 70, rust 30,
+# zinc 16 — and the packages stagger their bands so every rail reaches its
+# own port's left edge without crossing a package it does not serve: rust
+# clears J1's lid by 8u on its way to J2, then runs THROUGH J2 on the tile
+# register to reach J3 (two components on one trace — the schematic truth
+# of two links sharing the rust lane); zinc passes above everything to J4,
+# whose package sits highest. Uneven bands are the client's own doctrine
+# ("I like it uneven"), and they are what buys surface-only routing: the
+# whole pipeline is visible end to end, no inner-layer dives inside the
+# row. Nothing but the rails crosses a cut; a rail sub-path starting s
+# units past its junction carries C − s, exactly like the interval rails;
+# no text straddles a boundary.
 #
-# The chips remain ONE dark artwork for now — a near-black module in the
-# marks' own family language, self-grounded, legible on every canvas, linked
-# as [<img>](url). That is a design choice a component can defend (a part
-# does not recolour with the room), no longer a medium's ultimatum, and the
-# connector-row change (real brand logos on the four ports; portfolio mark
-# in design) decides whether it stands. Everything inside grades against the
-# module via check 10's local grounds; only ink that rides the changing
-# canvas (the module hairline, the leads) uses tones measured on BOTH
-# grounds.
+# THE MARKS — real and in colour, the client's brief, every pair measured
+# on its actual ground (scratchpad/row-contrast.py, 2026-08-13):
+#   J1  the Waymark, the portfolio's own mark — geometry read from
+#       brand/mark-night.svg AT BUILD TIME, not redrawn. The night cut in
+#       both themes, because the module tile is its own dark ground: bar
+#       #E08A5F 7.51:1 on the tile, glyph #F6EFE2 17.31:1.
+#   J2  the résumé has no brand, so its mark is drawn from the Waymark's
+#       own construction — the same bar at the same weight and station,
+#       with a cream sheet standing astride it where J1's letterform
+#       stands. The two self-owned ports read as a family because they are
+#       built from one rule, not because they share a sticker style.
+#   J3  LinkedIn's published mark, its own 24-box icon geometry: plate
+#       #0A66C2 (3.48:1 on the tile, structure floor 3.0) under the white
+#       glyphs (5.69:1 on the blue).
+#   J4  a mailto: is not a Gmail link, and drawing Google's M on it would
+#       claim a relationship that does not exist — so the mail mark is
+#       designed in the board's own palette, on J3's construction: a
+#       coloured plate carrying a glyph — the plate DARK verd #4FB39A
+#       (7.77:1 on the tile), the envelope knocked out in the tile's own
+#       ink (7.77:1 on the plate). Self-owned ports share the Waymark
+#       construction; network ports share the plate construction.
 #
-# HOW THE ROW SITS ON THE BOARD — re-authored 2026-08-13. The previous strip
-# ran three self-contained horizontal lanes edge-to-edge through the chips;
-# they continued nothing above or below, so the row read as a foreign object
-# breaking the page bus. Now each chip is a COMPONENT ON A TRACE: the hero's
-# fan band (its bottom 64u) drops one lane per port; the lead enters the
-# chip's top edge at the badge column, dives under the opaque package,
-# re-emerges below the badge carrying the comet, and exits the bottom edge;
-# plate-link-return.svg merges the four drops back to BUS_X and lands the
-# page bus on plate II at the x it left the hero. The README contract is one
-# line of adjacent links, IN ROUTING ORDER:
-#
-#   [portfolio][resume][linkedin][email]     GAP = 3.8px between adjacent
-#                                            linked images (measured on the
-#                                            live profile, 2026-08-12)
-#
-# CALIBRATION — SUPERSEDED DOCTRINE, kept only while the chips do. Chips
-# render at natural size; every 900-wide plate scales to the profile column.
-# Registration between a fixed-px image and a scaled one is exact at ONE
-# width, so the row is calibrated to the canonical 846px column (900 × PAGE)
-# and drifts at every other width — a small jog, never a collision — and the
-# 580.4px row still clears the 590px column GitHub serves at 1024 viewports
-# without wrapping. The row's left edge is the portfolio module at x=45.5 ≈
-# the hero's content margin (48 × PAGE). The interval strips below do NOT
-# calibrate: they are percent-width slices of a 900u artwork, so every slice
-# scales by the same factor as the plates and the lanes register at EVERY
-# column width, by construction. The connector-row change is expected to
-# move the chips onto the same construction and retire PAGE and GAP with the
-# fixed-px row they describe.
-#
-# The LEAD tones are the buses' component-land register: one artwork means a
-# lead crosses both canvases, so each is measured on #ffffff / #212830 / the
-# tile (scratchpad, 2026-08-13): verd #3E8E76 3.94/3.78/5.03, rust #C1663A
-# 4.02/3.71/4.93, zinc #79848C 3.82/3.89/5.18. Comets keep the dark ramps
-# but run ONLY on the module, below the badge: a ramp head is ~1.3:1 on
-# white canvas, and a travelling dash may never cross the '@' badge text
-# (gate check 3 reads that as a strikethrough) — which is also why the badge
-# is opaque tile now: it occludes the static lead instead of wearing it.
-PAGE = 846 / 900              # canonical profile column / authored width
-GAP = 3.8                     # measured inter-image gap, adjacent links
-CHIP_H = 88
-CHIP_EDGE = "#79848C"         # 3.89:1 on #212830, 3.82 on #fff, 5.37 on #010409
-LEAD = {"verd": "#3E8E76", "rust": "#C1663A", "zinc": "#79848C"}
-CHIP_RUN = 22                 # the comet's visible run, y58->y80 (see chip())
-CHIP_COMET = (17, 14, 11)     # COMET halved — every segment inside CHIP_RUN
-CHIP_SPAN = 52.5              # four of them per PAT, so every gap is 10.5u
+# Module interiors keep the DARK register on every canvas (_OnTile): a
+# package does not recolour with the room, and check 10 grades its ink
+# against the tile either way. Everything riding the canvas — lanes,
+# rails, junction dots, the canvas half of each pierce pad — is theme ink,
+# because the row is theme-served now: <a><picture><source…><img></picture></a>
+# on ONE source line survives GitHub's pipeline whole (the newline is the
+# splitter, not the nesting — probed against the real /markdown API,
+# 2026-08-13), so the old one-dark-artwork compromise is retired.
+ROW_H = 110
+ROW_CUTS = {1: 37, 2: 20, 3: 22, 4: 21}     # integer percents of the column
+ROW_X0 = {1: 0, 2: 333, 3: 513, 4: 711}     # 900 × cumulative cuts
+ROW_W = {k: v * 9 for k, v in ROW_CUTS.items()}
+M_ROW_H = 84
+M_ROW_X0 = {k: round(v * 440 / 900, 1) for k, v in ROW_X0.items()}
+M_ROW_W = {k: round(v * 440 / 900, 1) for k, v in ROW_W.items()}
+ROW_TIER = {"verd": 70, "rust": 30, "zinc": 16}     # rail y, desktop
+M_ROW_TIER = {"verd": 52, "rust": 22, "zinc": 12}   # rail y, phone cut
+ROW_C = {"verd": 20, "rust": 90, "zinc": 160}       # rail phase at the junction
+# package bands (x0, x1, y0, y1). The bands stagger DOWNWARD as the tiers
+# descend — J4 highest, J2/J3 middle, J1 lowest — see the routing note.
+ROW_MOD = {"portfolio": (140, 328, 38, 102), "resume": (380, 500, 22, 86),
+           "linkedin": (560, 690, 22, 86), "email": (750, 880, 8, 72)}
+M_ROW_MOD = {"portfolio": (80, 156, 28, 76), "resume": (170, 244, 18, 66),
+             "linkedin": (258, 340, 18, 66), "email": (356, 432, 6, 54)}
 
-# the row layout, in page px: (module width, left inset). Portfolio's inset
-# puts its module edge on the content margin, and its lead at 70.5 = board
-# 75 × PAGE — the hero's verd collector column runs dead straight through it.
-ROW = {"portfolio": (190, 45), "resume": (108, 0),
-       "linkedin": (124, 0), "email": (102, 0)}
-_rx, CHIP_LEAD = 0.0, {}
-for _k, (_w, _pad) in ROW.items():
-    CHIP_LEAD[_k] = _rx + (_pad + 25.5 if _pad else 24)
-    _rx += _pad + _w + GAP
-# where the hero's fan band drops each lead, in board units
-DROP = {k: round(v / PAGE, 1) for k, v in CHIP_LEAD.items()}
-
-
-def _port_glyphs(kind: str, dx: float, dy: float) -> str:
-    """The port marks, drawn here in the family language. White ink only —
-    colour on this page belongs to the products and the buses. The offset
-    rides EVERY element's own transform, never a wrapping <g>: gate.mjs
-    composes by nearest enclosing group, and these must stay in the module's.
-    """
-    tr = f' transform="translate({dx},{dy})"'
-    if kind == "www":       # a globe: equator and one meridian
-        return (f'<circle{tr} cx="24" cy="24" r="7.2" fill="none" stroke="#F7F8F8" stroke-width="1.7"/>'
-                f'<path{tr} d="M16.8,24 H31.2" fill="none" stroke="#F7F8F8" stroke-width="1.5"/>'
-                f'<path{tr} d="M24,16.8 C20.6,20.4 20.6,27.6 24,31.2 C27.4,27.6 27.4,20.4 24,16.8"'
-                ' fill="none" stroke="#F7F8F8" stroke-width="1.5"/>')
-    if kind == "doc":       # a sheet with three set lines
-        return (f'<rect{tr} x="18" y="16" width="12" height="16" rx="2" fill="none" stroke="#F7F8F8" stroke-width="1.7"/>'
-                f'<path{tr} d="M21,21.5 H27 M21,25 H27 M21,28.5 H25" fill="none" stroke="#F7F8F8" stroke-width="1.5" stroke-linecap="round"/>')
-    if kind == "at":
-        return (f'<text{tr} x="24" y="29.5" class="ts" font-size="17" text-anchor="middle" style="fill:#F7F8F8">@</text>')
-    if kind == "in":
-        return (f'<text{tr} x="24" y="29" class="ts" font-size="15.5" text-anchor="middle" style="fill:#F7F8F8">in</text>')
-    raise SystemExit(f"unknown port glyph {kind}")
+# J1's artwork, read from the brand file itself so the row can never drift
+# from the mark the portfolio ships. The night cut serves both themes — the
+# tile is its own dark ground (see the register note above).
+_BRAND_NIGHT = (ROOT.parent / "brand" / "mark-night.svg").read_text()
+_WAYMARK_D = re.search(r'd="(M468[^"]+)"', _BRAND_NIGHT).group(1)
+_WAYMARK_BAR = re.search(r'stroke="(#[0-9a-fA-F]{6})"', _BRAND_NIGHT).group(1)
+_WAYMARK_INK = re.search(r'fill="(#[0-9a-fA-F]{6})"', _BRAND_NIGHT).group(1)
 
 
-def chip(kind: str, label: str, glyph: str, tap_bus: str,
-         phase: float, title: str, desc: str, key: str,
-         frame: tuple[float, float, float]) -> str:
-    global T
-    saved = T
-    # the module carries the dark surface on every canvas: only data-canvas,
-    # written by head() from the theme, differs between the two files.
-    T = dict(saved, ink=DARK["ink"], mid=DARK["mid"], dim=DARK["dim"],
-             verd=DARK["verd"], rust=DARK["rust"], zinc=DARK["zinc"],
-             ramp=DARK["ramp"], edge=CHIP_EDGE)
-    try:
-        w_mod, pad = ROW[kind]
-        w = pad + w_mod
-        sx = pad + 25.5 if pad else 24          # the lead = the badge column
-        lead = LEAD[tap_bus]
-        # the through-lead: the trace this component sits on, canvas-to-canvas
-        track = f'<path class="bus" stroke="{lead}" d="M{sx},0 V{CHIP_H}"/>'
-        module = (
-            # the module and its fittings, one composed object; the rect is
-            # FIRST in document order so it is the plate's contrast ground
-            f'<g><rect x="{pad + 0.5}" y="20" width="{w_mod - 1}" height="64" rx="3" '
-            f'fill="{TILE}" stroke="{CHIP_EDGE}" stroke-width="1"/>'
-            # entry and exit pads, just inside the edges the lead pierces —
-            # vivid on the tile, where the true bus colours are legal
-            + "".join(f'<rect x="{sx - 2.5}" y="{py}" width="5" height="4" fill="{T[tap_bus]}"/>'
-                      for py in (20.5, 79.5))
-            # the trace where it is VISIBLE on the package: a stub above the
-            # badge, and the run below it that carries the comet
-            + f'<path class="bus" stroke="{lead}" d="M{sx},20 V26 M{sx},54 V84"/>'
-            # the port badge: OPAQUE tile, occluding the lead (see the note
-            # above on the '@' strikethrough), ruled like the marks
-            + f'<rect x="{sx - 14}" y="26" width="28" height="28" rx="8" fill="{TILE}" '
-            f'stroke="{STRUCT}" stroke-width="1.2"/>' + _port_glyphs(glyph, sx - 24, 16)
-            + lbl(pad + 46, 44.5, label, cls="ts", size=11.5, ls=1.3) + "</g>"
-        )
-        # THE CARRIER, SIZED TO THE RUN IT RIDES. This was two page-sized
-        # comets 105 pattern-units apart, and the note here read "one of them
-        # is always on-path, so the carrier never blinks". Never blank was the
-        # wrong property to check for. The page's comet is 84u long and its
-        # three segments are 34/28/22 (COMET); this visible run is 22u, so
-        # every segment is at least as wide as the window it crosses, and
-        # while one covers the run the chip draws a flat uniform bar — a still
-        # image, not a slow one. Measured per interval with motion.mjs's own
-        # sampler (2026-08-13): the head holds the run frozen for 34-22 = 12u
-        # of travel and the second segment for 28-22 = 6u, once each per comet
-        # per pattern. 36 of every 210u, 17% of the loop, in stalls of
-        # 120-157ms; any two samples landing inside one stall diff to EXACTLY
-        # zero pixels. That is what pinned three of these four chips one
-        # interval above the 95% carrier floor with nothing left to give —
-        # email cleared it only because its phase happened to put a single
-        # sample inside the band, which is luck, not margin.
-        #
-        # So the comet is halved and run four to the pattern instead of two:
-        # same PAT, same period, same speed, and the same ink duty cycle
-        # (4x42 = 2x84 of 210). The longest uniform region is now 17u and the
-        # longest gap 10.5u, both inside the 22u window, so every frame
-        # carries a moving boundary and the run never drains below 11.5u
-        # either — where it used to fall to a 1u sliver. THE CONSTRAINT, for
-        # anyone retuning this: segment < CHIP_RUN and gap < CHIP_RUN. Both,
-        # or the frame goes flat again — flat-full or flat-empty, the gate and
-        # the eye cannot tell those apart and neither should they.
-        current = "".join(
-            comet(tap_bus, f"M{sx},58 V80", C=phase + i * CHIP_SPAN, lens=CHIP_COMET)
-            for i in range(4))
-        # THE TYPE COLUMN this chip declares (gate check 5, which holds a
-        # left-anchored label 6u short of the declared edge). Default: 8u in
-        # from the canvas left, 4u short of its right.
-        #
-        # RÉSUMÉ is the one label that nearly fills its module — drawn 46->102
-        # in a 108-wide chip, identical at all 40 samples — so the 6u margin
-        # needs 105.85 and the blanket `w - 4` (= 104) declared an edge 2u
-        # inside what the plate DRAWS. The module's own ink edge is this
-        # chip's column: type may not leave the package, which is a decision
-        # a reviewer can read, and the label clears it with 1.65u. Written as
-        # its derivation, not as 107.5, so it follows the module width.
-        col = (pad + 8, pad + w_mod - 0.5 if kind == "resume" else w - 4)
-        return head(CHIP_H, title, desc, key=key, col=col, frame=frame,
-                    faces="6", w=w) + css_close() + track + module + current + "</svg>"
-    finally:
-        T = saved
+class _OnTile:
+    """Module interiors keep the DARK register on every canvas: the tile is
+    its own (dark) ground, so its ink and its comet ramps never re-theme."""
+
+    def __enter__(self):
+        global T
+        self._saved = T
+        T = dict(T, ink=DARK["ink"], mid=DARK["mid"], dim=DARK["dim"],
+                 verd=DARK["verd"], rust=DARK["rust"], zinc=DARK["zinc"],
+                 ramp=DARK["ramp"])
+        return self
+
+    def __exit__(self, *a):
+        global T
+        T = self._saved
 
 
-CHIPS = {
-    # filename fragment: (label, glyph, tap bus, carrier phase — the chip's
-    # four comets sit at phase + 0/1/2/3 x CHIP_SPAN, so no two ports open on
-    # the same frame: mod 52.5 these are 12, 35, 42.5, 13.5.
-    "portfolio": ("AYUSH-YADAV.COM", "www", "verd", 12,
-                  "ayush-yadav.com — the portfolio",
-                  "Port one of four on the link bus: ayush-yadav.com, the portfolio."),
-    "resume":    ("RÉSUMÉ", "doc", "rust", 140,
-                  "résumé — PDF",
-                  "Port two of four on the link bus: the résumé, as a PDF."),
-    "linkedin":  ("LINKEDIN", "in", "rust", 200,
-                  "linkedin — profile",
-                  "Port three of four on the link bus: the LinkedIn profile."),
-    "email":     ("EMAIL", "at", "zinc", 66,
-                  "email — aesh at gmail",
-                  "Port four of four on the link bus: email; opens a mail draft."),
+def _tile_mod(x0, y0, x1, y1):
+    return (f'<rect x="{x0 + 0.5}" y="{y0}" width="{x1 - x0 - 1}" height="{y1 - y0}" '
+            f'rx="3" fill="{TILE}" stroke="{T["edge"]}" stroke-width="1"/>')
+
+
+def _pierce(bus_key, x, y, side="l"):
+    """The pad where a rail pierces a package edge — the seam between the
+    two registers: canvas half in theme ink, tile half in the DARK register."""
+    canv_x, tile_x = (x - 3, x) if side == "l" else (x, x - 3)
+    return (f'<rect x="{canv_x}" y="{y - 2.5}" width="3" height="5" fill="{T[bus_key]}"/>'
+            f'<rect x="{tile_x}" y="{y - 2.5}" width="3" height="5" fill="{DARK[bus_key]}"/>')
+
+
+def _land(bus_key, x, y, r=4.0):
+    """A port land: ring plus solid centre, emitted INLINE (no wrapping <g>)
+    so it stays in its module's group — gate.mjs composes by nearest
+    enclosing group, and a land in its own group would collide with the
+    tile it sits on."""
+    return (f'<circle cx="{x}" cy="{y}" r="{r}" fill="none" stroke="{T[bus_key]}" stroke-width="2"/>'
+            f'<circle cx="{x}" cy="{y}" r="1.8" fill="{T[bus_key]}"/>')
+
+
+def _tlbl(x, y, s, size=10.5, ls=0.9, dim=False):
+    """Silkscreen ON a package: fill rides inline style, because head()'s
+    <style> sets text fill from the THEME and the tile does not re-theme."""
+    return (f'<text x="{x}" y="{y}" class="ts" font-size="{size}" letter-spacing="{ls}" '
+            f'style="fill:{DARK["dim" if dim else "ink"]}">{s}</text>')
+
+
+def mark_waymark(x, y, s):
+    """The Waymark, verbatim: the brand file's own two paths, its transforms
+    composed onto the placement. Presentation attributes ride each element
+    (the flat-emitter law), and stroke-width scales with the transform, so
+    44 in brand units is 44·s/512 = 3.3u drawn at s=38."""
+    k = f"translate({x},{y}) scale({s / 512:.6f})"
+    return (f'<path transform="{k}" d="M-2 293.9 H514" fill="none" '
+            f'stroke="{_WAYMARK_BAR}" stroke-width="44"/>'
+            f'<path transform="{k} translate(91.86,412) scale(0.22857,-0.22857)" '
+            f'd="{_WAYMARK_D}" fill="{_WAYMARK_INK}"/>')
+
+
+def mark_sheet(x, y, s):
+    """J2's mark, from the Waymark's construction: the same bar at the same
+    weight and station (293.9/512 of the box), with a cream sheet standing
+    astride it where J1's letterform stands. Fold and rules are the tile's
+    own ink — knockouts, like the envelope on J4's plate."""
+    k = f"translate({x},{y}) scale({s / 512:.6f})"
+    bar = (f'<path transform="{k}" d="M-2 293.9 H514" fill="none" '
+           f'stroke="{_WAYMARK_BAR}" stroke-width="44"/>')
+    x0, x1 = x + 0.30 * s, x + 0.70 * s
+    y0, y1 = y + 0.20 * s, y + 0.82 * s
+    f = 0.15 * s
+    sheet = (f'<path d="M{x0:.1f},{y0:.1f} H{x1 - f:.1f} L{x1:.1f},{y0 + f:.1f} '
+             f'V{y1:.1f} H{x0:.1f} Z" fill="{_WAYMARK_INK}"/>')
+    fold = (f'<path d="M{x1 - f:.1f},{y0:.1f} V{y0 + f:.1f} H{x1:.1f}" fill="none" '
+            f'stroke="{TILE}" stroke-width="{0.045 * s:.2f}"/>')
+    rx0, rx1 = x0 + 0.09 * s, x1 - 0.09 * s
+    rules = ('<path d="' + " ".join(f"M{rx0:.1f},{y + fy * s:.1f} H{rx1:.1f}"
+                                    for fy in (0.34, 0.45))
+             + f'" fill="none" stroke="{TILE}" stroke-width="{0.045 * s:.2f}"/>')
+    return bar + sheet + fold + rules
+
+
+# LinkedIn's published 24-box icon geometry — the mark as LinkedIn ships it,
+# not a redrawing: the i-dot circle, the i-stem, and the n, white on the
+# brand blue.
+_LI_N = ("M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 "
+         "0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 "
+         "1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286z")
+
+
+def mark_linkedin(x, y, s):
+    k = s / 24
+    return (f'<rect x="{x}" y="{y}" width="{s}" height="{s}" rx="{2 * k:.2f}" fill="#0A66C2"/>'
+            f'<circle cx="{x + 5.337 * k:.2f}" cy="{y + 5.368 * k:.2f}" r="{2.064 * k:.2f}" fill="#FFFFFF"/>'
+            f'<rect x="{x + 3.555 * k:.2f}" y="{y + 9 * k:.2f}" width="{3.564 * k:.2f}" '
+            f'height="{11.452 * k:.2f}" fill="#FFFFFF"/>'
+            f'<path transform="translate({x},{y}) scale({k:.4f})" d="{_LI_N}" fill="#FFFFFF"/>')
+
+
+def mark_mail(x, y, s):
+    """J4's mark, on J3's construction: a coloured plate carrying a glyph —
+    the plate the board's own verd, the envelope the tile's own ink. NOT
+    Gmail's M: a mailto: is not a Gmail link, and this page does not wear
+    marks it has no claim to."""
+    k = s / 24
+    ex, ey = x + 4.5 * k, y + 7 * k
+    ew, eh = 15 * k, 10.5 * k
+    return (f'<rect x="{x}" y="{y}" width="{s}" height="{s}" rx="{2 * k:.2f}" fill="{DARK["verd"]}"/>'
+            f'<rect x="{ex:.2f}" y="{ey:.2f}" width="{ew:.2f}" height="{eh:.2f}" rx="{1.2 * k:.2f}" '
+            f'fill="none" stroke="{TILE}" stroke-width="{1.7 * k:.2f}"/>'
+            f'<path d="M{ex:.2f},{ey + k:.2f} L{ex + ew / 2:.2f},{ey + 6.5 * k:.2f} '
+            f'L{ex + ew:.2f},{ey + k:.2f}" fill="none" stroke="{TILE}" '
+            f'stroke-width="{1.7 * k:.2f}"/>')
+
+
+# ── the four descriptions, authored once; the same words serve both cuts.
+DESC_PORT = {
+    "portfolio": ("Port one of four on the link bus: ayush-yadav.com, the "
+                  "portfolio, wearing the Waymark. The three page buses run "
+                  "whole through the row — every port taps off its own lane, "
+                  "and no lane leaves the bundle."),
+    "resume": ("Port two of four: the résumé, as a PDF. Its mark is drawn "
+               "from the Waymark's own construction — the same bar, with a "
+               "sheet standing astride it — on a tap off the rust lane."),
+    "linkedin": ("Port three of four: the LinkedIn profile, carrying "
+                 "LinkedIn's own mark. The rust tap runs on through the "
+                 "résumé's package to reach it."),
+    "email": ("Port four of four: email — opens a mail draft. The mail mark "
+              "is drawn in the board's own palette; the zinc tap reaches it "
+              "past every other package."),
 }
 
 
-def make_chip(kind: str):
-    label, glyph, tap, phase, title, desc = CHIPS[kind]
-    fn = f"plate-link-{kind}.svg"
-    return lambda: chip(kind, label, glyph, tap, phase, title, desc, fn,
-                        CHIP_FRAME[kind])
+def row_s1() -> str:
+    """Slice one: the whole bundle, its three junctions, and J1."""
+    w = ROW_W[1]
+    body = ""
+    for k, C in zip(("verd", "rust", "zinc"), (135, 40, 190)):
+        x = BUS_X[k]
+        body += bus(k, f"M{x},0 V{ROW_H}", C=C, cd=f"M{x},2.5 V{ROW_H - 2.5}")
+    for k in ("verd", "rust", "zinc"):
+        body += _dot(k, BUS_X[k], ROW_TIER[k])
+    body += _rail("verd", "M63,70 H140", ROW_C["verd"], "M63,70 H137.5")
+    body += _rail("rust", f"M90,30 H{w}", ROW_C["rust"], f"M90,30 H{w}")
+    body += _rail("zinc", f"M117,16 H{w}", ROW_C["zinc"], f"M117,16 H{w}")
+    x0, x1, y0, y1 = ROW_MOD["portfolio"]
+    body += f'<g>{_tile_mod(x0, y0, x1, y1)}'
+    with _OnTile():
+        body += (f'<path class="bus" stroke="{T["verd"]}" d="M{x0},70 H145"/>'
+                 + _land("verd", 149, 70)
+                 + mark_waymark(160, 51, 38)
+                 + _tlbl(206, 74, "AYUSH-YADAV.COM", size=10.5, ls=0.8)
+                 + _tlbl(148, 96, "J1", size=8.5, ls=1.2, dim=True))
+    body += "</g>" + _pierce("verd", x0, 70)
+    return head(ROW_H, "the link bus, port one — ayush-yadav.com",
+                DESC_PORT["portfolio"], key="plate-port-portfolio.svg",
+                col=(0, 327.5), frame=PORT_FRAME.get("plate-port-portfolio.svg"),
+                faces="6", w=w) + css_close() + body + "</svg>"
+
+
+def row_s2() -> str:
+    """Slice two: J2 sits ON the rust rail — the rail crosses the package on
+    the tile register and carries on toward J3; zinc passes above."""
+    w, X0 = ROW_W[2], ROW_X0[2]
+    cr = ROW_C["rust"] - (X0 - BUS_X["rust"])
+    cz = ROW_C["zinc"] - (X0 - BUS_X["zinc"])
+    x0, x1 = ROW_MOD["resume"][0] - X0, ROW_MOD["resume"][1] - X0
+    y0, y1 = ROW_MOD["resume"][2], ROW_MOD["resume"][3]
+    body = (_rail("zinc", f"M0,16 H{w}", cz, f"M0,16 H{w}")
+            + _rail("rust", f"M0,30 H{x0}", cr, f"M0,30 H{x0 - 2.5}"))
+    body += f'<g>{_tile_mod(x0, y0, x1, y1)}'
+    with _OnTile():
+        body += (f'<path class="bus" stroke="{T["rust"]}" d="M{x0},30 H{x1}"/>'
+                 + comet("rust", f"M{x0},30 H{x1}", cr - x0)
+                 + comet("rust", f"M{x0},30 H{x1}", cr - x0 - PAT / 2)
+                 + _land("rust", 82, 30)
+                 + mark_sheet(65, 39, 30)
+                 + _tlbl(103, 58, "RÉSUMÉ", size=10.5, ls=1.1)
+                 + _tlbl(55, 80, "J2", size=8.5, ls=1.2, dim=True))
+    body += ("</g>" + _pierce("rust", x0, 30) + _pierce("rust", x1, 30, side="r")
+             + _rail("rust", f"M{x1},30 H{w}", cr - x1, f"M{x1},30 H{w}"))
+    return head(ROW_H, "the link bus, port two — the résumé",
+                DESC_PORT["resume"], key="plate-port-resume.svg",
+                col=(0, x1 - 0.5), frame=PORT_FRAME.get("plate-port-resume.svg"),
+                faces="6", w=w) + css_close() + body + "</svg>"
+
+
+def row_s3() -> str:
+    """Slice three: the rust rail arrives and dies at J3's land."""
+    w, X0 = ROW_W[3], ROW_X0[3]
+    cr = ROW_C["rust"] - (X0 - BUS_X["rust"])
+    cz = ROW_C["zinc"] - (X0 - BUS_X["zinc"])
+    x0, x1 = ROW_MOD["linkedin"][0] - X0, ROW_MOD["linkedin"][1] - X0
+    y0, y1 = ROW_MOD["linkedin"][2], ROW_MOD["linkedin"][3]
+    body = (_rail("zinc", f"M0,16 H{w}", cz, f"M0,16 H{w}")
+            + _rail("rust", f"M0,30 H{x0}", cr, f"M0,30 H{x0 - 2.5}"))
+    body += f'<g>{_tile_mod(x0, y0, x1, y1)}'
+    with _OnTile():
+        body += (f'<path class="bus" stroke="{T["rust"]}" d="M{x0},30 H57"/>'
+                 + _land("rust", 61, 30)
+                 + mark_linkedin(71, 40, 28)
+                 + _tlbl(107, 58, "LINKEDIN", size=10, ls=0.7)
+                 + _tlbl(55, 80, "J3", size=8.5, ls=1.2, dim=True))
+    body += "</g>" + _pierce("rust", x0, 30)
+    return head(ROW_H, "the link bus, port three — LinkedIn",
+                DESC_PORT["linkedin"], key="plate-port-linkedin.svg",
+                col=(0, x1 - 0.5), frame=PORT_FRAME.get("plate-port-linkedin.svg"),
+                faces="6", w=w) + css_close() + body + "</svg>"
+
+
+def row_s4() -> str:
+    """Slice four: the zinc rail, clear of every package it does not serve,
+    dies at J4's land."""
+    w, X0 = ROW_W[4], ROW_X0[4]
+    cz = ROW_C["zinc"] - (X0 - BUS_X["zinc"])
+    x0, x1 = ROW_MOD["email"][0] - X0, ROW_MOD["email"][1] - X0
+    y0, y1 = ROW_MOD["email"][2], ROW_MOD["email"][3]
+    body = _rail("zinc", f"M0,16 H{x0}", cz, f"M0,16 H{x0 - 2.5}")
+    body += f'<g>{_tile_mod(x0, y0, x1, y1)}'
+    with _OnTile():
+        body += (f'<path class="bus" stroke="{T["zinc"]}" d="M{x0},16 H49"/>'
+                 + _land("zinc", 53, 16)
+                 + mark_mail(71, 26, 28)
+                 + _tlbl(107, 44, "EMAIL", size=10.5, ls=1.1)
+                 + _tlbl(47, 66, "J4", size=8.5, ls=1.2, dim=True))
+    body += "</g>" + _pierce("zinc", x0, 16)
+    return head(ROW_H, "the link bus, port four — email",
+                DESC_PORT["email"], key="plate-port-email.svg",
+                col=(0, x1 - 0.5), frame=PORT_FRAME.get("plate-port-email.svg"),
+                faces="6", w=w) + css_close() + body + "</svg>"
+
+
+def m_row_s1() -> str:
+    w = M_ROW_W[1]
+    body = ""
+    for k, C in zip(("verd", "rust", "zinc"), (135, 40, 190)):
+        x = MBUS_X[k]
+        body += bus(k, f"M{x},0 V{M_ROW_H}", C=C, cd=f"M{x},2.5 V{M_ROW_H - 2.5}")
+    for k in ("verd", "rust", "zinc"):
+        body += _dot(k, MBUS_X[k], M_ROW_TIER[k], r=2.4)
+    body += _rail("verd", "M40,52 H80", ROW_C["verd"], "M40,52 H77.5")
+    body += _rail("rust", f"M54,22 H{w}", ROW_C["rust"], f"M54,22 H{w}")
+    body += _rail("zinc", f"M68,12 H{w}", ROW_C["zinc"], f"M68,12 H{w}")
+    x0, x1, y0, y1 = M_ROW_MOD["portfolio"]
+    body += f'<g>{_tile_mod(x0, y0, x1, y1)}'
+    with _OnTile():
+        body += (f'<path class="bus" stroke="{T["verd"]}" d="M{x0},52 H85.5"/>'
+                 + _land("verd", 90, 52, r=3.5)
+                 + mark_waymark(105, 39, 26)
+                 + _tlbl(85, 70, "J1", size=8, ls=1, dim=True))
+    body += "</g>" + _pierce("verd", x0, 52)
+    return head(M_ROW_H, "the link bus, port one — ayush-yadav.com, phone cut",
+                DESC_PORT["portfolio"], key="m-port-portfolio.svg",
+                col=(0, 155.5), frame=PORT_FRAME.get("m-port-portfolio.svg"),
+                faces="6", w=w) + css_close() + body + "</svg>"
+
+
+def m_row_s2() -> str:
+    w, X0 = M_ROW_W[2], M_ROW_X0[2]
+    cr = ROW_C["rust"] - (X0 - MBUS_X["rust"])
+    cz = ROW_C["zinc"] - (X0 - MBUS_X["zinc"])
+    x0 = round(M_ROW_MOD["resume"][0] - X0, 1)
+    x1 = round(M_ROW_MOD["resume"][1] - X0, 1)
+    y0, y1 = M_ROW_MOD["resume"][2], M_ROW_MOD["resume"][3]
+    body = (_rail("zinc", f"M0,12 H{w}", cz, f"M0,12 H{w}")
+            + _rail("rust", f"M0,22 H{x0}", cr, f"M0,22 H{x0 - 2.5}"))
+    body += f'<g>{_tile_mod(x0, y0, x1, y1)}'
+    with _OnTile():
+        body += (f'<path class="bus" stroke="{T["rust"]}" d="M{x0},22 H{x1}"/>'
+                 + comet("rust", f"M{x0},22 H{x1}", cr - x0)
+                 + comet("rust", f"M{x0},22 H{x1}", cr - x0 - PAT / 2)
+                 + _land("rust", 44.2, 22, r=3.5)
+                 + mark_sheet(31.2, 29, 26)
+                 + _tlbl(11.2, 62, "J2", size=8, ls=1, dim=True))
+    body += ("</g>" + _pierce("rust", x0, 22) + _pierce("rust", x1, 22, side="r")
+             + _rail("rust", f"M{x1},22 H{w}", cr - x1, f"M{x1},22 H{w}"))
+    return head(M_ROW_H, "the link bus, port two — the résumé, phone cut",
+                DESC_PORT["resume"], key="m-port-resume.svg",
+                col=(0, x1 - 0.5), frame=PORT_FRAME.get("m-port-resume.svg"),
+                faces="6", w=w) + css_close() + body + "</svg>"
+
+
+def m_row_s3() -> str:
+    w, X0 = M_ROW_W[3], M_ROW_X0[3]
+    cr = ROW_C["rust"] - (X0 - MBUS_X["rust"])
+    cz = ROW_C["zinc"] - (X0 - MBUS_X["zinc"])
+    x0 = round(M_ROW_MOD["linkedin"][0] - X0, 1)
+    x1 = round(M_ROW_MOD["linkedin"][1] - X0, 1)
+    y0, y1 = M_ROW_MOD["linkedin"][2], M_ROW_MOD["linkedin"][3]
+    body = (_rail("zinc", f"M0,12 H{w}", cz, f"M0,12 H{w}")
+            + _rail("rust", f"M0,22 H{x0}", cr, f"M0,22 H{x0 - 2.5}"))
+    body += f'<g>{_tile_mod(x0, y0, x1, y1)}'
+    with _OnTile():
+        body += (f'<path class="bus" stroke="{T["rust"]}" d="M{x0},22 H15.2"/>'
+                 + _land("rust", 19.2, 22, r=3.5)
+                 + mark_linkedin(35.2, 29, 26)
+                 + _tlbl(11.2, 62, "J3", size=8, ls=1, dim=True))
+    body += "</g>" + _pierce("rust", x0, 22)
+    return head(M_ROW_H, "the link bus, port three — LinkedIn, phone cut",
+                DESC_PORT["linkedin"], key="m-port-linkedin.svg",
+                col=(0, x1 - 0.5), frame=PORT_FRAME.get("m-port-linkedin.svg"),
+                faces="6", w=w) + css_close() + body + "</svg>"
+
+
+def m_row_s4() -> str:
+    w, X0 = M_ROW_W[4], M_ROW_X0[4]
+    cz = ROW_C["zinc"] - (X0 - MBUS_X["zinc"])
+    x0 = round(M_ROW_MOD["email"][0] - X0, 1)
+    x1 = round(M_ROW_MOD["email"][1] - X0, 1)
+    y0, y1 = M_ROW_MOD["email"][2], M_ROW_MOD["email"][3]
+    body = _rail("zinc", f"M0,12 H{x0}", cz, f"M0,12 H{x0 - 2.5}")
+    body += f'<g>{_tile_mod(x0, y0, x1, y1)}'
+    with _OnTile():
+        body += (f'<path class="bus" stroke="{T["zinc"]}" d="M{x0},12 H16.4"/>'
+                 + _land("zinc", 20.4, 12, r=3.5)
+                 + mark_mail(33.4, 17, 26)
+                 + _tlbl(12.4, 50, "J4", size=8, ls=1, dim=True))
+    body += "</g>" + _pierce("zinc", x0, 12)
+    return head(M_ROW_H, "the link bus, port four — email, phone cut",
+                DESC_PORT["email"], key="m-port-email.svg",
+                col=(0, x1 - 0.5), frame=PORT_FRAME.get("m-port-email.svg"),
+                faces="6", w=w) + css_close() + body + "</svg>"
 
 
 # ══════════════════════════════════════════════════ the return plate
 #
-# Below the link row the four drops merge back into the page bus and land on
-# plate II at BUS_X — the other half of "the buses visibly survive the row".
-# Tier order mirrors the hero's fan band (verd y=14, rust y=32, zinc y=50):
-# with the ports in routing order the three trees nest and nothing crosses.
-# The one line of silkscreen is wayfinding, not decoration — it names what
-# the bus runs into next, and it is the only text between the ports and
-# section II.
+# Below the link row the bundle simply CONTINUES — the ports tapped off it
+# without moving it, so there is nothing to merge. What this plate still
+# owes the page is its one line of wayfinding: it names what the bus runs
+# into next, and it is the only text between the ports and section II.
 def plate_return() -> str:
-    pv, pr, pl, pe = (DROP[k] for k in ("portfolio", "resume", "linkedin", "email"))
     body = (
-        bus("verd", f"M{pv},0 V9 Q{pv},14 {pv - 5},14 H68 Q63,14 63,19 V64",
-            C=30, cd=f"M{pv},2.5 V9 Q{pv},14 {pv - 5},14 H68 Q63,14 63,19 V61.5")
-        + bus("rust", f"M{pl},0 V20 Q{pl},32 {pl - 12},32 H102 Q90,32 90,44 V64",
-              C=150, cd=f"M{pl},2.5 V20 Q{pl},32 {pl - 12},32 H102 Q90,32 90,44 V61.5")
-        # the resume drop joins rust's tier; junction dot = connected
-        + bus("rust", f"M{pr},0 V32", C=64, cd=f"M{pr},2.5 V29.5")
-        + f'<circle cx="{pr}" cy="32" r="2.6" fill="{T["rust"]}"/>'
-        + bus("zinc", f"M{pe},0 V38 Q{pe},50 {pe - 12},50 H129 Q117,50 117,62 V64",
-              C=100, cd=f"M{pe},2.5 V38 Q{pe},50 {pe - 12},50 H129 Q117,50 117,62 V61.5")
+        _dbus("verd", "M63,0 V64", 30, "M63,2.5 V61.5")
+        + _dbus("rust", "M90,0 V64", 150, "M90,2.5 V61.5")
+        + _dbus("zinc", "M117,0 V64", 100, "M117,2.5 V61.5")
         + lbl(640, 58, "THE EVIDENCE · SECTIONS II — VII", size=10.5)
     )
     return head(
         64,
-        "the link ports rejoin the page bus",
-        "The four link ports hand back to the page bus — the three lanes "
-        "merge and continue into the evidence, sections two to seven.",
+        "the page bus continues past the link ports",
+        "The three page buses continue past the link ports, whole, into the "
+        "evidence — sections two to seven.",
         key="plate-link-return.svg",
         col=(44, 886), frame=RET_FRAME,
-        # This plate speaks in ONE line of silkscreen, class "ts" — Commissioner
-        # 600 and nothing else. It was shipping the display 800 and the text 400
-        # as well: ~37KB of base64 no glyph on it ever asks for, sent to every
-        # reader of the profile, in both themes. Same declaration a chip makes.
         faces="6",
     ) + css_close() + body + "</svg>"
 
@@ -1341,7 +1519,7 @@ def plate_colophon() -> str:
 # 440u canvas, its own bus at MBUS_X. No email line here: the mobile set's
 # gate direction is drawn-numbers ⊆ description, and "aesh.03.23" can never
 # match a word-boundary number test — the address lives on the desktop hero
-# and behind the email chip, which mobile readers get too.
+# and behind the row's email port, which mobile readers get too.
 def m_hero() -> str:
     # drops at 178/188: the only x-corridor that clears the RLS/SIMD labels
     # (centered on 140), the row labels (32.. and 200..) and the automl label
@@ -1413,13 +1591,10 @@ def m_hero() -> str:
 #     at the phone column's ~0.89 these sit near desktop's own rendered
 #     sizes — larger, not smaller, than the desktop plate would give a
 #     phone reader.
-#   * the FOUR LINK CHIPS have no mobile twin: a chip is a fixed-px
-#     component (natural size), so at 440 the row wraps to two rows of
-#     ports and every chip keeps its size. A <picture> inside the link IS
-#     possible on one source line (see the corrected link-row doctrine);
-#     serving mobile twins is the connector-row change's call, not a
-#     medium's refusal. m-link-return resumes the lanes below the wrapped
-#     row.
+#   * the LINK ROW has a real phone cut since 2026-08-13 (m-port-*): the
+#     ports are percentage slices of a 440u artwork, so the row registers
+#     with the plates around it at every width instead of wrapping. The
+#     bundle crosses it at MBUS_X like every other plate here.
 def m_sec(h: int, C: tuple[float, float, float],
           tap: tuple[str, float] | None = None) -> str:
     """The three page buses crossing a mobile plate, plus the section's tap.
@@ -1850,29 +2025,25 @@ def m_visualassist() -> str:
     ) + css_close() + body + "</svg>"
 
 
-# ── the return, phone cut. At 440 the chip row WRAPS — the chips are
-# fixed-px components and keep their size, so the four drop columns the
-# desktop return receives do not exist at any predictable x. The board does
-# not pretend otherwise: the lanes RE-ENTER at pads (the colophon's edge
-# vocabulary, inverted — a pad is where the board meets what is off-board),
-# at MBUS_X, where the hero above the row handed them off.
+# ── the return, phone cut. This plate used to re-enter the lanes at PADS —
+# the honest drawing while the chip row wrapped at 440 and the lanes had no
+# predictable x to survive it at. The row registers now, so the honest
+# drawing is the simpler one: the bundle continues at MBUS_X, unbroken,
+# exactly as the desktop return continues it at BUS_X.
 def m_link_return() -> str:
     body = (
-        "".join(f'<rect x="{x - 5}" y="0" width="10" height="22" fill="{T[k]}"/>'
-                for k, x in MBUS_X.items())
-        + bus("verd", "M40,22 V72", C=30, cd="M40,24.5 V69.5")
-        + bus("rust", "M54,22 V72", C=150, cd="M54,24.5 V69.5")
-        + bus("zinc", "M68,22 V72", C=100, cd="M68,24.5 V69.5")
+        _dbus("verd", "M40,0 V72", 30, "M40,2.5 V69.5")
+        + _dbus("rust", "M54,0 V72", 150, "M54,2.5 V69.5")
+        + _dbus("zinc", "M68,0 V72", 100, "M68,2.5 V69.5")
         + lbl(404, 46, "THE EVIDENCE · SECTIONS II — VII", size=10.5, anchor="end")
     )
     return head(
         72,
-        "the link ports rejoin the page bus — phone cut",
-        "The link ports hand back to the page bus, phone cut: below the "
-        "wrapped row of ports the three lanes re-enter the board at their "
-        "pads and continue into the evidence, sections two to seven.",
+        "the page bus continues past the link ports — phone cut",
+        "The three page buses continue past the link ports, whole, into the "
+        "evidence — sections two to seven.",
         key="m-link-return.svg",
-        col=(88, 412), frame=(0, 36, 0), w=440,
+        col=(88, 412), frame=MRET_FRAME, w=440,
         faces="6",
     ) + css_close() + body + "</svg>"
 
@@ -1923,8 +2094,8 @@ def m_colophon() -> str:
 # ONE 900u artwork cut into slices on integer-percent boundaries, each slice
 # served at exactly that percent of the column, so every slice scales by the
 # same factor as the plates around it and the lanes land on the same x at
-# EVERY column width. (Contrast the chips' fixed-px row above, exact at 846
-# only — superseded doctrine, retired when the connector-row change lands.)
+# EVERY column width. (The link row above ships the same construction since
+# the connector-row change, 2026-08-13 — no fixed-px image survives.)
 #
 # Slices are STANDALONE plates, not viewBox windows of a shared file: every
 # published plate faces the whole gate (canvas, column, frame, faces,
@@ -1932,10 +2103,10 @@ def m_colophon() -> str:
 # nothing but the rail may cross a cut, rail segments continue across slices
 # by phase arithmetic (a sub-path starting s units along the rail carries
 # C - s), and text never straddles a boundary. Short runs go dead under
-# motion.mjs's carrier floor with one comet train per PAT — the same reason
-# the chips carry four per PAT — so every rail and every dive/resurface lane
-# carries TWO, spaced PAT/2: train (84u) + shortest window (22u) exceeds the
-# 105u spacing, so the current never leaves the wire.
+# motion.mjs's carrier floor with one comet train per PAT, so every rail and
+# every dive/resurface lane carries TWO, spaced PAT/2: train (84u) +
+# shortest window (22u) exceeds the 105u spacing, so the current never
+# leaves the wire.
 SEC_H = 108                       # strip height, desktop
 M_SEC_H = 104                     # strip height, phone cut
 RAIL_Y, TP_Y = 36, 64             # the tap rail and the probe row
@@ -2320,21 +2491,27 @@ APPLIED_FRAME = (2.5, 37, 2.5)
 VA_FRAME = (2.5, 150, 2.5)
 COLO_FRAME = (2.5, 48, 4)
 MOB_FRAME = (36, 58, 0)
-# The return plate's right edge is its one silkscreen line, which now ends
-# 47.2u short of the canvas — 30 was authored against a longer string. Measured
-# AFTER the dead faces came off, not before: check 12 normalises by a probe set
-# in 'T' 400, so while that face was embedded the probe resolved to it and the
-# same render measured 46.4. With only the 600 face on the plate the probe
-# substitutes the weight it already has, and both checks read one ruler.
-RET_FRAME = (0, 47.2, 0)
-# The chips' frame is the MODULE, not the canvas: check 12 excludes the
-# full-height through-lead by construction (a >=H-2 tall, <=5u wide element is
-# the trace, not content), so first ink is the package's top edge at y=20 and
-# the bottom margin is the 4u below it. The old 0,0.5,0 described the strip
-# these chips replaced, where the lanes ran edge to edge.
-CHIP_FRAME = {
-    "portfolio": (20, 0.5, 4), "resume": (20, 0.5, 4),
-    "linkedin": (20, 0.5, 4), "email": (20, 0.5, 4),
+# The return plates' frames, measured 2026-08-13 (dark and light identical).
+# check 12 excludes a full-height TRACK by construction (a >=H-2 tall, <=5u
+# wide element is the trace, not content), but a lane's COMET is inset 2.5u
+# at each end and so falls back INTO the measurement — which is honest: the
+# 2.5s below are the comets' authored insets, not accidents.
+RET_FRAME = (2.5, 47.2, 2.5)
+MRET_FRAME = (2.5, 36.8, 2.5)
+# The row slices' frames, same provenance. Slice one's edges are its lane
+# comets (see the note above); the tap slices' top edge is the zinc rail
+# crossing at its tier, their right edge is that same rail running to the
+# cut (0 — the current continues into the next slice by construction), and
+# J4's high-set package is why slice four's first ink sits above its rail.
+PORT_FRAME: dict[str, tuple[float, float, float]] = {
+    "plate-port-portfolio.svg": (2.5, 0, 2.5),
+    "plate-port-resume.svg": (16, 0, 24),
+    "plate-port-linkedin.svg": (16, 0, 24),
+    "plate-port-email.svg": (8, 20.5, 38),
+    "m-port-portfolio.svg": (2.5, 0, 2.5),
+    "m-port-resume.svg": (12, 0, 18),
+    "m-port-linkedin.svg": (12, 0, 18),
+    "m-port-email.svg": (6, 8.5, 30),
 }
 # the interval plates' frames, same provenance (gate.mjs measurement,
 # 2026-08-13; dark and light measured identical). While a plate is being
@@ -2383,10 +2560,10 @@ PROBE_FRAME: dict[str, tuple[float, float, float]] = {
 
 PLATES = {
     "plate-0-hero.svg": plate_hero,
-    "plate-link-portfolio.svg": make_chip("portfolio"),
-    "plate-link-resume.svg": make_chip("resume"),
-    "plate-link-linkedin.svg": make_chip("linkedin"),
-    "plate-link-email.svg": make_chip("email"),
+    "plate-port-portfolio.svg": row_s1,
+    "plate-port-resume.svg": row_s2,
+    "plate-port-linkedin.svg": row_s3,
+    "plate-port-email.svg": row_s4,
     "plate-link-return.svg": plate_return,
     "plate-1-work.svg": plate_work,
     "plate-2-jetpack.svg": plate_jetpack,
@@ -2399,6 +2576,10 @@ PLATES = {
 }
 MOBILE = {
     "m-0-hero.svg": m_hero,
+    "m-port-portfolio.svg": m_row_s1,
+    "m-port-resume.svg": m_row_s2,
+    "m-port-linkedin.svg": m_row_s3,
+    "m-port-email.svg": m_row_s4,
     "m-1-work.svg": m_work,
     "m-2-jetpack.svg": m_jetpack,
     "m-3-glyph.svg": m_glyph,
@@ -2584,17 +2765,11 @@ else:
     # through `.svg` and reads as present.
     _want = {f"./assets/{_d}{_f}" for _f in set(PLATES) | set(MOBILE) | set(INTERVALS)
              for _d in ("", "light/")}
-    # The four chips are ONE dark artwork in the README. A theme switch IS
-    # possible — a one-line <a><picture>…</picture></a> survives the pipeline
-    # whole (see the link-row doctrine: the splitter is the newline, not the
-    # nesting) — but the chips have not migrated yet: that lands with the
-    # connector-row change, which redraws the ports around real brand logos.
-    # Until then README serves only their dark files, on purpose. The light
-    # twins are still authored: gate.mjs refuses a set with a missing twin,
-    # and the light file (same art, data-canvas #ffffff) is exactly how the
-    # one artwork gets MEASURED on the light canvas. A harness, not a served
-    # asset.
-    _want -= {f"./assets/light/plate-link-{_k}.svg" for _k in CHIPS}
+    # No exceptions since the connector-row change: every authored file —
+    # the row slices included — is served in both themes, so both directions
+    # of this sweep run over the full set. (The old chips' light twins were
+    # authored-but-unserved measurement harnesses, and the carve-out that
+    # allowed that died with them.)
     _have = set(_re.findall(r'\./assets/(?:light/)?[\w.-]+\.svg(?![\w.-])', _md))
     for _p in sorted(_want - _have):
         _fail.append(f"{_p}: this build authors it and README.md references it nowhere")

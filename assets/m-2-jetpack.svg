@@ -12,92 +12,92 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#E4E9E9}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k274{to{stroke-dashoffset:-176}}
-.k274{animation:k274 2450ms linear infinite}
-@keyframes k275{to{stroke-dashoffset:-148}}
-.k275{animation:k275 2450ms linear infinite}
-@keyframes k276{to{stroke-dashoffset:-126}}
-.k276{animation:k276 2450ms linear infinite}
-@keyframes k277{to{stroke-dashoffset:-206}}
-.k277{animation:k277 2450ms linear infinite}
-@keyframes k278{to{stroke-dashoffset:-178}}
-.k278{animation:k278 2450ms linear infinite}
-@keyframes k279{to{stroke-dashoffset:-156}}
-.k279{animation:k279 2450ms linear infinite}
-@keyframes k280{to{stroke-dashoffset:-240}}
-.k280{animation:k280 2450ms linear infinite}
-@keyframes k281{to{stroke-dashoffset:-212}}
-.k281{animation:k281 2450ms linear infinite}
-@keyframes k282{to{stroke-dashoffset:-190}}
-.k282{animation:k282 2450ms linear infinite}
-@keyframes k283{to{stroke-dashoffset:-270}}
-.k283{animation:k283 2450ms linear infinite}
-@keyframes k284{to{stroke-dashoffset:-242}}
-.k284{animation:k284 2450ms linear infinite}
-@keyframes k285{to{stroke-dashoffset:-220}}
-.k285{animation:k285 2450ms linear infinite}
-@keyframes k286{to{stroke-dashoffset:-304}}
-.k286{animation:k286 2450ms linear infinite}
-@keyframes k287{to{stroke-dashoffset:-276}}
-.k287{animation:k287 2450ms linear infinite}
-@keyframes k288{to{stroke-dashoffset:-254}}
-.k288{animation:k288 2450ms linear infinite}
-@keyframes k289{to{stroke-dashoffset:-334}}
-.k289{animation:k289 2450ms linear infinite}
-@keyframes k290{to{stroke-dashoffset:-306}}
-.k290{animation:k290 2450ms linear infinite}
-@keyframes k291{to{stroke-dashoffset:-284}}
-.k291{animation:k291 2450ms linear infinite}
-@keyframes k292{to{stroke-dashoffset:-352}}
-.k292{animation:k292 2450ms linear infinite}
-@keyframes k293{to{stroke-dashoffset:-324}}
-.k293{animation:k293 2450ms linear infinite}
-@keyframes k294{to{stroke-dashoffset:-302}}
-.k294{animation:k294 2450ms linear infinite}
-@keyframes k295{to{stroke-dashoffset:-382}}
-.k295{animation:k295 2450ms linear infinite}
-@keyframes k296{to{stroke-dashoffset:-354}}
-.k296{animation:k296 2450ms linear infinite}
-@keyframes k297{to{stroke-dashoffset:-332}}
-.k297{animation:k297 2450ms linear infinite}
-@keyframes k298{to{stroke-dashoffset:-316}}
-.k298{animation:k298 2100ms linear infinite}
-@keyframes k299{to{stroke-dashoffset:-288}}
-.k299{animation:k299 2100ms linear infinite}
-@keyframes k300{to{stroke-dashoffset:-266}}
-.k300{animation:k300 2100ms linear infinite}
-@keyframes k301{to{stroke-dashoffset:-231}}
-.k301{animation:k301 2450ms linear infinite}
-@keyframes k302{to{stroke-dashoffset:-203}}
-.k302{animation:k302 2450ms linear infinite}
-@keyframes k303{to{stroke-dashoffset:-181}}
-.k303{animation:k303 2450ms linear infinite}
-@keyframes k304{to{stroke-dashoffset:-366}}
-.k304{animation:k304 2750ms linear infinite}
-@keyframes k305{to{stroke-dashoffset:-338}}
-.k305{animation:k305 2750ms linear infinite}
-@keyframes k306{to{stroke-dashoffset:-316}}
-.k306{animation:k306 2750ms linear infinite}
-@keyframes k307{to{stroke-dashoffset:-194}}
-.k307{animation:k307 2450ms linear infinite}
-@keyframes k308{to{stroke-dashoffset:-166}}
-.k308{animation:k308 2450ms linear infinite}
-@keyframes k309{to{stroke-dashoffset:-144}}
-.k309{animation:k309 2450ms linear infinite}
-@keyframes k310{to{stroke-dashoffset:-246}}
-.k310{animation:k310 2450ms linear infinite}
-@keyframes k311{to{stroke-dashoffset:-218}}
-.k311{animation:k311 2450ms linear infinite}
-@keyframes k312{to{stroke-dashoffset:-196}}
-.k312{animation:k312 2450ms linear infinite}
-@keyframes k313{to{stroke-dashoffset:-276}}
-.k313{animation:k313 2450ms linear infinite}
-@keyframes k314{to{stroke-dashoffset:-248}}
-.k314{animation:k314 2450ms linear infinite}
-@keyframes k315{to{stroke-dashoffset:-226}}
-.k315{animation:k315 2450ms linear infinite}
+@keyframes k367{to{stroke-dashoffset:-176}}
+.k367{animation:k367 2450ms linear infinite}
+@keyframes k368{to{stroke-dashoffset:-148}}
+.k368{animation:k368 2450ms linear infinite}
+@keyframes k369{to{stroke-dashoffset:-126}}
+.k369{animation:k369 2450ms linear infinite}
+@keyframes k370{to{stroke-dashoffset:-206}}
+.k370{animation:k370 2450ms linear infinite}
+@keyframes k371{to{stroke-dashoffset:-178}}
+.k371{animation:k371 2450ms linear infinite}
+@keyframes k372{to{stroke-dashoffset:-156}}
+.k372{animation:k372 2450ms linear infinite}
+@keyframes k373{to{stroke-dashoffset:-240}}
+.k373{animation:k373 2450ms linear infinite}
+@keyframes k374{to{stroke-dashoffset:-212}}
+.k374{animation:k374 2450ms linear infinite}
+@keyframes k375{to{stroke-dashoffset:-190}}
+.k375{animation:k375 2450ms linear infinite}
+@keyframes k376{to{stroke-dashoffset:-270}}
+.k376{animation:k376 2450ms linear infinite}
+@keyframes k377{to{stroke-dashoffset:-242}}
+.k377{animation:k377 2450ms linear infinite}
+@keyframes k378{to{stroke-dashoffset:-220}}
+.k378{animation:k378 2450ms linear infinite}
+@keyframes k379{to{stroke-dashoffset:-304}}
+.k379{animation:k379 2450ms linear infinite}
+@keyframes k380{to{stroke-dashoffset:-276}}
+.k380{animation:k380 2450ms linear infinite}
+@keyframes k381{to{stroke-dashoffset:-254}}
+.k381{animation:k381 2450ms linear infinite}
+@keyframes k382{to{stroke-dashoffset:-334}}
+.k382{animation:k382 2450ms linear infinite}
+@keyframes k383{to{stroke-dashoffset:-306}}
+.k383{animation:k383 2450ms linear infinite}
+@keyframes k384{to{stroke-dashoffset:-284}}
+.k384{animation:k384 2450ms linear infinite}
+@keyframes k385{to{stroke-dashoffset:-352}}
+.k385{animation:k385 2450ms linear infinite}
+@keyframes k386{to{stroke-dashoffset:-324}}
+.k386{animation:k386 2450ms linear infinite}
+@keyframes k387{to{stroke-dashoffset:-302}}
+.k387{animation:k387 2450ms linear infinite}
+@keyframes k388{to{stroke-dashoffset:-382}}
+.k388{animation:k388 2450ms linear infinite}
+@keyframes k389{to{stroke-dashoffset:-354}}
+.k389{animation:k389 2450ms linear infinite}
+@keyframes k390{to{stroke-dashoffset:-332}}
+.k390{animation:k390 2450ms linear infinite}
+@keyframes k391{to{stroke-dashoffset:-316}}
+.k391{animation:k391 2100ms linear infinite}
+@keyframes k392{to{stroke-dashoffset:-288}}
+.k392{animation:k392 2100ms linear infinite}
+@keyframes k393{to{stroke-dashoffset:-266}}
+.k393{animation:k393 2100ms linear infinite}
+@keyframes k394{to{stroke-dashoffset:-231}}
+.k394{animation:k394 2450ms linear infinite}
+@keyframes k395{to{stroke-dashoffset:-203}}
+.k395{animation:k395 2450ms linear infinite}
+@keyframes k396{to{stroke-dashoffset:-181}}
+.k396{animation:k396 2450ms linear infinite}
+@keyframes k397{to{stroke-dashoffset:-366}}
+.k397{animation:k397 2750ms linear infinite}
+@keyframes k398{to{stroke-dashoffset:-338}}
+.k398{animation:k398 2750ms linear infinite}
+@keyframes k399{to{stroke-dashoffset:-316}}
+.k399{animation:k399 2750ms linear infinite}
+@keyframes k400{to{stroke-dashoffset:-194}}
+.k400{animation:k400 2450ms linear infinite}
+@keyframes k401{to{stroke-dashoffset:-166}}
+.k401{animation:k401 2450ms linear infinite}
+@keyframes k402{to{stroke-dashoffset:-144}}
+.k402{animation:k402 2450ms linear infinite}
+@keyframes k403{to{stroke-dashoffset:-246}}
+.k403{animation:k403 2450ms linear infinite}
+@keyframes k404{to{stroke-dashoffset:-218}}
+.k404{animation:k404 2450ms linear infinite}
+@keyframes k405{to{stroke-dashoffset:-196}}
+.k405{animation:k405 2450ms linear infinite}
+@keyframes k406{to{stroke-dashoffset:-276}}
+.k406{animation:k406 2450ms linear infinite}
+@keyframes k407{to{stroke-dashoffset:-248}}
+.k407{animation:k407 2450ms linear infinite}
+@keyframes k408{to{stroke-dashoffset:-226}}
+.k408{animation:k408 2450ms linear infinite}
 </style>
-<g><path class="bus" stroke="#4FB39A" d="M40,0 V600"/><path class="cm k298" stroke="#A9EFD9" stroke-dasharray="34 176" stroke-dashoffset="-106" d="M40,2.5 V597.5"/><path class="cm k299" stroke="#83D6BC" stroke-dasharray="28 182" stroke-dashoffset="-78" d="M40,2.5 V597.5"/><path class="cm k300" stroke="#66C2A8" stroke-dasharray="22 188" stroke-dashoffset="-56" d="M40,2.5 V597.5"/></g><g><path class="bus" stroke="#E0703A" d="M54,0 V600"/><path class="cm k301" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-21" d="M54,2.5 V597.5"/><path class="cm k302" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="7" d="M54,2.5 V597.5"/><path class="cm k303" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="29" d="M54,2.5 V597.5"/></g><g><path class="bus" stroke="#8A9599" d="M68,0 V600"/><path class="cm k304" stroke="#C9D3D6" stroke-dasharray="34 176" stroke-dashoffset="-156" d="M68,2.5 V597.5"/><path class="cm k305" stroke="#AEB9BD" stroke-dasharray="28 182" stroke-dashoffset="-128" d="M68,2.5 V597.5"/><path class="cm k306" stroke="#9AA5A9" stroke-dasharray="22 188" stroke-dashoffset="-106" d="M68,2.5 V597.5"/></g><g><path class="bus" stroke="#E0703A" d="M54,120 H92.5"/><path class="cm k307" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="16" d="M58,120 H88"/><path class="cm k308" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="44" d="M58,120 H88"/><path class="cm k309" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="66" d="M58,120 H88"/></g><g transform="translate(92,96) scale(1.0000)"><rect x="0.75" y="0.75" width="46.5" height="46.5" rx="10" fill="#0A0A0B" stroke="#7A828A" stroke-width="1"/>
+<g><path class="bus" stroke="#4FB39A" d="M40,0 V600"/><path class="cm k391" stroke="#A9EFD9" stroke-dasharray="34 176" stroke-dashoffset="-106" d="M40,2.5 V597.5"/><path class="cm k392" stroke="#83D6BC" stroke-dasharray="28 182" stroke-dashoffset="-78" d="M40,2.5 V597.5"/><path class="cm k393" stroke="#66C2A8" stroke-dasharray="22 188" stroke-dashoffset="-56" d="M40,2.5 V597.5"/></g><g><path class="bus" stroke="#E0703A" d="M54,0 V600"/><path class="cm k394" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-21" d="M54,2.5 V597.5"/><path class="cm k395" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="7" d="M54,2.5 V597.5"/><path class="cm k396" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="29" d="M54,2.5 V597.5"/></g><g><path class="bus" stroke="#8A9599" d="M68,0 V600"/><path class="cm k397" stroke="#C9D3D6" stroke-dasharray="34 176" stroke-dashoffset="-156" d="M68,2.5 V597.5"/><path class="cm k398" stroke="#AEB9BD" stroke-dasharray="28 182" stroke-dashoffset="-128" d="M68,2.5 V597.5"/><path class="cm k399" stroke="#9AA5A9" stroke-dasharray="22 188" stroke-dashoffset="-106" d="M68,2.5 V597.5"/></g><g><path class="bus" stroke="#E0703A" d="M54,120 H92.5"/><path class="cm k400" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="16" d="M58,120 H88"/><path class="cm k401" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="44" d="M58,120 H88"/><path class="cm k402" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="66" d="M58,120 H88"/></g><g transform="translate(92,96) scale(1.0000)"><rect x="0.75" y="0.75" width="46.5" height="46.5" rx="10" fill="#0A0A0B" stroke="#7A828A" stroke-width="1"/>
 <path transform="translate(2.4,2.4) scale(1.35)"
   d="M7 10 H14.5 M7 16 H19 M7 22 H14.5 M14.5 10 L20 16 L14.5 22 M20 16 H25"
-  fill="none" stroke="#FF9E2C" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></g><text x="90.21" y="54" class="d" font-size="24" letter-spacing="0.5">II — JETPACK</text><text x="91.39" y="76" class="dim" font-size="13">is hand-vectorised code actually faster?</text><text x="170.96" y="140" class="d" font-size="44">6.4×</text><text x="172" y="172" class="dim" font-size="12">422 vs 66.2 MB/s, single thread</text><text x="172" y="189" class="dim" font-size="12">M1 Pro · 3-fork JMH, committed</text><g><path class="bus" stroke="#E0703A" d="M140,120 H160 V360"/><path class="cm k310" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-36" d="M144,120 H160 V357"/><path class="cm k311" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-8" d="M144,120 H160 V357"/><path class="cm k312" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="14" d="M144,120 H160 V357"/></g><g><path class="bus" stroke="#E0703A" d="M160,246 H196"/><path class="cm k274" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="34" d="M164,246 H192"/><path class="cm k275" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="62" d="M164,246 H192"/><path class="cm k276" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="84" d="M164,246 H192"/></g><rect x="196" y="233" width="140" height="26" rx="6" fill="none" stroke="#8A9599" stroke-width="1.3"/><g><path class="bus" stroke="#E0703A" d="M336,246 H372"/><path class="cm k277" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="4" d="M340,246 H368"/><path class="cm k278" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="32" d="M340,246 H368"/><path class="cm k279" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="54" d="M340,246 H368"/></g><g><path class="bus" stroke="#E0703A" d="M160,284 H196"/><path class="cm k280" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-30" d="M164,284 H192"/><path class="cm k281" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-2" d="M164,284 H192"/><path class="cm k282" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="20" d="M164,284 H192"/></g><rect x="196" y="271" width="140" height="26" rx="6" fill="none" stroke="#8A9599" stroke-width="1.3"/><g><path class="bus" stroke="#E0703A" d="M336,284 H372"/><path class="cm k283" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-60" d="M340,284 H368"/><path class="cm k284" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-32" d="M340,284 H368"/><path class="cm k285" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-10" d="M340,284 H368"/></g><g><path class="bus" stroke="#E0703A" d="M160,322 H196"/><path class="cm k286" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-94" d="M164,322 H192"/><path class="cm k287" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-66" d="M164,322 H192"/><path class="cm k288" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-44" d="M164,322 H192"/></g><rect x="196" y="309" width="140" height="26" rx="6" fill="none" stroke="#8A9599" stroke-width="1.3"/><g><path class="bus" stroke="#E0703A" d="M336,322 H372"/><path class="cm k289" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-124" d="M340,322 H368"/><path class="cm k290" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-96" d="M340,322 H368"/><path class="cm k291" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-74" d="M340,322 H368"/></g><g><path class="bus" stroke="#E0703A" d="M160,360 H196"/><path class="cm k292" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-142" d="M164,360 H192"/><path class="cm k293" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-114" d="M164,360 H192"/><path class="cm k294" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-92" d="M164,360 H192"/></g><rect x="196" y="347" width="140" height="26" rx="6" fill="none" stroke="#8A9599" stroke-width="1.3"/><g><path class="bus" stroke="#E0703A" d="M336,360 H372"/><path class="cm k295" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-172" d="M340,360 H368"/><path class="cm k296" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-144" d="M340,360 H368"/><path class="cm k297" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-122" d="M340,360 H368"/></g><text x="196" y="208" class="ts dim" font-size="10" letter-spacing="1.1">DEFLATE · JDK 25</text><text x="196" y="224" class="ts dim" font-size="10" letter-spacing="1.1">VIRTUAL THREADS</text><g><path class="bus" stroke="#E0703A" d="M372,246 V445 H252"/><path class="cm k313" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-66" d="M372,248.5 V445 H256.5"/><path class="cm k314" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-38" d="M372,248.5 V445 H256.5"/><path class="cm k315" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-16" d="M372,248.5 V445 H256.5"/></g><rect x="92" y="424" width="160" height="42" rx="8" fill="none" stroke="#E0703A" stroke-width="1.6"/><text x="104" y="449" class="ts" font-size="11.5" letter-spacing="1.3">ONE GZIP MEMBER</text><text x="92" y="484" class="ts dim" font-size="10" letter-spacing="1.1">STITCHED BYTE-ALIGNED · ONE CRC</text><rect x="92" y="506" width="4" height="16" fill="#E0703A"/><text x="106" y="519" class="mid" font-size="13">the JDK’s own Adler-32 intrinsic</text><text x="106" y="538" class="mid" font-size="13">does 14.06 GB/s — not beaten.</text><text x="106" y="558" class="dim" font-size="12">mine reaches 4.26 GB/s hand-vectorised,</text><text x="106" y="575" class="dim" font-size="12">bit-identical to java.util.zip.</text></svg>
+  fill="none" stroke="#FF9E2C" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></g><text x="90.21" y="54" class="d" font-size="24" letter-spacing="0.5">II — JETPACK</text><text x="91.39" y="76" class="dim" font-size="13">is hand-vectorised code actually faster?</text><text x="170.96" y="140" class="d" font-size="44">6.4×</text><text x="172" y="172" class="dim" font-size="12">422 vs 66.2 MB/s, single thread</text><text x="172" y="189" class="dim" font-size="12">M1 Pro · 3-fork JMH, committed</text><g><path class="bus" stroke="#E0703A" d="M140,120 H160 V360"/><path class="cm k403" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-36" d="M144,120 H160 V357"/><path class="cm k404" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-8" d="M144,120 H160 V357"/><path class="cm k405" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="14" d="M144,120 H160 V357"/></g><g><path class="bus" stroke="#E0703A" d="M160,246 H196"/><path class="cm k367" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="34" d="M164,246 H192"/><path class="cm k368" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="62" d="M164,246 H192"/><path class="cm k369" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="84" d="M164,246 H192"/></g><rect x="196" y="233" width="140" height="26" rx="6" fill="none" stroke="#8A9599" stroke-width="1.3"/><g><path class="bus" stroke="#E0703A" d="M336,246 H372"/><path class="cm k370" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="4" d="M340,246 H368"/><path class="cm k371" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="32" d="M340,246 H368"/><path class="cm k372" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="54" d="M340,246 H368"/></g><g><path class="bus" stroke="#E0703A" d="M160,284 H196"/><path class="cm k373" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-30" d="M164,284 H192"/><path class="cm k374" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-2" d="M164,284 H192"/><path class="cm k375" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="20" d="M164,284 H192"/></g><rect x="196" y="271" width="140" height="26" rx="6" fill="none" stroke="#8A9599" stroke-width="1.3"/><g><path class="bus" stroke="#E0703A" d="M336,284 H372"/><path class="cm k376" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-60" d="M340,284 H368"/><path class="cm k377" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-32" d="M340,284 H368"/><path class="cm k378" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-10" d="M340,284 H368"/></g><g><path class="bus" stroke="#E0703A" d="M160,322 H196"/><path class="cm k379" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-94" d="M164,322 H192"/><path class="cm k380" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-66" d="M164,322 H192"/><path class="cm k381" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-44" d="M164,322 H192"/></g><rect x="196" y="309" width="140" height="26" rx="6" fill="none" stroke="#8A9599" stroke-width="1.3"/><g><path class="bus" stroke="#E0703A" d="M336,322 H372"/><path class="cm k382" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-124" d="M340,322 H368"/><path class="cm k383" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-96" d="M340,322 H368"/><path class="cm k384" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-74" d="M340,322 H368"/></g><g><path class="bus" stroke="#E0703A" d="M160,360 H196"/><path class="cm k385" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-142" d="M164,360 H192"/><path class="cm k386" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-114" d="M164,360 H192"/><path class="cm k387" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-92" d="M164,360 H192"/></g><rect x="196" y="347" width="140" height="26" rx="6" fill="none" stroke="#8A9599" stroke-width="1.3"/><g><path class="bus" stroke="#E0703A" d="M336,360 H372"/><path class="cm k388" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-172" d="M340,360 H368"/><path class="cm k389" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-144" d="M340,360 H368"/><path class="cm k390" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-122" d="M340,360 H368"/></g><text x="196" y="208" class="ts dim" font-size="10" letter-spacing="1.1">DEFLATE · JDK 25</text><text x="196" y="224" class="ts dim" font-size="10" letter-spacing="1.1">VIRTUAL THREADS</text><g><path class="bus" stroke="#E0703A" d="M372,246 V445 H252"/><path class="cm k406" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-66" d="M372,248.5 V445 H256.5"/><path class="cm k407" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-38" d="M372,248.5 V445 H256.5"/><path class="cm k408" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-16" d="M372,248.5 V445 H256.5"/></g><rect x="92" y="424" width="160" height="42" rx="8" fill="none" stroke="#E0703A" stroke-width="1.6"/><text x="104" y="449" class="ts" font-size="11.5" letter-spacing="1.3">ONE GZIP MEMBER</text><text x="92" y="484" class="ts dim" font-size="10" letter-spacing="1.1">STITCHED BYTE-ALIGNED · ONE CRC</text><rect x="92" y="506" width="4" height="16" fill="#E0703A"/><text x="106" y="519" class="mid" font-size="13">the JDK’s own Adler-32 intrinsic</text><text x="106" y="538" class="mid" font-size="13">does 14.06 GB/s — not beaten.</text><text x="106" y="558" class="dim" font-size="12">mine reaches 4.26 GB/s hand-vectorised,</text><text x="106" y="575" class="dim" font-size="12">bit-identical to java.util.zip.</text></svg>

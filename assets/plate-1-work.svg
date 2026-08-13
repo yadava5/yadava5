@@ -12,29 +12,29 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#E4E9E9}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k85{to{stroke-dashoffset:-271}}
-.k85{animation:k85 2100ms linear infinite}
-@keyframes k86{to{stroke-dashoffset:-243}}
-.k86{animation:k86 2100ms linear infinite}
-@keyframes k87{to{stroke-dashoffset:-221}}
-.k87{animation:k87 2100ms linear infinite}
-@keyframes k88{to{stroke-dashoffset:-186}}
-.k88{animation:k88 2450ms linear infinite}
-@keyframes k89{to{stroke-dashoffset:-158}}
-.k89{animation:k89 2450ms linear infinite}
-@keyframes k90{to{stroke-dashoffset:-136}}
-.k90{animation:k90 2450ms linear infinite}
-@keyframes k91{to{stroke-dashoffset:-336}}
-.k91{animation:k91 2750ms linear infinite}
-@keyframes k92{to{stroke-dashoffset:-308}}
-.k92{animation:k92 2750ms linear infinite}
-@keyframes k93{to{stroke-dashoffset:-286}}
-.k93{animation:k93 2750ms linear infinite}
-@keyframes k94{to{stroke-dashoffset:-224}}
-.k94{animation:k94 2750ms linear infinite}
-@keyframes k95{to{stroke-dashoffset:-196}}
-.k95{animation:k95 2750ms linear infinite}
-@keyframes k96{to{stroke-dashoffset:-174}}
-.k96{animation:k96 2750ms linear infinite}
+@keyframes k109{to{stroke-dashoffset:-271}}
+.k109{animation:k109 2100ms linear infinite}
+@keyframes k110{to{stroke-dashoffset:-243}}
+.k110{animation:k110 2100ms linear infinite}
+@keyframes k111{to{stroke-dashoffset:-221}}
+.k111{animation:k111 2100ms linear infinite}
+@keyframes k112{to{stroke-dashoffset:-186}}
+.k112{animation:k112 2450ms linear infinite}
+@keyframes k113{to{stroke-dashoffset:-158}}
+.k113{animation:k113 2450ms linear infinite}
+@keyframes k114{to{stroke-dashoffset:-136}}
+.k114{animation:k114 2450ms linear infinite}
+@keyframes k115{to{stroke-dashoffset:-336}}
+.k115{animation:k115 2750ms linear infinite}
+@keyframes k116{to{stroke-dashoffset:-308}}
+.k116{animation:k116 2750ms linear infinite}
+@keyframes k117{to{stroke-dashoffset:-286}}
+.k117{animation:k117 2750ms linear infinite}
+@keyframes k118{to{stroke-dashoffset:-224}}
+.k118{animation:k118 2750ms linear infinite}
+@keyframes k119{to{stroke-dashoffset:-196}}
+.k119{animation:k119 2750ms linear infinite}
+@keyframes k120{to{stroke-dashoffset:-174}}
+.k120{animation:k120 2750ms linear infinite}
 </style>
-<g><path class="bus" stroke="#4FB39A" d="M63,0 V320"/><path class="cm k85" stroke="#A9EFD9" stroke-dasharray="34 176" stroke-dashoffset="-61" d="M63,2.5 V317.5"/><path class="cm k86" stroke="#83D6BC" stroke-dasharray="28 182" stroke-dashoffset="-33" d="M63,2.5 V317.5"/><path class="cm k87" stroke="#66C2A8" stroke-dasharray="22 188" stroke-dashoffset="-11" d="M63,2.5 V317.5"/></g><g><path class="bus" stroke="#E0703A" d="M90,0 V320"/><path class="cm k88" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="24" d="M90,2.5 V317.5"/><path class="cm k89" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="52" d="M90,2.5 V317.5"/><path class="cm k90" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="74" d="M90,2.5 V317.5"/></g><g><path class="bus" stroke="#8A9599" d="M117,0 V320"/><path class="cm k91" stroke="#C9D3D6" stroke-dasharray="34 176" stroke-dashoffset="-126" d="M117,2.5 V317.5"/><path class="cm k92" stroke="#AEB9BD" stroke-dasharray="28 182" stroke-dashoffset="-98" d="M117,2.5 V317.5"/><path class="cm k93" stroke="#9AA5A9" stroke-dasharray="22 188" stroke-dashoffset="-76" d="M117,2.5 V317.5"/></g><g><path class="bus" stroke="#8A9599" d="M117,120 H148.5"/><path class="cm k94" stroke="#C9D3D6" stroke-dasharray="34 176" stroke-dashoffset="-14" d="M121,120 H144"/><path class="cm k95" stroke="#AEB9BD" stroke-dasharray="28 182" stroke-dashoffset="14" d="M121,120 H144"/><path class="cm k96" stroke="#9AA5A9" stroke-dasharray="22 188" stroke-dashoffset="36" d="M121,120 H144"/></g><g><rect x="150.75" y="96.75" width="46.5" height="46.5" rx="12" fill="none" stroke="#8A9599" stroke-width="1.4" stroke-dasharray="5 4"/><rect x="148.25" y="118" width="5" height="4" fill="#8A9599"/></g><text x="150" y="163" class="ts dim" font-size="10" letter-spacing="1.1">NO PRODUCT MARK — THE WORK IS OFF-REPO</text><text x="147.7" y="54" class="d" font-size="30" letter-spacing="0.5">I — WORK</text><text x="149.89" y="76" class="dim" font-size="14.5">twelve months of production data work — none of it public.</text><text x="852" y="30" class="ts dim" font-size="10.5" letter-spacing="1.4" text-anchor="end">FIRST, THE EXCEPTION — ATTESTED, NOT DERIVED</text><text x="580.56" y="150" class="d" font-size="56">57.8M</text><text x="584" y="186" class="dim" font-size="13">rows in one field-usage table,</text><text x="584" y="204" class="dim" font-size="13">from 1.6M Oracle Analytics query logs.</text><rect x="150" y="248" width="4" height="16" fill="#8A9599"/><text x="164" y="261" class="mid" font-size="14">none of these numbers can be re-derived by you.</text><text x="164" y="281" class="dim" font-size="13">the data belongs to Miami University and to a competition — this section is my word.</text></svg>
+<g><path class="bus" stroke="#4FB39A" d="M63,0 V320"/><path class="cm k109" stroke="#A9EFD9" stroke-dasharray="34 176" stroke-dashoffset="-61" d="M63,2.5 V317.5"/><path class="cm k110" stroke="#83D6BC" stroke-dasharray="28 182" stroke-dashoffset="-33" d="M63,2.5 V317.5"/><path class="cm k111" stroke="#66C2A8" stroke-dasharray="22 188" stroke-dashoffset="-11" d="M63,2.5 V317.5"/></g><g><path class="bus" stroke="#E0703A" d="M90,0 V320"/><path class="cm k112" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="24" d="M90,2.5 V317.5"/><path class="cm k113" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="52" d="M90,2.5 V317.5"/><path class="cm k114" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="74" d="M90,2.5 V317.5"/></g><g><path class="bus" stroke="#8A9599" d="M117,0 V320"/><path class="cm k115" stroke="#C9D3D6" stroke-dasharray="34 176" stroke-dashoffset="-126" d="M117,2.5 V317.5"/><path class="cm k116" stroke="#AEB9BD" stroke-dasharray="28 182" stroke-dashoffset="-98" d="M117,2.5 V317.5"/><path class="cm k117" stroke="#9AA5A9" stroke-dasharray="22 188" stroke-dashoffset="-76" d="M117,2.5 V317.5"/></g><g><path class="bus" stroke="#8A9599" d="M117,120 H148.5"/><path class="cm k118" stroke="#C9D3D6" stroke-dasharray="34 176" stroke-dashoffset="-14" d="M121,120 H144"/><path class="cm k119" stroke="#AEB9BD" stroke-dasharray="28 182" stroke-dashoffset="14" d="M121,120 H144"/><path class="cm k120" stroke="#9AA5A9" stroke-dasharray="22 188" stroke-dashoffset="36" d="M121,120 H144"/></g><g><rect x="150.75" y="96.75" width="46.5" height="46.5" rx="12" fill="none" stroke="#8A9599" stroke-width="1.4" stroke-dasharray="5 4"/><rect x="148.25" y="118" width="5" height="4" fill="#8A9599"/></g><text x="150" y="163" class="ts dim" font-size="10" letter-spacing="1.1">NO PRODUCT MARK — THE WORK IS OFF-REPO</text><text x="147.7" y="54" class="d" font-size="30" letter-spacing="0.5">I — WORK</text><text x="149.89" y="76" class="dim" font-size="14.5">twelve months of production data work — none of it public.</text><text x="852" y="30" class="ts dim" font-size="10.5" letter-spacing="1.4" text-anchor="end">FIRST, THE EXCEPTION — ATTESTED, NOT DERIVED</text><text x="580.56" y="150" class="d" font-size="56">57.8M</text><text x="584" y="186" class="dim" font-size="13">rows in one field-usage table,</text><text x="584" y="204" class="dim" font-size="13">from 1.6M Oracle Analytics query logs.</text><rect x="150" y="248" width="4" height="16" fill="#8A9599"/><text x="164" y="261" class="mid" font-size="14">none of these numbers can be re-derived by you.</text><text x="164" y="281" class="dim" font-size="13">the data belongs to Miami University and to a competition — this section is my word.</text></svg>
