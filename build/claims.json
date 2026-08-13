@@ -286,7 +286,7 @@
       "repo": "applied",
       "path": "docs/ML_EXECUTION_TRACKER.md",
       "extractor": "sed -n '378p' \"$BLOB\" | grep -oE 'macro_f1=0\\.[0-9]+' | cut -d= -f2",
-      "note": "The full three-layer cascade's score, which has no evaluation artifact because the run that produced it was overwritten. The page no longer says 'exactly one line of prose' — the number has since been restated in the repo's own README, and counting restatements was never the claim; the missing artifact is. This row proves the cited line still carries it."
+      "note": "The full three-layer cascade's score, cited to the line of the execution tracker that records it. THIS NOTE USED TO ASSERT the run had no evaluation artifact because it was overwritten. That is no longer true: an evaluation artifact for the cascade was committed to applied on 2026-08-11, and every trace of the absence claim is off the page as of 2026-08-13. Re-pinning this row to cite that artifact needs a new pin, and the repository is frozen while it is being worked in, so the row keeps citing the tracker line until it can move -- that is the one piece of work section VI still owes. The cascade is still drawn dashed with an open lead, but for the reason that is true: it is not what ships. The page no longer says 'exactly one line of prose' — the number has since been restated in the repo's own README, and counting restatements was never the claim; the missing artifact is. This row proves the cited line still carries it."
     },
     {
       "id": "cadence.tenant_tables",
@@ -544,7 +544,7 @@
     "m-colophon.svg:29": "SELF-REFERENTIAL — the mobile colophon draws the same count; see the plate-colophon key above for the mechanism. Cited by name rather than by key, because the key carries a number that moves whenever a row is added or deleted.",
     "README.md:2025": "'June 2025 to May 2026' — the dates of the role",
     "README.md:2026": "'May 2026' as the graduation date and the end of the role, and 'DataFest 2026' — dates, not measurements",
-    "README.md:3": "'Three layers read it, cheapest first' — the count of tiers named in the same sentence. The other three in the prose, 'team lead of three at DataFest', is pinned by datafest.team_size's anchor and masked out before this exemption is consulted.",
+    "README.md:3": "'Three layers read it locally, cheapest first' — the count of tiers named in the same sentence. The other three in the prose, 'team lead of three at DataFest', is pinned by datafest.team_size's anchor and masked out before this exemption is consulted.",
     "README.md:3.0": "the version field of the licence identifier GPL-3.0 (see automl.license)",
     "README.md:4": "'Four of them ship a system card' — enumerated on the page (Glyph, jetpack, Cadence, Applied)",
     "README.md:5": "'[PR #5]' — the number of the open relicence pull request on the AutoML repository, an address rather than a measurement",
