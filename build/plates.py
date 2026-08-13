@@ -360,6 +360,62 @@ def lbl(x: float, y: float, text: str, cls: str = "ts dim", size: float = 11,
             f'letter-spacing="{ls}"{a}>{text}</text>')
 
 
+# ── optical alignment of the claim figures.
+#
+# Every claim figure and its two caption lines are authored at the SAME x, and
+# that is why they did not line up. A shared x makes the PEN ORIGINS identical;
+# it says nothing about where the ink starts. Ink starts at the origin plus the
+# glyph's own left side bearing, and Syne 800's figures are not tabular — their
+# advances run 529..1158 and their side bearings 25..60 per 1000 em. At 62px a
+# 60/1000 bearing is 3.7u of daylight the 13px caption underneath does not have,
+# so the figure hangs back from its own caption. Measured in Chromium against
+# the real embedded subset, every figure on this page sat 1.2..3.4u inside its
+# captions — invisible to a gate, because the elements agreed on x exactly.
+#
+# Two terms, both measured off the rendered ink, neither taken from a table:
+#
+#   lsb   the face's own left side bearing, em/1000, read from the subset's
+#         hmtx and confirmed against the Chromium raster to within 1/6 u. This
+#         term is mechanical and scales with the type size.
+#   over  the OPTICAL overshoot, authored units. A flat stem holds its leftmost
+#         x for the glyph's whole height; a curve or a diagonal touches that x
+#         at a single point and everything else falls back to the right, so the
+#         two do not read level when they start level. Measured as how far the
+#         apparent edge moves under a 1.5u isotropic low-pass of the real
+#         raster, read at the half crossing — a construction in which a flat
+#         stem's apparent edge IS its mechanical edge, and the flat 'I' of the
+#         romans duly measures 0.17u, zero at the raster's resolution. The blur
+#         is a fixed visual angle, so this term does not scale with type size,
+#         and measurement agrees: the same glyph came out 0.33u at 62px and
+#         0.50u at 44px. Capped at 2% of em — the overshoot Syne's own designer
+#         allows a round, 'O' standing 20/1000 taller than 'H' at both ends.
+#
+# The edge being matched TO is the caption block's mean ink edge: TEXT_LSB, the
+# mean over all 24 caption lines on the page (0.057 em; the spread across
+# leading glyphs is 0.013..0.077 em, i.e. under 0.9u at caption size).
+# Commissioner's own optical term at 12-13px is below 0.06u and is ignored.
+FIG_OPTIC = {                  # leading glyph -> (lsb em/1000, overshoot in u)
+    "0": (60, 0.40),
+    "3": (35, 0.75),
+    "4": (50, 0.35),
+    "5": (55, 1.10),
+    "6": (30, 0.40),
+}
+TEXT_LSB = 57                  # Commissioner 400's mean caption ink edge, em/1000
+
+
+def fig_x(x: float, fig: str, size: float, cap: float = 13) -> float:
+    """The x a display figure must be SET at to LAND on `x` optically.
+
+    `x` stays the block's authored left edge — the number the captions are
+    still set at, and the one the layout was reasoned about in. Only the
+    figure moves, and only by what its own leading glyph costs.
+    """
+    lsb, over = FIG_OPTIC[fig[0]]
+    shift = lsb * size / 1000 + min(over, 0.02 * size) - TEXT_LSB * cap / 1000
+    return round(x - shift, 2)
+
+
 # ══════════════════════════════════════════════════════════ the hero
 #
 # Layout registry, in authored units. Clearances between every travelling
@@ -732,7 +788,7 @@ def plate_jetpack() -> str:
         + mark("jetpack", 150, 96, 48)
         + f'<text x="150" y="54" class="d" font-size="30" letter-spacing="0.5">II — JETPACK</text>'
         + f'<text x="150" y="76" class="dim" font-size="14.5">is hand-vectorised code actually faster?</text>'
-        + f'<text x="640" y="138" class="d" font-size="62">6.4×</text>'
+        + f'<text x="{fig_x(640, "6.4×", 62)}" y="138" class="d" font-size="62">6.4×</text>'
         + f'<text x="640" y="176" class="dim" font-size="13">422 vs 66.2 MB/s, single thread —</text>'
         + f'<text x="640" y="194" class="dim" font-size="13">M1 Pro · 3-fork JMH, committed</text>'
         # the against-self admission, accent-barred: the page's differentiation
@@ -781,7 +837,7 @@ def plate_work() -> str:
         + f'<text x="150" y="54" class="d" font-size="30" letter-spacing="0.5">I — WORK</text>'
         + f'<text x="150" y="76" class="dim" font-size="14.5">twelve months of production data work — none of it public.</text>'
         + lbl(852, 30, "FIRST, THE EXCEPTION — ATTESTED, NOT DERIVED", size=10.5, anchor="end")
-        + f'<text x="584" y="150" class="d" font-size="56">57.8M</text>'
+        + f'<text x="{fig_x(584, "57.8M", 56)}" y="150" class="d" font-size="56">57.8M</text>'
         + f'<text x="584" y="186" class="dim" font-size="13">rows in one field-usage table,</text>'
         + f'<text x="584" y="204" class="dim" font-size="13">from 1.6M Oracle Analytics query logs.</text>'
         + f'<rect x="150" y="248" width="4" height="16" fill="{T["zinc"]}"/>'
@@ -850,7 +906,7 @@ def plate_glyph() -> str:
         + mark("glyph", 150, 96, 48)
         + f'<text x="150" y="54" class="d" font-size="30" letter-spacing="0.5">III — GLYPH</text>'
         + f'<text x="150" y="76" class="dim" font-size="14.5">SIMD kernels over a net the course provided.</text>'
-        + f'<text x="660" y="150" class="d" font-size="62">3.5×</text>'
+        + f'<text x="{fig_x(660, "3.5×", 62)}" y="150" class="d" font-size="62">3.5×</text>'
         + f'<text x="660" y="188" class="dim" font-size="13">benchDot/256 — course baseline,</text>'
         + f'<text x="660" y="206" class="dim" font-size="13">reference machine, committed run.</text>'
         + f'<rect x="150" y="382" width="4" height="16" fill="{T["rust"]}"/>'
@@ -904,7 +960,7 @@ def plate_automl() -> str:
         + mark("automl", 150, 96, 48)
         + f'<text x="150" y="54" class="d" font-size="30" letter-spacing="0.5">IV — AUTOML</text>'
         + f'<text x="150" y="76" class="dim" font-size="14.5">a LangGraph agent, dealt its tools phase by phase.</text>'
-        + f'<text x="660" y="160" class="d" font-size="62">44</text>'
+        + f'<text x="{fig_x(660, "44", 62)}" y="160" class="d" font-size="62">44</text>'
         + f'<text x="660" y="198" class="dim" font-size="13">defined across the dispatcher;</text>'
         + f'<text x="660" y="216" class="dim" font-size="13">no phase&#8217;s hand holds them all.</text>'
         + f'<rect x="150" y="308" width="4" height="16" fill="{T["zinc"]}"/>'
@@ -963,7 +1019,7 @@ def plate_cadence() -> str:
         + mark("cadence", 150, 96, 48)
         + f'<text x="150" y="54" class="d" font-size="30" letter-spacing="0.5">V — CADENCE</text>'
         + f'<text x="150" y="76" class="dim" font-size="14.5">every route into one function; every row behind RLS.</text>'
-        + f'<text x="680" y="70" class="d" font-size="62">37</text>'
+        + f'<text x="{fig_x(680, "37", 62)}" y="70" class="d" font-size="62">37</text>'
         + f'<text x="680" y="108" class="dim" font-size="13">route handlers, one function;</text>'
         + f'<text x="680" y="126" class="dim" font-size="13">RLS FORCEd on all 7 tables.</text>'
         + f'<rect x="150" y="374" width="4" height="16" fill="{T["verd"]}"/>'
@@ -1025,7 +1081,7 @@ def plate_applied() -> str:
         + mark("applied", 150, 96, 48)
         + f'<text x="150" y="54" class="d" font-size="30" letter-spacing="0.5">VI — APPLIED</text>'
         + f'<text x="150" y="76" class="dim" font-size="14.5">an inbox read by rules that keep score.</text>'
-        + f'<text x="560" y="240" class="d" font-size="62">0.979</text>'
+        + f'<text x="{fig_x(560, "0.979", 62)}" y="240" class="d" font-size="62">0.979</text>'
         + f'<text x="560" y="278" class="dim" font-size="13">macro-F1 — the rules layer alone,</text>'
         + f'<text x="560" y="296" class="dim" font-size="13">graded on the strip above.</text>'
         + f'<rect x="150" y="362" width="4" height="16" fill="{T["verd"]}"/>'
@@ -1260,12 +1316,16 @@ def m_sec(h: int, C: tuple[float, float, float],
 def m_fig(fig: str, c1: str, c2: str) -> str:
     """The claim figure block, right of the mark: Syne 44 over two measured
     12px caption lines. 172 leaves 12u to the x=160 feeder spine the denser
-    plates run — above the 8u floor, in the safe direction (see above).
-    Caption leading is set by Syne's em box, not its ink: the 44px figure's
-    box reaches ~13u below the baseline, so the first caption sits 32 down.
+    plates run — above the 8u floor, in the safe direction (see above). The
+    FIGURE is set a little left of 172 so its ink lands there (see fig_x): the
+    worst case on this page is 0.979, whose 0 is set at 169.64 and still leaves
+    9.6u to the spine — the caption lines, which set the block's edge, do not
+    move at all. Caption leading is set by Syne's em box, not its ink: the 44px
+    figure's box reaches ~13u below the baseline, so the first caption sits 32
+    down.
     Mobile prose never uses &#8217; — the entity's own digits would enter
     the drawn ⊆ description check — the literal ’ is in TEXT_CHARS."""
-    return (f'<text x="172" y="140" class="d" font-size="44">{fig}</text>'
+    return (f'<text x="{fig_x(172, fig, 44, cap=12)}" y="140" class="d" font-size="44">{fig}</text>'
             f'<text x="172" y="172" class="dim" font-size="12">{c1}</text>'
             f'<text x="172" y="189" class="dim" font-size="12">{c2}</text>')
 
@@ -1300,7 +1360,7 @@ def m_work() -> str:
         + f'<text x="92" y="74" class="dim" font-size="13">twelve months of production data work —</text>'
         + f'<text x="92" y="90" class="dim" font-size="13">none of it public.</text>'
         + lbl(404, 30, "THE EXCEPTION — ATTESTED, NOT DERIVED", size=10.5, anchor="end")
-        + f'<text x="92" y="224" class="d" font-size="44">57.8M</text>'
+        + f'<text x="{fig_x(92, "57.8M", 44, cap=12)}" y="224" class="d" font-size="44">57.8M</text>'
         + f'<text x="92" y="256" class="dim" font-size="12">rows in one field-usage table,</text>'
         + f'<text x="92" y="273" class="dim" font-size="12">from 1.6M Oracle Analytics query logs.</text>'
         + m_adm(300, "zinc",
