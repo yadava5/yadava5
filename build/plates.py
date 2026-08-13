@@ -442,12 +442,46 @@ def lbl(x: float, y: float, text: str, cls: str = "ts dim", size: float = 11,
 # right of its own tile, the subtitle 0.22..0.64u, and the I-plates and the
 # V-plates disagreed with EACH OTHER by 0.67u apparent (2.0u mechanical) down
 # the page. Three elements, one edge, seven sections, no two the same.
+# ── THE FIGURE ROWS ARE THE TABULAR LINING GLYPHS' (2026-08-13).
+#
+# The five lsbs below are .tf's, off the subset's hmtx: 0 60->32, 4 50->20,
+# 5 55->63, 6 30->29, 3 unmoved at 35. The old ones described .lf-less default
+# figures this page no longer draws, and three of the five were wrong by more
+# than a unit at 62px. Confirmed against the Chromium raster (30.2/34.3/18.1/
+# 62.5/28.2 per 1000 em at 62px) so they are the shipped glyphs', not a table's.
+#
+# The optical term for the figures is now ONE number and it is the CAP, which
+# is a simplification the arithmetic forces rather than a taste. fig_x passes
+# cap_em=0.02, so what _ink() applies is min(over, 0.02*size) — at most 1.24u
+# at 62, 1.12u at 56, 0.88u at 44. Both of the two independent estimators built
+# to re-measure this put every .tf leading digit's apparent overshoot at or
+# above its cap at every size on the page, so min() returns the cap and a
+# per-digit `over` is arithmetic with no reader. FIG_OVER is written as the
+# largest cap on the page for that reason: it is never the value applied.
+#
+# Neither estimator is offered as a measurement of the overshoot itself.
+# Calibrated against the two values this file already depends on, both missed
+# — 'V' reads 2.50-2.63u where the hand measurement says 1.49u — so the roman
+# rows below are left exactly as they were and no digit inherits a number from
+# an instrument that cannot reproduce a known answer.
+#
+# What makes the constant SAFE is not the estimate, it is that a constant
+# cancels. The five mobile figures are authored at one x and are read down the
+# page against each other; that agreement depends only on the differences
+# between their lsbs (32/35/20/63/29, spread 43/1000 — so the table is still
+# earning its keep). A shared `over` moves every figure identically against its
+# own caption and cannot make two figures disagree. The one residual: if 0's
+# true overshoot is below its cap — one estimator says so, the other does not —
+# then "0.979" sits up to 0.45u left of flush. That is inside the 0.67u this
+# page shipped with before the romans were fixed, and it is the same on every
+# plate that draws it.
+FIG_OVER = 1.24                # = 0.02 * 62, the largest display size here
 D_OPTIC = {                    # display leading glyph -> (lsb em/1000, overshoot in u)
-    "0": (60, 0.40),
-    "3": (35, 0.75),
-    "4": (50, 0.35),
-    "5": (55, 1.10),
-    "6": (30, 0.40),
+    "0": (32, FIG_OVER),
+    "3": (35, FIG_OVER),
+    "4": (20, FIG_OVER),
+    "5": (63, FIG_OVER),
+    "6": (29, FIG_OVER),
     # The romans. 'I' is a flat stem carrying an unusually deep bearing —
     # 85/1000, 2.55u of daylight at 30 — and, being flat, no overshoot at all:
     # its apparent edge IS its mechanical one, which is the construction the
