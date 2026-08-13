@@ -56,16 +56,17 @@
   "repos": {
     "glyph": {
       "github": "yadava5/glyph",
-      "ref": "3e510d497c3ad43b390c1845864f546f0e8b1543",
+      "ref": "3cc0505223ac402ae68faf44cf42229ba7ae165c",
       "branch": "main",
       "public": true,
-      "note": "Re-pinned 2026-08-08 because the DEPLOYMENT moved and the page's strongest claim is about the deployment. de7f24ac is an ancestor, 13 commits back, no rewritten history. The browser build was rebuilt somewhere in those 13, so the served binary changed size and hash; it is still byte-identical to this ref's blob, which is the thing the sentence actually argues."
+      "note": "Re-pinned 2026-08-08 because the DEPLOYMENT moved and the page's strongest claim is about the deployment. de7f24ac is an ancestor, 13 commits back, no rewritten history. The browser build was rebuilt somewhere in those 13, so the served binary changed size and hash; it is still byte-identical to this ref's blob, which is the thing the sentence actually argues. Re-pinned again 2026-08-13, 8 commits on from 3e510d49 (compare API: status ahead, behind_by 0, merge_base == the old pin). 7 of those were glyph's own work, headed by 'docs(docs): recompute every README number, and correct one that was wrong' — the repository audited its own figures AFTER this page pinned it. The 8th is this page's doing: the contributor line credited Shree Chaturvedi but linked github.com/shreebatsa, which is Sribatsa Prajapati, an unrelated developer. shreebatsa is Shree's macOS username and it is all over the December benchmark artifacts as an executable path under /Users/; somebody read a local account name as a GitHub handle. The real handle is ShreeChaturvedi, confirmed against the users API and by 1,237 commits on ai-augmented-auto-ml-toolchain. All five glyph rows were re-derived at 3cc0505 BEFORE the pin moved and reproduced unchanged. STILL OPEN at this pin: glyph's README now discloses more than this page does — it prints the whole 14-row ratio table and says the openmp+native change loses in 8 of the 12 matrix ops and both end-to-end workloads, including a 7.9x regression on transpose 128, while section III prints one loss. If that ever gets drawn, derive it from docs/benchmarks/runs/bench-20260802-aggregated-{baseline,openmp-native}.json and NOT from bench_summary.csv — see the note on glyph.axpy128_slowdown for why the CSV answers 6-win/6-lose and is the wrong machine."
     },
     "jetpack": {
       "github": "yadava5/jetpack-compress",
-      "ref": "7b75e03ddd6bb1eb6708eff6b10aacb8148a7c74",
+      "ref": "4c420ea689461c47f8f4512eed021f9b05bd8415",
       "branch": "main",
-      "public": true
+      "public": true,
+      "note": "Re-pinned 2026-08-13, 22 commits on from 7b75e03d. Ancestry checked through the compare API rather than asserted: status ahead, behind_by 0, merge_base == the old pin, so no rewritten history. Nothing here was wrong — the point is what the head commit says. 4c420ea6 is 'docs(readme): check every number against the artifacts, and fix three that were wrong': the repository audited its own figures AFTER this page pinned it, and the page went on citing the pre-audit tree. All six jetpack rows were re-derived at 4c420ea6 BEFORE the pin moved and every one reproduced unchanged, so this moves the evidence and no figure. Worth carrying into the next audit: that README now records a 2026-08-10 re-measurement under JDK 25.0.4 Temurin, which is NOT the 25.0.3 Homebrew build ENVIRONMENT.md pins for throughput work, and it says so rather than quietly replacing the reading. The 6.4x this page draws is still the rigorous 3-fork run (6.38), not the quick 1-fork run (6.89) — jetpack quotes the slower of the two on purpose and the page follows it."
     },
     "cadence": {
       "github": "yadava5/cadence",
@@ -90,10 +91,10 @@
     },
     "visualassist": {
       "github": "yadava5/VisualAssist",
-      "ref": "b0e6203369a829e2174ea263be53be0287675af9",
+      "ref": "04fbcadeaecb86674a74cf218618079fb5fc4e65",
       "branch": "main",
       "public": true,
-      "note": "New in round 21, at the client's choice. Swift/ARKit/LiDAR; no deployment exists, and the page says why instead of faking a link. The MUCAT placement and the $2,500 grant it is the artifact for stay ATTESTED — placements are not derivable from a repository."
+      "note": "New in round 21, at the client's choice. Swift/ARKit/LiDAR; no deployment exists, and the page says why instead of faking a link. The MUCAT placement and the $2,500 grant it is the artifact for stay ATTESTED — placements are not derivable from a repository. Re-pinned 2026-08-13, one commit on from b0e62033 (compare API: status ahead, behind_by 0, merge_base == the old pin). That one commit is 'fix(ci): the accessibility job could not fail, on an accessibility product' — the same check-that-cannot-fail shape this page keeps finding, in the repository §VII is about. All three visualassist rows were re-derived at 04fbcade before the pin moved and reproduced unchanged."
     }
   },
   "claims": [
