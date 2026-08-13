@@ -627,25 +627,78 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
     // the constraint is absolute: long enough to be a sequence, short enough to
     // be one gesture.
     const STAGGER_MIN = 40, STAGGER_MAX = 200;   // ms
-    // Grouped by CLASS TOKEN until now, which one selector defeats. The colophon
-    // writes `.ln,.ln2{animation:ln …}` — one gesture, three elements, relative
-    // delays 0 / 150 / 1900ms. Split across two class names it became a `.ln`
-    // group of two (gap 150, passes) and a `.ln2` group of one (size < 2,
-    // skipped), so a 1750ms gap — 8.75x the stated ceiling — was invisible.
-    // A stagger is a property of the GESTURE, so group by the keyframe name
-    // that defines it.
-    const byClass = new Map();
+    // ── WHAT IDENTIFIES A GESTURE. Neither key alone, and this check has now
+    // lost its jurisdiction to each of them in turn.
+    //
+    // Grouped by CLASS TOKEN first, which one selector defeats: the colophon
+    // wrote `.ln,.ln2{animation:ln …}` — one gesture, three elements, relative
+    // delays 0 / 150 / 1900ms — and split across two class names it became a
+    // `.ln` group of two (gap 150, passes) and a `.ln2` group of one (size < 2,
+    // skipped), so a 1750ms gap, 8.75x the stated ceiling, was invisible.
+    //
+    // So it was regrouped by the KEYFRAME NAME that defines the gesture, and
+    // BOARD (2026-08-12) defeated that in the opposite direction. Every comet
+    // segment and every one-shot on this page gets a GENERATED keyframe name —
+    // k115, k116, k117 … one per element, because dash animation is absolute
+    // and a shared keyframe would erase the per-segment offsets (plates.py,
+    // `comet`). Every group therefore had exactly one member and every group
+    // was skipped at `delays.size < 2`. The check did not weaken; it stopped
+    // having a subject, on all 48 plates, while printing nothing — the shape
+    // this file exists to refuse.
+    //
+    // A gesture is what those two keys have in common: elements belong to the
+    // same one if they share a keyframe name OR a class token. That is a
+    // connected component over both, so build it as one. `.ln`/`.ln2` merge
+    // through the shared name; the hero's three one-shots merge through the
+    // shared `pu` despite three generated names; and the comets, which share
+    // `cm` and all sit at delay 0, collapse to a single-delay group and are
+    // skipped as they should be — a phase written into the dasharray is not a
+    // stagger and this check has never claimed to read one.
+    //
+    // Over-merging is the risk this trades for, and it is the safe direction:
+    // the worst case is that two unrelated gestures sharing a class are held
+    // to the wave constraint together, which is a finding to look at rather
+    // than a silence to miss.
+    //
+    // And it cannot have weakened anything, by construction rather than by the
+    // 48 plates passing: the OLD key — the animation name, or the first class
+    // token when there was none — is always a member of the new key set, so any
+    // two animations the old grouping merged share a key this one merges too.
+    // A strict coarsening only ever merges more; nothing this check used to
+    // catch can escape it. mutations.mjs pulls the widest delay in the hero's
+    // wave down onto its smallest, and this must say so.
+    const root = new Map();
+    const find = (x) => {
+      if (!root.has(x)) root.set(x, x);
+      while (root.get(x) !== x) { root.set(x, root.get(root.get(x))); x = root.get(x); }
+      return x;
+    };
+    const union = (a, b) => { const ra = find(a), rb = find(b); if (ra !== rb) root.set(ra, rb); };
+    const members = [];
     for (const a of anims) {
       const el = a.effect?.target;
       if (!el || !el.getAttribute) continue;
-      const k = a.animationName || (el.getAttribute('class') || '').split(/\s+/)[0];
-      if (!k) continue;
-      const d = Math.abs(a.effect.getComputedTiming().delay || 0);
-      if (!byClass.has(k)) byClass.set(k, new Set());
-      byClass.get(k).add(Math.round(d));
+      const keys = [...new Set([a.animationName, ...(el.getAttribute('class') || '').split(/\s+/)]
+        .filter(Boolean))];
+      if (!keys.length) continue;
+      for (const k of keys.slice(1)) union(keys[0], k);
+      members.push({ keys, delay: Math.round(Math.abs(a.effect.getComputedTiming().delay || 0)) });
     }
-    for (const [k, delays] of byClass) {
+    const byClass = new Map();
+    for (const m of members) {
+      const r = find(m.keys[0]);
+      if (!byClass.has(r)) byClass.set(r, { delays: new Set(), tally: new Map() });
+      const g = byClass.get(r);
+      g.delays.add(m.delay);
+      for (const k of m.keys) g.tally.set(k, (g.tally.get(k) || 0) + 1);
+    }
+    for (const { delays, tally } of byClass.values()) {
       if (delays.size < 2 || !dur) continue;
+      // Name the group by the token its members actually SHARE. The component's
+      // representative is whichever key happened to be seen first, and on this
+      // page that is a generated `k117` — a failure message no reader can act
+      // on. `pu` is on all three one-shots; each generated name is on one.
+      const k = [...tally].sort((a, b) => b[1] - a[1] || (a[0] < b[0] ? -1 : 1))[0][0];
       const d = [...delays].sort((a, b) => a - b);
       // The MEAN step hides a hole. This computed (last - first)/(n-1), so
       // plate-4-applied's .env — real gaps 140 / 280 / 140ms, because the third
@@ -682,17 +735,22 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
     const parse = s => (s.match(/[\d.]+/g) || []).map(Number);
     const over = (fg, bg, al) => fg.map((c, i) => c * al + bg[i] * (1 - al));
 
-    // 20 — THE GROUND MUST PAINT WHAT IT DECLARES.
+    // 20 — THE GROUND MUST BE DECLARED, AND IT MUST BE A REAL COLOUR.
     //
-    //      Every ratio below is computed against the first <rect>'s fill. That
-    //      makes the ground a DECLARATION, and until it is checked, a
-    //      declaration is not a fact. The nine mobile plates carried
-    //      `fill="#43372f" fill-opacity="0"` from the day they were written
-    //      until 2026-08-08: the colour was right, the paint was missing, and
-    //      the whole check below graded a phone's marks against paper the
-    //      phone did not have. Nothing failed, because this line reads `fill`
-    //      and `fill-opacity` is a different attribute — the same two-
-    //      attributes-one-colour hole the loop below has its own note about.
+    //      RE-AIMED for BOARD (2026-08-12). Same doctrine, new subject, and
+    //      the change is worth writing down because the old subject did not
+    //      fail — it stopped existing.
+    //
+    //      WHAT THIS USED TO SAY. Every ratio below was computed against the
+    //      first <rect>'s fill, which made the ground a DECLARATION, and until
+    //      it is checked a declaration is not a fact. The nine mobile plates
+    //      carried `fill="#43372f" fill-opacity="0"` from the day they were
+    //      written until 2026-08-08: the colour was right, the paint was
+    //      missing, and the whole check below graded a phone's marks against
+    //      paper the phone did not have. Nothing failed, because that line
+    //      read `fill` and `fill-opacity` is a different attribute — the same
+    //      two-attributes-one-colour hole the loop below has its own note
+    //      about.
     //
     //      It was survivable there only by luck: 19 of the 20 token/theme
     //      pairs measure HIGHER on GitHub's real canvas than on the paper, so
@@ -702,26 +760,67 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
     //      highlight. Luck is not a floor, and a ratio is unsigned, so
     //      neither this check nor any other could have caught the sign.
     //
-    //      Three ways to make the ground a phantom, all three closed here:
-    //      an alpha channel in the fill, a fill-opacity beside it, and an
-    //      opacity on the rect or any ancestor of it.
+    //      WHY THE SUBJECT IS GONE. BOARD retired the sheet: every plate is
+    //      transparent and NAMES the canvas it is graded against, so there is
+    //      no ground rect left to paint, to leave unpainted, or to shadow with
+    //      a mark emitted one position early. Two assertions went with it, and
+    //      they are deleted here rather than left standing green:
+    //
+    //        · "the ground rect declares X but paints it at alpha 0" — the
+    //          three ways to make a ground a phantom (an alpha channel in the
+    //          fill, a fill-opacity beside it, an opacity on the rect or any
+    //          ancestor). The LOCAL grounds below still refuse all three by
+    //          construction: an element is graded against a mark tile only if
+    //          that tile paints at alpha 1, and a tile that goes transparent
+    //          drops out of the filter and falls back to the canvas — which is
+    //          what the reader would actually see through it.
+    //
+    //        · "the first <rect> is 30x10 on a 900x534 canvas — a mark, not
+    //          the sheet". Document order was load-bearing only while SLABRGB
+    //          came from that rect. It comes from data-canvas now, so a decoy
+    //          rect in first position moves no ratio on the plate.
+    //
+    //      Both were guarded on `!declaredCanvas`, and all 48 published plates
+    //      declare one — so neither could fire on anything this repository
+    //      ships. A check that cannot fail is the defect this repository has
+    //      already shipped four times; keeping these two because they read
+    //      like diligence would have been the fifth.
+    //
+    //      WHAT SURVIVES is the doctrine, aimed at the mechanism that carries
+    //      the ground now: the colour every ratio is graded against must be
+    //      declared, and must be a colour. Check 21 did not subsume this. It
+    //      fires only when a canvas IS declared and a full-canvas sheet is
+    //      painted as well, so a plate declaring nothing at all fell through
+    //      both checks and had every ratio on it graded against whatever the
+    //      fallback happened to be. Now it is refused by name.
+    //
+    //      The ratios below are then graded against black, deliberately NOT
+    //      skipped: a `continue` that made check 10's 4.5:1 text branch
+    //      unreachable is one of the four gates this repository has shipped
+    //      that could not fail, and it is listed at the top of mutations.mjs.
+    //      A defect is already recorded here; the rest of the plate is still
+    //      worth measuring. mutations.mjs strips data-canvas from a plate and
+    //      this must say so.
     // 21 — A TRANSPARENT PLATE DECLARES THE CANVAS IT IS GRADED AGAINST.
     //
-    //      Check 20 below exists precisely to refuse a ground that declares
-    //      and does not paint, so transparency cannot ride through it — it
-    //      has to be a declaration of its own. data-canvas names the hex
-    //      every ratio on the plate is graded against, and plates.py
-    //      declares the WORST canvas GitHub serves that theme on (#212830,
-    //      Primer 11.10.0 dark-dimmed, the lightest of the three dark
-    //      canvases, and #ffffff for light). The previous value here,
-    //      #22272e, is a canvas GitHub no longer serves — Primer renamed
-    //      dark-dimmed and moved the hex, so every ratio graded on the old
-    //      value was overstated by ~0.9%. A plate that declares a canvas AND
-    //      paints a full-canvas sheet is claiming to be two things at once,
-    //      and fails — mutations.mjs probes exactly that.
+    //      Check 20 above is the half that says a plate MUST declare one and
+    //      that the declaration must be a colour; this is the half that says
+    //      it may not then paint the ground as well. data-canvas names the hex
+    //      every ratio on the plate is graded against, and plates.py declares
+    //      the WORST canvas GitHub serves that theme on (#212830, Primer
+    //      11.10.0 dark-dimmed, the lightest of the three dark canvases, and
+    //      #ffffff for light). The previous value here, #22272e, is a canvas
+    //      GitHub no longer serves — Primer renamed dark-dimmed and moved the
+    //      hex, so every ratio graded on the old value was overstated by
+    //      ~0.9%. A plate that declares a canvas AND paints a full-canvas
+    //      sheet is claiming to be two things at once, and fails —
+    //      mutations.mjs probes exactly that.
     const declaredCanvas = svgEl.getAttribute('data-canvas');
     const canvasOK = declaredCanvas && /^#[0-9a-f]{6}$/i.test(declaredCanvas);
-    if (declaredCanvas && !canvasOK)
+    if (!declaredCanvas)
+      out.push('declares no data-canvas — every contrast ratio below would be graded against a ground '
+             + 'this plate never names, and a ground nobody declared cannot be the one the reader sees');
+    else if (!canvasOK)
       out.push(`data-canvas="${declaredCanvas}" is not a 6-digit hex — every ratio on this plate needs a real ground`);
     const slabEl = svgEl.querySelector('rect');
     if (canvasOK && slabEl) {
@@ -730,37 +829,9 @@ for (const { dir, tag, file: base } of sheet(/^(plate|m)-.*\.svg$/)) {
         out.push(`declares data-canvas="${declaredCanvas}" and also paints a full-canvas sheet `
                + `— it cannot be both paper and transparency`);
     }
-    if (!declaredCanvas && !slabEl) out.push('no <rect> to take a contrast ground from — every ratio below would be meaningless');
-    const slabStyle = slabEl && !declaredCanvas ? getComputedStyle(slabEl) : null;
-    if (slabStyle) {
-      const fo = parseFloat(slabStyle.fillOpacity);
-      const ao = opacityOf(slabEl);
-      const chan = parse(slabStyle.fill);
-      const alpha = (chan.length > 3 ? chan[3] : 1) * (Number.isFinite(fo) ? fo : 1) * ao;
-      if (slabStyle.fill === 'none' || slabStyle.fill.startsWith('url') || !(alpha >= 1))
-        out.push(`the ground rect declares ${slabStyle.fill} but paints it at alpha ${alpha.toFixed(3)} `
-               + `(fill-opacity ${slabStyle.fillOpacity}, opacity ${ao}) — every contrast ratio on this `
-               + `plate is measured against a colour the reader never sees`);
-      // ...and it must be the SHEET, not merely the first thing that paints.
-      // The line above grades the paint of whatever `querySelector` returns,
-      // which is document order — the ordering plates.py's ground() docstring
-      // calls load-bearing and which, until this line, nothing enforced. A
-      // 30x10 rect emitted one position early is enough: it becomes the
-      // contrast ground for the entire plate, and if its tone is near the
-      // paper's, check 10 does not fire either. Demonstrated on a temp copy,
-      // #4a3e35 ahead of #43372f — the gate passed while every ratio on the
-      // plate was measured against the decoy. Same full-canvas bbox rule the
-      // drawables filter uses to drop the slab, so the two agree by
-      // construction.
-      const sb = slabEl.getBBox();
-      if (!(sb.width >= W - 2 && sb.height >= H - 2))
-        out.push(`the first <rect> is ${Math.round(sb.width)}x${Math.round(sb.height)} on a ${W}x${H} `
-               + `canvas — it is a mark, not the sheet, and every contrast ratio on this plate is `
-               + `being measured against it`);
-    }
     const SLABRGB = canvasOK
       ? [1, 3, 5].map(i => parseInt(declaredCanvas.slice(i, i + 2), 16))
-      : parse(slabStyle ? slabStyle.fill : 'rgb(0, 0, 0)');
+      : [0, 0, 0];
     const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
 
     // ── LOCAL GROUNDS. RE-TUNED for BOARD (2026-08-12), in the same change

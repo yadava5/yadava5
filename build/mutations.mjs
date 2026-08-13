@@ -343,6 +343,29 @@ const MUTATIONS = [
       return s.replace(/(<title>)/,
         `<rect x="0" y="0" width="${c.w}" height="${c.h}" fill="#43372f"/>$1`);
     }],
+  // Check 20 was RE-AIMED in the same change as this probe, and this probe is
+  // what connects the two. The ground on this page is a DECLARATION —
+  // data-canvas, the worst canvas GitHub serves that theme on — not a painted
+  // sheet, so the check's two ground-rect assertions had no subject left: both
+  // were guarded on `!declaredCanvas` and all 48 published plates declare one,
+  // which made them dead code wearing a passing grade. They are deleted; what
+  // the check asserts now is that a plate MUST declare a canvas.
+  //
+  // That is not something check 21 was ever doing. 21 fires only when a canvas
+  // IS declared and a full-canvas sheet is painted as well, so a plate
+  // declaring nothing at all fell through both checks and had every ratio on it
+  // graded against whatever the fallback happened to be. Strip the attribute
+  // and the gate must say so.
+  //
+  // Keyed on the attribute, which head() writes for every plate in the set,
+  // rather than on any one plate's art. The mutation runs against the DARK set,
+  // where the fallback ground is black and every ink on the canvas therefore
+  // measures HIGHER rather than lower — so the only finding it can produce is
+  // the one it names, which was confirmed by reading the whole mutated gate
+  // output and not just the regex verdict.
+  ['a plate stops declaring the canvas it is graded against',
+    /declares no data-canvas — every contrast ratio below would be graded against a ground/,
+    (s) => s.replace(/ data-canvas="[^"]*"/, '')],
   // Check 13 fires when a plate declares animations NONE of which moves
   // anything — dead code on the reader's compositor wearing the name of a
   // gesture. Round 21 anchored this on the title page's two carriers; round
@@ -367,38 +390,63 @@ const MUTATIONS = [
   ['a declared animation never moves anything', /declares animations that never move anything/,
     (s) => s.replace(/^@keyframes ([\w-]+)\{.*$/gm, '@keyframes $1{to{stroke-opacity:1}}')],
   // Check 14 is the surviving motion-quality check (a stagger is a wave, not a
-  // queue), so it keeps a probe: stretching the middle pen stroke's delay on
-  // Glyph opens a 400ms hole in a 150ms wave.
-  // (Round 27: Glyph's pen stagger went with the pen. The wave now lives on the
-  // refusal's redaction rows. Rather than name that plate — the mistake this
-  // probe has made twice — the mutation asks each file in turn whether it holds
-  // a stagger at all: fewer than three distinct delays and it declines, so the
-  // runner moves on. Then it pushes the LAST step 600ms past the others, which
-  // is a hole no averaging can hide, against a 200ms ceiling.)
-  // Round 27 made this probe scan for a real stagger rather than name a plate,
-  // which was the right instinct and still found nothing on the board — and the
-  // reason is worth writing down, because it is a statement about the CHECK,
-  // not about the probe. Check 14 groups delays by animation NAME
-  // (gate.mjs:641). BOARD gives every animated element its own generated
-  // keyframe name (k115, k116, k117 …) and puts the offset in the dasharray
-  // rather than in a delay, so every group has exactly one member and the check
-  // skips all of them at `delays.size < 2`. There is no wave on this page for a
-  // mutation to widen: check 14 currently has no jurisdiction over any plate.
+  // queue), so it keeps a probe. Its history is a list of subjects that walked
+  // away: Glyph's pen stagger went with the pen in round 27, the refusal's
+  // redaction rows went with the refusal in round 28.
   //
-  // That does not make it dead code — it guards the next stagger someone
-  // writes — so, as with checks 6, 7 and 11 above, the probe brings its own
-  // subject: three elements on one keyframe name, delays 0 / 100 / 800ms, so
-  // the widest step is 700ms against a 200ms ceiling and the tightest is 100ms,
-  // safely inside the 40ms floor that is the check's other branch. The
-  // animation is on stroke-opacity so it perturbs nothing else the gate reads.
-  ['a stagger step is too wide to read as one gesture',
-    /\.probe14 has a \d+ms step across 3 elements \(ceiling 200ms\) — too slow/,
-    (s) => s.replace('</svg>',
-      '<style>@keyframes probe14{to{stroke-opacity:.5}}'
-      + '.probe14{animation:probe14 1000ms linear infinite}</style>'
-      + '<rect class="probe14" x="4" y="16" width="6" height="6" fill="none" stroke="#E4E9E9" style="animation-delay:0ms"/>'
-      + '<rect class="probe14" x="14" y="16" width="6" height="6" fill="none" stroke="#E4E9E9" style="animation-delay:100ms"/>'
-      + '<rect class="probe14" x="24" y="16" width="6" height="6" fill="none" stroke="#E4E9E9" style="animation-delay:800ms"/></svg>')],
+  // Round 28 found something worse than a stale probe, and the finding was
+  // about the CHECK. It grouped delays by animation NAME, and BOARD gives every
+  // animated element its OWN generated name (k115, k116, k117 …) because dash
+  // animation is absolute and a shared keyframe would erase the per-segment
+  // offsets. So every group had exactly one member, every group was skipped at
+  // `delays.size < 2`, and the check had jurisdiction over nothing at all while
+  // printing nothing at all.
+  //
+  // Fixed where the fault was. Check 14 now groups by the connected component
+  // over keyframe name AND class token, which is the only identity that
+  // survives both ways a gesture has been split here — one selector over two
+  // class names (the colophon's `.ln,.ln2`), and one class over many generated
+  // names (this page's `pu`). The hero's three one-shots are a wave again:
+  // class `pu`, delays 400 / 530 / 680, gaps 130 and 150 inside the 40-200ms
+  // band. Measured, not assumed.
+  //
+  // So this probe stops bringing its own subject. It brought one for exactly
+  // one round — three injected rects on one keyframe name — and a synthetic
+  // subject is the wrong instrument for this check: it passes whether or not
+  // the check can reach anything the page actually draws, which is the state it
+  // was written to expose. It mutates the real wave now, and the day a redesign
+  // leaves the page with no stagger at all it reports `??` stale, which is the
+  // finding rather than the failure.
+  //
+  // It PULLS the widest delay down to (smallest + 5ms) rather than pushing it
+  // out. Both directions fire the check — this one on the 40ms floor branch,
+  // widening on the 200ms ceiling — but widening a one-shot's delay shortens
+  // the window it is visible in and would trip check 7 as a side effect, and a
+  // mutation that causes two unrelated findings is harder to read than one that
+  // causes exactly the finding it names. Every delay only ever decreases here,
+  // which moves visibility in the safe direction.
+  //
+  // Keyed on the SHAPE of the message and on the mutation's own 5ms, never on
+  // `pu` — a class name is a literal design work is free to change, and naming
+  // one is how seventeen probes in this file went stale.
+  ['a stagger step is too tight to read as a sequence',
+    /has a 5ms step across \d+ elements \(floor 40ms\) — too tight to read as a sequence/,
+    (s) => {
+      // The delay is the SECOND time in the `animation` shorthand. A comet
+      // declares a duration and no delay — its phase lives in the dasharray —
+      // so the comets are skipped here by construction, exactly as check 14
+      // skips them for having one distinct delay between them.
+      const d = [...s.matchAll(/animation:[\w-]+ [\d.]+m?s [^;}"]*/g)].map(m => {
+        const t = [...m[0].matchAll(/([\d.]+)ms\b/g)];
+        return t.length >= 2
+          ? { at: m.index + t[1].index, len: t[1][0].length, delay: Number(t[1][1]) } : null;
+      }).filter(Boolean);
+      if (d.length < 2) return s;
+      const lo = Math.min(...d.map(x => x.delay));
+      const hi = d.reduce((a, b) => (b.delay > a.delay ? b : a));
+      if (hi.delay <= lo + 5) return s;
+      return s.slice(0, hi.at) + `${lo + 5}ms` + s.slice(hi.at + hi.len);
+    }],
   // Check 3 exempted every hairline from crossing type — "rules pass under
   // type" — so a rule that TRAVELLED across a word passed 40 samples a loop
   // while rendering it struck out. Two plates were shipping exactly that. The
