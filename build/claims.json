@@ -83,10 +83,10 @@
     },
     "automl": {
       "github": "yadava5/ai-augmented-auto-ml-toolchain",
-      "ref": "5c5b7624d4ede05235fc0289975d59f401e6a4e4",
+      "ref": "5e42233ccacbab6886c1df4c2b3fabf42157a8d0",
       "branch": "main",
       "public": true,
-      "note": "Public since 2026-07-30. Every AutoML figure on this page was ATTESTED before that and is now DERIVED, which is the whole point of the distinction. Written with Shree Chaturvedi; the repository has disjoint histories, so main is the only branch worth pinning."
+      "note": "Public since 2026-07-30. Every AutoML figure on this page was ATTESTED before that and is now DERIVED, which is the whole point of the distinction. Written with Shree Chaturvedi. RE-PINNED 2026-08-13, and the reason is the interesting part: the old pin 5c5b7624 is the head of archive/github-main, NOT of main. This repository has disjoint histories, and when they were reorganised the branch that had been main became archive/github-main while a new main was built from the consolidated GitLab history. The pin did not move, so the row went on declaring branch main while deriving from an archived one, and the freshness check could only answer 404 -- no common ancestor -- which reads like a network fault and is actually a claim whose evidence had moved out from under it. All four AutoML rows were recomputed against the new main before re-pinning and every one reproduced unchanged: tools 44, tools_phase 29, tool_sets 7, license GPL-3.0. PR #5 (PolyForm relicence) is still OPEN and still targets archive/github-main, so the page GPL sentence stands."
     },
     "visualassist": {
       "github": "yadava5/VisualAssist",
