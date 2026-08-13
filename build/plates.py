@@ -2036,7 +2036,10 @@ def m_automl() -> str:
 # table — the door is the only way through, and the drawing has exactly one
 # current to prove it with.
 def m_cadence() -> str:
-    stubs = " ".join(f"M{124 + i * 264 / 35:.1f},202 V216" for i in range(36))
+    # centred on the function box (x=100, w=296) the way the desktop cut centres
+    # its bank on its own box: the eye levels the stub mass against the box, not
+    # the rail, and the first stub sits on the rail's corner rather than clear of it.
+    stubs = " ".join(f"M{116 + i * 264 / 35:.1f},202 V216" for i in range(36))
     fan = " ".join(f"M248,{y} H264" for y in range(350, 495, 24))
     tables = "".join(f'<rect x="264" y="{y - 8}" width="132" height="16" rx="3" '
                      f'fill="none" stroke="{T["zinc"]}" stroke-width="1.3"/>'
@@ -2048,7 +2051,7 @@ def m_cadence() -> str:
         + sec_sub(92, 76, "every route, one function; RLS on every tenant row.", 13)
         + m_fig("36", "route handlers, one function;",
                 "RLS FORCEd on all 7 tables.")
-        + bus("verd", "M116,144 V202 H388", C=132, cd="M116,148 V202 H384")
+        + bus("verd", "M116,144 V202 H380", C=132, cd="M116,148 V202 H376")
         + f'<path fill="none" stroke="{T["verd"]}" stroke-width="1.4" d="{stubs}"/>'
         + f'<rect x="100" y="216" width="296" height="60" rx="8" fill="none" '
           f'stroke="{T["verd"]}" stroke-width="1.6"/>'
