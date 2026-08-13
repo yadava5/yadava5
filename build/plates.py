@@ -2209,8 +2209,20 @@ _LANE = {"rust": "rust", "zinc": "zinc", "verd": "verdigris"}
 
 def _probe(fn: str, h: int, w: float, title: str, desc: str, body_fn):
     def gen():
+        # THE BODY RUNS FIRST, and that is the whole of this function.
+        # css_close() DRAINS the shared `_CSS` accumulator, so a plate's
+        # keyframes reach its own file only if the calls that append to _CSS
+        # have already happened. `head + css_close() + body_fn()` reads left
+        # to right in Python exactly as it does in the output, and the output
+        # order is the reverse of the evaluation order this needs: every one
+        # of these 64 slices shipped the PREVIOUSLY emitted slice's keyframes
+        # and 516 class references to keyframes that were in another file.
+        # Every other generator in this file already binds `body` to a local
+        # on the line above its `return`; this one inlined the call and lost
+        # the ordering with it. Keep the binding.
+        body = body_fn()
         return (_probe_head(h, w, title, desc, fn, PROBE_FRAME.get(fn))
-                + css_close() + body_fn() + "</svg>")
+                + css_close() + body + "</svg>")
     return gen
 
 
@@ -2440,6 +2452,66 @@ def _check_coverage(fn: str, svg: str) -> None:
                                  f"(charsets.py + build/subset-fonts.py)")
 
 
+def _check_css_refs(fn: str, svg: str) -> None:
+    """A plate must be closed over its own stylesheet, in BOTH directions.
+
+    `_CSS` is a shared mutable accumulator drained by css_close(), and the
+    only thing keeping a plate's keyframes in the plate's own file is that
+    every generator computes its BODY before it calls css_close(). One
+    generator did not (`_probe`, whose `head + css_close() + body_fn()` reads
+    left to right and so drained the accumulator before the body had filled
+    it), and 64 of 120 published plates shipped with 516 class references to
+    keyframes that had gone into the PREVIOUS file — every animation on every
+    interval slice dead, and the whole set green. Nothing downstream saw it:
+    a dangling class is not a parse error, not a collision, and not a missing
+    face, and gate.mjs's dead-animation check was guarded on a duration that
+    is zero for exactly this defect.
+
+    So it is asserted here, at the point of emission, over the FILE:
+
+      · every class an element carries must be selected by some rule in this
+        plate's own stylesheet — a reference that resolves to nothing;
+      · every keyframes block must be named by some rule, and every rule that
+        names one must exist — an animation with no motion behind it;
+      · every rule that DECLARES an animation must be carried by an element —
+        the same leak seen from the other side, where the residue lands in
+        the next file and ships base64 keyframes to a reader that animate
+        nothing (assets/light/plate-0-hero.svg carried six of these).
+
+    Shape, not literal: nothing here knows that the generated names look like
+    `k463`, so a redesign is free to rename or renumber them. Both themes are
+    checked — half the broken files were the light twins, and the coverage
+    check above is theme-guarded only because TEXT is theme-invariant.
+    """
+    _style = "".join(_re.findall(r'<style>(.*?)</style>', svg, _re.S))
+    # the embedded faces are the biggest thing in the file and the only place
+    # a punctuation-heavy blob could impersonate a selector
+    _style = _re.sub(r'base64,[A-Za-z0-9+/=]+', 'base64,', _style)
+    body = _re.sub(r'<style>.*?</style>', '', svg, flags=_re.S)
+    used = {t for m in _re.findall(r'class="([^"]*)"', body) for t in m.split()}
+    # a class token in selector position: `.name` where name starts a word
+    defined = set(_re.findall(r'\.([A-Za-z_][\w-]*)', _style))
+    kfs = set(_re.findall(r'@keyframes ([\w-]+)', _style))
+    named = {n for n in _re.findall(r'animation(?:-name)?:\s*([\w-]+)', _style)
+             if n != "none"}
+    # the classes whose rule declares an animation
+    animated = {m for m in _re.findall(r'\.([A-Za-z_][\w-]*)\{[^}]*animation:', _style)}
+    for c in sorted(used - defined):
+        _fail.append(f"{fn}: an element carries class {c!r}, which no rule in this "
+                     f"plate's own <style> defines — the reference resolves to "
+                     f"nothing and whatever it was meant to do does not happen")
+    for k in sorted(kfs - named):
+        _fail.append(f"{fn}: defines @keyframes {k!r} that no rule names — "
+                     f"dead payload on every reader's compositor")
+    for n in sorted(named - kfs):
+        _fail.append(f"{fn}: a rule declares animation {n!r} with no @keyframes "
+                     f"{n!r} on this plate — the animation never runs")
+    for c in sorted(animated - used):
+        _fail.append(f"{fn}: rule .{c} declares an animation and no element on this "
+                     f"plate carries that class — keyframes shipped to every "
+                     f"reader that animate nothing")
+
+
 # One build, two documents. Dark keeps every path it has always had; light
 # lands in assets/light/ under the SAME basenames (gate.mjs keys on that).
 for _theme in ("dark", "light"):
@@ -2461,6 +2533,9 @@ for _theme in ("dark", "light"):
             _fail.append(f"{_theme}/{_fn}: MALFORMED XML — {e}")
         if _theme == "dark":                    # text is theme-invariant
             _check_coverage(_fn, _path.read_text())
+        # NOT theme-guarded: the stylesheet is generated per theme and half
+        # the dangling-class files were the light twins.
+        _check_css_refs(f"{_theme}/{_fn}", _path.read_text())
         print(f"{_theme:5s} {_fn}: {_path.stat().st_size:,} bytes")
 set_theme("dark")
 

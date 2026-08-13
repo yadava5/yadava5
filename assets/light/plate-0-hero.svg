@@ -12,18 +12,6 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#1A2224}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#1A2224;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k751{to{stroke-dashoffset:-243.8}}
-.k751{animation:k751 2450ms linear infinite}
-@keyframes k752{to{stroke-dashoffset:-215.8}}
-.k752{animation:k752 2450ms linear infinite}
-@keyframes k753{to{stroke-dashoffset:-193.8}}
-.k753{animation:k753 2450ms linear infinite}
-@keyframes k754{to{stroke-dashoffset:-138.8}}
-.k754{animation:k754 2450ms linear infinite}
-@keyframes k755{to{stroke-dashoffset:-110.8}}
-.k755{animation:k755 2450ms linear infinite}
-@keyframes k756{to{stroke-dashoffset:-88.8}}
-.k756{animation:k756 2450ms linear infinite}
 @keyframes k757{to{stroke-dashoffset:-206}}
 .k757{animation:k757 2100ms linear infinite}
 @keyframes k758{to{stroke-dashoffset:-178}}

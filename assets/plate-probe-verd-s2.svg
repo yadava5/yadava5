@@ -10,35 +10,17 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#E4E9E9}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k517{to{stroke-dashoffset:-356}}
-.k517{animation:k517 2100ms linear infinite}
-@keyframes k518{to{stroke-dashoffset:-328}}
-.k518{animation:k518 2100ms linear infinite}
-@keyframes k519{to{stroke-dashoffset:-306}}
-.k519{animation:k519 2100ms linear infinite}
-@keyframes k520{to{stroke-dashoffset:-266}}
-.k520{animation:k520 2450ms linear infinite}
-@keyframes k521{to{stroke-dashoffset:-238}}
-.k521{animation:k521 2450ms linear infinite}
-@keyframes k522{to{stroke-dashoffset:-216}}
-.k522{animation:k522 2450ms linear infinite}
-@keyframes k523{to{stroke-dashoffset:-306}}
-.k523{animation:k523 2750ms linear infinite}
-@keyframes k524{to{stroke-dashoffset:-278}}
-.k524{animation:k524 2750ms linear infinite}
-@keyframes k525{to{stroke-dashoffset:-256}}
-.k525{animation:k525 2750ms linear infinite}
-@keyframes k526{to{stroke-dashoffset:-221}}
-.k526{animation:k526 2100ms linear infinite}
-@keyframes k527{to{stroke-dashoffset:-193}}
-.k527{animation:k527 2100ms linear infinite}
-@keyframes k528{to{stroke-dashoffset:-171}}
-.k528{animation:k528 2100ms linear infinite}
-@keyframes k529{to{stroke-dashoffset:-116.0}}
-.k529{animation:k529 2100ms linear infinite}
-@keyframes k530{to{stroke-dashoffset:-88.0}}
-.k530{animation:k530 2100ms linear infinite}
-@keyframes k531{to{stroke-dashoffset:-66.0}}
-.k531{animation:k531 2100ms linear infinite}
+@keyframes k532{to{stroke-dashoffset:-50}}
+.k532{animation:k532 2100ms linear infinite}
+@keyframes k533{to{stroke-dashoffset:-22}}
+.k533{animation:k533 2100ms linear infinite}
+@keyframes k534{to{stroke-dashoffset:0}}
+.k534{animation:k534 2100ms linear infinite}
+@keyframes k535{to{stroke-dashoffset:55.0}}
+.k535{animation:k535 2100ms linear infinite}
+@keyframes k536{to{stroke-dashoffset:83.0}}
+.k536{animation:k536 2100ms linear infinite}
+@keyframes k537{to{stroke-dashoffset:105.0}}
+.k537{animation:k537 2100ms linear infinite}
 </style>
 <g><path class="bus" stroke="#4FB39A" d="M0,36 H153"/><path class="cm k532" stroke="#A9EFD9" stroke-dasharray="34 176" stroke-dashoffset="160" d="M0,36 H153"/><path class="cm k533" stroke="#83D6BC" stroke-dasharray="28 182" stroke-dashoffset="188" d="M0,36 H153"/><path class="cm k534" stroke="#66C2A8" stroke-dasharray="22 188" stroke-dashoffset="210" d="M0,36 H153"/><path class="cm k535" stroke="#A9EFD9" stroke-dasharray="34 176" stroke-dashoffset="265.0" d="M0,36 H153"/><path class="cm k536" stroke="#83D6BC" stroke-dasharray="28 182" stroke-dashoffset="293.0" d="M0,36 H153"/><path class="cm k537" stroke="#66C2A8" stroke-dasharray="22 188" stroke-dashoffset="315.0" d="M0,36 H153"/></g><circle cx="56" cy="36" r="2.6" fill="#4FB39A"/><path class="bus" stroke="#4FB39A" d="M56,36 V58"/><g><circle cx="56" cy="64" r="5.5" fill="none" stroke="#4FB39A" stroke-width="2"/><circle cx="56" cy="64" r="2" fill="#4FB39A"/></g><text x="70" y="52" class="ts dim" font-size="8.5" letter-spacing="1.2">TP1</text><text x="70" y="68" class="ts" font-size="11.5" letter-spacing="1.3">LIVE</text></svg>

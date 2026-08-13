@@ -10,17 +10,17 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#E4E9E9}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k709{to{stroke-dashoffset:-7.800000000000011}}
-.k709{animation:k709 2450ms linear infinite}
-@keyframes k710{to{stroke-dashoffset:20.19999999999999}}
-.k710{animation:k710 2450ms linear infinite}
-@keyframes k711{to{stroke-dashoffset:42.19999999999999}}
-.k711{animation:k711 2450ms linear infinite}
-@keyframes k712{to{stroke-dashoffset:97.19999999999999}}
-.k712{animation:k712 2450ms linear infinite}
-@keyframes k713{to{stroke-dashoffset:125.19999999999999}}
-.k713{animation:k713 2450ms linear infinite}
-@keyframes k714{to{stroke-dashoffset:147.2}}
-.k714{animation:k714 2450ms linear infinite}
+@keyframes k715{to{stroke-dashoffset:-21.80000000000001}}
+.k715{animation:k715 2750ms linear infinite}
+@keyframes k716{to{stroke-dashoffset:6.199999999999989}}
+.k716{animation:k716 2750ms linear infinite}
+@keyframes k717{to{stroke-dashoffset:28.19999999999999}}
+.k717{animation:k717 2750ms linear infinite}
+@keyframes k718{to{stroke-dashoffset:83.19999999999999}}
+.k718{animation:k718 2750ms linear infinite}
+@keyframes k719{to{stroke-dashoffset:111.19999999999999}}
+.k719{animation:k719 2750ms linear infinite}
+@keyframes k720{to{stroke-dashoffset:133.2}}
+.k720{animation:k720 2750ms linear infinite}
 </style>
 <g><path class="bus" stroke="#8A9599" d="M0,24 H22.80000000000001 V43.5"/><path class="cm k715" stroke="#C9D3D6" stroke-dasharray="34 176" stroke-dashoffset="188.2" d="M0,24 H22.80000000000001 V41"/><path class="cm k716" stroke="#AEB9BD" stroke-dasharray="28 182" stroke-dashoffset="216.2" d="M0,24 H22.80000000000001 V41"/><path class="cm k717" stroke="#9AA5A9" stroke-dasharray="22 188" stroke-dashoffset="238.2" d="M0,24 H22.80000000000001 V41"/><path class="cm k718" stroke="#C9D3D6" stroke-dasharray="34 176" stroke-dashoffset="293.2" d="M0,24 H22.80000000000001 V41"/><path class="cm k719" stroke="#AEB9BD" stroke-dasharray="28 182" stroke-dashoffset="321.2" d="M0,24 H22.80000000000001 V41"/><path class="cm k720" stroke="#9AA5A9" stroke-dasharray="22 188" stroke-dashoffset="343.2" d="M0,24 H22.80000000000001 V41"/></g><g><circle cx="22.80000000000001" cy="48" r="4.5" fill="none" stroke="#8A9599" stroke-width="2"/><circle cx="22.80000000000001" cy="48" r="2" fill="#8A9599"/></g><text x="22.80000000000001" y="66" class="ts" font-size="10" letter-spacing="1" text-anchor="middle">REPO</text></svg>

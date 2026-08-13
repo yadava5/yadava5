@@ -10,17 +10,29 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#E4E9E9}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k733{to{stroke-dashoffset:63.39999999999998}}
-.k733{animation:k733 2100ms linear infinite}
-@keyframes k734{to{stroke-dashoffset:91.39999999999998}}
-.k734{animation:k734 2100ms linear infinite}
-@keyframes k735{to{stroke-dashoffset:113.39999999999998}}
-.k735{animation:k735 2100ms linear infinite}
-@keyframes k736{to{stroke-dashoffset:168.39999999999998}}
-.k736{animation:k736 2100ms linear infinite}
-@keyframes k737{to{stroke-dashoffset:196.39999999999998}}
-.k737{animation:k737 2100ms linear infinite}
-@keyframes k738{to{stroke-dashoffset:218.39999999999998}}
-.k738{animation:k738 2100ms linear infinite}
+@keyframes k739{to{stroke-dashoffset:-170.6}}
+.k739{animation:k739 2450ms linear infinite}
+@keyframes k740{to{stroke-dashoffset:-142.6}}
+.k740{animation:k740 2450ms linear infinite}
+@keyframes k741{to{stroke-dashoffset:-120.6}}
+.k741{animation:k741 2450ms linear infinite}
+@keyframes k742{to{stroke-dashoffset:-65.6}}
+.k742{animation:k742 2450ms linear infinite}
+@keyframes k743{to{stroke-dashoffset:-37.599999999999994}}
+.k743{animation:k743 2450ms linear infinite}
+@keyframes k744{to{stroke-dashoffset:-15.599999999999994}}
+.k744{animation:k744 2450ms linear infinite}
+@keyframes k745{to{stroke-dashoffset:-291}}
+.k745{animation:k745 2450ms linear infinite}
+@keyframes k746{to{stroke-dashoffset:-263}}
+.k746{animation:k746 2450ms linear infinite}
+@keyframes k747{to{stroke-dashoffset:-241}}
+.k747{animation:k747 2450ms linear infinite}
+@keyframes k748{to{stroke-dashoffset:-186.0}}
+.k748{animation:k748 2450ms linear infinite}
+@keyframes k749{to{stroke-dashoffset:-158.0}}
+.k749{animation:k749 2450ms linear infinite}
+@keyframes k750{to{stroke-dashoffset:-136.0}}
+.k750{animation:k750 2450ms linear infinite}
 </style>
 <g><path class="bus" stroke="#E0703A" d="M0,24 H27.599999999999994 V43.5"/><path class="cm k739" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="39.4" d="M0,24 H27.599999999999994 V41"/><path class="cm k740" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="67.4" d="M0,24 H27.599999999999994 V41"/><path class="cm k741" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="89.4" d="M0,24 H27.599999999999994 V41"/><path class="cm k742" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="144.4" d="M0,24 H27.599999999999994 V41"/><path class="cm k743" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="172.4" d="M0,24 H27.599999999999994 V41"/><path class="cm k744" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="194.4" d="M0,24 H27.599999999999994 V41"/></g><circle cx="27.599999999999994" cy="24" r="2.4" fill="#E0703A"/><g><path class="bus" stroke="#E0703A" d="M27.599999999999994,24 H74.8"/><path class="cm k745" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="-81" d="M27.599999999999994,24 H74.8"/><path class="cm k746" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="-53" d="M27.599999999999994,24 H74.8"/><path class="cm k747" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="-31" d="M27.599999999999994,24 H74.8"/><path class="cm k748" stroke="#FFB287" stroke-dasharray="34 176" stroke-dashoffset="24.0" d="M27.599999999999994,24 H74.8"/><path class="cm k749" stroke="#F29260" stroke-dasharray="28 182" stroke-dashoffset="52.0" d="M27.599999999999994,24 H74.8"/><path class="cm k750" stroke="#E87E49" stroke-dasharray="22 188" stroke-dashoffset="74.0" d="M27.599999999999994,24 H74.8"/></g><g><circle cx="27.599999999999994" cy="48" r="4.5" fill="none" stroke="#E0703A" stroke-width="2"/><circle cx="27.599999999999994" cy="48" r="2" fill="#E0703A"/></g><text x="27.599999999999994" y="66" class="ts" font-size="10" letter-spacing="1" text-anchor="middle">REPO</text></svg>

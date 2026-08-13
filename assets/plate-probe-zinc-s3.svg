@@ -10,17 +10,17 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#E4E9E9}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k505{to{stroke-dashoffset:-124}}
-.k505{animation:k505 2750ms linear infinite}
-@keyframes k506{to{stroke-dashoffset:-96}}
-.k506{animation:k506 2750ms linear infinite}
-@keyframes k507{to{stroke-dashoffset:-74}}
-.k507{animation:k507 2750ms linear infinite}
-@keyframes k508{to{stroke-dashoffset:-19.0}}
-.k508{animation:k508 2750ms linear infinite}
-@keyframes k509{to{stroke-dashoffset:9.0}}
-.k509{animation:k509 2750ms linear infinite}
-@keyframes k510{to{stroke-dashoffset:31.0}}
-.k510{animation:k510 2750ms linear infinite}
+@keyframes k511{to{stroke-dashoffset:29}}
+.k511{animation:k511 2750ms linear infinite}
+@keyframes k512{to{stroke-dashoffset:57}}
+.k512{animation:k512 2750ms linear infinite}
+@keyframes k513{to{stroke-dashoffset:79}}
+.k513{animation:k513 2750ms linear infinite}
+@keyframes k514{to{stroke-dashoffset:134.0}}
+.k514{animation:k514 2750ms linear infinite}
+@keyframes k515{to{stroke-dashoffset:162.0}}
+.k515{animation:k515 2750ms linear infinite}
+@keyframes k516{to{stroke-dashoffset:184.0}}
+.k516{animation:k516 2750ms linear infinite}
 </style>
 <g><path class="bus" stroke="#8A9599" d="M0,36 H180"/><path class="cm k511" stroke="#C9D3D6" stroke-dasharray="34 176" stroke-dashoffset="239" d="M0,36 H180"/><path class="cm k512" stroke="#AEB9BD" stroke-dasharray="28 182" stroke-dashoffset="267" d="M0,36 H180"/><path class="cm k513" stroke="#9AA5A9" stroke-dasharray="22 188" stroke-dashoffset="289" d="M0,36 H180"/><path class="cm k514" stroke="#C9D3D6" stroke-dasharray="34 176" stroke-dashoffset="344.0" d="M0,36 H180"/><path class="cm k515" stroke="#AEB9BD" stroke-dasharray="28 182" stroke-dashoffset="372.0" d="M0,36 H180"/><path class="cm k516" stroke="#9AA5A9" stroke-dasharray="22 188" stroke-dashoffset="394.0" d="M0,36 H180"/></g><circle cx="54" cy="36" r="2.6" fill="#8A9599"/><path class="bus" stroke="#8A9599" d="M54,36 V58"/><g><circle cx="54" cy="64" r="5.5" fill="none" stroke="#8A9599" stroke-width="2"/><circle cx="54" cy="64" r="2" fill="#8A9599"/></g><text x="68" y="52" class="ts dim" font-size="8.5" letter-spacing="1.2">TP2</text><text x="68" y="68" class="ts" font-size="11.5" letter-spacing="1.3">SYSTEM CARD</text></svg>

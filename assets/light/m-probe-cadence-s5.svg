@@ -10,17 +10,17 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#1A2224}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#1A2224;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k1477{to{stroke-dashoffset:6.199999999999989}}
-.k1477{animation:k1477 2100ms linear infinite}
-@keyframes k1478{to{stroke-dashoffset:34.19999999999999}}
-.k1478{animation:k1478 2100ms linear infinite}
-@keyframes k1479{to{stroke-dashoffset:56.19999999999999}}
-.k1479{animation:k1479 2100ms linear infinite}
-@keyframes k1480{to{stroke-dashoffset:111.19999999999999}}
-.k1480{animation:k1480 2100ms linear infinite}
-@keyframes k1481{to{stroke-dashoffset:139.2}}
-.k1481{animation:k1481 2100ms linear infinite}
-@keyframes k1482{to{stroke-dashoffset:161.2}}
-.k1482{animation:k1482 2100ms linear infinite}
+@keyframes k1483{to{stroke-dashoffset:63.39999999999998}}
+.k1483{animation:k1483 2100ms linear infinite}
+@keyframes k1484{to{stroke-dashoffset:91.39999999999998}}
+.k1484{animation:k1484 2100ms linear infinite}
+@keyframes k1485{to{stroke-dashoffset:113.39999999999998}}
+.k1485{animation:k1485 2100ms linear infinite}
+@keyframes k1486{to{stroke-dashoffset:168.39999999999998}}
+.k1486{animation:k1486 2100ms linear infinite}
+@keyframes k1487{to{stroke-dashoffset:196.39999999999998}}
+.k1487{animation:k1487 2100ms linear infinite}
+@keyframes k1488{to{stroke-dashoffset:218.39999999999998}}
+.k1488{animation:k1488 2100ms linear infinite}
 </style>
 <g><path class="bus" stroke="#1F6D5C" d="M0,24 H31.600000000000023 V43.5"/><path class="cm k1483" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="273.4" d="M0,24 H31.600000000000023 V41"/><path class="cm k1484" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="301.4" d="M0,24 H31.600000000000023 V41"/><path class="cm k1485" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="323.4" d="M0,24 H31.600000000000023 V41"/><path class="cm k1486" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="378.4" d="M0,24 H31.600000000000023 V41"/><path class="cm k1487" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="406.4" d="M0,24 H31.600000000000023 V41"/><path class="cm k1488" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="428.4" d="M0,24 H31.600000000000023 V41"/></g><g><circle cx="31.600000000000023" cy="48" r="4.5" fill="none" stroke="#1F6D5C" stroke-width="2"/><circle cx="31.600000000000023" cy="48" r="2" fill="#1F6D5C"/></g><text x="31.600000000000023" y="66" class="ts" font-size="10" letter-spacing="1" text-anchor="middle">RLS SUITE</text></svg>

@@ -10,17 +10,17 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#1A2224}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#1A2224;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k1300{to{stroke-dashoffset:281}}
-.k1300{animation:k1300 2450ms linear infinite}
-@keyframes k1301{to{stroke-dashoffset:309}}
-.k1301{animation:k1301 2450ms linear infinite}
-@keyframes k1302{to{stroke-dashoffset:331}}
-.k1302{animation:k1302 2450ms linear infinite}
-@keyframes k1303{to{stroke-dashoffset:386.0}}
-.k1303{animation:k1303 2450ms linear infinite}
-@keyframes k1304{to{stroke-dashoffset:414.0}}
-.k1304{animation:k1304 2450ms linear infinite}
-@keyframes k1305{to{stroke-dashoffset:436.0}}
-.k1305{animation:k1305 2450ms linear infinite}
+@keyframes k1306{to{stroke-dashoffset:209}}
+.k1306{animation:k1306 2750ms linear infinite}
+@keyframes k1307{to{stroke-dashoffset:237}}
+.k1307{animation:k1307 2750ms linear infinite}
+@keyframes k1308{to{stroke-dashoffset:259}}
+.k1308{animation:k1308 2750ms linear infinite}
+@keyframes k1309{to{stroke-dashoffset:314.0}}
+.k1309{animation:k1309 2750ms linear infinite}
+@keyframes k1310{to{stroke-dashoffset:342.0}}
+.k1310{animation:k1310 2750ms linear infinite}
+@keyframes k1311{to{stroke-dashoffset:364.0}}
+.k1311{animation:k1311 2750ms linear infinite}
 </style>
 <g><path class="bus" stroke="#5F6E73" d="M0,36 H54 V58"/><path class="cm k1306" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="419" d="M0,36 H54 V55.5"/><path class="cm k1307" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="447" d="M0,36 H54 V55.5"/><path class="cm k1308" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="469" d="M0,36 H54 V55.5"/><path class="cm k1309" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="524.0" d="M0,36 H54 V55.5"/><path class="cm k1310" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="552.0" d="M0,36 H54 V55.5"/><path class="cm k1311" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="574.0" d="M0,36 H54 V55.5"/></g><g><circle cx="54" cy="64" r="5.5" fill="none" stroke="#5F6E73" stroke-width="2"/><circle cx="54" cy="64" r="2" fill="#5F6E73"/></g><text x="68" y="52" class="ts dim" font-size="8.5" letter-spacing="1.2">TP3</text><text x="68" y="68" class="ts" font-size="11.5" letter-spacing="1.3">REPO</text></svg>

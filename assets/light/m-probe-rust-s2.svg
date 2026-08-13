@@ -10,35 +10,17 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#1A2224}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#1A2224;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k1384{to{stroke-dashoffset:-206}}
-.k1384{animation:k1384 2100ms linear infinite}
-@keyframes k1385{to{stroke-dashoffset:-178}}
-.k1385{animation:k1385 2100ms linear infinite}
-@keyframes k1386{to{stroke-dashoffset:-156}}
-.k1386{animation:k1386 2100ms linear infinite}
-@keyframes k1387{to{stroke-dashoffset:-316}}
-.k1387{animation:k1387 2450ms linear infinite}
-@keyframes k1388{to{stroke-dashoffset:-288}}
-.k1388{animation:k1388 2450ms linear infinite}
-@keyframes k1389{to{stroke-dashoffset:-266}}
-.k1389{animation:k1389 2450ms linear infinite}
-@keyframes k1390{to{stroke-dashoffset:-256}}
-.k1390{animation:k1390 2750ms linear infinite}
-@keyframes k1391{to{stroke-dashoffset:-228}}
-.k1391{animation:k1391 2750ms linear infinite}
-@keyframes k1392{to{stroke-dashoffset:-206}}
-.k1392{animation:k1392 2750ms linear infinite}
-@keyframes k1393{to{stroke-dashoffset:-231}}
-.k1393{animation:k1393 2450ms linear infinite}
-@keyframes k1394{to{stroke-dashoffset:-203}}
-.k1394{animation:k1394 2450ms linear infinite}
-@keyframes k1395{to{stroke-dashoffset:-181}}
-.k1395{animation:k1395 2450ms linear infinite}
-@keyframes k1396{to{stroke-dashoffset:-126.0}}
-.k1396{animation:k1396 2450ms linear infinite}
-@keyframes k1397{to{stroke-dashoffset:-98.0}}
-.k1397{animation:k1397 2450ms linear infinite}
-@keyframes k1398{to{stroke-dashoffset:-76.0}}
-.k1398{animation:k1398 2450ms linear infinite}
+@keyframes k1399{to{stroke-dashoffset:-170.6}}
+.k1399{animation:k1399 2450ms linear infinite}
+@keyframes k1400{to{stroke-dashoffset:-142.6}}
+.k1400{animation:k1400 2450ms linear infinite}
+@keyframes k1401{to{stroke-dashoffset:-120.6}}
+.k1401{animation:k1401 2450ms linear infinite}
+@keyframes k1402{to{stroke-dashoffset:-65.6}}
+.k1402{animation:k1402 2450ms linear infinite}
+@keyframes k1403{to{stroke-dashoffset:-37.599999999999994}}
+.k1403{animation:k1403 2450ms linear infinite}
+@keyframes k1404{to{stroke-dashoffset:-15.599999999999994}}
+.k1404{animation:k1404 2450ms linear infinite}
 </style>
 <g><path class="bus" stroke="#9A3412" d="M0,24 H74.8"/><path class="cm k1399" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="39.4" d="M0,24 H74.8"/><path class="cm k1400" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="67.4" d="M0,24 H74.8"/><path class="cm k1401" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="89.4" d="M0,24 H74.8"/><path class="cm k1402" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="144.4" d="M0,24 H74.8"/><path class="cm k1403" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="172.4" d="M0,24 H74.8"/><path class="cm k1404" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="194.4" d="M0,24 H74.8"/></g><circle cx="27.599999999999994" cy="24" r="2.4" fill="#9A3412"/><path class="bus" stroke="#9A3412" d="M27.599999999999994,24 V43.5"/><g><circle cx="27.599999999999994" cy="48" r="4.5" fill="none" stroke="#9A3412" stroke-width="2"/><circle cx="27.599999999999994" cy="48" r="2" fill="#9A3412"/></g><text x="27.599999999999994" y="66" class="ts" font-size="10" letter-spacing="1" text-anchor="middle">LIVE</text></svg>
