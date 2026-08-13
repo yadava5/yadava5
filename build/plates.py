@@ -1494,8 +1494,10 @@ def plate_applied() -> str:
 #
 # The alert policy drawn to scale from the phone in the reader's hand:
 # three arcs at 0.5 / 1.0 / 2.0 m along a measured ruler, their styles
-# keyed to a swatch legend — solid rust interrupts, dashed rust pulses,
-# zinc stays silent, the mark's own encoding at board scale. The behaviour
+# keyed to a swatch legend — solid rust buzzes and says Stop, dashed rust
+# pulses and says Caution, and zinc is NOT a silent ring: past 1.0 m the
+# automatic check does nothing, and 2.0 m is how far the manual Describe
+# call reaches. The mark's own encoding at board scale. The behaviour
 # words live in the legend rather than on the arcs because a label laid
 # across a curve reads as ink through type at exactly the radii that
 # matter. Below: the settings slider the app actually shows, drawn with
@@ -1524,11 +1526,11 @@ def plate_visualassist() -> str:
         + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="2" d="M479.8,93 A240,240 0 0 1 479.8,333"/>'
         # the legend, keyed by the arcs' own strokes
         + f'<path fill="none" stroke="{T["rust"]}" stroke-width="2" d="M522,176 H534"/>'
-        + lbl(540, 180, "0.5 M — INTERRUPT", cls="ts", size=11, ls=1.3)
+        + lbl(540, 180, "0.5 M — BUZZ + STOP", cls="ts", size=11, ls=1.3)
         + f'<path fill="none" stroke="{T["rust"]}" stroke-width="2" stroke-dasharray="4.5 4.8" d="M522,201 H534"/>'
-        + lbl(540, 205, "1.0 M — PULSE", cls="ts", size=11, ls=1.3)
+        + lbl(540, 205, "1.0 M — PULSE + CAUTION", cls="ts", size=11, ls=1.3)
         + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="2" d="M522,226 H534"/>'
-        + lbl(540, 230, "2.0 M — STAY SILENT", cls="ts", size=11, ls=1.3)
+        + lbl(540, 230, "2.0 M — DESCRIBE REACH", cls="ts", size=11, ls=1.3)
         # the settings slider, lead severed before the service that ignores it
         + lbl(150, 372, "SETTINGS · ALERT DISTANCE — METRES, READ ALOUD", size=10, ls=1.1)
         + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="2" '
@@ -1551,14 +1553,19 @@ def plate_visualassist() -> str:
     )
     return head(
         524,
-        "VII · VisualAssist — 0.5 / 1.0 / 2.0 m: interrupt, pulse, stay silent; the slider is bound to nothing",
+        "VII · VisualAssist — 0.5 m buzzes and says Stop, 1.0 m pulses and says Caution, and 2.0 m is how far the manual Describe call reaches; the slider is bound to nothing",
         "VII · VisualAssist — the alert policy drawn to scale from the phone "
-        "in your hand: interrupt inside 0.5 m, pulse at 1.0, stay silent "
-        "past 2.0. Below it, the settings slider the app actually shows — "
-        "labelled in metres, its value read aloud — drawn with its lead "
-        "ending open before LiDARService, the threshold it never consults. "
-        "A live control that does nothing lies to the person the app is "
-        "for.",
+        "in your hand: inside 0.5 m a critical buzz and a spoken Stop, out to "
+        "1.0 m a warning pulse and a spoken Caution, and past 1.0 m the "
+        "automatic check does nothing at all — silence begins there, not at "
+        "the widest ring. The 2.0 m arc is the reach of the manual Describe "
+        "call: zones farther out are not mentioned. Below it, the settings "
+        "slider the app actually shows — labelled in metres, its value read "
+        "aloud — drawn with its lead ending open before LiDARService, the "
+        "threshold it never consults. A live control that does nothing lies "
+        "to the person the app is for. And a three-second announcement "
+        "cooldown sits above the critical branch, so the Stop the code "
+        "comments call always-announce can be swallowed for as long as that.",
         key="plate-7-visualassist.svg",
         col=SEC_COL, frame=VA_FRAME,
     ) + css_close() + body + "</svg>"
@@ -2081,11 +2088,11 @@ def m_visualassist() -> str:
         + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="2" d="M357.2,110 A200,200 0 0 1 357.2,310"/>'
         # the legend, keyed by the arcs' own strokes
         + f'<path fill="none" stroke="{T["rust"]}" stroke-width="2" d="M92,326 H104"/>'
-        + lbl(110, 330, "0.5 M — INTERRUPT", cls="ts", size=11, ls=1.3)
+        + lbl(110, 330, "0.5 M — BUZZ + STOP", cls="ts", size=11, ls=1.3)
         + f'<path fill="none" stroke="{T["rust"]}" stroke-width="2" stroke-dasharray="4.5 4.8" d="M92,348 H104"/>'
-        + lbl(110, 352, "1.0 M — PULSE", cls="ts", size=11, ls=1.3)
+        + lbl(110, 352, "1.0 M — PULSE + CAUTION", cls="ts", size=11, ls=1.3)
         + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="2" d="M92,370 H104"/>'
-        + lbl(110, 374, "2.0 M — STAY SILENT", cls="ts", size=11, ls=1.3)
+        + lbl(110, 374, "2.0 M — DESCRIBE REACH", cls="ts", size=11, ls=1.3)
         # the settings slider, lead severed before the service that ignores it
         + lbl(92, 414, "SETTINGS · ALERT DISTANCE — METRES, READ ALOUD", size=10, ls=1.1)
         + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="2" '
@@ -2109,11 +2116,17 @@ def m_visualassist() -> str:
         650,
         "VII · VisualAssist — the alert policy to scale, phone cut",
         "VII · VisualAssist, phone cut — the alert policy to scale from the "
-        "phone drawn on the plate: interrupt inside 0.5 m, pulse at 1.0, stay "
-        "silent past 2.0. Below it, the settings slider the app actually "
-        "shows — labelled in metres, its value read aloud — its lead drawn "
-        "ending open before LiDARService, the threshold it never consults. A "
-        "live control that does nothing lies to the person the app is for.",
+        "phone drawn on the plate: inside 0.5 m a critical buzz and a spoken "
+        "Stop, out to 1.0 m a warning pulse and a spoken Caution, and past "
+        "1.0 m the automatic check does nothing at all — silence begins "
+        "there, not at the widest ring. The 2.0 m arc is the reach of the "
+        "manual Describe call: zones farther out are not mentioned. Below it, "
+        "the settings slider the app actually shows — labelled in metres, its "
+        "value read aloud — its lead drawn ending open before LiDARService, "
+        "the threshold it never consults. A live control that does nothing "
+        "lies to the person the app is for. And a three-second announcement "
+        "cooldown sits above the critical branch, so the Stop the code "
+        "comments call always-announce can be swallowed for as long as that.",
         key="m-7-visualassist.svg",
         col=(88, 412), frame=(2.5, 35, 2.5), w=440,
     ) + css_close() + body + "</svg>"

@@ -492,7 +492,7 @@
       "repo": "visualassist",
       "path": "VisualAssist/Services/LiDARService.swift",
       "extractor": "sed -n 's/.*cautionDistance: Float = \\([0-9.]*\\).*/\\1/p' \"$BLOB\"",
-      "note": "The widest ring is the one that says the most about the design: inside 2.0 m the obstacle is drawn on screen and deliberately NOT announced. An aid that narrates every wall is an aid people switch off, so silence here is a feature with a threshold attached, not an omission."
+      "note": "2.0 m is the reach of the MANUAL Describe call, not the edge of a silent zone. Read from LiDARService.swift:295-327: checkForAlerts fires a .critical haptic plus a spoken Stop! under criticalDistance, a .warning haptic plus a spoken Caution between there and warningDistance, and NOTHING past 1.0 m. Automatic silence begins at 1.0, not 2.0. cautionDistance appears in exactly one place, announceSurroundings (lines 148/154/161/167) -- the function behind the Describe button -- where it decides which zones get spoken: farther than 2.0 m and the zone is not mentioned. It never gates an automatic alert. This note used to call the silence inside 2.0 m a feature with a threshold attached; that read a design intention into a constant the alert path never consults, and the ladder the plate drew was off by a whole band. The row keeps its anchor in the drawing: the settings slider draws 2.0 as its right-hand stop and the legend line names it as Describe's reach, so the arc stays at its true radius and says something true. Second defect, now admitted in the description: a 3.0 s announcementCooldown guard sits ABOVE the critical branch, so the Stop! the code comments call always-announce can be suppressed for up to three seconds."
     }
   ],
   "$unpinnable_note": [
