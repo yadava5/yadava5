@@ -184,8 +184,18 @@ if (!GATE) {
   // success line that claims coverage the run did not have is the same defect
   // as a check that cannot fail — it just fails upward. So it now counts what
   // was actually graded.
+  // Second correction, same defect as the first. "…land one" read as though
+  // every desktop plate fires a gesture burst; most do not. The clause has TWO
+  // satisfying routes (`r.live >= MIN_LIVE || r.strong / r.n >= 0.9`) and on
+  // this design the second carries the overwhelming majority — the comets are
+  // a strong continuous carrier rather than a periodic burst, which is legal
+  // and deliberate. Reporting the two as one number inflates what was
+  // demonstrated, which is the failure this line has now had twice.
   const exempt = rows.filter(([, r]) => r.mobile).length;
-  console.log(`\nMOTION GATE PASSED — all ${rows.length} plates sustain a carrier; `
-    + `${rows.length - exempt} are also held to the gesture clause and land one. `
+  const held = rows.filter(([, r]) => !r.mobile);
+  const burst = held.filter(([, r]) => r.live >= MIN_LIVE).length;
+  console.log(`\nMOTION GATE PASSED — all ${rows.length} plates sustain a carrier. `
+    + `${held.length} are also held to the gesture clause: ${burst} land a burst, `
+    + `${held.length - burst} clear it as a carrier strong enough to be the glance. `
     + `${exempt} mobile cards are excused it by design, not by accident.`);
 }
