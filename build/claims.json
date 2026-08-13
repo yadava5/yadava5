@@ -298,15 +298,14 @@
       "repo": "cadence",
       "path": "lib/config/migrations/0002_enable_rls.sql",
       "extractor": "grep -cE '^ALTER TABLE .* FORCE ROW LEVEL SECURITY' \"$BLOB\"",
-      "note": "Anchored to ^ALTER TABLE on purpose. A bare `grep -c 'FORCE ROW LEVEL SECURITY'` returns 8, because the file's own header comment explains what FORCE does — the same prose-counting mistake as the row above, in a file where it would have inflated the claim. user_profiles is deliberately excluded from RLS (0002_enable_rls.sql:21-22), so 'every tenant table' is seven, and the README now says seven. ROUND 28: the README sentence this anchored was cut; plate-5-cadence and m-5-cadence draw 'RLS FORCEd on all 7 tables', so the row pins the occurrence that exists. README's only 7 is now 'Seven systems', a different noun, exempted by name rather than licensed by this row."
+      "note": "Anchored to ^ALTER TABLE on purpose. A bare `grep -c 'FORCE ROW LEVEL SECURITY'` returns 8, because the file's own header comment explains what FORCE does — the same prose-counting mistake as the row above, in a file where it would have inflated the claim. user_profiles is deliberately excluded from RLS (0002_enable_rls.sql:21-22), so 'every tenant table' is seven, and the README now says seven. ROUND 28: the README sentence this anchored was cut; plate-5-cadence and m-5-cadence draw 'RLS FORCEd on all 7 tables', so the row pins the occurrence that exists. README's only 7 was 'Seven systems', a different noun, exempted by name rather than licensed by this row. ROUND 29 (2026-08-13): that 7 is gone. The page has seven SECTIONS but six systems — §I is a job whose plate draws NO PRODUCT MARK, and the hero draws six product marks — so the opening reads 'Six systems, and a year of paid data work.' README.md now draws no 7 at all, the README.md:7 exemption was deleted with the sentence (claims.mjs fails on an exemption nothing uses, which is how this was caught), and this row pins its occurrences on the two cadence plates and nowhere else."
     },
     {
       "id": "cadence.idor_services",
       "value": "6",
       "drawn_on": [
         "plate-5-cadence.svg",
-        "m-5-cadence.svg",
-        "README.md"
+        "m-5-cadence.svg"
       ],
       "repo": "cadence",
       "paths": [
@@ -318,7 +317,7 @@
         "lib/services/TaskService.ts"
       ],
       "extractor": "grep -lE 'AND \"userId\" = [$]' $BLOBS | grep -c .",
-      "note": "Counted from the guard in the QUERY, not from a comment about it. The previous row here counted the word IDOR in docstrings and returned 7; four different methods return 7, 8, 9 and 15, so the count of vulnerabilities is an audit finding and belongs in prose. How many services now scope by owner is a property of the code. Round 27: plate-5 left this row's drawn_on — the rebuilt plate draws the six services as six row-pairs, marks rather than a word, and a mark is not a token this gate can read. The README still says six and this row still holds it."
+      "note": "Counted from the guard in the QUERY, not from a comment about it. The previous row here counted the word IDOR in docstrings and returned 7; four different methods return 7, 8, 9 and 15, so the count of vulnerabilities is an audit finding and belongs in prose. How many services now scope by owner is a property of the code. Round 27: plate-5 left this row's drawn_on — the rebuilt plate draws the six services as six row-pairs, marks rather than a word, and a mark is not a token this gate can read. ROUND 29 (2026-08-13): README.md left this row's drawn_on. The README BODY sentence that said six was cut rounds ago — the only six left in that file is inside plate-5's <img alt>, which is a verbatim copy of the plate's own <desc>, i.e. generated prose. Keeping README.md here was not harmless: the row's per-file pool silently licensed the page's new opening word, 'Six systems', and the claims gate passed. Anchoring it instead would have repeated the mistake automl.tool_sets records under Round 27 — an anchor into alt text pins text the build rewrites, and it went orphaned. The two plates draw the word; this row accounts for those two occurrences and nothing in the prose."
     },
     {
       "id": "cadence.conditional_owner_guard",
@@ -548,7 +547,7 @@
     "README.md:3.0": "the version field of the licence identifier GPL-3.0 (see automl.license)",
     "README.md:4": "'Four of them ship a system card' — enumerated on the page (Glyph, jetpack, Cadence, Applied)",
     "README.md:5": "'[PR #5]' — the number of the open relicence pull request on the AutoML repository, an address rather than a measurement",
-    "README.md:7": "'Seven systems.' — the count of sections on this page. Deliberately NOT licensed by cadence.tenant_tables or automl.tool_sets, which are also 7 and are about repositories; both now pin their occurrences on their own plates."
+    "README.md:6": "'Six systems, and a year of paid data work.' — the count of PRODUCTS on this page, which is the count of marks the hero draws: §I is a job, not a product, and its plate is the empty footprint that says NO PRODUCT MARK — THE WORK IS OFF-REPO. It replaced 'Seven systems.', which counted sections and called them systems; the README.md:7 key that carried that went with it, because claims.mjs fails on an exemption nothing uses. Deliberately NOT licensed by cadence.idor_services or cadence.conditional_owner_guard, which are also 6 and are counts of service files in a repository — the first of those held README.md in its drawn_on and would have waved this word through in silence, which is exactly what a per-file pool is for catching."
   },
   "$attested_note": [
     "Facts about the AUTHOR rather than measurements of a repository.",
