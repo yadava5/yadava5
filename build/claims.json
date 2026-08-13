@@ -102,8 +102,8 @@
       "value": "97.01",
       "unit": "%",
       "drawn_on": [
-        "plate-1-glyph.svg",
-        "m-1-glyph.svg",
+        "plate-3-glyph.svg",
+        "m-3-glyph.svg",
         "README.md"
       ],
       "repo": "glyph",
@@ -111,44 +111,12 @@
       "extractor": "jq -r '(.overall.accuracy_pct*100|round)/100' \"$BLOB\""
     },
     {
-      "id": "glyph.test_set_size",
-      "value": "10000",
-      "drawn_on": [
-        "README.md"
-      ],
-      "repo": "glyph",
-      "path": "benchmarks/mnist_eval.json",
-      "extractor": "jq -r '.dataset.images' \"$BLOB\""
-    },
-    {
-      "id": "glyph.wrong",
-      "value": "299",
-      "drawn_on": [
-        "plate-1-glyph.svg",
-        "README.md"
-      ],
-      "repo": "glyph",
-      "path": "benchmarks/mnist_misclassified.csv",
-      "extractor": "tail -n +2 \"$BLOB\" | grep -c .",
-      "note": "Counted from the error list itself, not from 10000-9701 — so the 299 marks the plate draws and the number beside them come from one artifact."
-    },
-    {
-      "id": "glyph.confident_errors",
-      "value": "79",
-      "drawn_on": [
-        "plate-1-glyph.svg",
-        "README.md"
-      ],
-      "repo": "glyph",
-      "path": "benchmarks/mnist_misclassified.csv",
-      "extractor": "tail -n +2 \"$BLOB\" | awk -F, '$4>0.9' | grep -c .",
-      "note": "Column 4 is pred_activation — the softmax mass on the label it wrongly chose."
-    },
-    {
       "id": "glyph.deployed_wasm_bytes",
       "value": "43751",
       "unit": "bytes",
       "drawn_on": [
+        "plate-3-glyph.svg",
+        "m-3-glyph.svg",
         "README.md"
       ],
       "live": "https://getglyph.vercel.app/wasm/fast_mnist.wasm",
@@ -157,42 +125,21 @@
       "note": "A claim about the DEPLOYED artifact, not a committed one — checked against the deployment with curl, exactly as the sentence describes. Deliberately uncached, and it broke the build the day the SIMD work landed on main and Vercel began serving a different binary. That is the point of it."
     },
     {
-      "id": "glyph.deployed_wasm_type",
-      "value": "application/wasm",
-      "drawn_on": [
-        "README.md"
-      ],
-      "live": "https://getglyph.vercel.app/wasm/fast_mnist.wasm",
-      "header": "content-type",
-      "extractor": "echo \"$HEADER\""
-    },
-    {
       "id": "glyph.served_wasm_sha256",
       "value": "e681d2f76d41305aa3b8c250799f898bd1139497f60580ed59000d49cf5d6360",
-      "drawn_on": [
-        "README.md"
-      ],
+      "drawn_on": [],
       "live": "https://getglyph.vercel.app/wasm/fast_mnist.wasm",
       "digest": "sha256",
       "extractor": "echo \"$HEADER\"",
-      "note": "ADDED 2026-08-10, to close a hole the sibling row's own note had been documenting rather than fixing. glyph.deployed_wasm_sha256 hashes the REPO blob; glyph.deployed_wasm_bytes reads the DEPLOYMENT's content-length. Two sources, so a same-length different-bytes deploy passed both green — which is not hypothetical, it half-happened on 2026-08-08. This row runs the reader's own command against the host: curl the body, sha256 it, compare. With this and glyph.deployed_wasm_sha256 both green, the deployed bytes and the committed bytes are proven equal rather than separately plausible, and §III's 'this page's CI runs that same hash on every push' is a statement about machinery that exists."
-    },
-    {
-      "id": "glyph.msimd128_line",
-      "value": "332",
-      "drawn_on": [
-        "README.md"
-      ],
-      "repo": "glyph",
-      "path": "CMakeLists.txt",
-      "extractor": "grep -n -- '-msimd128' \"$BLOB\" | head -1 | cut -d: -f1",
-      "note": "The README cites CMakeLists.txt:332 by line. Line citations drift silently as a file grows; this one now fails the build instead — and it earned its keep: it was 279 at the old pin, a coverage block and an eval target were inserted above it, and this row is what flagged the drift. The sentence you are reading said 330 until 2026-08-10, while the value beside it said 332: a note about line-citation drift, itself carrying a stale line citation."
+      "note": "ADDED 2026-08-10, to close a hole the sibling row's own note had been documenting rather than fixing. glyph.deployed_wasm_sha256 hashes the REPO blob; glyph.deployed_wasm_bytes reads the DEPLOYMENT's content-length. Two sources, so a same-length different-bytes deploy passed both green — which is not hypothetical, it half-happened on 2026-08-08. This row runs the reader's own command against the host: curl the body, sha256 it, compare. With this and glyph.deployed_wasm_sha256 both green, the deployed bytes and the committed bytes are proven equal rather than separately plausible, and §III's 'this page's CI runs that same hash on every push' is a statement about machinery that exists. ROUND 28: drawn_on emptied, row kept — see glyph.deployed_wasm_sha256. The pair is what makes the plates' BYTE-IDENTICAL TO MAIN true; glyph.deployed_wasm_bytes proves length only, and a same-length different-bytes deploy passed both halves green on 2026-08-08."
     },
     {
       "id": "jetpack.parallel_mbs",
       "value": "422",
       "unit": "MB/s",
       "drawn_on": [
+        "plate-2-jetpack.svg",
+        "m-2-jetpack.svg",
         "README.md"
       ],
       "repo": "jetpack",
@@ -204,6 +151,8 @@
       "value": "66.2",
       "unit": "MB/s",
       "drawn_on": [
+        "plate-2-jetpack.svg",
+        "m-2-jetpack.svg",
         "README.md"
       ],
       "repo": "jetpack",
@@ -225,23 +174,12 @@
       "note": "Derived from the two scores, not stored — so it cannot drift from them."
     },
     {
-      "id": "jetpack.adler_scalar_gbs",
-      "value": "1.52",
-      "unit": "GB/s",
-      "drawn_on": [
-        "plate-2-jetpack.svg",
-        "README.md"
-      ],
-      "repo": "jetpack",
-      "path": "benchmarks/jmh-results-rigorous.json",
-      "extractor": "jq -r '([.[]|select(.benchmark|endswith(\"Adler32Benchmark.scalar\")).primaryMetric.score][0]/1e9*100|round)/100' \"$BLOB\""
-    },
-    {
       "id": "jetpack.adler_vector_gbs",
       "value": "4.26",
       "unit": "GB/s",
       "drawn_on": [
         "plate-2-jetpack.svg",
+        "m-2-jetpack.svg",
         "README.md"
       ],
       "repo": "jetpack",
@@ -254,6 +192,7 @@
       "unit": "GB/s",
       "drawn_on": [
         "plate-2-jetpack.svg",
+        "m-2-jetpack.svg",
         "README.md"
       ],
       "repo": "jetpack",
@@ -262,54 +201,16 @@
       "note": "The row the page keeps because it loses to it."
     },
     {
-      "id": "jetpack.adler_vector_speedup",
-      "value": "2.80",
-      "unit": "x",
-      "drawn_on": [
-        "plate-2-jetpack.svg",
-        "README.md"
-      ],
-      "repo": "jetpack",
-      "path": "benchmarks/jmh-results-rigorous.json",
-      "extractor": "jq -r '([.[]|select(.benchmark|endswith(\"Adler32Benchmark.vector\")).primaryMetric.score][0]/[.[]|select(.benchmark|endswith(\"Adler32Benchmark.scalar\")).primaryMetric.score][0]*100|round)/100' \"$BLOB\" | awk '{printf \"%.2f\", $1}'"
-    },
-    {
-      "id": "jetpack.ci_low",
-      "value": "0.7",
-      "unit": "%",
-      "drawn_on": [
-        "README.md"
-      ],
-      "repo": "jetpack",
-      "path": "benchmarks/jmh-results-rigorous.json",
-      "extractor": "jq -r '[.[]|.primaryMetric.scoreError/.primaryMetric.score*100]|min*10|round/10' \"$BLOB\""
-    },
-    {
-      "id": "jetpack.ci_high",
-      "value": "6.9",
-      "unit": "%",
-      "drawn_on": [
-        "README.md"
-      ],
-      "repo": "jetpack",
-      "path": "benchmarks/jmh-results-rigorous.json",
-      "extractor": "jq -r '[.[]|.primaryMetric.scoreError/.primaryMetric.score*100]|max*10|round/10' \"$BLOB\""
-    },
-    {
       "id": "jetpack.forks",
       "value": "3",
       "drawn_on": [
-        "README.md"
+        "plate-2-jetpack.svg",
+        "m-2-jetpack.svg"
       ],
       "repo": "jetpack",
       "path": "benchmarks/jmh-results-rigorous.json",
       "extractor": "jq -r '.[0].forks' \"$BLOB\"",
-      "anchors": {
-        "README.md": [
-          "a 3-fork JMH run",
-          "2.80× on the 3-fork run"
-        ]
-      }
+      "note": "ROUND 28: re-pointed from README.md to the two plates that actually print it (3-FORK JMH COMMITTED). Both anchors were dropped: one pinned a sentence the prose cut deleted, and the other pinned text inside an <img alt>, which is generated from the plate's <desc> and is rewritten whenever the plate is recomposed — the orphaning documented on automl.tool_sets."
     },
     {
       "id": "jetpack.jdk",
@@ -325,65 +226,11 @@
       "note": "Read from the run that produced the scores, so the JDK on the plate is the JDK that was measured."
     },
     {
-      "id": "jetpack.cores",
-      "value": "10",
-      "drawn_on": [
-        "README.md"
-      ],
-      "repo": "jetpack",
-      "path": "benchmarks/ENVIRONMENT.md",
-      "extractor": "grep -oE '[0-9]+ logical' \"$BLOB\" | grep -oE '[0-9]+' | head -1"
-    },
-    {
-      "id": "jetpack.confidence_level",
-      "value": "99.9",
-      "unit": "%",
-      "drawn_on": [
-        "README.md"
-      ],
-      "repo": "jetpack",
-      "path": "benchmarks/ENVIRONMENT.md",
-      "extractor": "grep -oE '99\\.9' \"$BLOB\" | head -1"
-    },
-    {
-      "id": "jetpack.parallel_speedup_quick",
-      "value": "6.89",
-      "unit": "x",
-      "drawn_on": [
-        "README.md"
-      ],
-      "repo": "jetpack",
-      "path": "benchmarks/jmh-results.json",
-      "extractor": "jq -r '([.[]|select(.benchmark|endswith(\"parallelVirtualThreads\")).primaryMetric.score][0]/[.[]|select(.benchmark|endswith(\"singleThreadedJdk\")).primaryMetric.score][0]*100|round)/100' \"$BLOB\"",
-      "note": "The number the page was suppressing. The parallel ratio moved 6.89x -> 6.38x between the quick and the rigorous run — an 8% spread, WIDER than the 4% spread on the SIMD ratio that the page already discloses. jetpack's own ENVIRONMENT.md warns about it. Publishing the smaller disagreement and hiding the larger one is the only place this page let the flattering number win, so the README now states it."
-    },
-    {
-      "id": "jetpack.parallel_speedup_rigorous_2dp",
-      "value": "6.38",
-      "unit": "x",
-      "drawn_on": [
-        "README.md"
-      ],
-      "repo": "jetpack",
-      "path": "benchmarks/jmh-results-rigorous.json",
-      "extractor": "jq -r '([.[]|select(.benchmark|endswith(\"parallelVirtualThreads\")).primaryMetric.score][0]/[.[]|select(.benchmark|endswith(\"singleThreadedJdk\")).primaryMetric.score][0]*100|round)/100' \"$BLOB\"",
-      "note": "The same ratio as jetpack.speedup, at two decimals, so the 6.89 -> 6.38 spread the README now discloses is stated in numbers that both derive."
-    },
-    {
-      "id": "jetpack.adler_vector_speedup_quick",
-      "value": "2.92",
-      "unit": "x",
-      "drawn_on": [
-        "README.md"
-      ],
-      "repo": "jetpack",
-      "path": "benchmarks/jmh-results.json",
-      "extractor": "jq -r '([.[]|select(.benchmark|endswith(\"Adler32Benchmark.vector\")).primaryMetric.score][0]/[.[]|select(.benchmark|endswith(\"Adler32Benchmark.scalar\")).primaryMetric.score][0]*100|round)/100' \"$BLOB\""
-    },
-    {
       "id": "cadence.handlers",
       "value": "37",
       "drawn_on": [
+        "plate-5-cadence.svg",
+        "m-5-cadence.svg",
         "README.md"
       ],
       "repo": "cadence",
@@ -395,8 +242,8 @@
       "id": "applied.macro_f1",
       "value": "0.979",
       "drawn_on": [
-        "plate-4-applied.svg",
-        "m-4-applied.svg",
+        "plate-6-applied.svg",
+        "m-6-applied.svg",
         "README.md"
       ],
       "repo": "applied",
@@ -407,7 +254,8 @@
       "id": "applied.eval_set_size",
       "value": "96",
       "drawn_on": [
-        "plate-4-applied.svg",
+        "plate-6-applied.svg",
+        "m-6-applied.svg",
         "README.md"
       ],
       "repo": "applied",
@@ -415,20 +263,11 @@
       "extractor": "jq -r '.meta.sample_count' \"$BLOB\""
     },
     {
-      "id": "applied.eval_classes",
-      "value": "8",
-      "drawn_on": [
-        "README.md"
-      ],
-      "repo": "applied",
-      "path": "backend/data/evaluation/baseline_rules_v3.json",
-      "extractor": "jq -r '.label_distribution|keys|length' \"$BLOB\""
-    },
-    {
       "id": "applied.eval_mode_is_rules_only",
       "value": "rules",
       "drawn_on": [
-        "plate-4-applied.svg",
+        "plate-6-applied.svg",
+        "m-6-applied.svg",
         "README.md"
       ],
       "repo": "applied",
@@ -437,70 +276,11 @@
       "note": "This is the row that keeps the hero honest: the artifact itself says the score was produced with the rules layer alone, which is what the plate labels it."
     },
     {
-      "id": "applied.regex_rules",
-      "value": "201",
-      "drawn_on": [
-        "plate-4-applied.svg",
-        "README.md"
-      ],
-      "repo": "applied",
-      "path": "backend/jobtracker/classifier/rules.py",
-      "extractor": "python3 -c \"import ast,sys;t=ast.parse(open(sys.argv[1]).read());print(sum(1 for n in ast.walk(t) if isinstance(n,ast.AnnAssign) and getattr(n.target,'id','')=='PATTERNS' for s in ast.walk(n.value) if isinstance(s,ast.Constant) and isinstance(s.value,str)))\" \"$BLOB\"",
-      "note": "Parsed, not grepped. A second method — counting r-string lines inside the PATTERNS block — also gives 201."
-    },
-    {
-      "id": "applied.confidence_gate",
-      "value": "0.85",
-      "drawn_on": [
-        "plate-4-applied.svg",
-        "m-4-applied.svg",
-        "README.md"
-      ],
-      "repo": "applied",
-      "path": "backend/jobtracker/cloud/pipeline.py",
-      "extractor": "grep -E '^AUTO_FILE_GATE' \"$BLOB\" | grep -oE '[0-9]+\\.[0-9]+'",
-      "note": "RE-POINTED 2026-08-10. This row used to extract REVIEW_QUEUE_CONFIDENCE_THRESHOLD from backend/jobtracker/api/classification.py:25 — the same 0.85, in a file the deployed function never evaluates. api/classification.py gates two desktop-only endpoints; main_cloud.py mounts only the applications/gmail/account cloud routers, and the cloud import graph never imports jobtracker.api at all (the only two 'jobtracker.api' strings under cloud/ are RST docstring prose). So the gate was certified against a constant that is dead on Vercel. AUTO_FILE_GATE (pipeline.py:410) is the one the hosted path actually compares against, at pipeline.py:746 inside _qualifies_for_hard_row; below-gate items go to collect_review_items (:827) and are persisted as category='needs_review' rows that a human resolves through apps/web/app/api/applications/review/[messageId]/classify. A right number read from the wrong file is the failure this whole file exists to prevent."
-    },
-    {
-      "id": "applied.ci_floor",
-      "value": "0.95",
-      "drawn_on": [
-        "README.md"
-      ],
-      "repo": "applied",
-      "path": ".github/workflows/backend-ci.yml",
-      "extractor": "grep -oE '\\-\\-min-macro-f1 [0-9.]+' \"$BLOB\" | grep -oE '[0-9]+\\.[0-9]+' | sort -u",
-      "note": "The build really does fail below this: it is a CI flag, not a doc sentence."
-    },
-    {
-      "id": "applied.onnx_fp32_mb",
-      "value": "90.4",
-      "unit": "MB",
-      "drawn_on": [
-        "README.md"
-      ],
-      "repo": "applied",
-      "path": "ml/browser/artifacts/model.onnx",
-      "bytes": true,
-      "extractor": "awk -v b=\"$BYTES\" 'BEGIN{printf \"%.1f\", b/1e6}'",
-      "note": "The byte length of the committed artifact, read from the contents API at that SHA. On main since 2026-08-03 (merge d349f02f, no PR) at byte-for-byte the size the branch pin carried — which is why the applied-web split could retire."
-    },
-    {
-      "id": "applied.onnx_int8_mb",
-      "value": "22.8",
-      "unit": "MB",
-      "drawn_on": [
-        "README.md"
-      ],
-      "repo": "applied",
-      "path": "ml/browser/artifacts/model_quantized.onnx",
-      "bytes": true,
-      "extractor": "awk -v b=\"$BYTES\" 'BEGIN{printf \"%.1f\", b/1e6}'"
-    },
-    {
       "id": "applied.hybrid_f1_prose",
       "value": "0.9583",
       "drawn_on": [
+        "plate-6-applied.svg",
+        "m-6-applied.svg",
         "README.md"
       ],
       "repo": "applied",
@@ -509,47 +289,23 @@
       "note": "The full three-layer cascade's score, which has no evaluation artifact because the run that produced it was overwritten. The page no longer says 'exactly one line of prose' — the number has since been restated in the repo's own README, and counting restatements was never the claim; the missing artifact is. This row proves the cited line still carries it."
     },
     {
-      "id": "applied.hybrid_f1_line",
-      "value": "378",
-      "drawn_on": [
-        "README.md"
-      ],
-      "repo": "applied",
-      "path": "docs/ML_EXECUTION_TRACKER.md",
-      "extractor": "grep -n 'macro_f1=0.9583' \"$BLOB\" | head -1 | cut -d: -f1",
-      "note": "Pins the citation itself. If the tracker grows a line above 378, this fails and the README's reference is corrected rather than silently pointing at the wrong row."
-    },
-    {
       "id": "cadence.tenant_tables",
       "value": "7",
       "drawn_on": [
-        "README.md"
+        "plate-5-cadence.svg",
+        "m-5-cadence.svg"
       ],
       "repo": "cadence",
       "path": "lib/config/migrations/0002_enable_rls.sql",
       "extractor": "grep -cE '^ALTER TABLE .* FORCE ROW LEVEL SECURITY' \"$BLOB\"",
-      "note": "Anchored to ^ALTER TABLE on purpose. A bare `grep -c 'FORCE ROW LEVEL SECURITY'` returns 8, because the file's own header comment explains what FORCE does — the same prose-counting mistake as the row above, in a file where it would have inflated the claim. user_profiles is deliberately excluded from RLS (0002_enable_rls.sql:21-22), so 'every tenant table' is seven, and the README now says seven.",
-      "anchors": {
-        "README.md": [
-          "`FORCE`d on all **seven** tenant tables"
-        ]
-      }
-    },
-    {
-      "id": "jetpack.adler_known_answer",
-      "value": "11E60398",
-      "drawn_on": [
-        "plate-2-jetpack.svg"
-      ],
-      "repo": "jetpack",
-      "path": "src/test/java/com/ayush/jetpack/Adler32Test.java",
-      "extractor": "grep -oE '0x[0-9A-F]{8}L' \"$BLOB\" | sort -u | head -1 | sed 's/^0x//; s/L$//'",
-      "note": "The canonical Adler-32 vector for the input \"Wikipedia\", asserted for both the scalar and the vectorised path (Adler32Test.java:36-37). It is now drawn as one string per row rather than eight <text> elements, so it appears whole in the plate and needs no per-glyph exemptions. The stronger claim on the plate — bit-identical to java.util.zip — is the separate matchesJdkAcrossSizes test, which compares both paths across 26 input sizes."
+      "note": "Anchored to ^ALTER TABLE on purpose. A bare `grep -c 'FORCE ROW LEVEL SECURITY'` returns 8, because the file's own header comment explains what FORCE does — the same prose-counting mistake as the row above, in a file where it would have inflated the claim. user_profiles is deliberately excluded from RLS (0002_enable_rls.sql:21-22), so 'every tenant table' is seven, and the README now says seven. ROUND 28: the README sentence this anchored was cut; plate-5-cadence and m-5-cadence draw 'RLS FORCEd on all 7 tables', so the row pins the occurrence that exists. README's only 7 is now 'Seven systems', a different noun, exempted by name rather than licensed by this row."
     },
     {
       "id": "cadence.idor_services",
       "value": "6",
       "drawn_on": [
+        "plate-5-cadence.svg",
+        "m-5-cadence.svg",
         "README.md"
       ],
       "repo": "cadence",
@@ -565,38 +321,45 @@
       "note": "Counted from the guard in the QUERY, not from a comment about it. The previous row here counted the word IDOR in docstrings and returned 7; four different methods return 7, 8, 9 and 15, so the count of vulnerabilities is an audit finding and belongs in prose. How many services now scope by owner is a property of the code. Round 27: plate-5 left this row's drawn_on — the rebuilt plate draws the six services as six row-pairs, marks rather than a word, and a mark is not a token this gate can read. The README still says six and this row still holds it."
     },
     {
+      "id": "cadence.conditional_owner_guard",
+      "value": "6",
+      "drawn_on": [
+        "plate-5-cadence.svg",
+        "m-5-cadence.svg"
+      ],
+      "repo": "cadence",
+      "paths": [
+        "lib/services/AttachmentService.ts",
+        "lib/services/CalendarService.ts",
+        "lib/services/EventService.ts",
+        "lib/services/TagService.ts",
+        "lib/services/TaskListService.ts",
+        "lib/services/TaskService.ts"
+      ],
+      "extractor": "grep -lE 'if \\(context\\?\\.userId\\)' $BLOBS | grep -c .",
+      "note": "Replaces the 'five of six app-side guards' both cadence plates drew until 2026-08-12, and the two exemptions that carried it. That five was not reproducible, and four methods disagreed about it. A literal grep of `if (context?.userId)` finds it in ALL SIX services — 2, 9, 5, 6, 8 and 7 occurrences. Classifying each guard conditional-vs-unconditional makes AttachmentService the only all-conditional service, so five services have a MIX: a different five. Restricting to the by-id path gives 8 unguarded sites in CalendarService, which would be a live IDOR and is contradicted by the audit that closed all six. And the retired prose simply asserted it. The house rule is that a number two methods disagree on does not get published, so the count came off the plate and this row derives the statement every one of those methods agrees on. WHAT IT PROVES: each of these six files carries at least one owner guard written as a CONDITION, so the scoping is a branch a caller can fail to take. WHAT IT DOES NOT PROVE: not that every guard inside a service is conditional, not that every by-id path carries one, and not that the guard is sufficient — those are the three readings that produced three different fives, and the plate now claims none of them. The line loses nothing it could support: the app-side guard is skippable, and the database's refusal is not. Deliberately the same six paths as cadence.idor_services and deliberately a different property — that row counts services that scope by owner IN THE QUERY (AND \"userId\" = $), this one counts services whose app-side guard is a condition. Both are 6; neither licenses the other's sentence. Not expected-zero, and self-controlling in the sense the tree() note in claims.mjs asks for: a typo'd pattern or wrong escaping prints 0, not 6, so this fails in the unflattering direction as well as the flattering one."
+    },
+    {
       "id": "glyph.deployed_wasm_sha256",
       "value": "e681d2f76d41305aa3b8c250799f898bd1139497f60580ed59000d49cf5d6360",
-      "drawn_on": [
-        "README.md"
-      ],
+      "drawn_on": [],
       "repo": "glyph",
       "path": "web/public/wasm/fast_mnist.wasm",
       "extractor": "shasum -a 256 \"$BLOB\" | cut -d' ' -f1",
-      "note": "The page's strongest single piece of evidence. The binary getglyph.vercel.app serves is byte-identical to this blob on main, so 'the deployment is what the repository builds' stops being testimony: curl the URL, hash it, compare. It used to point at an unmerged branch, because that was where the SIMD build lived; it merged, so this reads main. THE PAIR IS THE CLAIM AND NEITHER HALF PROVES IT: this row hashes the REPO blob and glyph.deployed_wasm_bytes reads the DEPLOYMENT's content-length, so the two are checked against different sources and can drift apart while both stay green. That is exactly what happened on 2026-08-08 — the deployment rebuilt, bytes went red, and this hash stayed green against a stale pin. Move them together, always."
+      "note": "The page's strongest single piece of evidence. The binary getglyph.vercel.app serves is byte-identical to this blob on main, so 'the deployment is what the repository builds' stops being testimony: curl the URL, hash it, compare. It used to point at an unmerged branch, because that was where the SIMD build lived; it merged, so this reads main. THE PAIR IS THE CLAIM AND NEITHER HALF PROVES IT: this row hashes the REPO blob and glyph.deployed_wasm_bytes reads the DEPLOYMENT's content-length, so the two are checked against different sources and can drift apart while both stay green. That is exactly what happened on 2026-08-08 — the deployment rebuilt, bytes went red, and this hash stayed green against a stale pin. Move them together, always. ROUND 28: drawn_on is now empty and the row STAYS. §III draws no hash any more, but plate-3-glyph and m-3-glyph both print BYTE-IDENTICAL TO MAIN · CHECKED DAILY IN CI, and this row plus glyph.served_wasm_sha256 are the only evidence for that sentence — deleting them would leave the page asserting a daily check that nothing performs, with a green gate. Same shape as automl.tools_phase: the value left the page, the assertion did not."
     },
     {
       "id": "applied.eval_misclassified",
       "value": "2",
       "drawn_on": [
-        "README.md",
-        "plate-4-applied.svg"
+        "plate-6-applied.svg",
+        "m-6-applied.svg",
+        "README.md"
       ],
       "repo": "applied",
       "path": "backend/data/evaluation/baseline_rules_v3.json",
       "extractor": "jq -r '.overall.misclassified' \"$BLOB\"",
       "note": "0.979 with no uncertainty beside it was the page's one remaining asymmetry: jetpack's numbers all carry an interval and Applied's did not. The honest statement of a 96-row result is the error count. Round 21: the rebuilt plate prints it too — '2 MISTAKES' beside the hero."
-    },
-    {
-      "id": "applied.eval_per_class",
-      "value": "12",
-      "drawn_on": [
-        "README.md"
-      ],
-      "repo": "applied",
-      "path": "backend/data/evaluation/baseline_rules_v3.json",
-      "extractor": "jq -r '.label_distribution|to_entries|map(.value)|unique|.[0]' \"$BLOB\"",
-      "note": "The set is balanced 12 per class, which is why macro-F1 and weighted-F1 are identical to the last digit. Unstated until now, and it is the reason the two numbers agree."
     },
     {
       "id": "automl.license",
@@ -613,8 +376,8 @@
       "id": "automl.tools",
       "value": "44",
       "drawn_on": [
-        "plate-6b-automl.svg",
-        "m-6b-automl.svg",
+        "plate-4-automl.svg",
+        "m-4-automl.svg",
         "README.md"
       ],
       "repo": "automl",
@@ -629,22 +392,6 @@
       ],
       "extractor": "cat $BLOBS | grep -cE \"^\\s+name: '\"",
       "note": "Counted two ways and they agree: the seven files sum 4+8+3+6+14+6+3, and a single grep across all seven returns 44."
-    },
-    {
-      "id": "automl.tools_general",
-      "value": "15",
-      "drawn_on": [
-        "plate-6b-automl.svg",
-        "README.md"
-      ],
-      "repo": "automl",
-      "paths": [
-        "backend/src/services/llm/tools/dataTools.ts",
-        "backend/src/services/llm/tools/cellTools.ts",
-        "backend/src/services/llm/tools/packageTools.ts"
-      ],
-      "extractor": "cat $BLOBS | grep -cE \"^\\s+name: '\"",
-      "note": "LLM_TOOL_DEFINITIONS in tools/index.ts is data + cell + package only: 4 data + 8 cell + 3 package. CORRECTED 2026-08-10 — this row previously read 'the general set the model carries everywhere is 15 of them', and the README said the same. It is not carried everywhere. No phase receives all 15: training admits only FEATURE_DISCOVERY_TOOLS union NOTEBOOK_EXECUTION_TOOLS (tools/index.ts:117-119), which excludes all three package tools, and re-adds install_package at the generate_code/write_code stages only; onboarding takes four (index.ts:130-137); preprocessing takes none, building its own list instead. The array length is still exactly what this extractor gates and is still worth drawing — what changed is the sentence around it. Same failure mode as [automl.tool_sets]: the count was right and the verb was wrong."
     },
     {
       "id": "automl.tools_phase",
@@ -664,64 +411,21 @@
       "id": "automl.tool_sets",
       "value": "7",
       "drawn_on": [
-        "README.md"
+        "plate-4-automl.svg",
+        "m-4-automl.svg"
       ],
       "repo": "automl",
       "path": "backend/src/services/llm/tools/index.ts",
       "extractor": "grep -E '^export const LLM_[A-Z_]+_TOOLS' \"$BLOB\" | grep -vc LLM_ALL_TOOLS",
-      "note": "Seven exported phase sets: onboarding, preprocessing, feature proposal, feature continue, feature engineering, feature lifecycle, training lifecycle. LLM_ALL_TOOLS is excluded because it is the union, not a phase. WARNING — this extractor counts EXPORTS, not ROUTES, and the two are not the same number. A source audit at this pin found LLM_PREPROCESSING_TOOLS (index.ts:124) and LLM_FEATURE_ENGINEERING_TOOLS (index.ts:61) are exported and never imported: their only other occurrence in the tree is the barrel re-export at toolRegistry.ts:18,23, there is no phase->set lookup table (BY_PHASE|PHASE_TOOLS|TOOL_SETS|toolsForPhase all return nothing repo-wide), and no `export *` or namespace import can be hiding a consumer. The preprocessing phase does receive its tools, assembled ad hoc from PREPROCESSING_ORCHESTRATION_TOOLS + CELL_TOOL_DEFINITIONS at phases/preprocessing/stageConfig.ts:21. So five of the seven names are live routes. The README said 'the other 29 arrive with the phase that needs them, through seven exported sets' — a true count describing a false mechanism, the same shape as the count-noun trap that produced AutoML's 44-vs-12 error. The prose now names the two dead exports; this row keeps gating the export count, which is all a grep of one file can honestly gate. Round 27 dropped a second anchor, 'Of the seven declared per-phase sets', because it pinned a sentence that lived in a plate's <img alt> rather than in the body: the plate was recomposed, the alt text was rewritten with it, and the anchor went orphaned. The gate failed closed, which is right — but an anchor into alt text pins generated prose, so pin the body text instead.",
-      "anchors": {
-        "README.md": [
-          "**Seven** named per-phase sets are declared"
-        ]
-      }
-    },
-    {
-      "id": "automl.tables",
-      "value": "29",
-      "drawn_on": [
-        "README.md"
-      ],
-      "repo": "automl",
-      "paths": [
-        "backend/migrations/001_init.sql",
-        "backend/migrations/002_auth.sql",
-        "backend/migrations/004_notebooks.sql",
-        "backend/migrations/007_workflows.sql",
-        "backend/migrations/009_savepoints.sql",
-        "backend/migrations/010_experiments.sql",
-        "backend/migrations/011_nl_placeholder_suggestions.sql",
-        "backend/migrations/014_models.sql",
-        "backend/migrations/016_plan_chats.sql",
-        "backend/migrations/017_deployments.sql",
-        "backend/migrations/019_email_verification_tokens.sql"
-      ],
-      "extractor": "cat $BLOBS | grep -ciE '^create table'",
-      "note": "Two methods agree: 29 CREATE TABLE statements, and 29 distinct table names after lowercasing and deduplicating. Eleven of the 24 migrations create tables (7+3+3+6+1+1+1+1+1+4+1); the other thirteen alter, backfill or index, and listing them would only pad the fetch. The 2026-08-11 plate anchors ('29 TABLES', both themes) were added for the count-noun trap — plate-6b drew 29 twice for unrelated nouns and this row was licensing both — and were REMOVED with the round-28 redraw in the same change that cut the schema line from the plate: the plate now draws no 29 at all, so there is no occurrence left to pin and the trap is structurally gone. README's 29-table sentence rides this row's value pool, as every unanchored README number does."
-    },
-    {
-      "id": "automl.sandbox_tmpfs",
-      "value": "5",
-      "drawn_on": [
-        "README.md"
-      ],
-      "repo": "automl",
-      "path": "backend/src/services/container/dockerBuilder.ts",
-      "extractor": "grep -c -- '--tmpfs' \"$BLOB\"",
-      "note": "The container is --read-only on an --internal network, so these five tmpfs mounts are the entire writable surface the generated Python gets. Drawing the count is drawing the size of the blast radius.",
-      "anchors": {
-        "README.md": [
-          "Five `--tmpfs` mounts"
-        ]
-      }
+      "note": "Seven exported phase sets: onboarding, preprocessing, feature proposal, feature continue, feature engineering, feature lifecycle, training lifecycle. LLM_ALL_TOOLS is excluded because it is the union, not a phase. WARNING — this extractor counts EXPORTS, not ROUTES, and the two are not the same number. A source audit at this pin found LLM_PREPROCESSING_TOOLS (index.ts:124) and LLM_FEATURE_ENGINEERING_TOOLS (index.ts:61) are exported and never imported: their only other occurrence in the tree is the barrel re-export at toolRegistry.ts:18,23, there is no phase->set lookup table (BY_PHASE|PHASE_TOOLS|TOOL_SETS|toolsForPhase all return nothing repo-wide), and no `export *` or namespace import can be hiding a consumer. The preprocessing phase does receive its tools, assembled ad hoc from PREPROCESSING_ORCHESTRATION_TOOLS + CELL_TOOL_DEFINITIONS at phases/preprocessing/stageConfig.ts:21. So five of the seven names are live routes. The README said 'the other 29 arrive with the phase that needs them, through seven exported sets' — a true count describing a false mechanism, the same shape as the count-noun trap that produced AutoML's 44-vs-12 error. The prose now names the two dead exports; this row keeps gating the export count, which is all a grep of one file can honestly gate. Round 27 dropped a second anchor, 'Of the seven declared per-phase sets', because it pinned a sentence that lived in a plate's <img alt> rather than in the body: the plate was recomposed, the alt text was rewritten with it, and the anchor went orphaned. The gate failed closed, which is right — but an anchor into alt text pins generated prose, so pin the body text instead. ROUND 28: re-pointed to plate-4-automl and m-4-automl ('SEVEN TOOL SETS — NO PHASE IS HANDED ALL 44'); the anchored README sentence was cut. Deliberately NOT registered on plate-5-cadence, which draws its own 7 for tenant tables — the count-noun trap, in the one file that documents it."
     },
     {
       "id": "glyph.dot256_speedup",
       "value": "3.5",
       "unit": "x",
       "drawn_on": [
-        "plate-1-glyph.svg",
-        "m-1-glyph.svg",
+        "plate-3-glyph.svg",
+        "m-3-glyph.svg",
         "README.md"
       ],
       "repo": "glyph",
@@ -737,6 +441,8 @@
       "value": "10.7",
       "unit": "x slower",
       "drawn_on": [
+        "plate-3-glyph.svg",
+        "m-3-glyph.svg",
         "README.md"
       ],
       "repo": "glyph",
@@ -748,113 +454,13 @@
       "note": "The answer that went against the author, printed on purpose: the same openmp+native flags that win benchDot/256 LOSE benchAxpy/128. Below a size floor, threading costs more than it pays, and the page says so. This read 6.9x until 2026-08-10, sourced to docs/benchmarks/bench_summary.csv. That figure was arithmetically correct and pointed at the wrong machine: bench_summary.csv is the December record, taken on Shrees-MacBook.local, and glyph's own docs/benchmarks/ENVIRONMENT.md retires it in one line -- 'The 2026-08-02 runs on the M1 Pro are the reference. The December runs are history.' For an OpenMP scaling ratio a fanless 4-performance-core machine is a different ceiling, not a noisier reading of the same one, which is why the two baselines agree within 8% while the two parallel numbers differ by 69%. Both glyph ratios now derive from the 2026-08-02 reference machine. They come from two runs on it because only one of them measures axpy: the dot20x pair carries no benchAxpy rows at all."
     },
     {
-      "id": "visualassist.swift_lines",
-      "value": "7177",
-      "drawn_on": [
-        "README.md"
-      ],
-      "repo": "visualassist",
-      "paths": [
-        "Assets/generate_banner.swift",
-        "Assets/generate_icon.swift",
-        "Assets/generate_social_preview.swift",
-        "VisualAssist/App/AppState.swift",
-        "VisualAssist/App/VisualAssistApp.swift",
-        "VisualAssist/Models/DetectedObject.swift",
-        "VisualAssist/Models/DetectedObstacle.swift",
-        "VisualAssist/Models/RecognizedText.swift",
-        "VisualAssist/Models/UserSettings.swift",
-        "VisualAssist/Services/CameraService.swift",
-        "VisualAssist/Services/HapticService.swift",
-        "VisualAssist/Services/LiDARService.swift",
-        "VisualAssist/Services/ObjectDetectionService.swift",
-        "VisualAssist/Services/SpeechService.swift",
-        "VisualAssist/Services/TextRecognitionService.swift",
-        "VisualAssist/Services/VoiceCommandService.swift",
-        "VisualAssist/Utilities/AccessibilityHelper.swift",
-        "VisualAssist/Utilities/DepthProcessor.swift",
-        "VisualAssist/Utilities/SpatialAudioManager.swift",
-        "VisualAssist/Views/Components/AccessibleButton.swift",
-        "VisualAssist/Views/Components/CameraPreview.swift",
-        "VisualAssist/Views/Components/ModeCard.swift",
-        "VisualAssist/Views/Components/StatusOverlay.swift",
-        "VisualAssist/Views/ContentView.swift",
-        "VisualAssist/Views/DeviceLevelIndicator.swift",
-        "VisualAssist/Views/HomeView.swift",
-        "VisualAssist/Views/NavigationModeView.swift",
-        "VisualAssist/Views/ObjectAwarenessModeView.swift",
-        "VisualAssist/Views/SettingsView.swift",
-        "VisualAssist/Views/TextReadingModeView.swift",
-        "VisualAssistTests/AccessibilityHelperTests.swift",
-        "VisualAssistTests/CommonObjectLabelTests.swift",
-        "VisualAssistTests/DepthProcessorTests.swift",
-        "VisualAssistTests/DetectedObstacleTests.swift",
-        "VisualAssistTests/DetectionSummaryTests.swift",
-        "VisualAssistTests/ObjectCategoryTests.swift",
-        "VisualAssistTests/ObjectPositionTests.swift",
-        "VisualAssistTests/RecognizedTextTests.swift"
-      ],
-      "extractor": "cat $BLOBS | wc -l | tr -d ' '",
-      "note": "wc -l over every .swift blob at the pin. The paths listed ARE the evidence for the companion file count: the recursive tree API at this SHA returns exactly these 38 and no others (verify: curl -s https://api.github.com/repos/yadava5/VisualAssist/git/trees/b0e6203369a829e2174ea263be53be0287675af9?recursive=1 | jq '[.tree[]|select(.path|endswith(\".swift\"))]|length')."
-    },
-    {
-      "id": "visualassist.swift_files",
-      "value": "38",
-      "drawn_on": [
-        "README.md"
-      ],
-      "repo": "visualassist",
-      "paths": [
-        "Assets/generate_banner.swift",
-        "Assets/generate_icon.swift",
-        "Assets/generate_social_preview.swift",
-        "VisualAssist/App/AppState.swift",
-        "VisualAssist/App/VisualAssistApp.swift",
-        "VisualAssist/Models/DetectedObject.swift",
-        "VisualAssist/Models/DetectedObstacle.swift",
-        "VisualAssist/Models/RecognizedText.swift",
-        "VisualAssist/Models/UserSettings.swift",
-        "VisualAssist/Services/CameraService.swift",
-        "VisualAssist/Services/HapticService.swift",
-        "VisualAssist/Services/LiDARService.swift",
-        "VisualAssist/Services/ObjectDetectionService.swift",
-        "VisualAssist/Services/SpeechService.swift",
-        "VisualAssist/Services/TextRecognitionService.swift",
-        "VisualAssist/Services/VoiceCommandService.swift",
-        "VisualAssist/Utilities/AccessibilityHelper.swift",
-        "VisualAssist/Utilities/DepthProcessor.swift",
-        "VisualAssist/Utilities/SpatialAudioManager.swift",
-        "VisualAssist/Views/Components/AccessibleButton.swift",
-        "VisualAssist/Views/Components/CameraPreview.swift",
-        "VisualAssist/Views/Components/ModeCard.swift",
-        "VisualAssist/Views/Components/StatusOverlay.swift",
-        "VisualAssist/Views/ContentView.swift",
-        "VisualAssist/Views/DeviceLevelIndicator.swift",
-        "VisualAssist/Views/HomeView.swift",
-        "VisualAssist/Views/NavigationModeView.swift",
-        "VisualAssist/Views/ObjectAwarenessModeView.swift",
-        "VisualAssist/Views/SettingsView.swift",
-        "VisualAssist/Views/TextReadingModeView.swift",
-        "VisualAssistTests/AccessibilityHelperTests.swift",
-        "VisualAssistTests/CommonObjectLabelTests.swift",
-        "VisualAssistTests/DepthProcessorTests.swift",
-        "VisualAssistTests/DetectedObstacleTests.swift",
-        "VisualAssistTests/DetectionSummaryTests.swift",
-        "VisualAssistTests/ObjectCategoryTests.swift",
-        "VisualAssistTests/ObjectPositionTests.swift",
-        "VisualAssistTests/RecognizedTextTests.swift"
-      ],
-      "extractor": "printf '%s\\n' $BLOBS | grep -c .",
-      "note": "Counts the fetched blobs, so on its own it proves these 38 EXIST at the pin; that no 39th exists is the tree-API check in the row above. Honest about what each half proves."
-    },
-    {
       "id": "visualassist.critical_m",
       "value": "0.5",
       "unit": "m",
       "drawn_on": [
-        "README.md",
-        "plate-8-visualassist.svg",
-        "m-8-visualassist.svg"
+        "plate-7-visualassist.svg",
+        "m-7-visualassist.svg",
+        "README.md"
       ],
       "repo": "visualassist",
       "path": "VisualAssist/Services/LiDARService.swift",
@@ -866,8 +472,9 @@
       "value": "1.0",
       "unit": "m",
       "drawn_on": [
-        "README.md",
-        "plate-8-visualassist.svg"
+        "plate-7-visualassist.svg",
+        "m-7-visualassist.svg",
+        "README.md"
       ],
       "repo": "visualassist",
       "path": "VisualAssist/Services/LiDARService.swift",
@@ -878,48 +485,14 @@
       "value": "2.0",
       "unit": "m",
       "drawn_on": [
-        "README.md",
-        "plate-8-visualassist.svg",
-        "m-8-visualassist.svg"
+        "plate-7-visualassist.svg",
+        "m-7-visualassist.svg",
+        "README.md"
       ],
       "repo": "visualassist",
       "path": "VisualAssist/Services/LiDARService.swift",
       "extractor": "sed -n 's/.*cautionDistance: Float = \\([0-9.]*\\).*/\\1/p' \"$BLOB\"",
       "note": "The widest ring is the one that says the most about the design: inside 2.0 m the obstacle is drawn on screen and deliberately NOT announced. An aid that narrates every wall is an aid people switch off, so silence here is a feature with a threshold attached, not an omission."
-    },
-    {
-      "id": "visualassist.workflows",
-      "value": "5",
-      "drawn_on": [
-        "README.md"
-      ],
-      "repo": "visualassist",
-      "paths": [
-        ".github/workflows/ci.yml",
-        ".github/workflows/codeql.yml",
-        ".github/workflows/gitleaks.yml",
-        ".github/workflows/release.yml",
-        ".github/workflows/scorecard.yml"
-      ],
-      "extractor": "grep -lE '^(on|name):' $BLOBS | grep -c .",
-      "note": "Five real workflow files at the pin — build, CodeQL, gitleaks, release, scorecard — each verified to be a workflow (a top-level on:/name: key), not just a file that exists."
-    },
-    {
-      "id": "visualassist.spatial_audio_files",
-      "value": "3",
-      "unit": "files",
-      "drawn_on": [
-        "README.md"
-      ],
-      "anchors": {
-        "README.md": [
-          "its name occurs in exactly three files and nowhere else"
-        ]
-      },
-      "repo": "visualassist",
-      "tree": true,
-      "extractor": "n=$(grep -rl SpatialAudioManager \"$TREE\" | grep -c .); u=$(grep -rE 'SpatialAudioManager\\(|: *SpatialAudioManager' \"$TREE\" | grep -c .); printf '%s' \"$n\"; [ \"$u\" = 0 ] || printf '+%s-uses' \"$u\"",
-      "note": "The first row on this page about a WHOLE repository rather than a named file, and it has to be: 'nothing constructs this class' is falsified by any one of 38 files, so checking three named blobs proves nothing about the fourth. Fetches the pinned tarball and greps the tree. Deliberately NOT an expected-zero grep — a `| wc -l` that must print 0 also prints 0 when the pattern is typo'd or the escaping is wrong, which is the check-that-cannot-fail defect this repo has shipped four times, wearing a new uniform. Measured: breaking the class name takes the count to 0, not to 3, so the row fails when its own instrument fails. The construction count rides in the SAME value rather than a second row — if a call site ever appears the output becomes '3+1-uses' and this goes red, instead of staying quietly true about the file count while the sentence built on it turns false."
     }
   ],
   "$unpinnable_note": [
@@ -940,17 +513,7 @@
     "section a reader cannot check. Anything drawn must derive or be exempt."
   ],
   "unpinnable": [],
-  "external": [
-    {
-      "id": "cadence.function_cap",
-      "value": "12",
-      "drawn_on": [
-        "README.md"
-      ],
-      "source": "https://vercel.com/docs/functions/runtimes#functions-created-per-deployment",
-      "why": "Vercel's Hobby-tier cap of 12 Vercel Functions per deployment is a platform fact (the docs moved: /docs/limits now says 'framework-dependent', and the 12 lives at the runtimes page cited above), not a measurement of this repository. The previous extractor grepped `caps deployments at 12` out of api/index.ts — the author's own comment — so the page was citing itself and calling it derivation. What the repo genuinely proves is the consequence: one function serving 37 routes, which cadence.handlers derives. (That read 36 until the 2026-08-10 re-pin moved cadence.handlers to 37 — a note inside the provenance file itself going stale, one row away from the gate that would have caught it had it been a drawn number.)"
-    }
-  ],
+  "external": [],
   "exempt": {
     "$comment": [
       "Numbers a plate draws that are not measurements of a repository — names,",
@@ -960,28 +523,32 @@
       "the document. claims.mjs also fails on an exemption no plate uses, so this",
       "list cannot quietly accumulate excuses for numbers that are already gone."
     ],
-    "plate-2-jetpack.svg:32": "the name of the Adler-32 algorithm",
+    "plate-0-hero.svg:2026": "'B.S. Computer Science, Miami University (May 2026)' — the graduation date, a fact about the author rather than a measurement of a repository",
+    "plate-0-hero.svg:03.23": "part of the contact address aesh.03.23@gmail.com",
+    "plate-1-work.svg:12": "'twelve months of production data work' — the length of the internship. NOT applied.eval_per_class or the old cadence.function_cap, both of which were 12 and neither of which is this: a per-file pool would have let either license this word.",
+    "m-1-work.svg:12": "'twelve months of production data work' — see plate-1-work.svg:12",
+    "plate-2-jetpack.svg:0": "'BLOCK 0 · DEFLATE' — one of the four block indices in the diagram, a label not a measurement",
+    "plate-2-jetpack.svg:1": "'BLOCK 1 · DEFLATE' — see plate-2-jetpack.svg:0",
+    "plate-2-jetpack.svg:2": "'BLOCK 2 · DEFLATE' — see plate-2-jetpack.svg:0. Emphatically not applied.eval_misclassified, whose 2 belongs to a different section.",
     "plate-2-jetpack.svg:25": "JDK 25 — a toolchain version, not a measurement",
-    "README.md:3.0": "the version field of the licence identifier GPL-3.0 (see automl.license)",
+    "plate-2-jetpack.svg:32": "the name of the Adler-32 algorithm",
     "m-2-jetpack.svg:25": "JDK 25 — a toolchain version, not a measurement",
-    "README.md:512": "AVX-512 — an instruction-set name",
-    "README.md:32": "the name of the Adler-32 algorithm",
-    "README.md:1": "the placeholder in the SQL literal `WHERE id = $1`",
-    "README.md:4": "'four ship a system card' — enumerated on the page (Glyph, jetpack, Cadence, Applied); the fifth and sixth are named as a booklet and a no-link app",
-    "README.md:219": "the first line of the early-stopping block cited as apps/train_model.cpp:219-243. A line RANGE has no single extractor; the citation is verified by reading it, and glyph.msimd128_line pins the one line citation that a machine can check.",
-    "README.md:243": "the last line of that same cited range",
-    "README.md:03.23": "part of the contact address aesh.03.23@gmail.com",
-    "README.md:256": "the '256' in `shasum -a 256` — the name of the hash algorithm in a command the reader is invited to run — and the benchDot/256 case name",
-    "plate-0-thesis.svg:03.23": "part of the contact address aesh.03.23@gmail.com",
-    "README.md:2026": "the graduation date, May 2026 — a fact about the author, not a measurement of a repository",
-    "plate-0b-work.svg:2025": "'Jun 2025 – May 2026' — the dates of the role",
-    "plate-0b-work.svg:2026": "'Jun 2025 – May 2026', and 'DATAFEST 2026'",
-    "plate-0b-work.svg:0": "'FROM 0' — the compliance baseline the 96.72% is measured against",
-    "plate-0b-work.svg:3": "'TEAM LEAD OF 3' — the DataFest team size",
+    "m-2-jetpack.svg:32": "the name of the Adler-32 algorithm. Added round 28: the mobile twin drew it with nothing accounting for it, because exemptions are per file and only the light/ prefix is folded away.",
+    "plate-3-glyph.svg:512": "AVX-512 — an instruction-set name, drawn as one of the three register-lane bundles",
+    "plate-3-glyph.svg:256": "benchDot/256 — the benchmark case name; glyph.dot256_speedup derives the ratio measured on it",
+    "plate-3-glyph.svg:128": "benchAxpy/128 and WASM_SIMD128 — a benchmark case name and a build target; glyph.axpy128_slowdown derives the ratio",
+    "m-3-glyph.svg:512": "AVX-512 — see plate-3-glyph.svg:512",
+    "m-3-glyph.svg:256": "benchDot/256 — see plate-3-glyph.svg:256",
+    "m-3-glyph.svg:128": "benchAxpy/128 and WASM_SIMD128 — see plate-3-glyph.svg:128",
+    "plate-colophon.svg:29": "SELF-REFERENTIAL, on purpose. The colophon draws \"N CLAIMS · N COMMANDS\", where N is len(claims) in this very file, computed by plates.py at build time. A claims row would have to count itself and would change its own value on being added, so the honest form is an exemption whose reason names the mechanism. It cannot go stale silently: add or delete a row, plates.py redraws a different number, and this key stops matching.",
+    "m-colophon.svg:29": "SELF-REFERENTIAL — the mobile colophon draws the same count; see the plate-colophon key above for the mechanism. Cited by name rather than by key, because the key carries a number that moves whenever a row is added or deleted.",
     "README.md:2025": "'June 2025 to May 2026' — the dates of the role",
-    "README.md:0": "'from 0% to 96.72%' — the compliance baseline",
-    "README.md:3": "'a three-layer cascade' — the count of the tiers named in the same sentence; 'three committed runs' in section III, which BENCHMARKS.md documents; and section V's 'three carry it in the query and the other three check ownership first', the guard split the plate draws as filled and hollow marks",
-    "README.md:128": "benchAxpy/128 — the benchmark case name in section III's prose (the plate stopped drawing it in round 28; glyph.axpy128_slowdown derives the ratio itself)"
+    "README.md:2026": "'May 2026' as the graduation date and the end of the role, and 'DataFest 2026' — dates, not measurements",
+    "README.md:3": "'Three layers read it, cheapest first' — the count of tiers named in the same sentence. The other three in the prose, 'team lead of three at DataFest', is pinned by datafest.team_size's anchor and masked out before this exemption is consulted.",
+    "README.md:3.0": "the version field of the licence identifier GPL-3.0 (see automl.license)",
+    "README.md:4": "'Four of them ship a system card' — enumerated on the page (Glyph, jetpack, Cadence, Applied)",
+    "README.md:5": "'[PR #5]' — the number of the open relicence pull request on the AutoML repository, an address rather than a measurement",
+    "README.md:7": "'Seven systems.' — the count of sections on this page. Deliberately NOT licensed by cadence.tenant_tables or automl.tool_sets, which are also 7 and are about repositories; both now pin their occurrences on their own plates."
   },
   "$attested_note": [
     "Facts about the AUTHOR rather than measurements of a repository.",
@@ -1003,8 +570,8 @@
       "value": "1.6",
       "unit": "M Oracle Analytics query logs",
       "drawn_on": [
-        "plate-0b-work.svg",
-        "m-0b-work.svg",
+        "plate-1-work.svg",
+        "m-1-work.svg",
         "README.md"
       ],
       "source": "Ayush Yadav CV, July 2026",
@@ -1015,115 +582,8 @@
       "value": "57.8",
       "unit": "M-row field-usage table",
       "drawn_on": [
-        "plate-0b-work.svg",
-        "m-0b-work.svg",
-        "README.md"
-      ],
-      "source": "Ayush Yadav CV, July 2026",
-      "why": "the work belongs to Miami University / a competition dataset; no public repository can be pinned"
-    },
-    {
-      "id": "work.inventory_rows",
-      "value": "10453",
-      "unit": "row master asset inventory",
-      "drawn_on": [
-        "README.md"
-      ],
-      "source": "Ayush Yadav CV, July 2026",
-      "why": "the work belongs to Miami University / a competition dataset; no public repository can be pinned"
-    },
-    {
-      "id": "work.compliance_after",
-      "value": "96.72",
-      "unit": "% code compliance, from 0",
-      "drawn_on": [
-        "plate-0b-work.svg",
-        "README.md"
-      ],
-      "source": "Ayush Yadav CV, July 2026",
-      "why": "the work belongs to Miami University / a competition dataset; no public repository can be pinned"
-    },
-    {
-      "id": "work.projects",
-      "value": "61",
-      "unit": "project portfolio",
-      "drawn_on": [
-        "plate-0b-work.svg",
-        "README.md"
-      ],
-      "source": "Ayush Yadav CV, July 2026",
-      "why": "the work belongs to Miami University / a competition dataset; no public repository can be pinned"
-    },
-    {
-      "id": "datafest.patients",
-      "value": "349",
-      "unit": "K patients modelled",
-      "drawn_on": [
-        "plate-0b-work.svg",
-        "README.md"
-      ],
-      "source": "Ayush Yadav CV, July 2026",
-      "why": "the work belongs to Miami University / a competition dataset; no public repository can be pinned"
-    },
-    {
-      "id": "datafest.auc",
-      "value": "0.90",
-      "unit": "holdout AUC",
-      "drawn_on": [
-        "plate-0b-work.svg",
-        "README.md"
-      ],
-      "source": "Ayush Yadav CV, July 2026",
-      "why": "the work belongs to Miami University / a competition dataset; no public repository can be pinned"
-    },
-    {
-      "id": "datafest.encounters",
-      "value": "7.7",
-      "unit": "M encounters, 1.4 GB",
-      "drawn_on": [
-        "README.md"
-      ],
-      "source": "Ayush Yadav CV, July 2026",
-      "why": "the work belongs to Miami University / a competition dataset; no public repository can be pinned"
-    },
-    {
-      "id": "datafest.linkage",
-      "value": "99.6",
-      "unit": "% social-determinant linkage preserved",
-      "drawn_on": [
-        "plate-0b-work.svg",
-        "README.md"
-      ],
-      "source": "Ayush Yadav CV, July 2026",
-      "why": "the work belongs to Miami University / a competition dataset; no public repository can be pinned"
-    },
-    {
-      "id": "datafest.naive_linkage",
-      "value": "32",
-      "unit": "% under a naive join",
-      "drawn_on": [
-        "plate-0b-work.svg",
-        "README.md"
-      ],
-      "source": "Ayush Yadav CV, July 2026",
-      "why": "the work belongs to Miami University / a competition dataset; no public repository can be pinned"
-    },
-    {
-      "id": "datafest.gigabytes",
-      "value": "1.4",
-      "unit": "GB of encounter data",
-      "drawn_on": [
-        "README.md"
-      ],
-      "source": "Ayush Yadav CV, July 2026",
-      "why": "the work belongs to Miami University / a competition dataset; no public repository can be pinned"
-    },
-    {
-      "id": "datafest.window_days",
-      "value": "90",
-      "unit": "day care-utilisation window",
-      "drawn_on": [
-        "plate-0b-work.svg",
+        "plate-1-work.svg",
+        "m-1-work.svg",
         "README.md"
       ],
       "source": "Ayush Yadav CV, July 2026",
@@ -1147,11 +607,33 @@
       ],
       "anchors": {
         "README.md": [
-          "I led a three-person team"
+          "team lead of three at DataFest"
         ]
       },
       "source": "Ayush Yadav CV, July 2026",
       "why": "Team size at DataFest 2026. Attested like the rest of §I, and anchored to its own sentence so the number cannot be changed under cover of another row's 3."
     }
+  ],
+  "$rewire_note_2026_08_12": [
+    "Rewired for the rebuilt board. The plate set was redrawn end to end (new filenames,",
+    "new compositions) and the README was cut from 3,417 words to 1,444 — 543 of them prose,",
+    "once the generated alt text and the link markup are stripped. This file went into that",
+    "round with 58 claims rows and 14 attested rows. 33 row-references named one of ten plates",
+    "that no longer exist; 41 more named a file that does exist and has stopped drawing the",
+    "value. 28 claims rows and 4 attested rows survive.",
+    "",
+    "What was deleted and why, by class:",
+    "  · dead number — the value is on no plate and in no prose: glyph.wrong, glyph.confident_errors, applied.regex_rules, applied.confidence_gate, automl.tools_general",
+    "  · prose cut — README-only rows whose sentence went: 29 rows",
+    "  · the redrawn plate stopped printing it: jetpack.adler_scalar_gbs, jetpack.adler_vector_speedup, jetpack.adler_known_answer",
+    "  · coincidence only — drawn_on was satisfied by another noun's digits, which is",
+    "    green for the wrong reason and the defect shape this file exists to catch:",
+    "    datafest.naive_linkage, visualassist.spatial_audio_files, automl.sandbox_tmpfs, visualassist.workflows",
+    "",
+    "Two rows keep an empty drawn_on rather than being deleted: glyph.deployed_wasm_sha256",
+    "and glyph.served_wasm_sha256. The page stopped printing the hash but did not stop",
+    "asserting it — both Glyph plates draw BYTE-IDENTICAL TO MAIN · CHECKED DAILY IN CI, and",
+    "those two rows are the check. The test is whether the PAGE still asserts the thing, not",
+    "whether it still prints the digits."
   ]
 }
