@@ -1542,7 +1542,7 @@ def plate_visualassist() -> str:
         + lbl(211.6, 422, "0.5", cls="dim", size=10, ls=0.5, anchor="middle")
         + lbl(273.2, 422, "1.0", cls="dim", size=10, ls=0.5, anchor="middle")
         + lbl(396.4, 422, "2.0", cls="dim", size=10, ls=0.5, anchor="middle")
-        + f'<path fill="none" stroke="{T["rust"]}" stroke-width="1.4" d="M273.2,405 V436 H544"/>'
+        + f'<path fill="none" stroke="{T["rust"]}" stroke-width="1.4" d="M273.2,405 V411 H293 V436 H544"/>'
         + f'<circle cx="551" cy="436" r="3.5" fill="none" stroke="{T["rust"]}" stroke-width="2"/>'
         + f'<rect x="590" y="415" width="160" height="42" rx="8" fill="none" '
           f'stroke="{T["rust"]}" stroke-width="1.6"/>'
@@ -2103,7 +2103,7 @@ def m_visualassist() -> str:
         + lbl(160, 470, "0.5", cls="dim", size=10, ls=0.5, anchor="middle")
         + lbl(220, 470, "1.0", cls="dim", size=10, ls=0.5, anchor="middle")
         + lbl(340, 470, "2.0", cls="dim", size=10, ls=0.5, anchor="middle")
-        + f'<path fill="none" stroke="{T["rust"]}" stroke-width="1.4" d="M220,453 V499 H248"/>'
+        + f'<path fill="none" stroke="{T["rust"]}" stroke-width="1.4" d="M220,453 V459 H240 V499 H248"/>'
         + f'<circle cx="255" cy="499" r="3.5" fill="none" stroke="{T["rust"]}" stroke-width="2"/>'
         + f'<rect x="288" y="478" width="116" height="42" rx="8" fill="none" '
           f'stroke="{T["rust"]}" stroke-width="1.6"/>'
@@ -2483,6 +2483,19 @@ _D_S1 = ("The three page buses dive to an inner layer at via pads beneath "
 _D_S2 = "Test point one — probe the section live, in the browser."
 _D_S3 = ("Test point two — the system card, a print-format walkthrough of "
          "the architecture and the evidence.")
+# AutoML is the one system on this page whose card is written but not
+# deployed, so its probe lands on the card's SOURCE. The row that claims
+# "four of them ship a system card" enumerates Glyph, jetpack, Cadence and
+# Applied by name — AutoML was never in that four, and the probe used to
+# point at a URL that 404s, which is the page asserting a fifth.
+_D_S3_ZINC = ("Test point two — the system card's source. AutoML is the one "
+              "system here whose card is written but not deployed.")
+_S3_DESC = {"rust": _D_S3, "verd": _D_S3, "zinc": _D_S3_ZINC}
+_S3_TITLE = {"rust": "the system card", "verd": "the system card",
+             "zinc": "the system card's source"}
+# 11 characters either way, so the silkscreen budget is unchanged.
+_S3_LABEL = {"rust": "SYSTEM CARD", "verd": "SYSTEM CARD", "zinc": "CARD SOURCE"}
+_S3_M_LABEL = {"rust": "CARD", "verd": "CARD", "zinc": "SOURCE"}
 _D_S4 = "Test point three — the source repository."
 _D_C5 = ("Test point four — the row-level-security isolation suite, run "
          "against real Postgres.")
@@ -2535,12 +2548,12 @@ for _f in ("rust", "zinc", "verd"):
         (lambda ff: lambda: _m_mid(ff, 2, "LIVE"))(_fam))
     INTERVAL_PLATES[f"plate-probe-{_f}-s3.svg"] = _probe(
         f"plate-probe-{_f}-s3.svg", SEC_H, SEC_W[3],
-        "test point two — the system card", _D_S3,
-        (lambda ff: lambda: _mid(ff, 3, "TP2", "SYSTEM CARD"))(_fam))
+        f"test point two — {_S3_TITLE[_f]}", _S3_DESC[_f],
+        (lambda ff: lambda: _mid(ff, 3, "TP2", _S3_LABEL[ff]))(_fam))
     INTERVAL_MOBILE[f"m-probe-{_f}-s3.svg"] = _probe(
         f"m-probe-{_f}-s3.svg", M_SEC_H, M_SEC_W[3],
-        "test point two — the system card, phone cut", _D_S3,
-        (lambda ff: lambda: _m_mid(ff, 3, "CARD"))(_fam))
+        f"test point two — {_S3_TITLE[_f]}, phone cut", _S3_DESC[_f],
+        (lambda ff: lambda: _m_mid(ff, 3, _S3_M_LABEL[ff]))(_fam))
 for _f in ("rust", "zinc"):
     _fam = _f
     INTERVAL_PLATES[f"plate-probe-{_f}-s4.svg"] = _probe(
