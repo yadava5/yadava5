@@ -177,25 +177,36 @@ if (!GATE) {
   console.error('\nMOTION GATE FAILED\n' + fail.map(s => '  ' + s).join('\n'));
   process.exit(1);
 } else {
-  // This said "every plate sustains its carrier and lands its gesture", which
-  // was not true of the second half: mobile cards are excused the gesture
-  // clause above (`!r.mobile && !glance`) for the reason documented at the top
-  // of this file, and four of them legitimately report `gesture in 0/N`. A
-  // success line that claims coverage the run did not have is the same defect
-  // as a check that cannot fail — it just fails upward. So it now counts what
-  // was actually graded.
-  // Second correction, same defect as the first. "…land one" read as though
-  // every desktop plate fires a gesture burst; most do not. The clause has TWO
-  // satisfying routes (`r.live >= MIN_LIVE || r.strong / r.n >= 0.9`) and on
-  // this design the second carries the overwhelming majority — the comets are
-  // a strong continuous carrier rather than a periodic burst, which is legal
-  // and deliberate. Reporting the two as one number inflates what was
-  // demonstrated, which is the failure this line has now had twice.
+  // THIRD correction of this one sentence, so the history is the warning.
+  //   v1 "every plate sustains its carrier and lands its gesture" — false of
+  //      the mobile set, which the gesture clause deliberately excuses.
+  //   v2 "N are held to the gesture clause and land one" — read as though
+  //      every desktop plate fires a burst.
+  //   v3 "12 land a burst, 16 clear it as a carrier" — read as a PARTITION by
+  //      route, which measurement refuted: the routes overlap completely.
+  //
+  // Measured on this design, and the reason v3 was still wrong: the clause has
+  // two satisfying routes (`r.live >= MIN_LIVE || r.strong / r.n >= 0.9`), and
+  // ALL held plates clear the second at 100% of intervals. `burst-only` is
+  // ZERO — delete burst detection entirely and every plate still passes. So
+  // the burst clause currently has no grip on anything, and any sentence
+  // implying it carries some plates overstates the gate's hold. The burst
+  // count is still worth printing, as the thing that would notice the carrier
+  // weakening, but it is a subset and must read as one.
+  //
+  // Everything here is counted from the rows rather than written down. Every
+  // stale number this comment has carried — "four of them report gesture in
+  // 0/N" was three by the next run — was a literal somebody typed.
   const exempt = rows.filter(([, r]) => r.mobile).length;
   const held = rows.filter(([, r]) => !r.mobile);
+  const strong = held.filter(([, r]) => r.strong / r.n >= 0.9).length;
   const burst = held.filter(([, r]) => r.live >= MIN_LIVE).length;
+  const carrierOnly = strong === held.length;
   console.log(`\nMOTION GATE PASSED — all ${rows.length} plates sustain a carrier. `
-    + `${held.length} are also held to the gesture clause: ${burst} land a burst, `
-    + `${held.length - burst} clear it as a carrier strong enough to be the glance. `
+    + (carrierOnly
+        ? `All ${held.length} desktop plates clear the gesture clause as a carrier `
+          + `strong enough to be the glance; ${burst} of them also land a burst. `
+        : `${held.length} are held to the gesture clause: ${strong} clear it on the `
+          + `carrier, ${held.length - strong} only on a burst. `)
     + `${exempt} mobile cards are excused it by design, not by accident.`);
 }
