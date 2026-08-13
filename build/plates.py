@@ -1281,28 +1281,30 @@ def plate_glyph() -> str:
         + f'<rect x="492" y="300" width="208" height="42" rx="8" fill="none" '
           f'stroke="{T["zinc"]}" stroke-width="1.6"/>'
         + lbl(504, 326, "WASM_SIMD128 · 43,751 B", cls="ts", size=11.5, ls=1.3)
-        + lbl(492, 360, "BYTE-IDENTICAL TO MAIN · CHECKED DAILY IN CI", size=10, ls=1.1)
+        + lbl(492, 360, "BYTE-IDENTICAL TO MAIN · CHECKED DAILY BY THIS PAGE", size=10, ls=1.1)
         + mark("glyph", 150, 96, 48)
         + sec_roman(150, 54, "III — GLYPH", 30)
         + sec_sub(150, 76, "SIMD kernels over a net the course provided.", 14.5)
         + f'<text x="{fig_x(660, "3.5×", 62)}" y="150" class="d" font-size="62">3.5×</text>'
-        + f'<text x="660" y="188" class="dim" font-size="13">benchDot/256 — course baseline,</text>'
-        + f'<text x="660" y="206" class="dim" font-size="13">reference machine, committed run.</text>'
+        + f'<text x="660" y="188" class="dim" font-size="13">benchDot/256 — OpenMP threads,</text>'
+        + f'<text x="660" y="206" class="dim" font-size="13">same kernels · committed runs.</text>'
         + f'<rect x="150" y="382" width="4" height="16" fill="{T["rust"]}"/>'
-        + f'<text x="164" y="395" class="mid" font-size="14">the same flags run 10.7× slower on benchAxpy/128 — below the size floor,</text>'
-        + f'<text x="164" y="415" class="dim" font-size="13">where threading costs more than it pays. and 97.01% is a training-time</text>'
+        + f'<text x="164" y="395" class="mid" font-size="14">the same flags run 10.7× slower on benchAxpy/128 — memory-bandwidth-bound;</text>'
+        + f'<text x="164" y="415" class="dim" font-size="13">threading never pays it, at any size measured. and 97.01% is a training-time</text>'
         + f'<text x="164" y="433" class="dim" font-size="13">number: the test set that graded the net also picked its checkpoint.</text>'
     )
     return head(
         448,
-        "III · Glyph — SIMD kernels over a course-provided net: 3.5× where the size is right, 10.7× slower where it is not",
+        "III · Glyph — SIMD kernels over a course-provided net: 3.5× from OpenMP threading; 10.7× slower where memory bandwidth is the wall",
         "III · Glyph — SIMD kernels over a course-provided MNIST net, drawn "
         "as three register-lane bundles — NEON, AVX2, AVX-512 — converging "
-        "on benchDot/256: 3.5× over the course baseline on the reference "
-        "machine. The package that ships is WASM_SIMD128, 43,751 bytes, "
-        "byte-identical to main and checked daily in CI. The against-self "
-        "results are printed: the same flags run 10.7× slower on "
-        "benchAxpy/128, below the size floor, and 97.01% is a training-time "
+        "on benchDot/256: 3.5× from OpenMP threading over the same kernels "
+        "— its own single-threaded build — on the reference machine, from "
+        "committed runs. The package that ships is WASM_SIMD128, 43,751 "
+        "bytes, byte-identical to main and checked daily by this page's own "
+        "CI. The against-self results are printed: the same flags run 10.7× "
+        "slower on benchAxpy/128, memory-bandwidth-bound, where threading "
+        "never pays at any size measured, and 97.01% is a training-time "
         "number — the test set that graded the net also picked its "
         "checkpoint.",
         key="plate-3-glyph.svg",
@@ -1830,8 +1832,8 @@ def m_glyph() -> str:
         + mark("glyph", 92, 96, 48)
         + sec_roman(92, 54, "III — GLYPH", 24)
         + sec_sub(92, 76, "SIMD kernels over a net the course provided.", 13)
-        + m_fig("3.5×", "benchDot/256 — course baseline,",
-                "reference machine, committed run.")
+        + m_fig("3.5×", "benchDot/256 — OpenMP threads,",
+                "same kernels · committed runs.")
         + bus("rust", "M140,120 H160 V368", C=30, cd="M144,120 H160 V365")
         + f'<circle cx="160" cy="240" r="2.6" fill="{T["rust"]}"/>'
         + f'<circle cx="160" cy="300" r="2.6" fill="{T["rust"]}"/>'
@@ -1849,11 +1851,11 @@ def m_glyph() -> str:
           f'stroke="{T["zinc"]}" stroke-width="1.6"/>'
         + lbl(212, 486, "WASM_SIMD128 · 43,751 B", cls="ts", size=11.5, ls=1.3)
         + lbl(200, 522, "BYTE-IDENTICAL TO MAIN", size=10, ls=1.1)
-        + lbl(200, 537, "CHECKED DAILY IN CI", size=10, ls=1.1)
+        + lbl(200, 537, "CHECKED DAILY BY THIS PAGE", size=10, ls=1.1)
         + m_adm(556, "rust",
                 ["the same flags run 10.7× slower on",
-                 "benchAxpy/128 — below the size floor,"],
-                ["where threading costs more than it pays.",
+                 "benchAxpy/128 — memory-bandwidth-bound;"],
+                ["threading never pays, at any size measured.",
                  "and 97.01% is a training-time number:",
                  "the test set that graded the net",
                  "also picked its checkpoint."])
@@ -1863,11 +1865,13 @@ def m_glyph() -> str:
         "III · Glyph — register lanes to one benchmark, phone cut",
         "III · Glyph, phone cut — SIMD kernels over a course-provided MNIST "
         "net: three register-lane bundles — NEON, AVX2, AVX-512 — converge on "
-        "benchDot/256, 3.5× over the course baseline on the reference "
-        "machine, and drop to the package that ships: WASM_SIMD128, 43,751 "
-        "bytes, byte-identical to main, checked daily in CI. The against-self "
-        "results are printed: the same flags run 10.7× slower on "
-        "benchAxpy/128, below the size floor, and 97.01% is a training-time "
+        "benchDot/256, 3.5× from OpenMP threading over the same kernels — its "
+        "own single-threaded build — on the reference machine, from committed "
+        "runs, and drop to the package that ships: WASM_SIMD128, 43,751 "
+        "bytes, byte-identical to main, checked daily by this page's own CI. "
+        "The against-self results are printed: the same flags run 10.7× "
+        "slower on benchAxpy/128, memory-bandwidth-bound, where threading "
+        "never pays at any size measured, and 97.01% is a training-time "
         "number — the test set that graded the net also picked its "
         "checkpoint.",
         key="m-3-glyph.svg",
