@@ -90,7 +90,14 @@ ALT: dict[str, str] = {}
 # (scratchpad/p1-palette.py, 2026-08-12): text >= 4.5:1, structure >= 3.0:1,
 # and the dark set re-checked on #010409 (dark-high-contrast), where light
 # ink only gains. ramp = comet colours head->tail; the tail is deliberately
-# near the track so the pulse decays into the line.
+# near the track so the pulse decays into the line — but each step must ALSO
+# clear its neighbour by >24 summed |dRGB|, motion.mjs's changed-pixel
+# threshold: a boundary under it does not exist to the gate or, by the
+# gate's proxy, to the eye. Light rust shipped flat (29/22/20 internal
+# edges, dE2000 3.8/3.0/2.9 — four short-rail plates read frozen) and was
+# widened 2026-08-13 to 44/38/36 (dE 5.5/5.0/4.8, zinc's band; every step
+# 9.0-14.0:1 on white), holding hue 13-15 deg with saturation rising to a
+# fully-saturated head, the same shape dark rust already has (0.73->1.00).
 TILE = "#0A0A0B"   # the product marks' own ground, from their repos
 DARK = dict(
     canvas="#212830", ink="#E4E9E9", mid="#C7D1D6", dim="#B0BAC0",
@@ -105,7 +112,7 @@ LIGHT = dict(
     verd="#1F6D5C", rust="#9A3412", zinc="#5F6E73",
     edge="#6E7A80", pulse="#1A2224",
     ramp=dict(verd=("#0C4A3C", "#14584A", "#1A6253"),
-              rust=("#6E2209", "#7F2A0D", "#8D2F10"),
+              rust=("#571300", "#6F1F08", "#852A0D"),
               zinc=("#39464B", "#48565B", "#535F64")),
 )
 T = DARK
