@@ -927,7 +927,7 @@ def plate_cadence() -> str:
         + f'<text x="680" y="108" class="dim" font-size="13">route handlers, one function;</text>'
         + f'<text x="680" y="126" class="dim" font-size="13">RLS FORCEd on all 7 tables.</text>'
         + f'<rect x="150" y="374" width="4" height="16" fill="{T["verd"]}"/>'
-        + f'<text x="164" y="387" class="mid" font-size="14">five of six app-side guards begin if (context?.userId) — conditional.</text>'
+        + f'<text x="164" y="387" class="mid" font-size="14">every one of the six services carries a conditional owner guard.</text>'
         + f'<text x="164" y="407" class="dim" font-size="13">a caller that forgets the identity still sends the query; the database&#8217;s refusal cannot be forgotten.</text>'
     )
     return head(
@@ -936,8 +936,8 @@ def plate_cadence() -> str:
         "V · Cadence — the whole API drawn as one part: 37 route handlers "
         "enter one serverless function, and its single output passes through "
         "the one door in a wall — row-level security, FORCEd — before "
-        "reaching the 7 tables behind it. The against-self line: five of six "
-        "app-side guards are conditional, if context userId; a caller that "
+        "reaching the 7 tables behind it. The against-self line: every one of "
+        "the six services carries a conditional owner guard; a caller that "
         "forgets the identity still sends the query, and the database's "
         "refusal is the one that cannot be forgotten.",
         key="plate-5-cadence.svg",
@@ -1473,8 +1473,8 @@ def m_cadence() -> str:
         + f'<path fill="none" stroke="{T["verd"]}" stroke-width="1.4" d="{fan}"/>'
         + tables
         + m_adm(524, "verd",
-                ["five of six app-side guards begin",
-                 "if (context?.userId) — conditional."],
+                ["every one of the six services",
+                 "carries a conditional owner guard."],
                 ["a caller that forgets the identity",
                  "still sends the query; the database’s",
                  "refusal cannot be forgotten."])
@@ -1485,8 +1485,8 @@ def m_cadence() -> str:
         "V · Cadence, phone cut — 37 route handlers rain into one serverless "
         "function, and its single output passes through the one door in a "
         "wall — row-level security, FORCEd — before reaching the 7 tables "
-        "behind it. The against-self line: five of six app-side guards are "
-        "conditional, if context userId; a caller that forgets the identity "
+        "behind it. The against-self line: every one of the six services "
+        "carries a conditional owner guard; a caller that forgets the identity "
         "still sends the query, and the database's refusal is the one that "
         "cannot be forgotten.",
         key="m-5-cadence.svg",

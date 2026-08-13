@@ -321,6 +321,25 @@
       "note": "Counted from the guard in the QUERY, not from a comment about it. The previous row here counted the word IDOR in docstrings and returned 7; four different methods return 7, 8, 9 and 15, so the count of vulnerabilities is an audit finding and belongs in prose. How many services now scope by owner is a property of the code. Round 27: plate-5 left this row's drawn_on — the rebuilt plate draws the six services as six row-pairs, marks rather than a word, and a mark is not a token this gate can read. The README still says six and this row still holds it."
     },
     {
+      "id": "cadence.conditional_owner_guard",
+      "value": "6",
+      "drawn_on": [
+        "plate-5-cadence.svg",
+        "m-5-cadence.svg"
+      ],
+      "repo": "cadence",
+      "paths": [
+        "lib/services/AttachmentService.ts",
+        "lib/services/CalendarService.ts",
+        "lib/services/EventService.ts",
+        "lib/services/TagService.ts",
+        "lib/services/TaskListService.ts",
+        "lib/services/TaskService.ts"
+      ],
+      "extractor": "grep -lE 'if \\(context\\?\\.userId\\)' $BLOBS | grep -c .",
+      "note": "Replaces the 'five of six app-side guards' both cadence plates drew until 2026-08-12, and the two exemptions that carried it. That five was not reproducible, and four methods disagreed about it. A literal grep of `if (context?.userId)` finds it in ALL SIX services — 2, 9, 5, 6, 8 and 7 occurrences. Classifying each guard conditional-vs-unconditional makes AttachmentService the only all-conditional service, so five services have a MIX: a different five. Restricting to the by-id path gives 8 unguarded sites in CalendarService, which would be a live IDOR and is contradicted by the audit that closed all six. And the retired prose simply asserted it. The house rule is that a number two methods disagree on does not get published, so the count came off the plate and this row derives the statement every one of those methods agrees on. WHAT IT PROVES: each of these six files carries at least one owner guard written as a CONDITION, so the scoping is a branch a caller can fail to take. WHAT IT DOES NOT PROVE: not that every guard inside a service is conditional, not that every by-id path carries one, and not that the guard is sufficient — those are the three readings that produced three different fives, and the plate now claims none of them. The line loses nothing it could support: the app-side guard is skippable, and the database's refusal is not. Deliberately the same six paths as cadence.idor_services and deliberately a different property — that row counts services that scope by owner IN THE QUERY (AND \"userId\" = $), this one counts services whose app-side guard is a condition. Both are 6; neither licenses the other's sentence. Not expected-zero, and self-controlling in the sense the tree() note in claims.mjs asks for: a typo'd pattern or wrong escaping prints 0, not 6, so this fails in the unflattering direction as well as the flattering one."
+    },
+    {
       "id": "glyph.deployed_wasm_sha256",
       "value": "e681d2f76d41305aa3b8c250799f898bd1139497f60580ed59000d49cf5d6360",
       "drawn_on": [],
@@ -521,10 +540,8 @@
     "m-3-glyph.svg:512": "AVX-512 — see plate-3-glyph.svg:512",
     "m-3-glyph.svg:256": "benchDot/256 — see plate-3-glyph.svg:256",
     "m-3-glyph.svg:128": "benchAxpy/128 and WASM_SIMD128 — see plate-3-glyph.svg:128",
-    "plate-5-cadence.svg:5": "'five of six app-side guards begin if (context?.userId) — conditional'. NOT DERIVED, and this reason says so rather than laundering it: cadence.idor_services derives the six, but a grep of those six services at 771acc48 finds `if (context?.userId)` in all six (2, 9, 5, 6, 8 and 7 occurrences), so the five is an audit finding stated in prose on the plate and no extractor here reproduces it.",
-    "m-5-cadence.svg:5": "'five of six app-side guards' — see plate-5-cadence.svg:5",
-    "plate-colophon.svg:28": "SELF-REFERENTIAL, on purpose. The colophon draws \"N CLAIMS · N COMMANDS\", where N is len(claims) in this very file, computed by plates.py at build time. A claims row would have to count itself and would change its own value on being added, so the honest form is an exemption whose reason names the mechanism. It cannot go stale silently: add or delete a row, plates.py redraws a different number, and this key stops matching.",
-    "m-colophon.svg:28": "SELF-REFERENTIAL — the mobile colophon draws the same count; see the plate-colophon key above for the mechanism. Cited by name rather than by key, because the key carries a number that moves whenever a row is added or deleted.",
+    "plate-colophon.svg:29": "SELF-REFERENTIAL, on purpose. The colophon draws \"N CLAIMS · N COMMANDS\", where N is len(claims) in this very file, computed by plates.py at build time. A claims row would have to count itself and would change its own value on being added, so the honest form is an exemption whose reason names the mechanism. It cannot go stale silently: add or delete a row, plates.py redraws a different number, and this key stops matching.",
+    "m-colophon.svg:29": "SELF-REFERENTIAL — the mobile colophon draws the same count; see the plate-colophon key above for the mechanism. Cited by name rather than by key, because the key carries a number that moves whenever a row is added or deleted.",
     "README.md:2025": "'June 2025 to May 2026' — the dates of the role",
     "README.md:2026": "'May 2026' as the graduation date and the end of the role, and 'DataFest 2026' — dates, not measurements",
     "README.md:3": "'Three layers read it, cheapest first' — the count of tiers named in the same sentence. The other three in the prose, 'team lead of three at DataFest', is pinned by datafest.team_size's anchor and masked out before this exemption is consulted.",
