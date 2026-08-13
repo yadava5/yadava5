@@ -12,44 +12,44 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#1A2224}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#1A2224;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k670{to{stroke-dashoffset:-201}}
-.k670{animation:k670 2100ms linear infinite}
-@keyframes k671{to{stroke-dashoffset:-173}}
-.k671{animation:k671 2100ms linear infinite}
-@keyframes k672{to{stroke-dashoffset:-151}}
-.k672{animation:k672 2100ms linear infinite}
-@keyframes k673{to{stroke-dashoffset:-326}}
-.k673{animation:k673 2450ms linear infinite}
-@keyframes k674{to{stroke-dashoffset:-298}}
-.k674{animation:k674 2450ms linear infinite}
-@keyframes k675{to{stroke-dashoffset:-276}}
-.k675{animation:k675 2450ms linear infinite}
-@keyframes k676{to{stroke-dashoffset:-176}}
-.k676{animation:k676 2100ms linear infinite}
-@keyframes k677{to{stroke-dashoffset:-148}}
-.k677{animation:k677 2100ms linear infinite}
-@keyframes k678{to{stroke-dashoffset:-126}}
-.k678{animation:k678 2100ms linear infinite}
-@keyframes k679{to{stroke-dashoffset:-263}}
-.k679{animation:k679 2450ms linear infinite}
-@keyframes k680{to{stroke-dashoffset:-235}}
-.k680{animation:k680 2450ms linear infinite}
-@keyframes k681{to{stroke-dashoffset:-213}}
-.k681{animation:k681 2450ms linear infinite}
-@keyframes k682{to{stroke-dashoffset:-217}}
-.k682{animation:k682 2750ms linear infinite}
-@keyframes k683{to{stroke-dashoffset:-189}}
-.k683{animation:k683 2750ms linear infinite}
-@keyframes k684{to{stroke-dashoffset:-167}}
-.k684{animation:k684 2750ms linear infinite}
-@keyframes k685{78%{opacity:.9}100%{stroke-dashoffset:-970;opacity:0}}
-.k685{animation:k685 2300ms cubic-bezier(.45,0,.2,1) 400ms 1 forwards}
-@keyframes k686{78%{opacity:.9}100%{stroke-dashoffset:-920;opacity:0}}
-.k686{animation:k686 2300ms cubic-bezier(.45,0,.2,1) 530ms 1 forwards}
-@keyframes k687{78%{opacity:.9}100%{stroke-dashoffset:-420;opacity:0}}
-.k687{animation:k687 2300ms cubic-bezier(.45,0,.2,1) 680ms 1 forwards}
+@keyframes k1000{to{stroke-dashoffset:-201}}
+.k1000{animation:k1000 2100ms linear infinite}
+@keyframes k1001{to{stroke-dashoffset:-173}}
+.k1001{animation:k1001 2100ms linear infinite}
+@keyframes k1002{to{stroke-dashoffset:-151}}
+.k1002{animation:k1002 2100ms linear infinite}
+@keyframes k1003{to{stroke-dashoffset:-326}}
+.k1003{animation:k1003 2450ms linear infinite}
+@keyframes k1004{to{stroke-dashoffset:-298}}
+.k1004{animation:k1004 2450ms linear infinite}
+@keyframes k1005{to{stroke-dashoffset:-276}}
+.k1005{animation:k1005 2450ms linear infinite}
+@keyframes k1006{to{stroke-dashoffset:-176}}
+.k1006{animation:k1006 2100ms linear infinite}
+@keyframes k1007{to{stroke-dashoffset:-148}}
+.k1007{animation:k1007 2100ms linear infinite}
+@keyframes k1008{to{stroke-dashoffset:-126}}
+.k1008{animation:k1008 2100ms linear infinite}
+@keyframes k1009{to{stroke-dashoffset:-263}}
+.k1009{animation:k1009 2450ms linear infinite}
+@keyframes k1010{to{stroke-dashoffset:-235}}
+.k1010{animation:k1010 2450ms linear infinite}
+@keyframes k1011{to{stroke-dashoffset:-213}}
+.k1011{animation:k1011 2450ms linear infinite}
+@keyframes k1012{to{stroke-dashoffset:-217}}
+.k1012{animation:k1012 2750ms linear infinite}
+@keyframes k1013{to{stroke-dashoffset:-189}}
+.k1013{animation:k1013 2750ms linear infinite}
+@keyframes k1014{to{stroke-dashoffset:-167}}
+.k1014{animation:k1014 2750ms linear infinite}
+@keyframes k1015{78%{opacity:.9}100%{stroke-dashoffset:-970;opacity:0}}
+.k1015{animation:k1015 2300ms cubic-bezier(.45,0,.2,1) 400ms 1 forwards}
+@keyframes k1016{78%{opacity:.9}100%{stroke-dashoffset:-920;opacity:0}}
+.k1016{animation:k1016 2300ms cubic-bezier(.45,0,.2,1) 530ms 1 forwards}
+@keyframes k1017{78%{opacity:.9}100%{stroke-dashoffset:-420;opacity:0}}
+.k1017{animation:k1017 2300ms cubic-bezier(.45,0,.2,1) 680ms 1 forwards}
 </style>
-<text x="32" y="64" class="d" font-size="30" letter-spacing="0.5">AYUSH YADAV</text><text x="32" y="96" font-size="13.5">Systems, from SIMD kernels</text><text x="32" y="114" font-size="13.5">to the browser they run in.</text><text x="32" y="138" class="dim" font-size="12">open to full-time software engineering roles</text><rect x="32" y="152" width="8" height="8" fill="#1F6D5C"/><text x="48" y="160" class="ts mid" font-size="10" letter-spacing="1.4">EVERY EDGE IS A CHECKABLE CLAIM</text><g><path class="bus" stroke="#1F6D5C" d="M84,214 H196"/><path class="cm k670" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="9" d="M88,214 H192"/><path class="cm k671" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="37" d="M88,214 H192"/><path class="cm k672" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="59" d="M88,214 H192"/></g><g><path class="bus" stroke="#9A3412" d="M84,324 H196"/><path class="cm k673" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="-116" d="M88,324 H192"/><path class="cm k674" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="-88" d="M88,324 H192"/><path class="cm k675" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="-66" d="M88,324 H192"/></g><path class="bus" stroke="#5F6E73" stroke-dasharray="3 6" d="M196,464 H172"/><circle cx="166" cy="464" r="3" fill="none" stroke="#5F6E73" stroke-width="2"/><g><path class="bus" stroke="#1F6D5C" d="M178,214 V548 Q178,560 166,560 H52 Q40,560 40,572 V620"/><path class="cm k676" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="34" d="M178,218 V548 Q178,560 166,560 H52 Q40,560 40,572 V617.5"/><path class="cm k677" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="62" d="M178,218 V548 Q178,560 166,560 H52 Q40,560 40,572 V617.5"/><path class="cm k678" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="84" d="M178,218 V548 Q178,560 166,560 H52 Q40,560 40,572 V617.5"/></g><g><path class="bus" stroke="#9A3412" d="M188,324 V564 Q188,576 176,576 H66 Q54,576 54,588 V620"/><path class="cm k679" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="-53" d="M188,328 V564 Q188,576 176,576 H66 Q54,576 54,588 V617.5"/><path class="cm k680" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="-25" d="M188,328 V564 Q188,576 176,576 H66 Q54,576 54,588 V617.5"/><path class="cm k681" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="-3" d="M188,328 V564 Q188,576 176,576 H66 Q54,576 54,588 V617.5"/></g><g><path class="bus" stroke="#5F6E73" d="M68,458 V620"/><path class="cm k682" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-7" d="M68,462 V617.5"/><path class="cm k683" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="21" d="M68,462 V617.5"/><path class="cm k684" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="43" d="M68,462 V617.5"/></g><path class="pu k685" stroke-dasharray="70 1040" stroke-dashoffset="70" d="M178,218 V548 Q178,560 166,560 H52 Q40,560 40,572 V617.5"/><path class="pu k686" stroke-dasharray="70 990" stroke-dashoffset="70" d="M188,328 V564 Q188,576 176,576 H66 Q54,576 54,588 V617.5"/><path class="pu k687" stroke-dasharray="70 490" stroke-dashoffset="70" d="M68,462 V617.5"/><g transform="translate(32,190) scale(1.0000)"><rect x="0.75" y="0.75" width="46.5" height="46.5" rx="12" fill="#0A0A0B" stroke="#6E7A80" stroke-width="1"/>
+<text x="32" y="64" class="d" font-size="30" letter-spacing="0.5">AYUSH YADAV</text><text x="32" y="96" font-size="13.5">Systems, from SIMD kernels</text><text x="32" y="114" font-size="13.5">to the browser they run in.</text><text x="32" y="138" class="dim" font-size="12">open to full-time software engineering roles</text><rect x="32" y="152" width="8" height="8" fill="#1F6D5C"/><text x="48" y="160" class="ts mid" font-size="10" letter-spacing="1.4">EVERY EDGE IS A CHECKABLE CLAIM</text><g><path class="bus" stroke="#1F6D5C" d="M84,214 H196"/><path class="cm k1000" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="9" d="M88,214 H192"/><path class="cm k1001" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="37" d="M88,214 H192"/><path class="cm k1002" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="59" d="M88,214 H192"/></g><g><path class="bus" stroke="#9A3412" d="M84,324 H196"/><path class="cm k1003" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="-116" d="M88,324 H192"/><path class="cm k1004" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="-88" d="M88,324 H192"/><path class="cm k1005" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="-66" d="M88,324 H192"/></g><path class="bus" stroke="#5F6E73" stroke-dasharray="3 6" d="M196,464 H172"/><circle cx="166" cy="464" r="3" fill="none" stroke="#5F6E73" stroke-width="2"/><g><path class="bus" stroke="#1F6D5C" d="M178,214 V548 Q178,560 166,560 H52 Q40,560 40,572 V620"/><path class="cm k1006" stroke="#0C4A3C" stroke-dasharray="34 176" stroke-dashoffset="34" d="M178,218 V548 Q178,560 166,560 H52 Q40,560 40,572 V617.5"/><path class="cm k1007" stroke="#14584A" stroke-dasharray="28 182" stroke-dashoffset="62" d="M178,218 V548 Q178,560 166,560 H52 Q40,560 40,572 V617.5"/><path class="cm k1008" stroke="#1A6253" stroke-dasharray="22 188" stroke-dashoffset="84" d="M178,218 V548 Q178,560 166,560 H52 Q40,560 40,572 V617.5"/></g><g><path class="bus" stroke="#9A3412" d="M188,324 V564 Q188,576 176,576 H66 Q54,576 54,588 V620"/><path class="cm k1009" stroke="#6E2209" stroke-dasharray="34 176" stroke-dashoffset="-53" d="M188,328 V564 Q188,576 176,576 H66 Q54,576 54,588 V617.5"/><path class="cm k1010" stroke="#7F2A0D" stroke-dasharray="28 182" stroke-dashoffset="-25" d="M188,328 V564 Q188,576 176,576 H66 Q54,576 54,588 V617.5"/><path class="cm k1011" stroke="#8D2F10" stroke-dasharray="22 188" stroke-dashoffset="-3" d="M188,328 V564 Q188,576 176,576 H66 Q54,576 54,588 V617.5"/></g><g><path class="bus" stroke="#5F6E73" d="M68,458 V620"/><path class="cm k1012" stroke="#39464B" stroke-dasharray="34 176" stroke-dashoffset="-7" d="M68,462 V617.5"/><path class="cm k1013" stroke="#48565B" stroke-dasharray="28 182" stroke-dashoffset="21" d="M68,462 V617.5"/><path class="cm k1014" stroke="#535F64" stroke-dasharray="22 188" stroke-dashoffset="43" d="M68,462 V617.5"/></g><path class="pu k1015" stroke-dasharray="70 1040" stroke-dashoffset="70" d="M178,218 V548 Q178,560 166,560 H52 Q40,560 40,572 V617.5"/><path class="pu k1016" stroke-dasharray="70 990" stroke-dashoffset="70" d="M188,328 V564 Q188,576 176,576 H66 Q54,576 54,588 V617.5"/><path class="pu k1017" stroke-dasharray="70 490" stroke-dashoffset="70" d="M68,462 V617.5"/><g transform="translate(32,190) scale(1.0000)"><rect x="0.75" y="0.75" width="46.5" height="46.5" rx="12" fill="#0A0A0B" stroke="#6E7A80" stroke-width="1"/>
 <path d="M10,33 H38" fill="none" stroke="#F7F8F8" stroke-opacity="0.82" stroke-width="2" stroke-linecap="round"/>
 <path d="M15,30.5 V33 M22,30.5 V33 M36,30.5 V33" fill="none" stroke="#F7F8F8" stroke-opacity="0.42" stroke-width="1.5" stroke-linecap="round"/>
 <path d="M25.6,15.2 L29,18.6 L32.4,15.2 M29,18.6 V33" fill="none" stroke="#34D399" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></g><g transform="translate(200,190) scale(1.0000)"><rect x="0.75" y="0.75" width="46.5" height="46.5" rx="12" fill="#0A0A0B" stroke="#6E7A80" stroke-width="1"/>

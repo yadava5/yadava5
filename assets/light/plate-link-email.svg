@@ -10,29 +10,29 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#E4E9E9}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#1A2224;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k487{to{stroke-dashoffset:-259.0}}
-.k487{animation:k487 2750ms linear infinite}
-@keyframes k488{to{stroke-dashoffset:-245.0}}
-.k488{animation:k488 2750ms linear infinite}
-@keyframes k489{to{stroke-dashoffset:-234.0}}
-.k489{animation:k489 2750ms linear infinite}
-@keyframes k490{to{stroke-dashoffset:-311.5}}
-.k490{animation:k490 2750ms linear infinite}
-@keyframes k491{to{stroke-dashoffset:-297.5}}
-.k491{animation:k491 2750ms linear infinite}
-@keyframes k492{to{stroke-dashoffset:-286.5}}
-.k492{animation:k492 2750ms linear infinite}
-@keyframes k493{to{stroke-dashoffset:-364.0}}
-.k493{animation:k493 2750ms linear infinite}
-@keyframes k494{to{stroke-dashoffset:-350.0}}
-.k494{animation:k494 2750ms linear infinite}
-@keyframes k495{to{stroke-dashoffset:-339.0}}
-.k495{animation:k495 2750ms linear infinite}
-@keyframes k496{to{stroke-dashoffset:-416.5}}
-.k496{animation:k496 2750ms linear infinite}
-@keyframes k497{to{stroke-dashoffset:-402.5}}
-.k497{animation:k497 2750ms linear infinite}
-@keyframes k498{to{stroke-dashoffset:-391.5}}
-.k498{animation:k498 2750ms linear infinite}
+@keyframes k817{to{stroke-dashoffset:-259.0}}
+.k817{animation:k817 2750ms linear infinite}
+@keyframes k818{to{stroke-dashoffset:-245.0}}
+.k818{animation:k818 2750ms linear infinite}
+@keyframes k819{to{stroke-dashoffset:-234.0}}
+.k819{animation:k819 2750ms linear infinite}
+@keyframes k820{to{stroke-dashoffset:-311.5}}
+.k820{animation:k820 2750ms linear infinite}
+@keyframes k821{to{stroke-dashoffset:-297.5}}
+.k821{animation:k821 2750ms linear infinite}
+@keyframes k822{to{stroke-dashoffset:-286.5}}
+.k822{animation:k822 2750ms linear infinite}
+@keyframes k823{to{stroke-dashoffset:-364.0}}
+.k823{animation:k823 2750ms linear infinite}
+@keyframes k824{to{stroke-dashoffset:-350.0}}
+.k824{animation:k824 2750ms linear infinite}
+@keyframes k825{to{stroke-dashoffset:-339.0}}
+.k825{animation:k825 2750ms linear infinite}
+@keyframes k826{to{stroke-dashoffset:-416.5}}
+.k826{animation:k826 2750ms linear infinite}
+@keyframes k827{to{stroke-dashoffset:-402.5}}
+.k827{animation:k827 2750ms linear infinite}
+@keyframes k828{to{stroke-dashoffset:-391.5}}
+.k828{animation:k828 2750ms linear infinite}
 </style>
-<path class="bus" stroke="#79848C" d="M24,0 V88"/><g><rect x="0.5" y="20" width="101" height="64" rx="3" fill="#0A0A0B" stroke="#79848C" stroke-width="1"/><rect x="21.5" y="20.5" width="5" height="4" fill="#8A9599"/><rect x="21.5" y="79.5" width="5" height="4" fill="#8A9599"/><path class="bus" stroke="#79848C" d="M24,20 V26 M24,54 V84"/><rect x="10" y="26" width="28" height="28" rx="8" fill="#0A0A0B" stroke="#6B6B76" stroke-width="1.2"/><text transform="translate(0,16)" x="24" y="29.5" class="ts" font-size="17" text-anchor="middle" style="fill:#F7F8F8">@</text><text x="46" y="44.5" class="ts" font-size="11.5" letter-spacing="1.3">EMAIL</text></g><path class="cm k487" stroke="#C9D3D6" stroke-dasharray="17 193" stroke-dashoffset="-49.0" d="M24,58 V80"/><path class="cm k488" stroke="#AEB9BD" stroke-dasharray="14 196" stroke-dashoffset="-35.0" d="M24,58 V80"/><path class="cm k489" stroke="#9AA5A9" stroke-dasharray="11 199" stroke-dashoffset="-24.0" d="M24,58 V80"/><path class="cm k490" stroke="#C9D3D6" stroke-dasharray="17 193" stroke-dashoffset="-101.5" d="M24,58 V80"/><path class="cm k491" stroke="#AEB9BD" stroke-dasharray="14 196" stroke-dashoffset="-87.5" d="M24,58 V80"/><path class="cm k492" stroke="#9AA5A9" stroke-dasharray="11 199" stroke-dashoffset="-76.5" d="M24,58 V80"/><path class="cm k493" stroke="#C9D3D6" stroke-dasharray="17 193" stroke-dashoffset="-154.0" d="M24,58 V80"/><path class="cm k494" stroke="#AEB9BD" stroke-dasharray="14 196" stroke-dashoffset="-140.0" d="M24,58 V80"/><path class="cm k495" stroke="#9AA5A9" stroke-dasharray="11 199" stroke-dashoffset="-129.0" d="M24,58 V80"/><path class="cm k496" stroke="#C9D3D6" stroke-dasharray="17 193" stroke-dashoffset="-206.5" d="M24,58 V80"/><path class="cm k497" stroke="#AEB9BD" stroke-dasharray="14 196" stroke-dashoffset="-192.5" d="M24,58 V80"/><path class="cm k498" stroke="#9AA5A9" stroke-dasharray="11 199" stroke-dashoffset="-181.5" d="M24,58 V80"/></svg>
+<path class="bus" stroke="#79848C" d="M24,0 V88"/><g><rect x="0.5" y="20" width="101" height="64" rx="3" fill="#0A0A0B" stroke="#79848C" stroke-width="1"/><rect x="21.5" y="20.5" width="5" height="4" fill="#8A9599"/><rect x="21.5" y="79.5" width="5" height="4" fill="#8A9599"/><path class="bus" stroke="#79848C" d="M24,20 V26 M24,54 V84"/><rect x="10" y="26" width="28" height="28" rx="8" fill="#0A0A0B" stroke="#6B6B76" stroke-width="1.2"/><text transform="translate(0,16)" x="24" y="29.5" class="ts" font-size="17" text-anchor="middle" style="fill:#F7F8F8">@</text><text x="46" y="44.5" class="ts" font-size="11.5" letter-spacing="1.3">EMAIL</text></g><path class="cm k817" stroke="#C9D3D6" stroke-dasharray="17 193" stroke-dashoffset="-49.0" d="M24,58 V80"/><path class="cm k818" stroke="#AEB9BD" stroke-dasharray="14 196" stroke-dashoffset="-35.0" d="M24,58 V80"/><path class="cm k819" stroke="#9AA5A9" stroke-dasharray="11 199" stroke-dashoffset="-24.0" d="M24,58 V80"/><path class="cm k820" stroke="#C9D3D6" stroke-dasharray="17 193" stroke-dashoffset="-101.5" d="M24,58 V80"/><path class="cm k821" stroke="#AEB9BD" stroke-dasharray="14 196" stroke-dashoffset="-87.5" d="M24,58 V80"/><path class="cm k822" stroke="#9AA5A9" stroke-dasharray="11 199" stroke-dashoffset="-76.5" d="M24,58 V80"/><path class="cm k823" stroke="#C9D3D6" stroke-dasharray="17 193" stroke-dashoffset="-154.0" d="M24,58 V80"/><path class="cm k824" stroke="#AEB9BD" stroke-dasharray="14 196" stroke-dashoffset="-140.0" d="M24,58 V80"/><path class="cm k825" stroke="#9AA5A9" stroke-dasharray="11 199" stroke-dashoffset="-129.0" d="M24,58 V80"/><path class="cm k826" stroke="#C9D3D6" stroke-dasharray="17 193" stroke-dashoffset="-206.5" d="M24,58 V80"/><path class="cm k827" stroke="#AEB9BD" stroke-dasharray="14 196" stroke-dashoffset="-192.5" d="M24,58 V80"/><path class="cm k828" stroke="#9AA5A9" stroke-dasharray="11 199" stroke-dashoffset="-181.5" d="M24,58 V80"/></svg>

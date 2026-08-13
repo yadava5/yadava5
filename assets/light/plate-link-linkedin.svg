@@ -10,29 +10,29 @@ text{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:#E4E9E9}
 .cm{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .pu{fill:none;stroke:#1A2224;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 @media (prefers-reduced-motion: reduce){*{animation:none!important}}
-@keyframes k475{to{stroke-dashoffset:-393.0}}
-.k475{animation:k475 2450ms linear infinite}
-@keyframes k476{to{stroke-dashoffset:-379.0}}
-.k476{animation:k476 2450ms linear infinite}
-@keyframes k477{to{stroke-dashoffset:-368.0}}
-.k477{animation:k477 2450ms linear infinite}
-@keyframes k478{to{stroke-dashoffset:-445.5}}
-.k478{animation:k478 2450ms linear infinite}
-@keyframes k479{to{stroke-dashoffset:-431.5}}
-.k479{animation:k479 2450ms linear infinite}
-@keyframes k480{to{stroke-dashoffset:-420.5}}
-.k480{animation:k480 2450ms linear infinite}
-@keyframes k481{to{stroke-dashoffset:-498.0}}
-.k481{animation:k481 2450ms linear infinite}
-@keyframes k482{to{stroke-dashoffset:-484.0}}
-.k482{animation:k482 2450ms linear infinite}
-@keyframes k483{to{stroke-dashoffset:-473.0}}
-.k483{animation:k483 2450ms linear infinite}
-@keyframes k484{to{stroke-dashoffset:-550.5}}
-.k484{animation:k484 2450ms linear infinite}
-@keyframes k485{to{stroke-dashoffset:-536.5}}
-.k485{animation:k485 2450ms linear infinite}
-@keyframes k486{to{stroke-dashoffset:-525.5}}
-.k486{animation:k486 2450ms linear infinite}
+@keyframes k805{to{stroke-dashoffset:-393.0}}
+.k805{animation:k805 2450ms linear infinite}
+@keyframes k806{to{stroke-dashoffset:-379.0}}
+.k806{animation:k806 2450ms linear infinite}
+@keyframes k807{to{stroke-dashoffset:-368.0}}
+.k807{animation:k807 2450ms linear infinite}
+@keyframes k808{to{stroke-dashoffset:-445.5}}
+.k808{animation:k808 2450ms linear infinite}
+@keyframes k809{to{stroke-dashoffset:-431.5}}
+.k809{animation:k809 2450ms linear infinite}
+@keyframes k810{to{stroke-dashoffset:-420.5}}
+.k810{animation:k810 2450ms linear infinite}
+@keyframes k811{to{stroke-dashoffset:-498.0}}
+.k811{animation:k811 2450ms linear infinite}
+@keyframes k812{to{stroke-dashoffset:-484.0}}
+.k812{animation:k812 2450ms linear infinite}
+@keyframes k813{to{stroke-dashoffset:-473.0}}
+.k813{animation:k813 2450ms linear infinite}
+@keyframes k814{to{stroke-dashoffset:-550.5}}
+.k814{animation:k814 2450ms linear infinite}
+@keyframes k815{to{stroke-dashoffset:-536.5}}
+.k815{animation:k815 2450ms linear infinite}
+@keyframes k816{to{stroke-dashoffset:-525.5}}
+.k816{animation:k816 2450ms linear infinite}
 </style>
-<path class="bus" stroke="#C1663A" d="M24,0 V88"/><g><rect x="0.5" y="20" width="123" height="64" rx="3" fill="#0A0A0B" stroke="#79848C" stroke-width="1"/><rect x="21.5" y="20.5" width="5" height="4" fill="#E0703A"/><rect x="21.5" y="79.5" width="5" height="4" fill="#E0703A"/><path class="bus" stroke="#C1663A" d="M24,20 V26 M24,54 V84"/><rect x="10" y="26" width="28" height="28" rx="8" fill="#0A0A0B" stroke="#6B6B76" stroke-width="1.2"/><text transform="translate(0,16)" x="24" y="29" class="ts" font-size="15.5" text-anchor="middle" style="fill:#F7F8F8">in</text><text x="46" y="44.5" class="ts" font-size="11.5" letter-spacing="1.3">LINKEDIN</text></g><path class="cm k475" stroke="#FFB287" stroke-dasharray="17 193" stroke-dashoffset="-183.0" d="M24,58 V80"/><path class="cm k476" stroke="#F29260" stroke-dasharray="14 196" stroke-dashoffset="-169.0" d="M24,58 V80"/><path class="cm k477" stroke="#E87E49" stroke-dasharray="11 199" stroke-dashoffset="-158.0" d="M24,58 V80"/><path class="cm k478" stroke="#FFB287" stroke-dasharray="17 193" stroke-dashoffset="-235.5" d="M24,58 V80"/><path class="cm k479" stroke="#F29260" stroke-dasharray="14 196" stroke-dashoffset="-221.5" d="M24,58 V80"/><path class="cm k480" stroke="#E87E49" stroke-dasharray="11 199" stroke-dashoffset="-210.5" d="M24,58 V80"/><path class="cm k481" stroke="#FFB287" stroke-dasharray="17 193" stroke-dashoffset="-288.0" d="M24,58 V80"/><path class="cm k482" stroke="#F29260" stroke-dasharray="14 196" stroke-dashoffset="-274.0" d="M24,58 V80"/><path class="cm k483" stroke="#E87E49" stroke-dasharray="11 199" stroke-dashoffset="-263.0" d="M24,58 V80"/><path class="cm k484" stroke="#FFB287" stroke-dasharray="17 193" stroke-dashoffset="-340.5" d="M24,58 V80"/><path class="cm k485" stroke="#F29260" stroke-dasharray="14 196" stroke-dashoffset="-326.5" d="M24,58 V80"/><path class="cm k486" stroke="#E87E49" stroke-dasharray="11 199" stroke-dashoffset="-315.5" d="M24,58 V80"/></svg>
+<path class="bus" stroke="#C1663A" d="M24,0 V88"/><g><rect x="0.5" y="20" width="123" height="64" rx="3" fill="#0A0A0B" stroke="#79848C" stroke-width="1"/><rect x="21.5" y="20.5" width="5" height="4" fill="#E0703A"/><rect x="21.5" y="79.5" width="5" height="4" fill="#E0703A"/><path class="bus" stroke="#C1663A" d="M24,20 V26 M24,54 V84"/><rect x="10" y="26" width="28" height="28" rx="8" fill="#0A0A0B" stroke="#6B6B76" stroke-width="1.2"/><text transform="translate(0,16)" x="24" y="29" class="ts" font-size="15.5" text-anchor="middle" style="fill:#F7F8F8">in</text><text x="46" y="44.5" class="ts" font-size="11.5" letter-spacing="1.3">LINKEDIN</text></g><path class="cm k805" stroke="#FFB287" stroke-dasharray="17 193" stroke-dashoffset="-183.0" d="M24,58 V80"/><path class="cm k806" stroke="#F29260" stroke-dasharray="14 196" stroke-dashoffset="-169.0" d="M24,58 V80"/><path class="cm k807" stroke="#E87E49" stroke-dasharray="11 199" stroke-dashoffset="-158.0" d="M24,58 V80"/><path class="cm k808" stroke="#FFB287" stroke-dasharray="17 193" stroke-dashoffset="-235.5" d="M24,58 V80"/><path class="cm k809" stroke="#F29260" stroke-dasharray="14 196" stroke-dashoffset="-221.5" d="M24,58 V80"/><path class="cm k810" stroke="#E87E49" stroke-dasharray="11 199" stroke-dashoffset="-210.5" d="M24,58 V80"/><path class="cm k811" stroke="#FFB287" stroke-dasharray="17 193" stroke-dashoffset="-288.0" d="M24,58 V80"/><path class="cm k812" stroke="#F29260" stroke-dasharray="14 196" stroke-dashoffset="-274.0" d="M24,58 V80"/><path class="cm k813" stroke="#E87E49" stroke-dasharray="11 199" stroke-dashoffset="-263.0" d="M24,58 V80"/><path class="cm k814" stroke="#FFB287" stroke-dasharray="17 193" stroke-dashoffset="-340.5" d="M24,58 V80"/><path class="cm k815" stroke="#F29260" stroke-dasharray="14 196" stroke-dashoffset="-326.5" d="M24,58 V80"/><path class="cm k816" stroke="#E87E49" stroke-dasharray="11 199" stroke-dashoffset="-315.5" d="M24,58 V80"/></svg>
