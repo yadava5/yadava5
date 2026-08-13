@@ -510,9 +510,12 @@ if (!OFFLINE && !process.env.CLAIMS_SKIP_FRESHNESS) {
         + `...${encodeURIComponent(r.branch)}?per_page=1`;
       // execFileSync's default maxBuffer is 1 MiB, and applied's compare is
       // 1.59 MB of file patches — so this threw ENOBUFS, the catch below ate it,
-      // and the freshness note for that repo had NEVER printed. It is pinned 65
-      // commits behind main. The size scales with the diff, so every repo here
-      // acquires this failure as it grows, silently, one at a time.
+      // and the freshness note for that repo had NEVER printed. The size scales
+      // with the diff, so every repo here acquires this failure as it grows,
+      // silently, one at a time. This comment used to name applied's distance —
+      // 65 commits — which was 123 within the week and is exactly the staleness
+      // this file exists to prevent. The number belongs in the run output,
+      // where it is derived; a comment cannot hold one and stay true.
       const cmp = JSON.parse(execFileSync('curl', [...args, url],
         { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }));
       if (cmp.ahead_by > 0)

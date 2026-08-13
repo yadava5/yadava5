@@ -456,7 +456,7 @@
     {
       "id": "glyph.losing_matrix_cases",
       "value": "8",
-      "unit": "of 12 matrix ops",
+      "unit": "matrix-op cases that lose",
       "drawn_on": [
         "plate-3-glyph.svg",
         "m-3-glyph.svg"
