@@ -1314,9 +1314,14 @@ def plate_glyph() -> str:
 
 # ══════════════════════════════════════════════════ IV · automl
 #
-# The dispatcher drawn as its registry: a 44-pin strip — one pin per tool
-# the graph defines, emitted by loop so the count is true by construction —
-# with seven tool-set taps hanging below it. No tap spans the strip, which
+# The tool library drawn as one registry strip: a 44-pin comb — one pin per
+# tool SCHEMA, emitted by loop so the count is true by construction — with
+# seven tool-set taps hanging below it. llm/tools.ts is the DISPATCHER and
+# holds no schemas at all; the 44 are defined across the seven modules in
+# llm/tools/ (dataTools 4, cellTools 8, packageTools 3, featureTools 6,
+# preprocessingTools 14, trainingTools 6, uiTools 3) and exposed as the seven
+# LLM_*_TOOLS phase sets. The drawing was always right; the caption named the
+# wrong file until 2026-08-13. No tap spans the strip, which
 # is the claim: no phase is handed all 44. The per-phase counts (15/7/29)
 # were cut by the prose inventory and are deliberately NOT drawn, so no
 # bracket on this plate is countable into a number the page no longer backs.
@@ -1342,7 +1347,7 @@ def plate_automl() -> str:
         + sec_roman(150, 54, "IV — AUTOML", 30)
         + sec_sub(150, 76, "a LangGraph agent, dealt its tools phase by phase.", 14.5)
         + f'<text x="{fig_x(660, "44", 62)}" y="160" class="d" font-size="62">44</text>'
-        + f'<text x="660" y="198" class="dim" font-size="13">defined across the dispatcher;</text>'
+        + f'<text x="660" y="198" class="dim" font-size="13">tool schemas in llm/tools;</text>'
         + f'<text x="660" y="216" class="dim" font-size="13">no phase&#8217;s hand holds them all.</text>'
         + f'<rect x="150" y="308" width="4" height="16" fill="{T["zinc"]}"/>'
         + f'<text x="164" y="321" class="mid" font-size="14">the sandbox guards against accidents, not adversaries.</text>'
@@ -1351,8 +1356,8 @@ def plate_automl() -> str:
     return head(
         380,
         "IV · AutoML — 44 tools defined; no phase is handed all of them",
-        "IV · AutoML — the dispatcher drawn as its registry: a 44-pin strip, "
-        "one pin per tool the graph defines, with seven tool-set taps below "
+        "IV · AutoML — the tool library drawn as one registry strip: a 44-pin "
+        "comb, one pin per tool schema, with seven tool-set taps below "
         "it — no phase is handed all 44. The against-self line is the "
         "sandbox: it guards against accidents, not adversaries — the network "
         "is an env var the beta template renders as bridge, with no "
@@ -1894,7 +1899,7 @@ def m_automl() -> str:
         + mark("automl", 92, 96, 48)
         + sec_roman(92, 54, "IV — AUTOML", 24)
         + sec_sub(92, 76, "a LangGraph agent, dealt its tools phase by phase.", 13)
-        + m_fig("44", "defined across the dispatcher;",
+        + m_fig("44", "tool schemas in llm/tools;",
                 "no phase’s hand holds them all.")
         + bus("zinc", "M116,144 V236 H128", C=96, cd="M116,148 V236 H124")
         + lbl(128, 206, "THE REGISTRY · 44 TOOLS DEFINED", size=10, ls=1.1)
@@ -1914,9 +1919,9 @@ def m_automl() -> str:
     return head(
         490,
         "IV · AutoML — the 44-pin registry, phone cut",
-        "IV · AutoML, phone cut — the dispatcher as its registry: a 44-pin "
-        "strip, one pin per tool the graph defines, seven tool-set taps below "
-        "it — no phase is handed all 44. The against-self line is the "
+        "IV · AutoML, phone cut — the tool library drawn as one registry "
+        "strip: a 44-pin comb, one pin per tool schema, seven tool-set taps "
+        "below it — no phase is handed all 44. The against-self line is the "
         "sandbox: it guards against accidents, not adversaries — the network "
         "is an env var the beta template renders as bridge, with no cap-drop, "
         "no pids-limit, no seccomp.",
