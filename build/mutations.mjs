@@ -389,6 +389,34 @@ const MUTATIONS = [
   // motion it likes and this still empties it.
   ['a declared animation never moves anything', /declares animations that never move anything/,
     (s) => s.replace(/^@keyframes ([\w-]+)\{.*$/gm, '@keyframes $1{to{stroke-opacity:1}}')],
+  // The branch the probe above CANNOT reach, and the reason check 22 exists.
+  //
+  // The mutation above deliberately leaves `dur !== 0` — it empties the
+  // keyframe bodies and keeps the animations declared — because that is the
+  // only way to reach check 13 at all. So it exercises the guarded branch and
+  // says nothing about the unguarded one, and the unguarded one is where the
+  // real defect lived: 64 of 120 plates shipped class references to keyframes
+  // that a generator ordering bug had put in the previous file, no animation
+  // was ever created, `dur` was 0, check 13 did not run, and gate.mjs printed
+  // PASSED over all 64. A check switched off by the exact condition that
+  // should trigger it is this file's founding subject, and it had no probe.
+  //
+  // The mutation removes the first CSS rule that DECLARES an animation and
+  // leaves the elements carrying its class — which is precisely the shipped
+  // defect: a class that resolves to nothing. Keyed on the SHAPE of such a
+  // rule (`.something{…animation:…}`), never on a class name: every animated
+  // element on this page gets a generated `k1`, `k2`, `k3` … and naming one
+  // is how seventeen probes in this file went stale. The reduced-motion block
+  // is `*{animation:none!important}` and cannot match — it has no class
+  // selector — and the rule bodies here hold no nested braces, so `[^{}]*` is
+  // a safe cut. `@keyframes` is left in place on purpose: the check must fire
+  // on the reference resolving to nothing, not on the keyframes being gone.
+  ['a class reference resolves to nothing',
+    /carries \d+ class names? that no rule on this plate defines/,
+    (s) => {
+      const m = /\.[_a-zA-Z][\w-]*\{[^{}]*animation:[^{}]*\}/.exec(s);
+      return m ? s.slice(0, m.index) + s.slice(m.index + m[0].length) : s;
+    }],
   // Check 14 is the surviving motion-quality check (a stagger is a wave, not a
   // queue), so it keeps a probe. Its history is a list of subjects that walked
   // away: Glyph's pen stagger went with the pen in round 27, the refusal's
