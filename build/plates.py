@@ -1362,15 +1362,16 @@ def plate_automl() -> str:
 
 # ══════════════════════════════════════════════════ V · cadence
 #
-# The whole API drawn as the one part it actually is: 37 entry stubs — one
-# per route handler, range(150,331,5), count true by construction — into a
+# The whole API drawn as the one part it actually is: 36 entry stubs — one
+# per route handler, 36 evenly across the same 150..330 span, count true by
+# construction — into a
 # single serverless package, whose single output crosses a doored wall
 # before the 7 table frames behind it. The wall is the section's claim: the
 # door is the only way through, because RLS is FORCEd. The app-side guards
 # being conditional is the admission, and the drawing agrees — nothing else
 # crosses the wall.
 def plate_cadence() -> str:
-    stubs = " ".join(f"M252,{y} H300" for y in range(150, 331, 5))
+    stubs = " ".join(f"M252,{150 + i * 180 / 35:.1f} H300" for i in range(36))
     fan = " ".join(f"M600,{y} H628" for y in range(165, 316, 25))
     tables = "".join(f'<rect x="628" y="{y - 9}" width="120" height="18" rx="3" '
                      f'fill="none" stroke="{T["zinc"]}" stroke-width="1.3"/>'
@@ -1386,7 +1387,7 @@ def plate_cadence() -> str:
           f'stroke="{T["verd"]}" stroke-width="1.6"/>'
         + lbl(312, 222, "ONE SERVERLESS", cls="ts", size=10, ls=1.1)
         + lbl(312, 238, "FUNCTION", cls="ts", size=10, ls=1.1)
-        + lbl(312, 258, "37 ROUTE HANDLERS", cls="ts dim", size=10, ls=1.1)
+        + lbl(312, 258, "36 ROUTE HANDLERS", cls="ts dim", size=10, ls=1.1)
         + bus("verd", "M496,235 H600", C=66, cd="M500,235 H596")
         # the wall, doored only where the output passes
         + f'<path class="bus" stroke="{T["verd"]}" d="M560,150 V223 M560,247 V330"/>'
@@ -1398,7 +1399,7 @@ def plate_cadence() -> str:
         + mark("cadence", 150, 96, 48)
         + sec_roman(150, 54, "V — CADENCE", 30)
         + sec_sub(150, 76, "every route into one function; every row behind RLS.", 14.5)
-        + f'<text x="{fig_x(680, "37", 62)}" y="70" class="d" font-size="62">37</text>'
+        + f'<text x="{fig_x(680, "36", 62)}" y="70" class="d" font-size="62">36</text>'
         + f'<text x="680" y="108" class="dim" font-size="13">route handlers, one function;</text>'
         + f'<text x="680" y="126" class="dim" font-size="13">RLS FORCEd on all 7 tables.</text>'
         + f'<rect x="150" y="374" width="4" height="16" fill="{T["verd"]}"/>'
@@ -1407,8 +1408,8 @@ def plate_cadence() -> str:
     )
     return head(
         440,
-        "V · Cadence — 37 route handlers, one function, and a wall with one door",
-        "V · Cadence — the whole API drawn as one part: 37 route handlers "
+        "V · Cadence — 36 route handlers, one function, and a wall with one door",
+        "V · Cadence — the whole API drawn as one part: 36 route handlers "
         "enter one serverless function, and its single output passes through "
         "the one door in a wall — row-level security, FORCEd — before "
         "reaching the 7 tables behind it. The against-self line: every one of "
@@ -1920,13 +1921,13 @@ def m_automl() -> str:
     ) + css_close() + body + "</svg>"
 
 
-# ── V · cadence, phone cut. The wall rotates with the flow: 37 stubs rain
+# ── V · cadence, phone cut. The wall rotates with the flow: 36 stubs rain
 # off a rail into the function's top edge, and the single output crosses a
 # HORIZONTAL doored wall before the 7 tables. One comet runs entry to last
 # table — the door is the only way through, and the drawing has exactly one
 # current to prove it with.
 def m_cadence() -> str:
-    stubs = " ".join(f"M{124 + i * 264 / 36:.1f},202 V216" for i in range(37))
+    stubs = " ".join(f"M{124 + i * 264 / 35:.1f},202 V216" for i in range(36))
     fan = " ".join(f"M248,{y} H264" for y in range(350, 495, 24))
     tables = "".join(f'<rect x="264" y="{y - 8}" width="132" height="16" rx="3" '
                      f'fill="none" stroke="{T["zinc"]}" stroke-width="1.3"/>'
@@ -1936,14 +1937,14 @@ def m_cadence() -> str:
         + mark("cadence", 92, 96, 48)
         + sec_roman(92, 54, "V — CADENCE", 24)
         + sec_sub(92, 76, "every route into one function; every row behind RLS.", 13)
-        + m_fig("37", "route handlers, one function;",
+        + m_fig("36", "route handlers, one function;",
                 "RLS FORCEd on all 7 tables.")
         + bus("verd", "M116,144 V202 H388", C=132, cd="M116,148 V202 H384")
         + f'<path fill="none" stroke="{T["verd"]}" stroke-width="1.4" d="{stubs}"/>'
         + f'<rect x="100" y="216" width="296" height="60" rx="8" fill="none" '
           f'stroke="{T["verd"]}" stroke-width="1.6"/>'
         + lbl(112, 242, "ONE SERVERLESS FUNCTION", cls="ts", size=11.5, ls=1.3)
-        + lbl(112, 260, "37 ROUTE HANDLERS", cls="ts dim", size=10, ls=1.1)
+        + lbl(112, 260, "36 ROUTE HANDLERS", cls="ts dim", size=10, ls=1.1)
         # the wall, doored only where the output passes
         + f'<path class="bus" stroke="{T["verd"]}" d="M100,326 H236 M260,326 H396"/>'
         + f'<path class="bus" stroke="{T["verd"]}" d="M100,332 H236 M260,332 H396"/>'
@@ -1961,7 +1962,7 @@ def m_cadence() -> str:
     return head(
         640,
         "V · Cadence — one function, one door, phone cut",
-        "V · Cadence, phone cut — 37 route handlers rain into one serverless "
+        "V · Cadence, phone cut — 36 route handlers rain into one serverless "
         "function, and its single output passes through the one door in a "
         "wall — row-level security, FORCEd — before reaching the 7 tables "
         "behind it. The against-self line: every one of the six services "

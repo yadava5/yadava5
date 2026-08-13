@@ -69,10 +69,10 @@
     },
     "cadence": {
       "github": "yadava5/cadence",
-      "ref": "771acc48cb4e3665b474cc73652a8e2c2cfc4322",
+      "ref": "6d09ee482abc5ccc3bec89d2bc258c616698a5c1",
       "branch": "main",
       "public": true,
-      "note": "Re-pinned 2026-08-10, 32 commits on from 8a2fbbb (verified an ancestor: git merge-base --is-ancestor passes, no rewritten history). The old pin was not merely behind — it was holding a sentence that had become FALSE. At 8a2fbbb, docs/RLS-CUTOVER.md still read 'the app connects as postgres, which carries BYPASSRLS', and section V repeated it. The DATABASE_URL swap was made 2026-08-03 (b271100); production connects as cadence_app, NOSUPERUSER NOBYPASSRLS, confirmed against the live database and the deployed environment. The freshness check at claims.mjs:388 had been printing 'pinned N commits behind main' the whole time and does not fail the build, by design — which is exactly how a prose claim outlived its evidence. handlers moves 36 -> 37 with this pin."
+      "note": "Re-pinned 2026-08-10, 32 commits on from 8a2fbbb (verified an ancestor: git merge-base --is-ancestor passes, no rewritten history). The old pin was not merely behind — it was holding a sentence that had become FALSE. At 8a2fbbb, docs/RLS-CUTOVER.md still read 'the app connects as postgres, which carries BYPASSRLS', and section V repeated it. The DATABASE_URL swap was made 2026-08-03 (b271100); production connects as cadence_app, NOSUPERUSER NOBYPASSRLS, confirmed against the live database and the deployed environment. The freshness check at claims.mjs:388 had been printing 'pinned N commits behind main' the whole time and does not fail the build, by design — which is exactly how a prose claim outlived its evidence. handlers moved 36 -> 37 with that pin. Re-pinned again 2026-08-13 to 6d09ee48 (12 commits on, ancestry verified: git merge-base --is-ancestor passes). This time the pin was not holding a false sentence, it was holding a stale figure: api/index.ts lost attachments/cleanup, so handlers moves 37 -> 36 and cadence's own README says 36 in three places. The page links /blob/main/, so a reader clicking through was landing on a repo that contradicted the plate. All four cadence rows were re-derived against 6d09ee48 BEFORE re-pinning: tenant_tables 7, idor_services 6, conditional_owner_guard 6 all reproduce unchanged, so this moves the evidence and exactly one figure."
     },
     "applied": {
       "github": "yadava5/applied",
@@ -227,7 +227,7 @@
     },
     {
       "id": "cadence.handlers",
-      "value": "37",
+      "value": "36",
       "drawn_on": [
         "plate-5-cadence.svg",
         "m-5-cadence.svg",
@@ -236,7 +236,7 @@
       "repo": "cadence",
       "path": "api/index.ts",
       "extractor": "awk '/^const ROUTES/,/^\\];/' \"$BLOB\" | grep -cE '^\\s*\\[\\['",
-      "note": "The dispatch table itself, not the import list — at this pin both agree at 37 (an audit on 2026-08-10 confirmed 37 default handler imports, 37 ROUTES entries, 37 distinct handlers, with nothing imported-but-unrouted, nothing routed-but-unimported, no duplicate patterns and no route shadowed unreachable under api/index.ts's own match() ordering), but routes are what the function actually serves. Round 21: the parser plate is retired (the section merged into the refusal plate), so this is prose-only now."
+      "note": "The dispatch table itself, not the import list — at the 771acc48 pin both agreed at 37 (an audit on 2026-08-10 confirmed 37 default handler imports, 37 ROUTES entries, 37 distinct handlers, with nothing imported-but-unrouted, nothing routed-but-unimported, no duplicate patterns and no route shadowed unreachable under api/index.ts's own match() ordering), but routes are what the function actually serves. Round 21: the parser plate is retired (the section merged into the refusal plate), so this is prose-only now. 2026-08-13: 36 at 6d09ee48, where attachments/cleanup is gone. The plate draws its entry stubs one per handler, count true by construction, so the drawing moved with the number rather than only the label."
     },
     {
       "id": "applied.macro_f1",
