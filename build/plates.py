@@ -1455,8 +1455,8 @@ def plate_applied() -> str:
         + f'<circle cx="320" cy="202.5" r="3.5" fill="none" stroke="{T["verd"]}" stroke-width="2"/>'
         + f'<rect x="240" y="220" width="160" height="42" rx="8" fill="none" '
           f'stroke="{T["zinc"]}" stroke-width="1.4" stroke-dasharray="5 4"/>'
-        + lbl(252, 245, "THE CASCADE", cls="ts dim", size=10, ls=1.1)
-        + lbl(240, 286, "LAYER TWO — NO EVALUATION ARTIFACT SURVIVES", size=10, ls=1.1)
+        + lbl(252, 245, "THE FULL CASCADE", cls="ts dim", size=10, ls=1.1)
+        + lbl(240, 286, "SCORED LOWER · NO EVALUATION ARTIFACT", size=10, ls=1.1)
         + mark("applied", 150, 96, 48)
         + sec_roman(150, 54, "VI — APPLIED", 30)
         + sec_sub(150, 76, "an inbox read by rules that keep score.", 14.5)
@@ -1464,18 +1464,19 @@ def plate_applied() -> str:
         + f'<text x="560" y="278" class="dim" font-size="13">macro-F1 — the rules layer alone,</text>'
         + f'<text x="560" y="296" class="dim" font-size="13">graded on the strip above.</text>'
         + f'<rect x="150" y="362" width="4" height="16" fill="{T["verd"]}"/>'
-        + f'<text x="164" y="375" class="mid" font-size="14">the full cascade scored 0.9583 — and the artifact is gone; the run was overwritten.</text>'
-        + f'<text x="164" y="395" class="dim" font-size="13">what is deployed runs only that first layer.</text>'
+        + f'<text x="164" y="375" class="mid" font-size="14">the full cascade scored 0.9583 — lower than the rules layer alone.</text>'
+        + f'<text x="164" y="395" class="dim" font-size="13">a tracker line records it; the run was overwritten. what is deployed runs only that first layer.</text>'
     )
     return head(
         430,
-        "VI · Applied — 0.979 macro-F1, rules layer alone; the cascade has no artifact",
+        "VI · Applied — 0.979 macro-F1, rules layer alone; the full cascade scored lower",
         "VI · Applied — the mail triage drawn as the part that ships: the "
         "rules layer grades a labelled strip of 96 messages and gets 2 wrong "
         "— 0.979 macro-F1, rules layer alone. Below it, drawn dashed with "
-        "its lead left open, is the cascade: layer two, whose 0.9583 has no "
-        "evaluation artifact — the run was overwritten. What is deployed "
-        "runs only that first layer.",
+        "its lead left open, is the full cascade, all three layers, and it "
+        "scored lower: 0.9583 — a number a tracker line records and no "
+        "evaluation artifact supports, because the run that produced it was "
+        "overwritten. What is deployed runs only that first layer.",
         key="plate-6-applied.svg",
         col=SEC_COL, frame=APPLIED_FRAME,
     ) + css_close() + body + "</svg>"
@@ -2004,17 +2005,18 @@ def m_applied() -> str:
         + f'<circle cx="116" cy="271" r="3.5" fill="none" stroke="{T["verd"]}" stroke-width="2"/>'
         + f'<rect x="92" y="284" width="140" height="42" rx="8" fill="none" '
           f'stroke="{T["zinc"]}" stroke-width="1.4" stroke-dasharray="5 4"/>'
-        + lbl(104, 309, "THE CASCADE", cls="ts dim", size=10, ls=1.1)
-        + lbl(92, 344, "LAYER TWO — NO EVALUATION", size=10, ls=1.1)
-        + lbl(92, 360, "ARTIFACT SURVIVES", size=10, ls=1.1)
+        + lbl(104, 309, "THE FULL CASCADE", cls="ts dim", size=10, ls=1.1)
+        + lbl(92, 344, "SCORED LOWER", size=10, ls=1.1)
+        + lbl(92, 360, "NO EVALUATION ARTIFACT", size=10, ls=1.1)
         + f'<rect x="92" y="380" width="304" height="102" rx="6" fill="none" '
           f'stroke="{T["zinc"]}" stroke-width="1.3"/>'
         + row(390, 21) + row(420, 8) + row(450, None)
         + lbl(92, 502, "96 LABELLED MESSAGES · 2 CALLED WRONG", size=10, ls=1.1)
         + m_adm(528, "verd",
-                ["the full cascade scored 0.9583 — and",
-                 "the artifact is gone; the run was overwritten."],
-                ["what is deployed runs only that first layer."])
+                ["the full cascade scored 0.9583 —",
+                 "lower than the rules layer alone."],
+                ["a tracker line records it; the run was overwritten.",
+                 "what is deployed runs only that first layer."])
     )
     return head(
         610,
@@ -2022,9 +2024,10 @@ def m_applied() -> str:
         "VI · Applied, phone cut — the mail triage as the part that ships: "
         "the rules layer grades a labelled strip of 96 messages and gets 2 "
         "wrong — 0.979 macro-F1, rules layer alone. Below it, drawn dashed "
-        "with its lead left open, is the cascade: layer two, whose 0.9583 has "
-        "no evaluation artifact — the run was overwritten. What is deployed "
-        "runs only that first layer.",
+        "with its lead left open, is the full cascade, all three layers, and "
+        "it scored lower: 0.9583 — a number a tracker line records and no "
+        "evaluation artifact supports, because the run that produced it was "
+        "overwritten. What is deployed runs only that first layer.",
         key="m-6-applied.svg",
         col=(88, 412), frame=(2.5, 43, 2.5), w=440,
     ) + css_close() + body + "</svg>"
