@@ -243,11 +243,20 @@ def _kf() -> str:
     return f"k{_KN}"
 
 
-def comet(bus: str, d: str, C: float = 0.0) -> str:
-    """The moving current for one trace segment (no track — see bus())."""
+def comet(bus: str, d: str, C: float = 0.0,
+          lens: tuple[float, ...] = COMET) -> str:
+    """The moving current for one trace segment (no track — see bus()).
+
+    `lens` is the ramp's segment lengths, a parameter because a comet only
+    reads as one on a run LONGER than its own segments: where a segment is
+    wider than the window it crosses, it fills that window edge to edge and
+    the frame stops changing for as long as it takes to cross. Long traces
+    never meet this; the link row's 22u run does, and passes a scaled set —
+    see the carrier note in chip().
+    """
     out = ""
     end = C
-    for L, col in zip(COMET, T["ramp"][bus]):
+    for L, col in zip(lens, T["ramp"][bus]):
         o0 = round(L - end, 2)
         name = _kf()
         _CSS.append(f"@keyframes {name}{{to{{stroke-dashoffset:{o0 - PAT}}}}}")
@@ -510,6 +519,9 @@ GAP = 3.8                     # measured inter-image gap, adjacent links
 CHIP_H = 88
 CHIP_EDGE = "#79848C"         # 3.89:1 on #212830, 3.82 on #fff, 5.37 on #010409
 LEAD = {"verd": "#3E8E76", "rust": "#C1663A", "zinc": "#79848C"}
+CHIP_RUN = 22                 # the comet's visible run, y58->y80 (see chip())
+CHIP_COMET = (17, 14, 11)     # COMET halved — every segment inside CHIP_RUN
+CHIP_SPAN = 52.5              # four of them per PAT, so every gap is 10.5u
 
 # the row layout, in page px: (module width, left inset). Portfolio's inset
 # puts its module edge on the content margin, and its lead at 70.5 = board
@@ -547,7 +559,7 @@ def _port_glyphs(kind: str, dx: float, dy: float) -> str:
 
 
 def chip(kind: str, label: str, glyph: str, tap_bus: str,
-         phases: tuple[float, float], title: str, desc: str, key: str,
+         phase: float, title: str, desc: str, key: str,
          frame: tuple[float, float, float]) -> str:
     global T
     saved = T
@@ -581,9 +593,35 @@ def chip(kind: str, label: str, glyph: str, tap_bus: str,
             f'stroke="{STRUCT}" stroke-width="1.2"/>' + _port_glyphs(glyph, sx - 24, 16)
             + lbl(pad + 46, 44.5, label, cls="ts", size=11.5, ls=1.3) + "</g>"
         )
-        # two comets 105 pattern-units apart: on the 22u visible run one of
-        # them is always on-path, so the carrier never blinks (motion.mjs)
-        current = "".join(comet(tap_bus, f"M{sx},58 V80", C=c) for c in phases)
+        # THE CARRIER, SIZED TO THE RUN IT RIDES. This was two page-sized
+        # comets 105 pattern-units apart, and the note here read "one of them
+        # is always on-path, so the carrier never blinks". Never blank was the
+        # wrong property to check for. The page's comet is 84u long and its
+        # three segments are 34/28/22 (COMET); this visible run is 22u, so
+        # every segment is at least as wide as the window it crosses, and
+        # while one covers the run the chip draws a flat uniform bar — a still
+        # image, not a slow one. Measured per interval with motion.mjs's own
+        # sampler (2026-08-13): the head holds the run frozen for 34-22 = 12u
+        # of travel and the second segment for 28-22 = 6u, once each per comet
+        # per pattern. 36 of every 210u, 17% of the loop, in stalls of
+        # 120-157ms; any two samples landing inside one stall diff to EXACTLY
+        # zero pixels. That is what pinned three of these four chips one
+        # interval above the 95% carrier floor with nothing left to give —
+        # email cleared it only because its phase happened to put a single
+        # sample inside the band, which is luck, not margin.
+        #
+        # So the comet is halved and run four to the pattern instead of two:
+        # same PAT, same period, same speed, and the same ink duty cycle
+        # (4x42 = 2x84 of 210). The longest uniform region is now 17u and the
+        # longest gap 10.5u, both inside the 22u window, so every frame
+        # carries a moving boundary and the run never drains below 11.5u
+        # either — where it used to fall to a 1u sliver. THE CONSTRAINT, for
+        # anyone retuning this: segment < CHIP_RUN and gap < CHIP_RUN. Both,
+        # or the frame goes flat again — flat-full or flat-empty, the gate and
+        # the eye cannot tell those apart and neither should they.
+        current = "".join(
+            comet(tap_bus, f"M{sx},58 V80", C=phase + i * CHIP_SPAN, lens=CHIP_COMET)
+            for i in range(4))
         # THE TYPE COLUMN this chip declares (gate check 5, which holds a
         # left-anchored label 6u short of the declared edge). Default: 8u in
         # from the canvas left, 4u short of its right.
@@ -603,26 +641,28 @@ def chip(kind: str, label: str, glyph: str, tap_bus: str,
 
 
 CHIPS = {
-    # filename fragment: (label, glyph, tap bus, comet phases — 105 apart)
-    "portfolio": ("AYUSH-YADAV.COM", "www", "verd", (12, 117),
+    # filename fragment: (label, glyph, tap bus, carrier phase — the chip's
+    # four comets sit at phase + 0/1/2/3 x CHIP_SPAN, so no two ports open on
+    # the same frame: mod 52.5 these are 12, 35, 42.5, 13.5.
+    "portfolio": ("AYUSH-YADAV.COM", "www", "verd", 12,
                   "ayush-yadav.com — the portfolio",
                   "Port one of four on the link bus: ayush-yadav.com, the portfolio."),
-    "resume":    ("RÉSUMÉ", "doc", "rust", (140, 35),
+    "resume":    ("RÉSUMÉ", "doc", "rust", 140,
                   "résumé — PDF",
                   "Port two of four on the link bus: the résumé, as a PDF."),
-    "linkedin":  ("LINKEDIN", "in", "rust", (200, 95),
+    "linkedin":  ("LINKEDIN", "in", "rust", 200,
                   "linkedin — profile",
                   "Port three of four on the link bus: the LinkedIn profile."),
-    "email":     ("EMAIL", "at", "zinc", (66, 171),
+    "email":     ("EMAIL", "at", "zinc", 66,
                   "email — aesh at gmail",
                   "Port four of four on the link bus: email; opens a mail draft."),
 }
 
 
 def make_chip(kind: str):
-    label, glyph, tap, phases, title, desc = CHIPS[kind]
+    label, glyph, tap, phase, title, desc = CHIPS[kind]
     fn = f"plate-link-{kind}.svg"
-    return lambda: chip(kind, label, glyph, tap, phases, title, desc, fn,
+    return lambda: chip(kind, label, glyph, tap, phase, title, desc, fn,
                         CHIP_FRAME[kind])
 
 
