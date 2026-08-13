@@ -161,12 +161,116 @@ def build(src: pathlib.Path, chars: str, out: pathlib.Path,
               f"all present in cmap, OFL notice intact, byte-identical on rebuild")
 
 
+def assert_tabular_lining(out: pathlib.Path) -> None:
+    """The display figures must SHAPE to tabular lining, in the shipped binary.
+
+    Retaining 'lnum' and 'tnum' in the subset is not the fix; it is the
+    precondition for the fix. A layout feature whose substitution targets were
+    dropped by the closure still validates, still appears in the FeatureList,
+    and substitutes NOTHING — the page then draws the default figures and
+    every other check on this page stays green. That is this repository's
+    signature defect and it is exactly the shape of the bug being fixed here,
+    so the check is written to fail on it.
+
+    Name-independent by construction. The subsetter drops PostScript glyph
+    names (post 3.0), so after the woff2 round-trip 'five.tf' comes back as
+    'glyph00042' and any assertion spelled with a glyph name would be checking
+    a string this pipeline does not produce. Instead the digits are looked up
+    through the BUILT font's own cmap and walked through its own GSUB, which
+    are mangled consistently with each other, and the verdict is read off
+    hmtx/glyf — metrics, which cannot be renamed.
+
+    The walk mirrors HarfBuzz: lookups apply in LookupList index order, not in
+    feature order. That ordering is the whole substance of the fix. In Syne,
+    'lnum' is lookup 26 and maps digit -> digit.lf; 'tnum' is lookup 28 and
+    maps digit -> digit.TOSF *and* digit.lf -> digit.tf. So 'lnum' first, then
+    'tnum', lands on .tf — tabular LINING. 'tnum' ALONE lands on .tosf, which
+    is tabular OLDSTYLE: uniform widths, and the staggered heights that are
+    the reported defect left completely intact. The near-miss is invisible to
+    a width check, which is why the height bounds below are not optional.
+    """
+    f = TTFont(out)
+    try:
+        gsub = f["GSUB"].table if "GSUB" in f else None
+        feats: dict[str, set[int]] = {}
+        if gsub is not None:
+            for fr in gsub.FeatureList.FeatureRecord:
+                feats.setdefault(fr.FeatureTag, set()).update(
+                    fr.Feature.LookupListIndex)
+        if not {"lnum", "tnum"} <= set(feats):
+            raise SystemExit(
+                f"{out.name}: the subset's GSUB has {sorted(feats)} — 'lnum' "
+                f"and 'tnum' are what turn the figures lining and tabular, and "
+                f"the CSS asks for both. Without them the page draws Syne's "
+                f"default figures, whose 3 4 5 7 9 descend below the baseline.")
+        cmap = f.getBestCmap()
+        shaped = [cmap[ord(d)] for d in "0123456789"]
+        plain = list(shaped)
+        for li in sorted(feats["lnum"] | feats["tnum"]):
+            for st in gsub.LookupList.Lookup[li].SubTable:
+                m = getattr(st, "mapping", None) or {}
+                shaped = [m.get(g, g) for g in shaped]
+        unmoved = [d for d, s in zip("0123456789", zip(plain, shaped))
+                   if s[0] == s[1]]
+        if unmoved:
+            raise SystemExit(
+                f"{out.name}: lnum/tnum are present but leave {''.join(unmoved)} "
+                f"unchanged — the alternates they substitute TO were dropped by "
+                f"the subsetter's closure. The feature would substitute nothing "
+                f"and the page would draw the default figures.")
+        hmtx, glyf = f["hmtx"], f["glyf"]
+        adv, tops, bots = [], [], []
+        for g in shaped:
+            adv.append(hmtx[g][0])
+            o = glyf[g]
+            o.recalcBounds(glyf)
+            tops.append(o.yMax)
+            bots.append(o.yMin)
+        upem = f["head"].unitsPerEm
+        sp = lambda v: max(v) - min(v)            # noqa: E731
+        # 8 units, not 0: seven.tf is genuinely 1063 against the other nine at
+        # 1055 in Syne itself. 25 units is the overshoot a round figure is
+        # ALLOWED — 'zero' standing 20/1000 proud of 'one' is drawing, not
+        # misalignment. The default set fails this at 170, and .tosf at 170.
+        for what, vals, bound in (("advance", adv, 8),
+                                  ("ink top", tops, 25),
+                                  ("baseline", bots, 25)):
+            if sp(vals) * 1000 / upem > bound:
+                raise SystemExit(
+                    f"{out.name}: the shaped figures' {what} spread is "
+                    f"{sp(vals) * 1000 / upem:.0f}/1000 em, over {bound}. "
+                    f"lnum+tnum resolved to {sorted(set(shaped))[:3]}… — that "
+                    f"is not the tabular lining set. Per-glyph: "
+                    f"{dict(zip('0123456789', vals))}")
+        print(f"{out.name}: figures shape to tabular lining — advance spread "
+              f"{sp(adv) * 1000 // upem:.0f}, ink top {sp(tops) * 1000 // upem:.0f}, "
+              f"baseline {sp(bots) * 1000 // upem:.0f} per 1000 em")
+    finally:
+        f.close()
+
+
 SYNE = SRC / "Syne[wght].ttf"
 COMM = SRC / "Commissioner[FLAR,VOLM,slnt,wght].ttf"
 
 # Syne's caps do the silkscreen work; no lowercase is requested, so the GSUB
-# closure stays tiny. kern rides — 'AV' in the name needs it.
-build(SYNE, DISPLAY_CHARS, ROOT / "syne-800.woff2", {"wght": 800})
+# closure stays tiny. kern rides — 'AV' in the name needs it, and it is GPOS,
+# so it must be named here or the explicit list drops it.
+#
+# lnum+tnum are the figure fix (2026-08-13). Syne's DEFAULT figures are
+# old-style: 3 4 5 7 9 descend below the baseline and 0 1 2 stop near
+# x-height, so "57.8M" drew its 5 and 7 about nine user units short of its 8
+# and M at 56px, which is the misalignment that was reported three times.
+# Naming the features also has to be paid for in glyphs — the closure pulls
+# the .lf, .tf and .tosf alternates, +528 bytes over the previous subset — and
+# it BUYS a saving at the same time: the fontTools default feature set that
+# used to apply here retained frac/numr/dnom/locl, whose closure was 31 glyphs
+# of fraction furniture no plate on this page can form. 77 glyphs before, 86
+# after. Ten of the new ones (.tosf, tabular oldstyle) are unreachable while
+# both features are on and are the price of letting the closure be automatic
+# rather than hand-editing GSUB, which the repro twin would rightly distrust.
+build(SYNE, DISPLAY_CHARS, ROOT / "syne-800.woff2", {"wght": 800},
+      features=["kern", "lnum", "tnum"])
+assert_tabular_lining(ROOT / "syne-800.woff2")
 # FLAR 40 on both weights: one flare for the whole family, chosen at 11-16px
 # on the rendered plates (0 is sterile at label size, 70+ reads as a serif
 # trying to happen). VOLM and slnt pin to 0 via the defaults.

@@ -340,11 +340,52 @@ def head(h: int, title: str, desc: str, key: str = "",
           f"src:url(data:font/woff2;base64,{FONT_T}) format('woff2')}}\n") if "T" in faces else ""
     f6 = (f"@font-face{{font-family:'T';font-weight:600;"
           f"src:url(data:font/woff2;base64,{FONT_TS}) format('woff2')}}\n") if "6" in faces else ""
+    # ── .d ASKS FOR TABULAR LINING FIGURES, AND BOTH FEATURES ARE LOAD-BEARING.
+    #
+    # Syne's DEFAULT figures are old-style. 3 4 5 7 9 hang below the baseline,
+    # 0 1 2 stop near x-height, and only 6 8 reach cap height, so "57.8M" drew
+    # its 5 and 7 with their tops 9.5u below its 8 and its M at 56px — the
+    # thing that was reported as "57 is placed a bit lower in height compared
+    # to the rest". It was never a layout bug; nothing was misplaced. The page
+    # was drawing text figures at display size.
+    #
+    # The order these are WRITTEN in is cosmetic — HarfBuzz applies lookups in
+    # LookupList order, not in the order CSS names them — but the order they
+    # APPLY in is the whole fix, so they are written in it. In Syne, 'lnum' is
+    # lookup 26 (digit -> digit.lf) and 'tnum' is lookup 28, which carries TWO
+    # mappings: digit -> digit.tosf, and digit.lf -> digit.tf. lnum runs first
+    # and leaves no bare digit for tnum's first mapping to see, so the pair
+    # lands on .tf, tabular lining.
+    #
+    # Asking for 'tnum' alone would land on .tosf — tabular OLDSTYLE. Uniform
+    # widths, and the staggered heights entirely intact: the reported defect,
+    # shipped, behind a change that looks like the fix and measures like it on
+    # any width check. subset-fonts.py's assert_tabular_lining bounds the ink
+    # top and the baseline for exactly that reason.
+    #
+    # Tabular, not merely lining, because these six figures head a column of
+    # sections and are read down the page against each other. Uniform advances
+    # cost nothing here — no figure on this page is set to a width — and they
+    # are what makes the column agree with itself.
+    #
+    # Set on .d only. Commissioner was measured at BOTH the weights this page
+    # ships, not just the one the captions use, and both are already lining:
+    # the 400 spreads its digit ink tops 13/1000 em and its baselines 11/1000,
+    # the 600 spreads them 14 and 12, with 1 2 4 7 sitting flat on the baseline
+    # and the round figures overshooting it. That is drawing, not misalignment,
+    # and it is the same order as the .tf set's 20. Neither weight carries
+    # lnum, tnum, onum or pnum AT ALL, so there is nothing to ask Commissioner
+    # for and nothing to fix — which also makes the lnum/pnum named in
+    # subset-fonts.py's two Commissioner calls inert. They are left there: the
+    # saving that comment claims comes from excluding fontTools' DEFAULT
+    # feature set, which naming any list achieves, and dropping the two dead
+    # tags would rewrite both text subsets and the base64 of every plate that
+    # embeds them for no rendering change at all.
     return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" width="{w}" height="{h}" role="img" aria-label="{desc}" data-col="{col[0]},{col[1]}"{fr} data-canvas="{T['canvas']}">
 <title>{title}</title><desc>{desc}</desc>
 <style>
 {fd}{ft}{f6}text{{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:{T['ink']}}}
-.d{{font-family:'D',sans-serif;font-weight:800;fill:{T['ink']}}}
+.d{{font-family:'D',sans-serif;font-weight:800;font-feature-settings:'lnum' 1,'tnum' 1;fill:{T['ink']}}}
 .ts{{font-weight:600}}
 .mid{{fill:{T['mid']}}} .dim{{fill:{T['dim']}}}
 .bus{{fill:none;stroke-width:2;stroke-linejoin:round}}
@@ -411,12 +452,46 @@ def lbl(x: float, y: float, text: str, cls: str = "ts dim", size: float = 11,
 # right of its own tile, the subtitle 0.22..0.64u, and the I-plates and the
 # V-plates disagreed with EACH OTHER by 0.67u apparent (2.0u mechanical) down
 # the page. Three elements, one edge, seven sections, no two the same.
+# ── THE FIGURE ROWS ARE THE TABULAR LINING GLYPHS' (2026-08-13).
+#
+# The five lsbs below are .tf's, off the subset's hmtx: 0 60->32, 4 50->20,
+# 5 55->63, 6 30->29, 3 unmoved at 35. The old ones described .lf-less default
+# figures this page no longer draws, and three of the five were wrong by more
+# than a unit at 62px. Confirmed against the Chromium raster (30.2/34.3/18.1/
+# 62.5/28.2 per 1000 em at 62px) so they are the shipped glyphs', not a table's.
+#
+# The optical term for the figures is now ONE number and it is the CAP, which
+# is a simplification the arithmetic forces rather than a taste. fig_x passes
+# cap_em=0.02, so what _ink() applies is min(over, 0.02*size) — at most 1.24u
+# at 62, 1.12u at 56, 0.88u at 44. Both of the two independent estimators built
+# to re-measure this put every .tf leading digit's apparent overshoot at or
+# above its cap at every size on the page, so min() returns the cap and a
+# per-digit `over` is arithmetic with no reader. FIG_OVER is written as the
+# largest cap on the page for that reason: it is never the value applied.
+#
+# Neither estimator is offered as a measurement of the overshoot itself.
+# Calibrated against the two values this file already depends on, both missed
+# — 'V' reads 2.50-2.63u where the hand measurement says 1.49u — so the roman
+# rows below are left exactly as they were and no digit inherits a number from
+# an instrument that cannot reproduce a known answer.
+#
+# What makes the constant SAFE is not the estimate, it is that a constant
+# cancels. The five mobile figures are authored at one x and are read down the
+# page against each other; that agreement depends only on the differences
+# between their lsbs (32/35/20/63/29, spread 43/1000 — so the table is still
+# earning its keep). A shared `over` moves every figure identically against its
+# own caption and cannot make two figures disagree. The one residual: if 0's
+# true overshoot is below its cap — one estimator says so, the other does not —
+# then "0.979" sits up to 0.45u left of flush. That is inside the 0.67u this
+# page shipped with before the romans were fixed, and it is the same on every
+# plate that draws it.
+FIG_OVER = 1.24                # = 0.02 * 62, the largest display size here
 D_OPTIC = {                    # display leading glyph -> (lsb em/1000, overshoot in u)
-    "0": (60, 0.40),
-    "3": (35, 0.75),
-    "4": (50, 0.35),
-    "5": (55, 1.10),
-    "6": (30, 0.40),
+    "0": (32, FIG_OVER),
+    "3": (35, FIG_OVER),
+    "4": (20, FIG_OVER),
+    "5": (63, FIG_OVER),
+    "6": (29, FIG_OVER),
     # The romans. 'I' is a flat stem carrying an unusually deep bearing —
     # 85/1000, 2.55u of daylight at 30 — and, being flat, no overshoot at all:
     # its apparent edge IS its mechanical one, which is the construction the
@@ -2487,13 +2562,22 @@ INTERVAL_MOBILE["m-probe-va-s3.svg"] = _probe(
 
 # ── declared frames (top, rightGap, bottomGap), baked from gate.mjs
 # measurement on this machine; tolerance 4 absorbs the CI ascent skew.
+#
+# Three rightGaps moved with the figure fix (2026-08-13) and were re-baked from
+# what check 12 measured, which is the one direction this is allowed to go: the
+# declaration follows the drawing. Tabular figures are one width, and on these
+# three plates the claim figure IS the rightmost ink, so the plate's right edge
+# moved when the digits stopped being proportional. "0.979" is the largest:
+# 0+9+7+9 advanced 4889/1000 em as text figures and 4582 as tabular, 19u
+# narrower at 62px, and APPLIED_FRAME went 37 -> 59.3 to say so. Nothing was
+# nudged to make a number fit; the numbers were re-read after the type changed.
 HERO_FRAME = (30, 37.7, 0)
-JET_FRAME = (2.5, 55.9, 2.5)
-WORK_FRAME = (2.5, 28, 2.5)
+JET_FRAME = (2.5, 64.7, 2.5)
+WORK_FRAME = (2.5, 35.7, 2.5)
 GLYPH_FRAME = (2.5, 35.5, 2.5)
 AUTOML_FRAME = (2.5, 60.8, 2.5)
 CADENCE_FRAME = (2.5, 51.7, 2.5)
-APPLIED_FRAME = (2.5, 37, 2.5)
+APPLIED_FRAME = (2.5, 59.3, 2.5)
 VA_FRAME = (2.5, 150, 2.5)
 COLO_FRAME = (2.5, 48, 4)
 MOB_FRAME = (36, 58, 0)
