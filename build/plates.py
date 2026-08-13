@@ -1405,7 +1405,7 @@ def plate_cadence() -> str:
         + tables
         + mark("cadence", 150, 96, 48)
         + sec_roman(150, 54, "V — CADENCE", 30)
-        + sec_sub(150, 76, "every route into one function; every row behind RLS.", 14.5)
+        + sec_sub(150, 76, "every route, one function; tenant rows behind RLS.", 14.5)
         + f'<text x="{fig_x(680, "36", 62)}" y="70" class="d" font-size="62">36</text>'
         + f'<text x="680" y="108" class="dim" font-size="13">route handlers, one function;</text>'
         + f'<text x="680" y="126" class="dim" font-size="13">RLS FORCEd on all 7 tables.</text>'
@@ -1945,7 +1945,7 @@ def m_cadence() -> str:
         m_sec(640, (12, 175, 90), tap=("verd", 30))
         + mark("cadence", 92, 96, 48)
         + sec_roman(92, 54, "V — CADENCE", 24)
-        + sec_sub(92, 76, "every route into one function; every row behind RLS.", 13)
+        + sec_sub(92, 76, "every route, one function; tenant rows behind RLS.", 13)
         + m_fig("36", "route handlers, one function;",
                 "RLS FORCEd on all 7 tables.")
         + bus("verd", "M116,144 V202 H388", C=132, cd="M116,148 V202 H384")
