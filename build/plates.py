@@ -367,10 +367,19 @@ def head(h: int, title: str, desc: str, key: str = "",
     # cost nothing here — no figure on this page is set to a width — and they
     # are what makes the column agree with itself.
     #
-    # Set on .d only. Commissioner's figures were measured and are already
-    # lining (yMin 0/-22, yMax 1371..1398 on a 2000 em, i.e. flat 1 4 7 and
-    # overshoot on the rest); it carries no figure features at all, so there
-    # is nothing to ask it for and nothing to fix.
+    # Set on .d only. Commissioner was measured at BOTH the weights this page
+    # ships, not just the one the captions use, and both are already lining:
+    # the 400 spreads its digit ink tops 13/1000 em and its baselines 11/1000,
+    # the 600 spreads them 14 and 12, with 1 2 4 7 sitting flat on the baseline
+    # and the round figures overshooting it. That is drawing, not misalignment,
+    # and it is the same order as the .tf set's 20. Neither weight carries
+    # lnum, tnum, onum or pnum AT ALL, so there is nothing to ask Commissioner
+    # for and nothing to fix — which also makes the lnum/pnum named in
+    # subset-fonts.py's two Commissioner calls inert. They are left there: the
+    # saving that comment claims comes from excluding fontTools' DEFAULT
+    # feature set, which naming any list achieves, and dropping the two dead
+    # tags would rewrite both text subsets and the base64 of every plate that
+    # embeds them for no rendering change at all.
     return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" width="{w}" height="{h}" role="img" aria-label="{desc}" data-col="{col[0]},{col[1]}"{fr} data-canvas="{T['canvas']}">
 <title>{title}</title><desc>{desc}</desc>
 <style>
