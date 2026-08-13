@@ -617,18 +617,34 @@ def plate_hero() -> str:
 # ══════════════════════════════════════════════════ the link row
 #
 # Four ports on the bus, each its own SVG so each is its own link in the
-# README — the way out of "an SVG in an <img> cannot hold a link". EACH CHIP
-# IS AN OPAQUE MODULE, and that is forced by the medium, not chosen: GitHub's
-# markdown pipeline SPLITS a <picture> inside a link — the <source> stays in
-# the author's <a>, the <img> is extracted and auto-linked to the asset file
-# itself (probed against the real /markdown API, 2026-08-12). So a chip
-# cannot be both clickable and theme-switched. A component is a physical
-# object that does not recolour with the room: the chip is a near-black
-# module in the marks' own family language, self-grounded, ONE artwork
-# legible on every canvas, linked as [<img>](url) — the nesting that
-# survives. Everything inside grades against the module via check 10's local
-# grounds; only ink that rides the changing canvas (the module hairline, the
-# leads) uses tones measured on BOTH grounds.
+# README — the way out of "an SVG in an <img> cannot hold a link".
+#
+# THE PLATFORM RULE, corrected 2026-08-13. This block used to state, as a
+# measured law, that GitHub's pipeline splits a <picture> inside a link, "so
+# a chip cannot be both clickable and theme-switched". That is FALSE, and
+# the 2026-08-12 probe that produced it was measuring its own artifact: the
+# probe's <picture> spanned several source lines, and it is the NEWLINE the
+# pipeline splits raw inline HTML on, not the nesting. Re-probed against the
+# real /markdown API (2026-08-13):
+#
+#   · <a href><picture><source…><img…></picture></a> on ONE source line
+#     survives intact — clickable AND theme-switched. The interval strips
+#     below (`the intervals`) ship exactly this and are the live proof.
+#   · The same element spread across lines is re-parented per line, which is
+#     what the old probe saw and misread as a law about nesting.
+#   · An HTML block ends at a BLANK line; markdown after it renders with
+#     live links inside the still-open element. The interval stacks lean on
+#     the first half of that (no blank line inside a stack).
+#
+# The chips remain ONE dark artwork for now — a near-black module in the
+# marks' own family language, self-grounded, legible on every canvas, linked
+# as [<img>](url). That is a design choice a component can defend (a part
+# does not recolour with the room), no longer a medium's ultimatum, and the
+# connector-row change (real brand logos on the four ports; portfolio mark
+# in design) decides whether it stands. Everything inside grades against the
+# module via check 10's local grounds; only ink that rides the changing
+# canvas (the module hairline, the leads) uses tones measured on BOTH
+# grounds.
 #
 # HOW THE ROW SITS ON THE BOARD — re-authored 2026-08-13. The previous strip
 # ran three self-contained horizontal lanes edge-to-edge through the chips;
@@ -645,14 +661,19 @@ def plate_hero() -> str:
 #                                            linked images (measured on the
 #                                            live profile, 2026-08-12)
 #
-# CALIBRATION. Chips render at natural size; every 900-wide plate scales to
-# the profile column. Registration between a fixed-px image and a scaled one
-# is exact at ONE width, so the row is calibrated to the canonical 846px
-# column (900 × PAGE, the wide-desktop measurement; the demo renders at it).
-# At narrower columns the two seams drift by the scale difference — a small
-# jog, never a collision — and the 580.4px row still clears the 590px column
-# GitHub serves at 1024 viewports without wrapping. The row's left edge is
-# the portfolio module at x=45.5 ≈ the hero's content margin (48 × PAGE).
+# CALIBRATION — SUPERSEDED DOCTRINE, kept only while the chips do. Chips
+# render at natural size; every 900-wide plate scales to the profile column.
+# Registration between a fixed-px image and a scaled one is exact at ONE
+# width, so the row is calibrated to the canonical 846px column (900 × PAGE)
+# and drifts at every other width — a small jog, never a collision — and the
+# 580.4px row still clears the 590px column GitHub serves at 1024 viewports
+# without wrapping. The row's left edge is the portfolio module at x=45.5 ≈
+# the hero's content margin (48 × PAGE). The interval strips below do NOT
+# calibrate: they are percent-width slices of a 900u artwork, so every slice
+# scales by the same factor as the plates and the lanes register at EVERY
+# column width, by construction. The connector-row change is expected to
+# move the chips onto the same construction and retire PAGE and GAP with the
+# fixed-px row they describe.
 #
 # The LEAD tones are the buses' component-land register: one artwork means a
 # lead crosses both canvases, so each is measured on #ffffff / #212830 / the
@@ -1385,11 +1406,13 @@ def m_hero() -> str:
 #     at the phone column's ~0.89 these sit near desktop's own rendered
 #     sizes — larger, not smaller, than the desktop plate would give a
 #     phone reader.
-#   * the FOUR LINK CHIPS have no mobile twin BY DESIGN: a chip is a
-#     fixed-px component (natural size, no <picture> possible inside a
-#     link — see the link-row doctrine above), so at 440 the row wraps to
-#     two rows of ports and every chip keeps its size. m-link-return
-#     resumes the lanes below the wrapped row.
+#   * the FOUR LINK CHIPS have no mobile twin: a chip is a fixed-px
+#     component (natural size), so at 440 the row wraps to two rows of
+#     ports and every chip keeps its size. A <picture> inside the link IS
+#     possible on one source line (see the corrected link-row doctrine);
+#     serving mobile twins is the connector-row change's call, not a
+#     medium's refusal. m-link-return resumes the lanes below the wrapped
+#     row.
 def m_sec(h: int, C: tuple[float, float, float],
           tap: tuple[str, float] | None = None) -> str:
     """The three page buses crossing a mobile plate, plus the section's tap.
@@ -2039,13 +2062,16 @@ else:
     # through `.svg` and reads as present.
     _want = {f"./assets/{_d}{_f}" for _f in set(PLATES) | set(MOBILE)
              for _d in ("", "light/")}
-    # The four chips are ONE dark artwork in the README — GitHub's markdown
-    # pipeline splits a <picture> inside a link (see the link-row doctrine),
-    # so no theme switch is possible there and README rightly never serves
-    # their light/ files. Those twins are still authored on purpose: gate.mjs
-    # refuses a set with a missing twin, and the light file (same art,
-    # data-canvas #ffffff) is exactly how the one artwork gets MEASURED on
-    # the light canvas. A harness, not a served asset.
+    # The four chips are ONE dark artwork in the README. A theme switch IS
+    # possible — a one-line <a><picture>…</picture></a> survives the pipeline
+    # whole (see the link-row doctrine: the splitter is the newline, not the
+    # nesting) — but the chips have not migrated yet: that lands with the
+    # connector-row change, which redraws the ports around real brand logos.
+    # Until then README serves only their dark files, on purpose. The light
+    # twins are still authored: gate.mjs refuses a set with a missing twin,
+    # and the light file (same art, data-canvas #ffffff) is exactly how the
+    # one artwork gets MEASURED on the light canvas. A harness, not a served
+    # asset.
     _want -= {f"./assets/light/plate-link-{_k}.svg" for _k in CHIPS}
     _have = set(_re.findall(r'\./assets/(?:light/)?[\w.-]+\.svg(?![\w.-])', _md))
     for _p in sorted(_want - _have):
