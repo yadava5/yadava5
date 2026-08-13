@@ -360,7 +360,7 @@ def lbl(x: float, y: float, text: str, cls: str = "ts dim", size: float = 11,
             f'letter-spacing="{ls}"{a}>{text}</text>')
 
 
-# ── optical alignment of the claim figures.
+# ── optical alignment of the display line: the claim figures, and the romans.
 #
 # Every claim figure and its two caption lines are authored at the SAME x, and
 # that is why they did not line up. A shared x makes the PEN ORIGINS identical;
@@ -394,14 +394,70 @@ def lbl(x: float, y: float, text: str, cls: str = "ts dim", size: float = 11,
 # mean over all 24 caption lines on the page (0.057 em; the spread across
 # leading glyphs is 0.013..0.077 em, i.e. under 0.9u at caption size).
 # Commissioner's own optical term at 12-13px is below 0.06u and is ignored.
-FIG_OPTIC = {                  # leading glyph -> (lsb em/1000, overshoot in u)
+#
+# THE SECTION ROMANS are the same defect one size up, and they repeat seven
+# times, which is why they are the visible one. `I — WORK` and `V — CADENCE`
+# are authored at the same x as the subtitle under them and the mark tile
+# beside them, and all three land somewhere different: measured at 8 device px
+# per unit with every other element hidden, the roman's ink sat 1.66..2.46u
+# right of its own tile, the subtitle 0.22..0.64u, and the I-plates and the
+# V-plates disagreed with EACH OTHER by 0.67u apparent (2.0u mechanical) down
+# the page. Three elements, one edge, seven sections, no two the same.
+D_OPTIC = {                    # display leading glyph -> (lsb em/1000, overshoot in u)
     "0": (60, 0.40),
     "3": (35, 0.75),
     "4": (50, 0.35),
     "5": (55, 1.10),
     "6": (30, 0.40),
+    # The romans. 'I' is a flat stem carrying an unusually deep bearing —
+    # 85/1000, 2.55u of daylight at 30 — and, being flat, no overshoot at all:
+    # its apparent edge IS its mechanical one, which is the construction the
+    # `over` term is defined by. 'V' is the opposite shape and the reason this
+    # table cannot be one number: almost no bearing (20/1000) but its leftmost
+    # ink is a POINT, so it must overhang to read level. 1.47u is the same
+    # low-pass read the figures got — 1.49u at 30 and 1.44u at 24, one
+    # constant for both, and the two sizes agreeing to 0.05u is the evidence
+    # for the claim above that this term is a fixed visual angle.
+    "I": (85, 0.00),
+    "V": (20, 1.47),
 }
 TEXT_LSB = 57                  # Commissioner 400's mean caption ink edge, em/1000
+# Per-glyph, for the lines that must land ON an edge rather than near it:
+# Commissioner 400's own xMin, em/1000, off the subset's outlines. TEXT_LSB
+# above is their mean, and a mean is what a figure is aligned to because it
+# faces a two-line caption block. A subtitle is ONE line and there is no mean
+# to hide in: 't' starts 0.36u right of its pen origin at 14.5 and 'i' starts
+# 0.96u, which is the whole of why the seven section subtitles disagreed with
+# each other before they disagreed with the tile.
+TEXT_OPTIC = {"S": 54.5, "a": 52.5, "e": 50.0, "i": 66.0, "n": 82.0, "t": 24.5}
+# The section header's spine: the mark tile's painted left edge. _tile() draws
+# rect x="0.75" under a 1u stroke, so paint starts 0.25u right of the mark's
+# own x — and it starts there as a FLAT side 24u tall, an edge whose apparent
+# position is its mechanical one. It is the largest object in the header and
+# the only one whose edge is geometry rather than type, so it is the reference
+# the type is brought to, not the other way round; and every section puts its
+# mark at the section's x, so this is ONE number for the page.
+SPINE = 0.25
+# The declared type column of a desktop section plate. It moved from 148 with
+# this change, and it had to: an 'I' whose ink lands on 150.25 has its PEN
+# ORIGIN at 147.70, and check 5 measures getBoundingClientRect().x, which for
+# SVG text is the pen box, not the ink (verified in Chromium — rectX equals the
+# set x to the hundredth on all 48 plates). Shaving the correction to fit 148
+# was the alternative and it is the one thing a declaration must never do: the
+# column says where this plate's type starts, so when the type moves the
+# declaration moves with it. The mobile plates keep col=(88,412) — their
+# deepest origin is m-1-work's 57.8M at 89.38, and the romans land at 90.21.
+SEC_COL = (147, 880)
+
+
+def _ink(glyph: str, size: float, cap_em: float | None = None) -> float:
+    """How far right of the pen origin the display face's ink actually starts.
+
+    `cap_em` bounds the optical term to a fraction of the em. The figures pass
+    2%; the romans pass nothing, and that is deliberate — see rom_x.
+    """
+    lsb, over = D_OPTIC[glyph]
+    return lsb * size / 1000 + (over if cap_em is None else min(over, cap_em * size))
 
 
 def fig_x(x: float, fig: str, size: float, cap: float = 13) -> float:
@@ -411,9 +467,45 @@ def fig_x(x: float, fig: str, size: float, cap: float = 13) -> float:
     still set at, and the one the layout was reasoned about in. Only the
     figure moves, and only by what its own leading glyph costs.
     """
-    lsb, over = FIG_OPTIC[fig[0]]
-    shift = lsb * size / 1000 + min(over, 0.02 * size) - TEXT_LSB * cap / 1000
+    shift = _ink(fig[0], size, cap_em=0.02) - TEXT_LSB * cap / 1000
     return round(x - shift, 2)
+
+
+def rom_x(x: float, rom: str, size: float) -> float:
+    """The x a section roman must be SET at to land its ink on the spine.
+
+    No 2%-of-em cap here, and the omission is the argument. That cap bounds a
+    ROUND's overshoot to the one Syne's own designer allows — 'O' standing
+    20/1000 taller than 'H' — which is the right bound for a figure and the
+    wrong one for an apex: at 30 it is 0.60u against 'V's measured 1.49u, so
+    capping would leave the V-plates 0.89u inside the I-plates. That is a
+    WIDER disagreement than the 0.67u the page ships with today, i.e. the cap
+    would make the defect worse while looking like a correction.
+    """
+    return round(x + SPINE - _ink(rom[0], size), 2)
+
+
+def txt_x(x: float, s: str, size: float) -> float:
+    """The x a text line must be SET at to land ITS ink on the spine.
+
+    Mechanical only, no optical term. At 13-14.5 the text face's strokes are
+    thinner than the low-pass the display term is read under — the filter
+    returns no half crossing at all, the apparent edge is the mechanical one —
+    and it is also how every other text block on this page is set.
+    """
+    return round(x + SPINE - TEXT_OPTIC[s[0]] * size / 1000, 2)
+
+
+def sec_roman(x: float, y: float, s: str, size: float) -> str:
+    """A section roman, set so its ink lands on the plate's spine."""
+    return (f'<text x="{rom_x(x, s, size)}" y="{y:g}" class="d" '
+            f'font-size="{size:g}" letter-spacing="0.5">{s}</text>')
+
+
+def sec_sub(x: float, y: float, s: str, size: float) -> str:
+    """One line of a section subtitle, landing its ink on the same spine."""
+    return (f'<text x="{txt_x(x, s, size)}" y="{y:g}" class="dim" '
+            f'font-size="{size:g}">{s}</text>')
 
 
 # ══════════════════════════════════════════════════════════ the hero
@@ -786,8 +878,8 @@ def plate_jetpack() -> str:
         + lbl(556, 264, "STITCHED BYTE-ALIGNED · ONE CRC", size=10, ls=1.1)
         + lbl(300, 128, "DEFLATE · JDK 25 · VIRTUAL THREADS", size=10, ls=1.1)
         + mark("jetpack", 150, 96, 48)
-        + f'<text x="150" y="54" class="d" font-size="30" letter-spacing="0.5">II — JETPACK</text>'
-        + f'<text x="150" y="76" class="dim" font-size="14.5">is hand-vectorised code actually faster?</text>'
+        + sec_roman(150, 54, "II — JETPACK", 30)
+        + sec_sub(150, 76, "is hand-vectorised code actually faster?", 14.5)
         + f'<text x="{fig_x(640, "6.4×", 62)}" y="138" class="d" font-size="62">6.4×</text>'
         + f'<text x="640" y="176" class="dim" font-size="13">422 vs 66.2 MB/s, single thread —</text>'
         + f'<text x="640" y="194" class="dim" font-size="13">M1 Pro · 3-fork JMH, committed</text>'
@@ -807,7 +899,7 @@ def plate_jetpack() -> str:
         "beaten; the hand-vectorised checksum reaches 4.26, bit-identical to "
         "java.util.zip.",
         key="plate-2-jetpack.svg",
-        col=(148, 880), frame=JET_FRAME,
+        col=SEC_COL, frame=JET_FRAME,
     ) + css_close() + body + "</svg>"
 
 
@@ -834,8 +926,8 @@ def plate_work() -> str:
           f'fill="none" stroke="{T["zinc"]}" stroke-width="1.4" stroke-dasharray="5 4"/>'
           f'<rect x="148.25" y="118" width="5" height="4" fill="{T["zinc"]}"/></g>'
         + lbl(150, 163, "NO PRODUCT MARK — THE WORK IS OFF-REPO", size=10, ls=1.1)
-        + f'<text x="150" y="54" class="d" font-size="30" letter-spacing="0.5">I — WORK</text>'
-        + f'<text x="150" y="76" class="dim" font-size="14.5">twelve months of production data work — none of it public.</text>'
+        + sec_roman(150, 54, "I — WORK", 30)
+        + sec_sub(150, 76, "twelve months of production data work — none of it public.", 14.5)
         + lbl(852, 30, "FIRST, THE EXCEPTION — ATTESTED, NOT DERIVED", size=10.5, anchor="end")
         + f'<text x="{fig_x(584, "57.8M", 56)}" y="150" class="d" font-size="56">57.8M</text>'
         + f'<text x="584" y="186" class="dim" font-size="13">rows in one field-usage table,</text>'
@@ -855,7 +947,7 @@ def plate_work() -> str:
         "University and to a competition; this section is attested, not "
         "derived.",
         key="plate-1-work.svg",
-        col=(148, 880), frame=WORK_FRAME,
+        col=SEC_COL, frame=WORK_FRAME,
     ) + css_close() + body + "</svg>"
 
 
@@ -904,8 +996,8 @@ def plate_glyph() -> str:
         + lbl(504, 326, "WASM_SIMD128 · 43,751 B", cls="ts", size=11.5, ls=1.3)
         + lbl(492, 360, "BYTE-IDENTICAL TO MAIN · CHECKED DAILY IN CI", size=10, ls=1.1)
         + mark("glyph", 150, 96, 48)
-        + f'<text x="150" y="54" class="d" font-size="30" letter-spacing="0.5">III — GLYPH</text>'
-        + f'<text x="150" y="76" class="dim" font-size="14.5">SIMD kernels over a net the course provided.</text>'
+        + sec_roman(150, 54, "III — GLYPH", 30)
+        + sec_sub(150, 76, "SIMD kernels over a net the course provided.", 14.5)
         + f'<text x="{fig_x(660, "3.5×", 62)}" y="150" class="d" font-size="62">3.5×</text>'
         + f'<text x="660" y="188" class="dim" font-size="13">benchDot/256 — course baseline,</text>'
         + f'<text x="660" y="206" class="dim" font-size="13">reference machine, committed run.</text>'
@@ -927,7 +1019,7 @@ def plate_glyph() -> str:
         "number — the test set that graded the net also picked its "
         "checkpoint.",
         key="plate-3-glyph.svg",
-        col=(148, 880), frame=GLYPH_FRAME,
+        col=SEC_COL, frame=GLYPH_FRAME,
     ) + css_close() + body + "</svg>"
 
 
@@ -958,8 +1050,8 @@ def plate_automl() -> str:
         + sets
         + lbl(300, 256, "SEVEN TOOL SETS — NO PHASE IS HANDED ALL 44", size=10, ls=1.1)
         + mark("automl", 150, 96, 48)
-        + f'<text x="150" y="54" class="d" font-size="30" letter-spacing="0.5">IV — AUTOML</text>'
-        + f'<text x="150" y="76" class="dim" font-size="14.5">a LangGraph agent, dealt its tools phase by phase.</text>'
+        + sec_roman(150, 54, "IV — AUTOML", 30)
+        + sec_sub(150, 76, "a LangGraph agent, dealt its tools phase by phase.", 14.5)
         + f'<text x="{fig_x(660, "44", 62)}" y="160" class="d" font-size="62">44</text>'
         + f'<text x="660" y="198" class="dim" font-size="13">defined across the dispatcher;</text>'
         + f'<text x="660" y="216" class="dim" font-size="13">no phase&#8217;s hand holds them all.</text>'
@@ -977,7 +1069,7 @@ def plate_automl() -> str:
         "is an env var the beta template renders as bridge, with no "
         "cap-drop, no pids-limit, no seccomp.",
         key="plate-4-automl.svg",
-        col=(148, 880), frame=AUTOML_FRAME,
+        col=SEC_COL, frame=AUTOML_FRAME,
     ) + css_close() + body + "</svg>"
 
 
@@ -1017,8 +1109,8 @@ def plate_cadence() -> str:
         + f'<path fill="none" stroke="{T["verd"]}" stroke-width="1.4" d="{fan}"/>'
         + tables
         + mark("cadence", 150, 96, 48)
-        + f'<text x="150" y="54" class="d" font-size="30" letter-spacing="0.5">V — CADENCE</text>'
-        + f'<text x="150" y="76" class="dim" font-size="14.5">every route into one function; every row behind RLS.</text>'
+        + sec_roman(150, 54, "V — CADENCE", 30)
+        + sec_sub(150, 76, "every route into one function; every row behind RLS.", 14.5)
         + f'<text x="{fig_x(680, "37", 62)}" y="70" class="d" font-size="62">37</text>'
         + f'<text x="680" y="108" class="dim" font-size="13">route handlers, one function;</text>'
         + f'<text x="680" y="126" class="dim" font-size="13">RLS FORCEd on all 7 tables.</text>'
@@ -1037,7 +1129,7 @@ def plate_cadence() -> str:
         "forgets the identity still sends the query, and the database's "
         "refusal is the one that cannot be forgotten.",
         key="plate-5-cadence.svg",
-        col=(148, 880), frame=CADENCE_FRAME,
+        col=SEC_COL, frame=CADENCE_FRAME,
     ) + css_close() + body + "</svg>"
 
 
@@ -1079,8 +1171,8 @@ def plate_applied() -> str:
         + lbl(252, 245, "THE CASCADE", cls="ts dim", size=10, ls=1.1)
         + lbl(240, 286, "LAYER TWO — NO EVALUATION ARTIFACT SURVIVES", size=10, ls=1.1)
         + mark("applied", 150, 96, 48)
-        + f'<text x="150" y="54" class="d" font-size="30" letter-spacing="0.5">VI — APPLIED</text>'
-        + f'<text x="150" y="76" class="dim" font-size="14.5">an inbox read by rules that keep score.</text>'
+        + sec_roman(150, 54, "VI — APPLIED", 30)
+        + sec_sub(150, 76, "an inbox read by rules that keep score.", 14.5)
         + f'<text x="{fig_x(560, "0.979", 62)}" y="240" class="d" font-size="62">0.979</text>'
         + f'<text x="560" y="278" class="dim" font-size="13">macro-F1 — the rules layer alone,</text>'
         + f'<text x="560" y="296" class="dim" font-size="13">graded on the strip above.</text>'
@@ -1098,7 +1190,7 @@ def plate_applied() -> str:
         "evaluation artifact — the run was overwritten. What is deployed "
         "runs only that first layer.",
         key="plate-6-applied.svg",
-        col=(148, 880), frame=APPLIED_FRAME,
+        col=SEC_COL, frame=APPLIED_FRAME,
     ) + css_close() + body + "</svg>"
 
 
@@ -1154,8 +1246,8 @@ def plate_visualassist() -> str:
         + f'<rect x="590" y="415" width="160" height="42" rx="8" fill="none" '
           f'stroke="{T["rust"]}" stroke-width="1.6"/>'
         + lbl(602, 440, "LIDARSERVICE", cls="ts", size=11.5, ls=1.3)
-        + f'<text x="150" y="54" class="d" font-size="30" letter-spacing="0.5">VII — VISUALASSIST</text>'
-        + f'<text x="150" y="76" class="dim" font-size="14.5">it decides by distance when to speak — and when not to.</text>'
+        + sec_roman(150, 54, "VII — VISUALASSIST", 30)
+        + sec_sub(150, 76, "it decides by distance when to speak — and when not to.", 14.5)
         + mark("visualassist", 150, 96, 48)
         + f'<rect x="150" y="470" width="4" height="16" fill="{T["rust"]}"/>'
         + f'<text x="164" y="483" class="dim" font-size="13">a slider labelled in metres, its value read aloud — bound to a threshold LiDARService never consults.</text>'
@@ -1172,7 +1264,7 @@ def plate_visualassist() -> str:
         "A live control that does nothing lies to the person the app is "
         "for.",
         key="plate-7-visualassist.svg",
-        col=(148, 880), frame=VA_FRAME,
+        col=SEC_COL, frame=VA_FRAME,
     ) + css_close() + body + "</svg>"
 
 
@@ -1356,9 +1448,9 @@ def m_work() -> str:
           f'fill="none" stroke="{T["zinc"]}" stroke-width="1.4" stroke-dasharray="5 4"/>'
           f'<rect x="90.25" y="118" width="5" height="4" fill="{T["zinc"]}"/></g>'
         + lbl(92, 163, "NO PRODUCT MARK — THE WORK IS OFF-REPO", size=10, ls=1.1)
-        + f'<text x="92" y="54" class="d" font-size="24" letter-spacing="0.5">I — WORK</text>'
-        + f'<text x="92" y="74" class="dim" font-size="13">twelve months of production data work —</text>'
-        + f'<text x="92" y="90" class="dim" font-size="13">none of it public.</text>'
+        + sec_roman(92, 54, "I — WORK", 24)
+        + sec_sub(92, 74, "twelve months of production data work —", 13)
+        + sec_sub(92, 90, "none of it public.", 13)
         + lbl(404, 30, "THE EXCEPTION — ATTESTED, NOT DERIVED", size=10.5, anchor="end")
         + f'<text x="{fig_x(92, "57.8M", 44, cap=12)}" y="224" class="d" font-size="44">57.8M</text>'
         + f'<text x="92" y="256" class="dim" font-size="12">rows in one field-usage table,</text>'
@@ -1398,8 +1490,8 @@ def m_jetpack() -> str:
     body = (
         m_sec(600, (140, 55, 190), tap=("rust", 18))
         + mark("jetpack", 92, 96, 48)
-        + f'<text x="92" y="54" class="d" font-size="24" letter-spacing="0.5">II — JETPACK</text>'
-        + f'<text x="92" y="76" class="dim" font-size="13">is hand-vectorised code actually faster?</text>'
+        + sec_roman(92, 54, "II — JETPACK", 24)
+        + sec_sub(92, 76, "is hand-vectorised code actually faster?", 13)
         + m_fig("6.4×", "422 vs 66.2 MB/s, single thread",
                 "M1 Pro · 3-fork JMH, committed")
         + bus("rust", "M140,120 H160 V360", C=70, cd="M144,120 H160 V357")
@@ -1448,8 +1540,8 @@ def m_glyph() -> str:
     body = (
         m_sec(690, (40, 130, 8), tap=("rust", 88))
         + mark("glyph", 92, 96, 48)
-        + f'<text x="92" y="54" class="d" font-size="24" letter-spacing="0.5">III — GLYPH</text>'
-        + f'<text x="92" y="76" class="dim" font-size="13">SIMD kernels over a net the course provided.</text>'
+        + sec_roman(92, 54, "III — GLYPH", 24)
+        + sec_sub(92, 76, "SIMD kernels over a net the course provided.", 13)
         + m_fig("3.5×", "benchDot/256 — course baseline,",
                 "reference machine, committed run.")
         + bus("rust", "M140,120 H160 V368", C=30, cd="M144,120 H160 V365")
@@ -1508,8 +1600,8 @@ def m_automl() -> str:
     body = (
         m_sec(490, (170, 85, 25), tap=("zinc", 55))
         + mark("automl", 92, 96, 48)
-        + f'<text x="92" y="54" class="d" font-size="24" letter-spacing="0.5">IV — AUTOML</text>'
-        + f'<text x="92" y="76" class="dim" font-size="13">a LangGraph agent, dealt its tools phase by phase.</text>'
+        + sec_roman(92, 54, "IV — AUTOML", 24)
+        + sec_sub(92, 76, "a LangGraph agent, dealt its tools phase by phase.", 13)
         + m_fig("44", "defined across the dispatcher;",
                 "no phase’s hand holds them all.")
         + bus("zinc", "M116,144 V236 H128", C=96, cd="M116,148 V236 H124")
@@ -1555,8 +1647,8 @@ def m_cadence() -> str:
     body = (
         m_sec(640, (12, 175, 90), tap=("verd", 30))
         + mark("cadence", 92, 96, 48)
-        + f'<text x="92" y="54" class="d" font-size="24" letter-spacing="0.5">V — CADENCE</text>'
-        + f'<text x="92" y="76" class="dim" font-size="13">every route into one function; every row behind RLS.</text>'
+        + sec_roman(92, 54, "V — CADENCE", 24)
+        + sec_sub(92, 76, "every route into one function; every row behind RLS.", 13)
         + m_fig("37", "route handlers, one function;",
                 "RLS FORCEd on all 7 tables.")
         + bus("verd", "M116,144 V202 H388", C=132, cd="M116,148 V202 H384")
@@ -1612,8 +1704,8 @@ def m_applied() -> str:
     body = (
         m_sec(610, (200, 45, 130), tap=("verd", 88))
         + mark("applied", 92, 96, 48)
-        + f'<text x="92" y="54" class="d" font-size="24" letter-spacing="0.5">VI — APPLIED</text>'
-        + f'<text x="92" y="76" class="dim" font-size="13">an inbox read by rules that keep score.</text>'
+        + sec_roman(92, 54, "VI — APPLIED", 24)
+        + sec_sub(92, 76, "an inbox read by rules that keep score.", 13)
         + m_fig("0.979", "macro-F1 — the rules layer alone,",
                 "graded on the strip below.")
         + bus("verd", "M116,144 V206", C=140, cd="M116,148 V202")
@@ -1661,15 +1753,20 @@ def m_applied() -> str:
 # chord. The slider keeps its severed lead, and keeps desktop's one licensed
 # crossing — the dead 1.4u drop through the value it is set to.
 def m_visualassist() -> str:
+    # the one roman that runs to two lines. Both lines lead with 'V', so the
+    # tspan carries the same correction as the element that owns it — a tspan
+    # with its own x is a second pen origin, and leaving it at 92 would set the
+    # section's own name one bearing right of its own title.
+    rx = rom_x(92, "VII — VISUALASSIST", 24)
     body = (
         m_sec(650, (60, 145, 205))
         # the open stub: reaching for the zinc bus, not landing
         + f'<circle cx="76.5" cy="140" r="3.5" fill="none" stroke="{T["zinc"]}" stroke-width="2"/>'
         + f'<path class="bus" stroke="{T["zinc"]}" stroke-dasharray="3 6" d="M84,140 H90"/>'
-        + f'<text x="92" y="44" class="d" font-size="24" letter-spacing="0.5">VII —'
-          f'<tspan x="92" dy="26">VISUALASSIST</tspan></text>'
-        + f'<text x="92" y="92" class="dim" font-size="13">it decides by distance when to speak —</text>'
-        + f'<text x="92" y="108" class="dim" font-size="13">and when not to.</text>'
+        + f'<text x="{rx}" y="44" class="d" font-size="24" letter-spacing="0.5">VII —'
+          f'<tspan x="{rx}" dy="26">VISUALASSIST</tspan></text>'
+        + sec_sub(92, 92, "it decides by distance when to speak —", 13)
+        + sec_sub(92, 108, "and when not to.", 13)
         + mark("visualassist", 92, 116, 48)
         # the one live current: mark to phone
         + bus("rust", "M140,140 H156 V210 H164", C=100, cd="M144,140 H156 V210 H159.5")
