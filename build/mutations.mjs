@@ -37,6 +37,61 @@ import { join } from 'node:path';
 const ROOT = new URL('..', import.meta.url).pathname;
 const ASSETS = join(ROOT, 'assets');
 
+// ── FINDING A SUBJECT WITHOUT NAMING ONE
+//
+// Round 28 (BOARD) rebuilt every plate: new filenames, new compositions, new
+// class names, new faces. Fifteen of the twenty probes below reported "??
+// stale" against the result, and all fifteen for one reason — each named a
+// literal that design work is free to change and duly did: class="lbl",
+// class="say", class="kick", font-family:'S', x="150", a y-coordinate. That
+// makes seventeen stale probes from this cause in this file's history, which
+// is no longer a run of bad luck; it is the wrong way to write a probe.
+//
+// So the probes take their subject from the page's SHAPE. `topText` answers
+// "which <text> elements are direct children of <svg>, and where are they" —
+// direct children because checks 2 and 3 both exempt elements that share a <g>
+// ("composed on purpose", gate.mjs:353), so a probe injected beside a grouped
+// target is waved through and reports a false pass; and because a <g> may
+// carry a transform, so a copy of a grouped element's authored x/y placed at
+// the top level lands somewhere else entirely.
+//
+// A regex cannot answer "is this inside a <g>", so this walks the tags once
+// and tracks depth. Not a parser: the plates are machine-written and plates.py
+// asserts they are well-formed XML at build time, and giving the negative test
+// an XML dependency the gate itself does not have would be its own liability.
+const topText = (s) => {
+  const out = [];
+  let depth = 0;
+  const re = /<(\/?)([\w-]+)((?:[^>"]|"[^"]*")*?)(\/?)>/g;
+  let m;
+  while ((m = re.exec(s))) {
+    const [, close, name, attrs] = m;
+    if (name === 'g') { depth += close ? -1 : 1; continue; }
+    if (close || name !== 'text' || depth !== 0) continue;
+    const end = s.indexOf('</text>', re.lastIndex);
+    if (end < 0) continue;
+    const x = /\bx="(-?[\d.]+)"/.exec(attrs), y = /\by="(-?[\d.]+)"/.exec(attrs);
+    if (!x || !y) continue;
+    out.push({ attrs, x: Number(x[1]), y: Number(y[1]), body: s.slice(re.lastIndex, end) });
+  }
+  return out;
+};
+// The one a coordinate-borrowing probe wants: long enough that an overlap is
+// wider than the 1.5u antialiasing slack, and START-anchored, because an
+// end-anchored run extends LEFT of its x and a rule drawn rightwards from
+// there would miss it entirely — a probe that lands in empty space and proves
+// nothing, which is the mistake the collision probe made in round 17.
+const anchorText = (s) => topText(s).find(t =>
+  !/text-anchor="(?:end|middle)"/.test(t.attrs)
+  && t.body.replace(/<[^>]*>/g, '').trim().length >= 4);
+// Authored canvas, read per file rather than assumed. The retired design was
+// 794 wide with an 86u viewBox offset; this one is 900x534 and 440x… on the
+// phone, and the next one will be something else again.
+const canvasOf = (s) => {
+  const m = /viewBox="[\d.-]+ [\d.-]+ ([\d.]+) ([\d.]+)"/.exec(s);
+  return m ? { w: Number(m[1]), h: Number(m[2]) } : null;
+};
+
 // [name, check it must trip, how to break one plate]
 const MUTATIONS = [
   // inject a second run of type at coordinates already occupied. Moving an
@@ -54,11 +109,31 @@ const MUTATIONS = [
   // anything — and this line reported a pass while its injection was never
   // read. The injected run is the only thing on the page that says OVERLAP, so
   // the expectation names it. Either side of the pair may print first.
+  // Round 28: x="150" was the retired design's type column and matches nothing
+  // on the board. The injected run now COPIES the attribute list of the first
+  // top-level text on the plate, so it lands at exactly that element's
+  // position, in exactly its face and size, whatever those turn out to be —
+  // there is no coordinate, class or size left here for a redesign to move.
   ['text collides with text', /"OVERLAP" collides with|collides with "OVERLAP"/,
-    (s) => s.replace(/<text x="150" y="(\d+)" class="(\w+)">/,
-      (m, y, c) => `<text x="150" y="${y}" class="${c}">OVERLAP</text>${m}`)],
-  ['ink leaves the canvas', /leaves the canvas/,
-    (s) => s.replace(/<text x="150" y="56"/, '<text x="1500" y="56"')],
+    (s) => {
+      const t = topText(s)[0];
+      if (!t) return s;
+      return s.replace('</svg>', `<text${t.attrs}>OVERLAP</text></svg>`);
+    }],
+  // Same treatment, one axis over: the same attribute list, pushed past the
+  // plate's own right edge. The old form moved a literal x="150" y="56" that
+  // no plate has had for two rounds. The expectation names the injected run
+  // because check 4's message identifies a <text> by its content, and a bare
+  // /leaves the canvas/ would be satisfied by any real overflow — a probe that
+  // passes because the tree is already broken is the defect this file exists
+  // to prevent.
+  ['ink leaves the canvas', /"OFFCANVAS" leaves the canvas[^\n]*canvas \d+x\d+\)/,
+    (s) => {
+      const t = topText(s)[0], c = canvasOf(s);
+      if (!t || !c) return s;
+      return s.replace('</svg>',
+        `<text${t.attrs.replace(/\bx="-?[\d.]+"/, `x="${c.w + 40}"`)}>OFFCANVAS</text></svg>`);
+    }],
   // Glyph's first hand-drawn glyph carries its negative delay in an element
   // style; zeroing it puts the pen at 0% at t=0 — an undrawn stroke on the
   // authored frame, which check 6 must call out. Keys on the element style,
@@ -78,21 +153,43 @@ const MUTATIONS = [
     (s) => s.replace('</svg>',
       '<path class="probe6" d="M160 24 L 260 24" fill="none" stroke="#f6efe2" '
       + 'stroke-width="1" style="stroke-dasharray:100;stroke-dashoffset:100"/></svg>')],
-  // Applied's refused message rests beside the human for the first 30% of
-  // its loop; flipping that hold to opacity:0 hides it for most of the cycle.
-  // (Round 21 re-anchor: the sieve became the sifting channel and the hold
-  // moved from 52% to 30%.)
-  ['an element hides for most of its loop', /visible only \d+%/,
-    (s) => s.replace(/0%,30%\{opacity:1;/, '0%,30%{opacity:0;')],
+  // Check 7 held a probe pointed at one keyframe percentage on one plate
+  // (`0%,30%{opacity:1;`), and the rebuild deleted the plate. There is no
+  // element on the board that hides for part of its loop — every gesture here
+  // is a dash travelling along a bus — so, like the draw-on probe above, this
+  // SYNTHESISES the subject rather than borrowing one that does not exist:
+  // a rect that spends 84% of a one-second cycle at opacity 0. 1000ms is
+  // deliberately shorter than any authored loop, so `dur` (gate.mjs:280, the
+  // longest animation on the plate) does not move and the sampling phase of
+  // every real element is left exactly where the gate found it.
+  ['an element hides for most of its loop',
+    /<rect\.probe7 [\d.,-]+> is visible only \d+% of the loop/,
+    (s) => s.replace('</svg>',
+      '<style>@keyframes probe7{0%,84%{opacity:0}85%,100%{opacity:1}}'
+      + '.probe7{animation:probe7 1000ms linear infinite}</style>'
+      + '<rect class="probe7" x="4" y="4" width="24" height="8" fill="#E4E9E9"/></svg>')],
   // Anchored on `class="lbl" style="fill:#F5A524"` until a round reclaimed that
-  // amber for Glyph, and then it matched nothing. Third stale probe of the
-  // week, all three from keying on a literal that design work is free to
-  // change. Keys on the SHAPE now: any classed element that sets its fill
-  // through `style` — which is the whole point of the check, since a `fill`
-  // ATTRIBUTE loses to any CSS rule and paints nothing.
-  ['a fill attribute is overridden by its class', /overriding the attribute/,
-    (s) => s.replace(/class="([\w ]+)" style="fill:(#[0-9A-Fa-f]{6})"/,
-      (m, c, col) => `class="${c}" fill="${col}"`)],
+  // amber for Glyph, then on the SHAPE of any classed element setting its fill
+  // through `style` — and BOARD emits no element style at all, so that shape
+  // matched nothing either. Both versions were looking for a defect already
+  // present; what the check actually needs is an attribute a rule can beat.
+  // So the mutation reads the plate's OWN stylesheet, takes the first class
+  // rule that sets a fill, finds an element carrying that class and no fill
+  // attribute, and gives it one. Whatever the classes are called, a plate that
+  // styles fill by class has a subject for this check.
+  ['a fill attribute is overridden by its class',
+    /asks for fill="#FF00FF" and renders rgb\([\d, ]+\) — a CSS rule is overriding the attribute/,
+    (s) => {
+      const css = [...s.matchAll(/<style>([\s\S]*?)<\/style>/g)].map(m => m[1]).join('\n');
+      for (const [, cls] of css.matchAll(/\.([\w-]+)\{[^}]*\bfill:#[0-9A-Fa-f]{6}/g)) {
+        const held = new RegExp(`class="[^"]*\\b${cls}\\b[^"]*"`);
+        for (const m of s.matchAll(/<(text|rect|circle|path)\s((?:[^>"]|"[^"]*")*?)>/g)) {
+          if (!held.test(m[2]) || /\bfill="/.test(m[2])) continue;
+          return s.replace(m[0], `<${m[1]} fill="#FF00FF" ${m[2]}>`);
+        }
+      }
+      return s;
+    }],
   // Re-anchored 2026-08-08 with the paper palette: this keyed on the literal
   // dark INK2 #8A8F98, which the Daylight Study replaced with #D9D0C3. The
   // probe went stale in the same commit that changed the colour — which is
@@ -105,14 +202,25 @@ const MUTATIONS = [
   // points it at assets/light, which is the cheaper thing to be right about.
   // The rule's geometry — 13px / 0.4px — stays pinned: that is authored
   // typography, not palette, and it should rot loudly if a redesign moves it.
-  ['text drops below 4.5:1 on the slab', /on the slab \(needs 4.5/,
-    // Round 25 moved .fine's tracking 0.4px -> 0px when the text face became
-    // Newsreader (a serif's lowercase wants no extra air; the mono's did).
-    // The probe went stale and SAID SO, which is what the note above asks for:
-    // pinning the authored typography means a redesign trips this on purpose
-    // rather than silently carrying a probe that matches nothing.
-    (s) => s.replace(/\.fine\{font-size:13px;letter-spacing:0px;fill:#[0-9A-Fa-f]{6}\}/,
-      '.fine{font-size:13px;letter-spacing:0px;fill:#8a8175}')],
+  // Round 28: `.fine` went with the paper design, and pinning a rule's authored
+  // geometry — the thing the note above defended — turned out to buy nothing
+  // except a probe that dies on schedule. The check has nothing to do with any
+  // particular rule: it grades the ink a plate actually paints against the
+  // ground it declares. So the mutation adds ink of its own, at the position
+  // of the plate's first top-level run so it is certainly on the SHEET rather
+  // than inside one of the product tiles (which have their own local ground —
+  // see the mark probe further down, which is the other half of this pair).
+  // #3a4048 is a near-black that fails 4.5:1 against the dark canvas by a wide
+  // margin, and the expectation names both the injected run and the ground it
+  // must be graded against.
+  ['text drops below 4.5:1 on the slab',
+    /"FAINT" fill is \d\.\d+:1 on the slab \(needs 4\.5:1\)/,
+    (s) => {
+      const t = anchorText(s);
+      if (!t) return s;
+      return s.replace('</svg>',
+        `<text x="${t.x}" y="${t.y}" font-size="13" style="fill:#3a4048">FAINT</text></svg>`);
+    }],
   // Keys on Applied's refused message, which declares data-rest="the-human":
   // pulling its authored x back 100u strands it short of the person it must
   // reach, in both the animated and the still frame.
@@ -125,9 +233,26 @@ const MUTATIONS = [
   // the shift — it happened again (round 22 resized the token 14u -> 18u,
   // moving 632 -> 630), so this now does exactly that: any element that
   // declares a rest is dragged 100u left of wherever it was authored.
-  ['a token rests short of its target', /should come to rest at|still frame is the START/,
-    (s) => s.replace(/data-rest-within="12" x="(\d+)"/,
-      (m, x) => `data-rest-within="12" x="${Number(x) - 100}"`)],
+  // Round 28: the board draws no token that travels to a destination, so
+  // `data-rest` appears on nothing and no element carries an `id` for one to
+  // point at. Both ends are synthesised, at the plate's own scale: a target
+  // near the right edge and a marker that stops on the far left and stays
+  // there. That is enough to ask both halves of the claim — check 11 reads the
+  // longest still run in the animated timeline, check 16 reads the authored
+  // frame with motion off — and a static pair fails both, which is why the
+  // expectation accepts either sentence. If a plate ever declares a real rest
+  // again, this probe keeps working beside it and stops being the only subject.
+  ['a token rests short of its target',
+    /<rect\.probe11 [\d.,-]+> should come to rest at #probe11target but stops \d+u away|with motion off, <rect\.probe11> sits \d+u from #probe11target/,
+    (s) => {
+      const c = canvasOf(s);
+      if (!c) return s;
+      const y = Math.round(c.h / 2);
+      return s.replace('</svg>',
+        `<rect id="probe11target" x="${c.w - 80}" y="${y}" width="20" height="20" fill="#E4E9E9"/>`
+        + `<rect class="probe11" data-rest="probe11target" data-rest-within="12" `
+        + `x="40" y="${y}" width="20" height="20" fill="#E4E9E9"/></svg>`);
+    }],
   // Both of the following were dead until an audit ran them by hand. They are
   // probes now so that cannot happen twice.
   //
@@ -138,11 +263,23 @@ const MUTATIONS = [
   // token went with the table's decorative ripple.)
   // (Round 20 re-anchor: jetpack's bench sub-header — the old benchmark-table
   // row went with the table when the lanes became bars.)
-  // (Round 27: the y="82" literal died with the plate that carried it — the
-  // SAME y-literal trap already fixed on the fill-opacity probe below, one
-  // instance missed. Keys on the shape of any left-column label now.)
-  ['contrast is destroyed by an ancestor group opacity', /on the slab \(needs 4.5/,
-    (s) => s.replace(/(<text x="150" y="\d+" class="lbl">[^<]*<\/text>)/, '<g opacity="0.5">$1</g>')],
+  // (Round 27: the y="82" literal died with the plate that carried it. Round
+  // 28: so did class="lbl" and x="150", and the whole selector matched nothing
+  // — which is the third form of the same mistake on one line.)
+  //
+  // The ink is injected at FULL strength — #E4E9E9 is roughly 13:1 on the dark
+  // canvas — inside a <g opacity="0.35">. Nothing about the element itself is
+  // wrong; only the ancestor makes it illegible, so the check can only catch it
+  // by walking the chain, which is precisely the hole that was live here.
+  ['contrast is destroyed by an ancestor group opacity',
+    /"DIMMED" fill is \d\.\d+:1 on the slab \(needs 4\.5:1\)/,
+    (s) => {
+      const t = anchorText(s);
+      if (!t) return s;
+      return s.replace('</svg>',
+        `<g opacity="0.35"><text x="${t.x}" y="${t.y}" font-size="13" `
+        + `style="fill:#E4E9E9">DIMMED</text></g></svg>`);
+    }],
   // Check 9 compared the accessible description to the plate with
   // String.includes, so any number that is a PREFIX of one the plate draws
   // passed: "29" is a substring of "299". The desc is the only thing a screen
@@ -165,20 +302,47 @@ const MUTATIONS = [
   // `opacity` and not an rgba alpha, and they are exactly what an exported
   // logo carries — two of the six product marks shipped at 1.49:1 and 2.68:1
   // because of it.
-  // (Round 20 re-anchor: the refusal's SIX SERVICES say-line. Round 27: that
-  // line went with the audit table it headed, so this keys on the SHAPE — the
-  // first left-column .say in the sorted set, which is jetpack's bench
-  // header. A y-literal was the third stale-probe pattern in one week.)
-  ['contrast is destroyed by fill-opacity', /on the slab \(needs 4.5/,
-    (s) => s.replace(/(<text x="150" y="\d+" class="say")/, '$1 fill-opacity="0.12"')],
-  // Check 21 (data-canvas) is new in round 27 and gets its probe in the same
-  // change — this file's whole history is checks trusted before they were
-  // watched to fail. Paints a full-canvas sheet onto a plate that declares
-  // itself transparent; keyed to the attribute rather than a filename, so it
-  // follows the frontispieces wherever they move.
-  ['a transparent frontispiece paints a sheet anyway', /cannot be both paper and transparency/,
-    (s) => s.includes('data-canvas') ? s.replace(/(<desc>)/,
-      '<rect x="86" y="0" width="708" height="100%" fill="#43372f"/>$1') : s],
+  // (Round 20 re-anchor: the refusal's SIX SERVICES say-line. Round 27: the
+  // first left-column .say in the sorted set. Round 28: no plate has a .say and
+  // no plate has an x="150". Same injected-ink treatment as its two siblings
+  // above, and the same reason it is a separate probe from them: fill-opacity
+  // is a sibling PRESENTATION ATTRIBUTE, neither `opacity` nor an rgba alpha,
+  // and reading the other two is what let two product marks ship at 1.49:1.)
+  ['contrast is destroyed by fill-opacity',
+    /"SHEER" fill is \d\.\d+:1 on the slab \(needs 4\.5:1\)/,
+    (s) => {
+      const t = anchorText(s);
+      if (!t) return s;
+      return s.replace('</svg>',
+        `<text x="${t.x}" y="${t.y}" font-size="13" style="fill:#E4E9E9" `
+        + `fill-opacity="0.12">SHEER</text></svg>`);
+    }],
+  // Check 21 (data-canvas) got its probe in round 27, in the same change as the
+  // check — and the probe could not produce the violation. It painted a rect
+  // 708 units wide, which was the paper design's sheet inside an 86u viewBox
+  // offset; BOARD's canvas is 900x534, and check 21 fires only when the first
+  // <rect> covers the whole of it (gate.mjs:729). So the condition was
+  // unsatisfiable, the probe reported `!!` — "the gate said nothing" — and
+  // check 21 has in fact never once been watched to fail, in the round that
+  // was written to make sure it could be. A probe built against a retired
+  // geometry is not a weaker probe than one built against a literal; it is the
+  // same probe.
+  //
+  // The sheet is now cut from the plate's OWN viewBox, and injected ahead of
+  // <title> so it is what querySelector('rect') returns. Two things make it
+  // clean rather than noisy: the drawables filter (gate.mjs:239) drops any
+  // element with a full-canvas bbox, so it adds no collision or edge findings;
+  // and SLABRGB comes from the declared canvas, not from this rect, so no
+  // contrast ratio on the plate moves either. The only thing it changes is the
+  // one thing check 21 asserts.
+  ['a transparent frontispiece paints a sheet anyway',
+    /declares data-canvas="#[0-9A-Fa-f]{6}" and also paints a full-canvas sheet — it cannot be both paper and transparency/,
+    (s) => {
+      const c = canvasOf(s);
+      if (!c || !/\bdata-canvas="/.test(s)) return s;
+      return s.replace(/(<title>)/,
+        `<rect x="0" y="0" width="${c.w}" height="${c.h}" fill="#43372f"/>$1`);
+    }],
   // Check 13 fires when a plate declares animations NONE of which moves
   // anything — dead code on the reader's compositor wearing the name of a
   // gesture. Round 21 anchored this on the title page's two carriers; round
@@ -186,11 +350,22 @@ const MUTATIONS = [
   // longer silences it and the probe moved to the colophon — the plate with
   // the fewest declared animations — freezing all three (the turning device,
   // the counter-rotation that keeps its marks upright, the drifting halo).
-  ['a declared animation never moves anything', /never move anything/,
-    (s) => s
-      .replace('to{transform:rotate(360deg)}', 'to{transform:rotate(0deg)}')
-      .replace('to{transform:rotate(-360deg)}', 'to{transform:rotate(0deg)}')
-      .replace('to{stroke-dashoffset:-44}', 'to{stroke-dashoffset:0}')],
+  // Round 28: naming three keyframe bodies was the same mistake made three
+  // times over — the turning device, its counter-rotation and the drifting halo
+  // all went with the colophon's redraw, and the probe froze nothing.
+  //
+  // The check fires only when NO element moves at any sample, so a probe cannot
+  // freeze one gesture; it has to neutralise every keyframe on the plate and
+  // leave the ANIMATIONS THEMSELVES declared, because gate.mjs:602 guards the
+  // whole check on `dur` and a plate with no animations at all is a different
+  // (and legal) thing. Every keyframe body becomes `to{stroke-opacity:1}`:
+  // still a real animation with a real duration, on the one animatable
+  // property the alive test (gate.mjs:605-610, which reads x/y/w/h, composited
+  // opacity and stroke-dashoffset) does not look at. Keyed to the @keyframes
+  // syntax rather than to any gesture, so a redesign can invent whatever
+  // motion it likes and this still empties it.
+  ['a declared animation never moves anything', /declares animations that never move anything/,
+    (s) => s.replace(/^@keyframes ([\w-]+)\{.*$/gm, '@keyframes $1{to{stroke-opacity:1}}')],
   // Check 14 is the surviving motion-quality check (a stagger is a wave, not a
   // queue), so it keeps a probe: stretching the middle pen stroke's delay on
   // Glyph opens a 400ms hole in a 150ms wave.
@@ -200,35 +375,30 @@ const MUTATIONS = [
   // a stagger at all: fewer than three distinct delays and it declines, so the
   // runner moves on. Then it pushes the LAST step 600ms past the others, which
   // is a hole no averaging can hide, against a 200ms ceiling.)
+  // Round 27 made this probe scan for a real stagger rather than name a plate,
+  // which was the right instinct and still found nothing on the board — and the
+  // reason is worth writing down, because it is a statement about the CHECK,
+  // not about the probe. Check 14 groups delays by animation NAME
+  // (gate.mjs:641). BOARD gives every animated element its own generated
+  // keyframe name (k115, k116, k117 …) and puts the offset in the dasharray
+  // rather than in a delay, so every group has exactly one member and the check
+  // skips all of them at `delays.size < 2`. There is no wave on this page for a
+  // mutation to widen: check 14 currently has no jurisdiction over any plate.
+  //
+  // That does not make it dead code — it guards the next stagger someone
+  // writes — so, as with checks 6, 7 and 11 above, the probe brings its own
+  // subject: three elements on one keyframe name, delays 0 / 100 / 800ms, so
+  // the widest step is 700ms against a 200ms ceiling and the tightest is 100ms,
+  // safely inside the 40ms floor that is the check's other branch. The
+  // animation is on stroke-opacity so it perturbs nothing else the gate reads.
   ['a stagger step is too wide to read as one gesture',
-    /has a \d+ms step across \d+ elements \(ceiling 200ms\) — too slow/,
-    (s) => {
-      // Counting delays FILE-WIDE was wrong and the first run caught it: check 5
-      // groups by animation NAME (gate.mjs:641), and plate-4-applied's four
-      // delays sit on four different names — four groups of one, which the check
-      // skips at `delays.size < 2`. The mutation landed on a plate the check has
-      // no jurisdiction over and the corrupted file passed clean. So group the
-      // same way the check does: by animation name when the element declares
-      // one, by first class token otherwise.
-      const groups = new Map();
-      for (const tag of s.match(/<[^>]*animation-delay:[^>]*>/g) || []) {
-        const d = /animation-delay:(-?[\d.]+)s/.exec(tag)?.[1];
-        const key = /animation:\s*([\w-]+)/.exec(tag)?.[1]
-                 ?? /class="([\w-]+)/.exec(tag)?.[1];
-        if (d === undefined || !key) continue;
-        if (!groups.has(key)) groups.set(key, new Set());
-        groups.get(key).add(d);
-      }
-      const wave = [...groups.values()].find(v => v.size >= 3);
-      if (!wave) return s;                       // no stagger here — try the next plate
-      // gate.mjs:643 reads Math.abs(delay), so widen the MAGNITUDE. Adding 0.6
-      // to the largest of a negative set (-3.1 -> -2.5) narrows the step instead.
-      const far = [...wave].reduce((a, b) =>
-        (Math.abs(parseFloat(b)) > Math.abs(parseFloat(a)) ? b : a));
-      const v = parseFloat(far);
-      return s.replace(`animation-delay:${far}s`,
-        `animation-delay:${(v < 0 ? v - 0.6 : v + 0.6).toFixed(2)}s`);
-    }],
+    /\.probe14 has a \d+ms step across 3 elements \(ceiling 200ms\) — too slow/,
+    (s) => s.replace('</svg>',
+      '<style>@keyframes probe14{to{stroke-opacity:.5}}'
+      + '.probe14{animation:probe14 1000ms linear infinite}</style>'
+      + '<rect class="probe14" x="4" y="16" width="6" height="6" fill="none" stroke="#E4E9E9" style="animation-delay:0ms"/>'
+      + '<rect class="probe14" x="14" y="16" width="6" height="6" fill="none" stroke="#E4E9E9" style="animation-delay:100ms"/>'
+      + '<rect class="probe14" x="24" y="16" width="6" height="6" fill="none" stroke="#E4E9E9" style="animation-delay:800ms"/></svg>')],
   // Check 3 exempted every hairline from crossing type — "rules pass under
   // type" — so a rule that TRAVELLED across a word passed 40 samples a loop
   // while rendering it struck out. Two plates were shipping exactly that. The
@@ -245,29 +415,44 @@ const MUTATIONS = [
   // "caught" without the mutation contributing anything — a probe that passes
   // because the tree is already broken is the precise defect this file exists
   // to prevent, and it would have been one more entry in its own history.
-  // The font-load assertion covered family 'M' and nothing else, so the SERIF
-  // — every hero numeral on the page — could have fallen back to a platform
-  // face and been measured there. This corrupts the SERIF's base64 payload
-  // specifically, so the probe exercises the half that was missing rather than
-  // the half that already worked.
-  ['an embedded webfont fails to load', /the embedded 'S' 600 webfont did not load/,
-    (s) => s.replace(/(font-family:'S';font-weight:600;src:url\(data:font\/woff2;base64,)([A-Za-z0-9+/=]{240})/,
+  // The font-load assertion covered family 'M' and nothing else, so the serif —
+  // every hero numeral on the paper design — could have fallen back to a
+  // platform face and been measured there. The fix in gate.mjs was to derive
+  // the faces from the document so a swap could not outrun it, and the swap
+  // duly came: BOARD is Syne 800 ('D') and Commissioner 400/600 ('T'), and
+  // there is no 'S' and no 'M' anywhere. These two probes named the family and
+  // the weight, so both went stale in the change that proved the gate right.
+  //
+  // Neither names a face now. The payload of every declared face is corrupted,
+  // which guarantees the probe hits whichever ones the plate actually renders
+  // — the message the expectation reads is emitted only for a face that IS
+  // rendered (gate.mjs:178), so a plate carrying an unused face cannot satisfy
+  // it by accident.
+  ['an embedded webfont fails to load',
+    /the embedded '\w+' \d+ webfont did not load — every measurement that uses it is the fallback font/,
+    (s) => s.replace(/(font-family:'[^']+';font-weight:\d+;src:url\(data:font\/woff2;base64,)([A-Za-z0-9+/=]{240})/g,
       (m, head) => head + 'A'.repeat(240))],
-  // The other direction. Two plates stopped embedding the serif-600 face
-  // because nothing on them renders it (~7.5 KB each, four files); that is only
-  // safe while a plate which DOES render it cannot quietly lose it. Strips the
-  // face from a plate that uses a hero and expects the fallback to be named.
-  ['a rendered face is not embedded', /renders 'S' at weight 600, which no @font-face/,
-    (s) => s.replace(/@font-face\{font-family:'S';font-weight:600;src:url\(data:font\/woff2;base64,[A-Za-z0-9+/=]+\) format\('woff2'\)\}\n?/, '')],
-  ['a moving rule is drawn through type', /rect\.mutsweep[^\n]*sweeps across/,
+  // The other direction, and the half that makes DROPPING a face safe: plates
+  // stop embedding a face nothing renders (~7.5 KB apiece), which is only safe
+  // while a plate that DOES render one cannot quietly lose it. Strips the first
+  // declared face and expects the fallback to be named — the expectation is
+  // keyed to the reverse message (rendered-minus-declared, gate.mjs:192) so it
+  // cannot be satisfied by the declared-but-unused warning next to it.
+  ['a rendered face is not embedded',
+    /renders '\w+' at weight \d+, which no @font-face on this plate embeds/,
+    (s) => s.replace(/@font-face\{font-family:'[^']+';font-weight:\d+;src:url\(data:font\/woff2;base64,[A-Za-z0-9+/=]+\) format\('woff2'\)\}\n?/, '')],
+  // (Round 28: the class alternation `kick|lbl|fine|key` and the x="150" both
+  // stopped matching. The rule is laid over whatever the plate's first
+  // start-anchored run turns out to be, at that run's own coordinates.)
+  ['a moving rule is drawn through type', /<rect\.mutsweep [\d.,-]+> sweeps across/,
     (s) => {
-      const m = /<text x="150" y="(\d+)" class="(?:kick|lbl|fine|key)"/.exec(s);
-      if (!m) return s;
+      const t = anchorText(s);
+      if (!t) return s;
       return s.replace('</svg>',
         '<style>@keyframes mutsweep{from{transform:translateY(-30px)}'
         + 'to{transform:translateY(30px)}}</style>'
-        + `<rect class="mutsweep" x="150" y="${Number(m[1]) - 8}" width="360" height="2" `
-        + 'fill="#ffffff" style="animation:mutsweep 4s linear infinite"/></svg>');
+        + `<rect class="mutsweep" x="${t.x}" y="${t.y - 8}" width="120" height="2" `
+        + 'fill="#ffffff" style="animation:mutsweep 1000ms linear infinite"/></svg>');
     }],
   // The OTHER half of check 3, which had no probe at all until 2026-08-11.
   // The rule above exercises the hairline branch — a thin thing travelling
@@ -283,12 +468,16 @@ const MUTATIONS = [
   // rect is a HAIRLINE to this gate at 3u or under on either side, and a FRAME
   // if its fill is none — a probe that is either is a probe of a different
   // branch.
-  ['a solid graphic is laid over type', /<rect [\d.,]+> sits on top of/,
+  // (Round 28: same class alternation, same death. It also carries a class now,
+  // so the expectation names the injected rect instead of matching any bare
+  // <rect> — while a real graphic is sitting on real type, the old form would
+  // have reported "caught" with the mutation contributing nothing.)
+  ['a solid graphic is laid over type', /<rect\.mutover [\d.,-]+> sits on top of/,
     (s) => {
-      const m = /<text x="([\d.]+)" y="([\d.]+)" class="(?:lbl|kick|fine)\b[^"]*"/.exec(s);
-      if (!m) return s;
+      const t = anchorText(s);
+      if (!t) return s;
       return s.replace('</svg>',
-        `<rect x="${Number(m[1]) + 2}" y="${Number(m[2]) - 12}" width="80" height="16" `
+        `<rect class="mutover" x="${t.x + 2}" y="${t.y - 12}" width="80" height="16" `
         + 'fill="#8a8a8a"/></svg>');
     }],
   // ── The mobile canvas, for the first time.
