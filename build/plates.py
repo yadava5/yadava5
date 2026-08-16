@@ -2600,7 +2600,7 @@ _S3_M_LABEL = {"rust": "CARD", "verd": "CARD", "zinc": "SOURCE"}
 _D_S4 = "Test point three — the source repository."
 _D_C5 = ("Test point four — the row-level-security isolation suite, run "
          "against real Postgres.")
-_D_A5 = ("Test point four — the browser build of the mail classifier, its "
+_D_A5 = ("Test point four, the browser build of the mail classifier, its "
          "page and its quantized weights.")
 _D_V2 = "Test point one — the source repository, the one probe this section has."
 _D_V3 = ("The next test point is an unpopulated footprint, drawn dashed with "
@@ -2684,11 +2684,11 @@ INTERVAL_MOBILE["m-probe-cadence-s5.svg"] = _probe(
     lambda: _m_end("verd", 5, "RLS SUITE"))
 INTERVAL_PLATES["plate-probe-applied-s5.svg"] = _probe(
     "plate-probe-applied-s5.svg", SEC_H, SEC_W[5],
-    "test point four — the browser build", _D_A5,
+    "test point four, the browser build", _D_A5,
     lambda: _end("verd", 5, "TP4", "BROWSER BUILD"))
 INTERVAL_MOBILE["m-probe-applied-s5.svg"] = _probe(
     "m-probe-applied-s5.svg", M_SEC_H, M_SEC_W[5],
-    "test point four — the browser build, phone cut", _D_A5,
+    "test point four, the browser build, phone cut", _D_A5,
     lambda: _m_end("verd", 5, "BUILD"))
 INTERVAL_PLATES["plate-probe-va-s2.svg"] = _probe(
     "plate-probe-va-s2.svg", SEC_H, SEC_W[2],
