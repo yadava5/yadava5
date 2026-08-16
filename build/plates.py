@@ -2600,7 +2600,8 @@ _S3_M_LABEL = {"rust": "CARD", "verd": "CARD", "zinc": "SOURCE"}
 _D_S4 = "Test point three — the source repository."
 _D_C5 = ("Test point four — the row-level-security isolation suite, run "
          "against real Postgres.")
-_D_A5 = "Test point four — the in-browser demo of the mail classifier."
+_D_A5 = ("Test point four — the browser build of the mail classifier, its "
+         "page and its quantized weights.")
 _D_V2 = "Test point one — the source repository, the one probe this section has."
 _D_V3 = ("The next test point is an unpopulated footprint, drawn dashed with "
          "its lead open — there is no live deployment to probe; VisualAssist "
@@ -2683,12 +2684,12 @@ INTERVAL_MOBILE["m-probe-cadence-s5.svg"] = _probe(
     lambda: _m_end("verd", 5, "RLS SUITE"))
 INTERVAL_PLATES["plate-probe-applied-s5.svg"] = _probe(
     "plate-probe-applied-s5.svg", SEC_H, SEC_W[5],
-    "test point four — the in-browser demo", _D_A5,
-    lambda: _end("verd", 5, "TP4", "IN-BROWSER DEMO"))
+    "test point four — the browser build", _D_A5,
+    lambda: _end("verd", 5, "TP4", "BROWSER BUILD"))
 INTERVAL_MOBILE["m-probe-applied-s5.svg"] = _probe(
     "m-probe-applied-s5.svg", M_SEC_H, M_SEC_W[5],
-    "test point four — the in-browser demo, phone cut", _D_A5,
-    lambda: _m_end("verd", 5, "DEMO"))
+    "test point four — the browser build, phone cut", _D_A5,
+    lambda: _m_end("verd", 5, "BUILD"))
 INTERVAL_PLATES["plate-probe-va-s2.svg"] = _probe(
     "plate-probe-va-s2.svg", SEC_H, SEC_W[2],
     "test point one — the repository", _D_V2, _va_s2)
@@ -2713,6 +2714,15 @@ INTERVAL_MOBILE["m-probe-va-s3.svg"] = _probe(
 # 0+9+7+9 advanced 4889/1000 em as text figures and 4582 as tabular, 19u
 # narrower at 62px, and APPLIED_FRAME went 37 -> 59.3 to say so. Nothing was
 # nudged to make a number fit; the numbers were re-read after the type changed.
+#
+# Applied's s5 rightGap moved again on 2026-08-15, same direction and same
+# reason. The Hugging Face Space that test point four probed went private and
+# started answering 401, so the probe was repointed at the browser build in the
+# repository and the silkscreen went IN-BROWSER DEMO ⟶ BROWSER BUILD. A shorter
+# label ends further from the cut: 34.5 ⟶ 55.1 is check 12's measurement of
+# where the ink actually stops, not a nudge. The phone cut's DEMO ⟶ BUILD moved
+# it 56.7 ⟶ 56.6, inside the tolerance and re-baked anyway, because a
+# declaration that happens to be forgiven is still a declaration that is wrong.
 HERO_FRAME = (30, 37.7, 0)
 JET_FRAME = (2.5, 64.7, 2.5)
 WORK_FRAME = (2.5, 35.7, 2.5)
@@ -2769,7 +2779,7 @@ PROBE_FRAME: dict[str, tuple[float, float, float]] = {
     "plate-probe-zinc-s4.svg": (36, 12.4, 38),
     "plate-probe-verd-s4.svg": (33.4, 0, 38),
     "plate-probe-cadence-s5.svg": (36, 19, 38),
-    "plate-probe-applied-s5.svg": (36, 34.5, 38),
+    "plate-probe-applied-s5.svg": (36, 55.1, 38),
     "plate-probe-va-s2.svg": (33.4, 0, 38),
     "plate-probe-va-s3.svg": (36, 31.7, 38),
     "m-probe-rust-s1.svg": (0, 0, 3),
@@ -2785,7 +2795,7 @@ PROBE_FRAME: dict[str, tuple[float, float, float]] = {
     "m-probe-zinc-s4.svg": (24, 18.8, 36),
     "m-probe-verd-s4.svg": (21.6, 0, 36),
     "m-probe-cadence-s5.svg": (24, 45.1, 36),
-    "m-probe-applied-s5.svg": (24, 56.7, 36),
+    "m-probe-applied-s5.svg": (24, 56.6, 36),
     "m-probe-va-s2.svg": (21.6, 0, 36),
     "m-probe-va-s3.svg": (24, 10.1, 36),
 }
