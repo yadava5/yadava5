@@ -50,9 +50,12 @@ Design rules encoded here (each one is a finding, not a preference):
   * frame zero is the finished frame; keyframes only ever state `to`, so
     the authored attribute IS the start pose (gate checks 6/16).
   * viewBox 900 wide, every desktop plate. The board is one artifact and
-    the buses must land on the same x across every seam; GitHub's profile
-    column measures 846px at every desktop viewport (probed 2026-08-12), so
-    every plate scales identically at 0.94 and registration holds exactly.
+    the buses must land on the same x across every seam. GitHub's profile
+    column measures 846px at 100% zoom on every desktop viewport (probed
+    2026-08-12), but zoom moves it (about 776px at 125%, 422px at 300%), so
+    registration cannot rest on one width: every plate is served at its
+    share of the column, and its root declares preserveAspectRatio="none"
+    (see head()) so an engine that rounds the height cannot move the x.
   * type: Syne 800 ('D') for the silkscreen voice — name, romans, claim
     figures; Commissioner 400/600 ('T') for text and labels, instanced at
     FLAR 40 (see subset-fonts.py). No mono anywhere: nothing on this page
@@ -381,7 +384,24 @@ def head(h: int, title: str, desc: str, key: str = "",
     # feature set, which naming any list achieves, and dropping the two dead
     # tags would rewrite both text subsets and the base64 of every plate that
     # embeds them for no rendering change at all.
-    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" width="{w}" height="{h}" role="img" aria-label="{desc}" data-col="{col[0]},{col[1]}"{fr} data-canvas="{T['canvas']}">
+    #
+    # ── preserveAspectRatio="none" IS WHAT HOLDS REGISTRATION OFF CHROME.
+    #
+    # The default, xMidYMid meet, scales the drawing by the SMALLER of the
+    # box's two scales and centres it. WebKit hands an SVG in an <img> a
+    # viewport rounded down to whole CSS pixels, so the box's two scales
+    # disagree by up to a pixel of height. On the 900x44 seam plates that
+    # pixel is about 2.5% of the height: meet shrinks the whole drawing to
+    # match and centres it, and the buses land 8-9px right of every other
+    # plate (Safari's engine at 125% zoom, column 776.406px, measured
+    # 2026-10-29; Chrome and Firefox within half a pixel, though Firefox
+    # does the same at device pixel ratio 1). Every zoom step rounds
+    # differently, which is the buses walking left and right as the reader
+    # zooms. With "none" each axis maps by its own side of the box, so x is
+    # the same on every plate whatever the height rounds to. Every plate's
+    # box already has the viewBox's own ratio, so where nothing rounds
+    # (Chrome, the gate's own mounts) this draws exactly what meet did.
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" width="{w}" height="{h}" preserveAspectRatio="none" role="img" aria-label="{desc}" data-col="{col[0]},{col[1]}"{fr} data-canvas="{T['canvas']}">
 <title>{title}</title><desc>{desc}</desc>
 <style>
 {fd}{ft}{f6}text{{font-family:'T',-apple-system,'Segoe UI',sans-serif;fill:{T['ink']}}}
@@ -702,7 +722,9 @@ def plate_hero() -> str:
 #     factor as the plates above and below it, so the lanes land on the same
 #     x at EVERY column width — registration by construction, not
 #     calibration. Probed upstream before authoring: percentage slices open
-#     no hairline at any width from 308 to 1200px.
+#     no hairline at any width from 308 to 1200px. That held for the BOXES
+#     in every engine, and for the paint only in Chrome until 2026-10-29:
+#     WebKit drew the seam plates' buses up to 8px off (see head()).
 #   · THE PIPELINE, corrected in the same change, on the client's read of
 #     the render ("the pipeline through the chips is wrong"): the old row —
 #     and the first draft of this one — fanned the three-lane bundle out
