@@ -1422,7 +1422,9 @@ def plate_glyph() -> str:
 # generated training code before it runs: one pin per estimator class (21)
 # and per transformer architecture (3), also emitted by loop. Until
 # 2026-11-10 this plate drew the 44-tool registry in llm/tools, which is
-# Shree Chaturvedi's work, so it claimed a part he did not build.
+# Shree Chaturvedi's work, so it claimed a part he did not build. The
+# closing line used to be an against-self admission about the Docker
+# sandbox, which is also Shree's; it now attributes his parts plainly.
 def plate_automl() -> str:
     xs = [286 + i * 44 for i in range(8)]
     nodes = "".join(f'<circle cx="{x}" cy="160" r="5" fill="none" '
@@ -1454,8 +1456,8 @@ def plate_automl() -> str:
         + f'<text x="660" y="198" class="dim" font-size="13">estimator classes and 3 transformer</text>'
         + f'<text x="660" y="216" class="dim" font-size="13">architectures the guard checks.</text>'
         + f'<rect x="150" y="308" width="4" height="16" fill="{T["zinc"]}"/>'
-        + f'<text x="164" y="321" class="mid" font-size="14">the sandbox guards against accidents, not adversaries.</text>'
-        + f'<text x="164" y="341" class="dim" font-size="13">the network is an env var — the beta template renders it bridge; no cap-drop, no pids-limit, no seccomp.</text>'
+        + f'<text x="164" y="321" class="mid" font-size="14">Shree Chaturvedi built the MCP server, the tool registry and the sandbox.</text>'
+        + f'<text x="164" y="341" class="dim" font-size="13">this plate draws only the part I wrote.</text>'
     )
     return head(
         380,
@@ -1465,10 +1467,9 @@ def plate_automl() -> str:
         "state machine behind preprocessing, one node per stage. Below, the "
         "guard that checks generated training code before it runs, one pin "
         "for each of 21 estimator classes and 3 transformer architectures. "
-        "The against-self line is the "
-        "sandbox: it guards against accidents, not adversaries — the network "
-        "is an env var the beta template renders as bridge, with no "
-        "cap-drop, no pids-limit, no seccomp.",
+        "The closing line says whose the rest is: Shree Chaturvedi built the "
+        "MCP server, the tool registry and the sandbox, and this plate draws "
+        "only the part I wrote.",
         key="plate-4-automl.svg",
         col=SEC_COL, frame=AUTOML_FRAME,
     ) + css_close() + body + "</svg>"
@@ -2058,11 +2059,9 @@ def m_automl() -> str:
         + lbl(92, 342, "TRAINING GUARD · 21 ESTIMATOR CLASSES", size=10, ls=1.1)
         + lbl(92, 358, "AND 3 TRANSFORMER ARCHITECTURES", size=10, ls=1.1)
         + m_adm(376, "zinc",
-                ["the sandbox guards against accidents,",
-                 "not adversaries."],
-                ["the network is an env var — the beta template",
-                 "renders it bridge; no cap-drop, no pids-limit,",
-                 "no seccomp."])
+                ["Shree Chaturvedi built the MCP server,",
+                 "the tool registry and the sandbox."],
+                ["this plate draws only the part I wrote."])
     )
     return head(
         490,
@@ -2071,10 +2070,9 @@ def m_automl() -> str:
         "preprocessing and training, drawn as the eight stage LangGraph state "
         "machine behind preprocessing and, under it, the guard that checks "
         "generated training code against 21 estimator classes and 3 "
-        "transformer architectures before it runs. The against-self line is the "
-        "sandbox: it guards against accidents, not adversaries — the network "
-        "is an env var the beta template renders as bridge, with no cap-drop, "
-        "no pids-limit, no seccomp.",
+        "transformer architectures before it runs. The closing line says "
+        "whose the rest is: Shree Chaturvedi built the MCP server, the tool "
+        "registry and the sandbox, and this plate draws only the part I wrote.",
         key="m-4-automl.svg",
         col=(88, 412), frame=(2.5, 35, 2.5), w=440,
     ) + css_close() + body + "</svg>"
