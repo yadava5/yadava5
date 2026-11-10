@@ -508,6 +508,9 @@ def lbl(x: float, y: float, text: str, cls: str = "ts dim", size: float = 11,
 FIG_OVER = 1.24                # = 0.02 * 62, the largest display size here
 D_OPTIC = {                    # display leading glyph -> (lsb em/1000, overshoot in u)
     "0": (32, FIG_OVER),
+    # added 2026-11-10 for plate IV's 21: two -> lnum -> tnum lands on the
+    # .tf glyph with lsb 54, read off the subset's hmtx the same way.
+    "2": (54, FIG_OVER),
     "3": (35, FIG_OVER),
     "4": (20, FIG_OVER),
     "5": (63, FIG_OVER),
@@ -1239,8 +1242,8 @@ def plate_work() -> str:
         + sec_sub(150, 76, "twelve months of production data work — none of it public.", 14.5)
         + lbl(852, 30, "FIRST, THE EXCEPTION — ATTESTED, NOT DERIVED", size=10.5, anchor="end")
         + f'<text x="{fig_x(584, "57.8M", 56)}" y="150" class="d" font-size="56">57.8M</text>'
-        + f'<text x="584" y="186" class="dim" font-size="13">rows in one field-usage table,</text>'
-        + f'<text x="584" y="204" class="dim" font-size="13">from 1.6M Oracle Analytics query logs.</text>'
+        + f'<text x="584" y="186" class="dim" font-size="13">field usage rows, one per column</text>'
+        + f'<text x="584" y="204" class="dim" font-size="13">a query named, from 1.6M query logs.</text>'
         + f'<rect x="150" y="248" width="4" height="16" fill="{T["zinc"]}"/>'
         + f'<text x="164" y="261" class="mid" font-size="14">none of these numbers can be re-derived by you.</text>'
         + f'<text x="164" y="281" class="dim" font-size="13">the data belongs to Miami University and to a competition — this section is my word.</text>'
@@ -1250,8 +1253,9 @@ def plate_work() -> str:
         "I · Work — a year of paid data work; the part is off-board",
         "I · Work — the one section drawn as an empty footprint: a component "
         "the board expects that is not fitted, because the year of paid work "
-        "is off-repo. A 57.8M-row field-usage table, distilled from 1.6M "
-        "Oracle Analytics query logs at Miami University. None of these "
+        "is off-repo. 57.8M field usage rows, one per column a query named, "
+        "distilled from 1.6M Oracle Analytics query logs at Miami "
+        "University. None of these "
         "numbers can be re-derived by a reader — the data belongs to Miami "
         "University and to a competition; this section is attested, not "
         "derived.",
@@ -1411,22 +1415,21 @@ def plate_glyph() -> str:
 
 # ══════════════════════════════════════════════════ IV · automl
 #
-# The tool library drawn as one registry strip: a 44-pin comb — one pin per
-# tool SCHEMA, emitted by loop so the count is true by construction — with
-# seven tool-set taps hanging below it. llm/tools.ts is the DISPATCHER and
-# holds no schemas at all; the 44 are defined across the seven modules in
-# llm/tools/ (dataTools 4, cellTools 8, packageTools 3, featureTools 6,
-# preprocessingTools 14, trainingTools 6, uiTools 3) and exposed as the seven
-# LLM_*_TOOLS phase sets. The drawing was always right; the caption named the
-# wrong file until 2026-08-13. No tap spans the strip, which
-# is the claim: no phase is handed all 44. The per-phase counts (15/7/29)
-# were cut by the prose inventory and are deliberately NOT drawn, so no
-# bracket on this plate is countable into a number the page no longer backs.
+# Ayush's part of a two-author system, drawn as the two pieces he wrote. The
+# preprocessing state machine is one strip of eight stage nodes, emitted by
+# loop so the count is true by construction (preprocessingRuntime.ts adds
+# exactly eight createStageNode nodes). Below it, the guard that checks
+# generated training code before it runs: one pin per estimator class (21)
+# and per transformer architecture (3), also emitted by loop. Until
+# 2026-11-10 this plate drew the 44-tool registry in llm/tools, which is
+# Shree Chaturvedi's work, so it claimed a part he did not build.
 def plate_automl() -> str:
-    pins = " ".join(f"M{276 + i * (604 - 276) / 43:.1f},150 V170" for i in range(44))
-    drops = " ".join(f"M{300 + i * 45},182 V218" for i in range(7))
-    sets = "".join(f'<circle cx="{300 + i * 45}" cy="224" r="5" fill="none" '
-                   f'stroke="{T["zinc"]}" stroke-width="2"/>' for i in range(7))
+    xs = [286 + i * 44 for i in range(8)]
+    nodes = "".join(f'<circle cx="{x}" cy="160" r="5" fill="none" '
+                    f'stroke="{T["zinc"]}" stroke-width="2"/>' for x in xs)
+    links = " ".join(f"M{x + 5},160 H{x + 39}" for x in xs[:-1])
+    est = " ".join(f"M{280 + i * 12},216 V236" for i in range(21))
+    tfm = " ".join(f"M{548 + i * 12},216 V236" for i in range(3))
     body = (
         bus("verd", "M63,0 V380", C=170, cd="M63,2.5 V377.5")
         + bus("rust", "M90,0 V380", C=85, cd="M90,2.5 V377.5")
@@ -1435,27 +1438,34 @@ def plate_automl() -> str:
         + bus("zinc", "M198,120 H240 V160 H262", C=96, cd="M202,120 H240 V160 H258")
         + f'<rect x="262" y="138" width="356" height="44" rx="4" fill="none" '
           f'stroke="{T["zinc"]}" stroke-width="1.3"/>'
-        + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="2" d="{pins}"/>'
-        + lbl(262, 130, "THE REGISTRY · 44 TOOLS DEFINED", size=10, ls=1.1)
-        + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="1.4" d="{drops}"/>'
-        + sets
-        + lbl(300, 256, "SEVEN TOOL SETS — NO PHASE IS HANDED ALL 44", size=10, ls=1.1)
+        + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="1.4" d="{links}"/>'
+        + nodes
+        + lbl(262, 130, "PREPROCESSING · EIGHT STAGE STATE MACHINE", size=10, ls=1.1)
+        + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="1.4" d="M286,182 V206"/>'
+        + f'<rect x="262" y="206" width="356" height="40" rx="4" fill="none" '
+          f'stroke="{T["zinc"]}" stroke-width="1.3"/>'
+        + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="2" d="{est}"/>'
+        + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="2" d="{tfm}"/>'
+        + lbl(262, 266, "TRAINING GUARD · 21 ESTIMATOR CLASSES · 3 TRANSFORMERS", size=10, ls=1.1)
         + mark("automl", 150, 96, 48)
         + sec_roman(150, 54, "IV — AUTOML", 30)
-        + sec_sub(150, 76, "a LangGraph agent, dealt its tools phase by phase.", 14.5)
-        + f'<text x="{fig_x(660, "44", 62)}" y="160" class="d" font-size="62">44</text>'
-        + f'<text x="660" y="198" class="dim" font-size="13">tool schemas in llm/tools;</text>'
-        + f'<text x="660" y="216" class="dim" font-size="13">no phase&#8217;s hand holds them all.</text>'
+        + sec_sub(150, 76, "the TypeScript backend I wrote for preprocessing and training.", 14.5)
+        + f'<text x="{fig_x(660, "21", 62)}" y="160" class="d" font-size="62">21</text>'
+        + f'<text x="660" y="198" class="dim" font-size="13">estimator classes and 3 transformer</text>'
+        + f'<text x="660" y="216" class="dim" font-size="13">architectures the guard checks.</text>'
         + f'<rect x="150" y="308" width="4" height="16" fill="{T["zinc"]}"/>'
         + f'<text x="164" y="321" class="mid" font-size="14">the sandbox guards against accidents, not adversaries.</text>'
         + f'<text x="164" y="341" class="dim" font-size="13">the network is an env var — the beta template renders it bridge; no cap-drop, no pids-limit, no seccomp.</text>'
     )
     return head(
         380,
-        "IV · AutoML — 44 tools defined; no phase is handed all of them",
-        "IV · AutoML — the tool library drawn as one registry strip: a 44-pin "
-        "comb, one pin per tool schema, with seven tool-set taps below "
-        "it — no phase is handed all 44. The against-self line is the "
+        "IV · AutoML: my part, the preprocessing and training backend",
+        "IV · AutoML, my part of it: the TypeScript backend for preprocessing "
+        "and training, drawn as two pieces. Above, the eight stage LangGraph "
+        "state machine behind preprocessing, one node per stage. Below, the "
+        "guard that checks generated training code before it runs, one pin "
+        "for each of 21 estimator classes and 3 transformer architectures. "
+        "The against-self line is the "
         "sandbox: it guards against accidents, not adversaries — the network "
         "is an env var the beta template renders as bridge, with no "
         "cap-drop, no pids-limit, no seccomp.",
@@ -1528,23 +1538,25 @@ def plate_cadence() -> str:
 # ══════════════════════════════════════════════════ VI · applied
 #
 # The part that ships and the part that doesn't, on one plate. The rules
-# layer grades a strip of 96 ticks — two of them rust, the two it called
-# wrong — and below it the cascade is drawn in the board's absence
+# layer grades a strip of 96 ticks, one of them rust, the one it called
+# wrong, and below it the cascade is drawn in the board's absence
 # vocabulary: a dashed outline, its lead ending in an open circle, because
-# it is not what ships — the deployed app runs the rules layer alone. It is
-# NOT drawn dashed for want of evidence: an evaluation artifact for the
-# cascade was committed to applied on 2026-08-11, and this page pins an
-# older commit, so the row still cites the tracker line until the pin moves.
-# The wrong ticks are placed by hand;
-# their COUNT is the claim, their positions are not.
+# it is not what ships; the deployed app runs the rules layer alone. Since
+# the 2026-11-10 re-pin to applied ee606ae both numbers come from committed
+# evaluation artifacts: baseline_rules_v3.json for the rules layer and
+# baseline_cascade_v3.json for the cascade.
+# The wrong tick is placed by hand;
+# its COUNT is the claim, its position is not.
 def plate_applied() -> str:
-    def row(y0: int, wrong: int) -> str:
+    def row(y0: int, wrong: int | None) -> str:
         ticks = " ".join(f"M{462 + i * 6.4:.1f},{y0} V{y0 + 24}"
                          for i in range(48) if i != wrong)
-        wx = 462 + wrong * 6.4
-        return (f'<path fill="none" stroke="{T["verd"]}" stroke-width="2" d="{ticks}"/>'
-                f'<path fill="none" stroke="{T["rust"]}" stroke-width="2" '
-                f'd="M{wx:.1f},{y0 - 3} V{y0 + 27}"/>')
+        out = f'<path fill="none" stroke="{T["verd"]}" stroke-width="2" d="{ticks}"/>'
+        if wrong is not None:
+            wx = 462 + wrong * 6.4
+            out += (f'<path fill="none" stroke="{T["rust"]}" stroke-width="2" '
+                    f'd="M{wx:.1f},{y0 - 3} V{y0 + 27}"/>')
+        return out
     body = (
         bus("verd", "M63,0 V430", C=200, cd="M63,2.5 V427.5")
         + bus("rust", "M90,0 V430", C=45, cd="M90,2.5 V427.5")
@@ -1557,8 +1569,8 @@ def plate_applied() -> str:
         + bus("verd", "M400,120 H452", C=20, cd="M404,120 H448")
         + f'<rect x="452" y="88" width="324" height="80" rx="6" fill="none" '
           f'stroke="{T["zinc"]}" stroke-width="1.3"/>'
-        + row(100, 16) + row(132, 40)
-        + lbl(452, 80, "96 LABELLED MESSAGES · 2 CALLED WRONG", size=10, ls=1.1)
+        + row(100, 16) + row(132, None)
+        + lbl(452, 80, "96 LABELLED MESSAGES · 1 CALLED WRONG", size=10, ls=1.1)
         # the cascade, in the board's absence vocabulary: dashed, lead open
         + f'<path fill="none" stroke="{T["verd"]}" stroke-width="1.4" d="M320,141 V196"/>'
         + f'<circle cx="320" cy="202.5" r="3.5" fill="none" stroke="{T["verd"]}" stroke-width="2"/>'
@@ -1569,22 +1581,22 @@ def plate_applied() -> str:
         + mark("applied", 150, 96, 48)
         + sec_roman(150, 54, "VI — APPLIED", 30)
         + sec_sub(150, 76, "an inbox read by rules that keep score.", 14.5)
-        + f'<text x="{fig_x(560, "0.979", 62)}" y="240" class="d" font-size="62">0.979</text>'
-        + f'<text x="560" y="278" class="dim" font-size="13">macro-F1 — the rules layer alone,</text>'
+        + f'<text x="{fig_x(560, "0.990", 62)}" y="240" class="d" font-size="62">0.990</text>'
+        + f'<text x="560" y="278" class="dim" font-size="13">macro F1, the rules layer alone,</text>'
         + f'<text x="560" y="296" class="dim" font-size="13">graded on the strip above.</text>'
         + f'<rect x="150" y="362" width="4" height="16" fill="{T["verd"]}"/>'
-        + f'<text x="164" y="375" class="mid" font-size="14">the full cascade scored 0.9583 — lower than the rules layer alone.</text>'
-        + f'<text x="164" y="395" class="dim" font-size="13">a tracker line records it. what is deployed runs only that first layer.</text>'
+        + f'<text x="164" y="375" class="mid" font-size="14">the full cascade scored 0.9686, lower than the rules layer alone.</text>'
+        + f'<text x="164" y="395" class="dim" font-size="13">its own evaluation artifact records it. what ships is the rules layer.</text>'
     )
     return head(
         430,
-        "VI · Applied — 0.979 macro-F1, rules layer alone; the full cascade scored lower",
-        "VI · Applied — the mail triage drawn as the part that ships: the "
-        "rules layer grades a labelled strip of 96 messages and gets 2 wrong "
-        "— 0.979 macro-F1, rules layer alone. Below it, drawn dashed with "
-        "its lead left open — it is not what ships — is the full cascade, "
-        "all three layers, and it scored lower: 0.9583, a number a tracker "
-        "line records. What is deployed runs only that first layer.",
+        "VI · Applied: 0.990 macro F1, rules layer alone; the full cascade scored lower",
+        "VI · Applied, the mail triage drawn as the part that ships. 0.990 "
+        "macro F1, rules layer alone: 1 of 96 labelled messages called "
+        "wrong. Below it, drawn dashed with its lead left open because it "
+        "is not what ships, is the full cascade, all three layers, and it "
+        "scored lower: 0.9686, recorded in its own evaluation artifact. "
+        "What ships is the rules layer.",
         key="plate-6-applied.svg",
         col=SEC_COL, frame=APPLIED_FRAME,
     ) + css_close() + body + "</svg>"
@@ -1823,7 +1835,7 @@ def m_fig(fig: str, c1: str, c2: str) -> str:
     12px caption lines. 172 leaves 12u to the x=160 feeder spine the denser
     plates run — above the 8u floor, in the safe direction (see above). The
     FIGURE is set a little left of 172 so its ink lands there (see fig_x): the
-    worst case on this page is 0.979, whose 0 is set at 169.64 and still leaves
+    worst case on this page is 0.990 (measured as 0.979, same leading 0), whose 0 is set at 169.64 and still leaves
     9.6u to the spine — the caption lines, which set the block's edge, do not
     move at all. Caption leading is set by Syne's em box, not its ink: the 44px
     figure's box reaches ~13u below the baseline, so the first caption sits 32
@@ -1866,8 +1878,8 @@ def m_work() -> str:
         + sec_sub(92, 90, "none of it public.", 13)
         + lbl(404, 30, "THE EXCEPTION — ATTESTED, NOT DERIVED", size=10.5, anchor="end")
         + f'<text x="{fig_x(92, "57.8M", 44, cap=12)}" y="224" class="d" font-size="44">57.8M</text>'
-        + f'<text x="92" y="256" class="dim" font-size="12">rows in one field-usage table,</text>'
-        + f'<text x="92" y="273" class="dim" font-size="12">from 1.6M Oracle Analytics query logs.</text>'
+        + f'<text x="92" y="256" class="dim" font-size="12">field usage rows, one per column</text>'
+        + f'<text x="92" y="273" class="dim" font-size="12">a query named, from 1.6M query logs.</text>'
         + m_adm(300, "zinc",
                 ["none of these numbers can be re-derived by you."],
                 ["the data belongs to Miami University",
@@ -1878,8 +1890,9 @@ def m_work() -> str:
         "I · Work — the empty footprint, phone cut",
         "I · Work, phone cut — the empty footprint: the slot for a component "
         "the board expects but does not fit, because the year of paid work is "
-        "off-repo. A 57.8M-row field-usage table, distilled from 1.6M Oracle "
-        "Analytics query logs at Miami University. None of it can be "
+        "off-repo. 57.8M field usage rows, one per column a query named, "
+        "distilled from 1.6M Oracle Analytics query logs at Miami "
+        "University. None of it can be "
         "re-derived by a reader — the data belongs to Miami University and to "
         "a competition; this section is attested, not derived.",
         key="m-1-work.svg",
@@ -2013,31 +2026,37 @@ def m_glyph() -> str:
     ) + css_close() + body + "</svg>"
 
 
-# ── IV · automl, phone cut. The registry keeps its one un-negotiable
-# property: 44 pins in ONE strip, emitted by loop so the count stays true by
-# construction. The pitch tightens to 5.9u — a denser comb, not a shorter
-# one — because splitting the strip would redraw "one part, 44 pins" as two
-# parts. Seven set-taps below, exactly as wide as the strip they tap.
+# ── IV · automl, phone cut. The same two pieces stacked: the eight stage
+# strip on the tap, the training guard under it, both counts emitted by loop
+# so they stay true by construction. The guard's label takes two lines
+# because one would run past the 412 column.
 def m_automl() -> str:
-    pins = " ".join(f"M{140 + i * (392 - 140) / 43:.1f},222 V242" for i in range(44))
-    drops = " ".join(f"M{152 + i * 40},258 V294" for i in range(7))
-    sets = "".join(f'<circle cx="{152 + i * 40}" cy="300" r="5" fill="none" '
-                   f'stroke="{T["zinc"]}" stroke-width="2"/>' for i in range(7))
+    xs = [150 + i * 34 for i in range(8)]
+    nodes = "".join(f'<circle cx="{x}" cy="236" r="5" fill="none" '
+                    f'stroke="{T["zinc"]}" stroke-width="2"/>' for x in xs)
+    links = " ".join(f"M{x + 5},236 H{x + 29}" for x in xs[:-1])
+    est = " ".join(f"M{140 + i * 10},290 V310" for i in range(21))
+    tfm = " ".join(f"M{364 + i * 10},290 V310" for i in range(3))
     body = (
         m_sec(490, (170, 85, 25), tap=("zinc", 55))
         + mark("automl", 92, 96, 48)
         + sec_roman(92, 54, "IV — AUTOML", 24)
-        + sec_sub(92, 76, "a LangGraph agent, dealt its tools phase by phase.", 13)
-        + m_fig("44", "tool schemas in llm/tools;",
-                "no phase’s hand holds them all.")
+        + sec_sub(92, 76, "the preprocessing and training backend I wrote.", 13)
+        + m_fig("21", "estimator classes and 3 transformer",
+                "architectures, checked before it runs.")
         + bus("zinc", "M116,144 V236 H128", C=96, cd="M116,148 V236 H124")
-        + lbl(128, 206, "THE REGISTRY · 44 TOOLS DEFINED", size=10, ls=1.1)
+        + lbl(128, 206, "PREPROCESSING · EIGHT STAGES", size=10, ls=1.1)
         + f'<rect x="128" y="214" width="276" height="44" rx="4" fill="none" '
           f'stroke="{T["zinc"]}" stroke-width="1.3"/>'
-        + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="2" d="{pins}"/>'
-        + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="1.4" d="{drops}"/>'
-        + sets
-        + lbl(92, 334, "SEVEN TOOL SETS — NO PHASE IS HANDED ALL 44", size=10, ls=1.1)
+        + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="1.4" d="{links}"/>'
+        + nodes
+        + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="1.4" d="M150,258 V280"/>'
+        + f'<rect x="128" y="280" width="276" height="40" rx="4" fill="none" '
+          f'stroke="{T["zinc"]}" stroke-width="1.3"/>'
+        + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="2" d="{est}"/>'
+        + f'<path fill="none" stroke="{T["zinc"]}" stroke-width="2" d="{tfm}"/>'
+        + lbl(92, 342, "TRAINING GUARD · 21 ESTIMATOR CLASSES", size=10, ls=1.1)
+        + lbl(92, 358, "AND 3 TRANSFORMER ARCHITECTURES", size=10, ls=1.1)
         + m_adm(376, "zinc",
                 ["the sandbox guards against accidents,",
                  "not adversaries."],
@@ -2047,10 +2066,12 @@ def m_automl() -> str:
     )
     return head(
         490,
-        "IV · AutoML — the 44-pin registry, phone cut",
-        "IV · AutoML, phone cut — the tool library drawn as one registry "
-        "strip: a 44-pin comb, one pin per tool schema, seven tool-set taps "
-        "below it — no phase is handed all 44. The against-self line is the "
+        "IV · AutoML: my part, phone cut",
+        "IV · AutoML, phone cut. My part of it: the TypeScript backend for "
+        "preprocessing and training, drawn as the eight stage LangGraph state "
+        "machine behind preprocessing and, under it, the guard that checks "
+        "generated training code against 21 estimator classes and 3 "
+        "transformer architectures before it runs. The against-self line is the "
         "sandbox: it guards against accidents, not adversaries — the network "
         "is an env var the beta template renders as bridge, with no cap-drop, "
         "no pids-limit, no seccomp.",
@@ -2116,7 +2137,7 @@ def m_cadence() -> str:
 
 
 # ── VI · applied, phone cut. The graded strip reflows 96 = 3×32 (the row
-# split is layout, the 96 and the 2 are the claims); the cascade keeps the
+# split is layout, the 96 and the 1 are the claims); the cascade keeps the
 # absence vocabulary — dashed outline, open lead — directly under the rules
 # layer it never shipped behind. The caption says "the strip below" because
 # here it IS below: each description is true of its own plate.
@@ -2135,7 +2156,7 @@ def m_applied() -> str:
         + mark("applied", 92, 96, 48)
         + sec_roman(92, 54, "VI — APPLIED", 24)
         + sec_sub(92, 76, "an inbox read by rules that keep score.", 13)
-        + m_fig("0.979", "macro-F1 — the rules layer alone,",
+        + m_fig("0.990", "macro F1, the rules layer alone,",
                 "graded on the strip below.")
         + bus("verd", "M116,144 V206", C=140, cd="M116,148 V202")
         + f'<rect x="92" y="206" width="160" height="42" rx="8" fill="none" '
@@ -2152,23 +2173,23 @@ def m_applied() -> str:
         + lbl(92, 360, "THAN THE RULES LAYER", size=10, ls=1.1)
         + f'<rect x="92" y="380" width="304" height="102" rx="6" fill="none" '
           f'stroke="{T["zinc"]}" stroke-width="1.3"/>'
-        + row(390, 21) + row(420, 8) + row(450, None)
-        + lbl(92, 502, "96 LABELLED MESSAGES · 2 CALLED WRONG", size=10, ls=1.1)
+        + row(390, 21) + row(420, None) + row(450, None)
+        + lbl(92, 502, "96 LABELLED MESSAGES · 1 CALLED WRONG", size=10, ls=1.1)
         + m_adm(528, "verd",
-                ["the full cascade scored 0.9583 —",
+                ["the full cascade scored 0.9686,",
                  "lower than the rules layer alone."],
-                ["a tracker line records it. what is deployed",
-                 "runs only that first layer."])
+                ["its own evaluation artifact records it.",
+                 "what ships is the rules layer."])
     )
     return head(
         610,
-        "VI · Applied — the graded strip, phone cut",
-        "VI · Applied, phone cut — the mail triage as the part that ships: "
-        "the rules layer grades a labelled strip of 96 messages and gets 2 "
-        "wrong — 0.979 macro-F1, rules layer alone. Below it, drawn dashed "
-        "with its lead left open — it is not what ships — is the full "
-        "cascade, all three layers, and it scored lower: 0.9583, a number a "
-        "tracker line records. What is deployed runs only that first layer.",
+        "VI · Applied: the graded strip, phone cut",
+        "VI · Applied, phone cut. The mail triage as the part that ships: "
+        "0.990 macro F1, rules layer alone: 1 of 96 labelled messages called "
+        "wrong. Below it, drawn dashed with its lead left open because it is "
+        "not what ships, is the full cascade, all three layers, and it scored "
+        "lower: 0.9686, recorded in its own evaluation artifact. What ships "
+        "is the rules layer.",
         key="m-6-applied.svg",
         col=(88, 412), frame=(2.5, 43, 2.5), w=440,
     ) + css_close() + body + "</svg>"
@@ -2622,8 +2643,11 @@ _S3_M_LABEL = {"rust": "CARD", "verd": "CARD", "zinc": "SOURCE"}
 _D_S4 = "Test point three — the source repository."
 _D_C5 = ("Test point four — the row-level-security isolation suite, run "
          "against real Postgres.")
-_D_A5 = ("Test point four, the browser build of the mail classifier, its "
-         "page and its quantized weights.")
+# Pointed at the rules benchmark on 2026-11-10. It used to name the browser
+# build of the classifier (ml/browser/site), and no in-browser model has run
+# since 2026-08-15, so the probe sent a reader to something that does not run.
+_D_A5 = ("Test point four, the rules benchmark the CI gate pins: "
+         "baseline_rules_v3.json, the score this section draws.")
 _D_V2 = "Test point one — the source repository, the one probe this section has."
 _D_V3 = ("The next test point is an unpopulated footprint, drawn dashed with "
          "its lead open — there is no live deployment to probe; VisualAssist "
@@ -2706,12 +2730,12 @@ INTERVAL_MOBILE["m-probe-cadence-s5.svg"] = _probe(
     lambda: _m_end("verd", 5, "RLS SUITE"))
 INTERVAL_PLATES["plate-probe-applied-s5.svg"] = _probe(
     "plate-probe-applied-s5.svg", SEC_H, SEC_W[5],
-    "test point four, the browser build", _D_A5,
-    lambda: _end("verd", 5, "TP4", "BROWSER BUILD"))
+    "test point four, the rules benchmark", _D_A5,
+    lambda: _end("verd", 5, "TP4", "RULES BENCHMARK"))
 INTERVAL_MOBILE["m-probe-applied-s5.svg"] = _probe(
     "m-probe-applied-s5.svg", M_SEC_H, M_SEC_W[5],
-    "test point four, the browser build, phone cut", _D_A5,
-    lambda: _m_end("verd", 5, "BUILD"))
+    "test point four, the rules benchmark, phone cut", _D_A5,
+    lambda: _m_end("verd", 5, "RULES"))
 INTERVAL_PLATES["plate-probe-va-s2.svg"] = _probe(
     "plate-probe-va-s2.svg", SEC_H, SEC_W[2],
     "test point one — the repository", _D_V2, _va_s2)
@@ -2745,11 +2769,18 @@ INTERVAL_MOBILE["m-probe-va-s3.svg"] = _probe(
 # where the ink actually stops, not a nudge. The phone cut's DEMO ⟶ BUILD moved
 # it 56.7 ⟶ 56.6, inside the tolerance and re-baked anyway, because a
 # declaration that happens to be forgiven is still a declaration that is wrong.
+#
+# Re-baked again 2026-11-10, same rule. Plate IV was redrawn to show Ayush's
+# own part (the eight stage strip and the training guard) in place of the
+# 44-tool registry, and its longer caption moved the rightGap 60.8 to 29.9.
+# Applied's s5 probe now points at the rules benchmark, so the silkscreen
+# went BROWSER BUILD to RULES BENCHMARK (55.1 to 33.7) and the phone cut's
+# BUILD to RULES (56.6 to 55.8).
 HERO_FRAME = (30, 37.7, 0)
 JET_FRAME = (2.5, 64.7, 2.5)
 WORK_FRAME = (2.5, 35.7, 2.5)
 GLYPH_FRAME = (2.5, 35.5, 2.5)
-AUTOML_FRAME = (2.5, 60.8, 2.5)
+AUTOML_FRAME = (2.5, 29.9, 2.5)
 CADENCE_FRAME = (2.5, 51.7, 2.5)
 APPLIED_FRAME = (2.5, 59.3, 2.5)
 VA_FRAME = (2.5, 150, 2.5)
@@ -2801,7 +2832,7 @@ PROBE_FRAME: dict[str, tuple[float, float, float]] = {
     "plate-probe-zinc-s4.svg": (36, 12.4, 38),
     "plate-probe-verd-s4.svg": (33.4, 0, 38),
     "plate-probe-cadence-s5.svg": (36, 19, 38),
-    "plate-probe-applied-s5.svg": (36, 55.1, 38),
+    "plate-probe-applied-s5.svg": (36, 33.7, 38),
     "plate-probe-va-s2.svg": (33.4, 0, 38),
     "plate-probe-va-s3.svg": (36, 31.7, 38),
     "m-probe-rust-s1.svg": (0, 0, 3),
@@ -2817,7 +2848,7 @@ PROBE_FRAME: dict[str, tuple[float, float, float]] = {
     "m-probe-zinc-s4.svg": (24, 18.8, 36),
     "m-probe-verd-s4.svg": (21.6, 0, 36),
     "m-probe-cadence-s5.svg": (24, 45.1, 36),
-    "m-probe-applied-s5.svg": (24, 56.6, 36),
+    "m-probe-applied-s5.svg": (24, 55.8, 36),
     "m-probe-va-s2.svg": (21.6, 0, 36),
     "m-probe-va-s3.svg": (24, 10.1, 36),
 }

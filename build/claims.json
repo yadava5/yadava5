@@ -77,24 +77,24 @@
     },
     "applied": {
       "github": "yadava5/applied",
-      "ref": "5b895d8dd30ae6ae502d7ae29b830429a85c5c3f",
+      "ref": "ee606aeebbc0c8d76b5789455d2bcf527c63f6a0",
       "branch": "main",
       "public": true,
-      "note": "This pin now carries ml/ — the web-migration branch merged into main on 2026-08-03 via merge commit d349f02f, without a PR, which is why no gate saw it coming. The separate applied-web entry that used to pin that branch is retired: both ONNX byte counts cite main now, at identical sizes."
+      "note": "This pin now carries ml/ — the web-migration branch merged into main on 2026-08-03 via merge commit d349f02f, without a PR, which is why no gate saw it coming. The separate applied-web entry that used to pin that branch is retired: both ONNX byte counts cite main now, at identical sizes. Re-pinned 2026-11-10 from 5b895d8d to ee606aee, the head of main that day (compare API: status ahead, 959 commits, behind_by 0, so no rewritten history). The old pin was holding two stale figures. baseline_rules_v3.json was re-recorded on 2026-09-07 and reads macro_f1 0.98957 with 1 of 96 misclassified, where the plate drew 0.979 and 2. And the cascade figure 0.9583 that applied.hybrid_f1_prose cited from a tracker line was, by the tracker's own later account, the cascade's accuracy rather than its macro F1 (the artifact said 0.9582), and the cascade was re-measured on 2026-09-08 at 0.9686; the tracker line that row read now holds a different number. That row is replaced by applied.cascade_macro_f1, which reads baseline_cascade_v3.json directly, the move the old row's note said section VI still owed. eval_set_size 96 and eval_mode_is_rules_only rules reproduce unchanged at ee606aee."
     },
     "automl": {
       "github": "yadava5/ai-augmented-auto-ml-toolchain",
       "ref": "5e42233ccacbab6886c1df4c2b3fabf42157a8d0",
       "branch": "main",
       "public": true,
-      "note": "Public since 2026-07-30. Every AutoML figure on this page was ATTESTED before that and is now DERIVED, which is the whole point of the distinction. Written with Shree Chaturvedi. RE-PINNED 2026-08-13, and the reason is the interesting part: the old pin 5c5b7624 is the head of archive/github-main, NOT of main. This repository has disjoint histories, and when they were reorganised the branch that had been main became archive/github-main while a new main was built from the consolidated GitLab history. The pin did not move, so the row went on declaring branch main while deriving from an archived one, and the freshness check could only answer 404 -- no common ancestor -- which reads like a network fault and is actually a claim whose evidence had moved out from under it. All four AutoML rows were recomputed against the new main before re-pinning and every one reproduced unchanged: tools 44, tools_phase 29, tool_sets 7, license GPL-3.0. PR #5 (PolyForm relicence) is still OPEN and still targets archive/github-main, so the page GPL sentence stands."
+      "note": "Public since 2026-07-30. Every AutoML figure on this page was ATTESTED before that and is now DERIVED, which is the whole point of the distinction. Written with Shree Chaturvedi. RE-PINNED 2026-08-13, and the reason is the interesting part: the old pin 5c5b7624 is the head of archive/github-main, NOT of main. This repository has disjoint histories, and when they were reorganised the branch that had been main became archive/github-main while a new main was built from the consolidated GitLab history. The pin did not move, so the row went on declaring branch main while deriving from an archived one, and the freshness check could only answer 404 -- no common ancestor -- which reads like a network fault and is actually a claim whose evidence had moved out from under it. All four AutoML rows were recomputed against the new main before re-pinning and every one reproduced unchanged: tools 44, tools_phase 29, tool_sets 7, license GPL-3.0. 2026-11-10: automl.tools, automl.tools_phase and automl.tool_sets are DELETED. All three counted the LLM tool registry in llm/tools, which is Shree Chaturvedi's work, and plate IV drew it as the section's claim, so the page credited Ayush with a part he did not build. Plate IV now draws his part, in his resume's words, and three rows derive it at this same pin: automl.preprocessing_stages 8, automl.estimator_classes 21, automl.transformer_archs 3. PR #5 (PolyForm relicence) is still OPEN and still targets archive/github-main, so the page GPL sentence stands."
     },
     "visualassist": {
       "github": "yadava5/VisualAssist",
       "ref": "04fbcadeaecb86674a74cf218618079fb5fc4e65",
       "branch": "main",
       "public": true,
-      "note": "New in round 21, at the client's choice. Swift/ARKit/LiDAR; no deployment exists, and the page says why instead of faking a link. The MUCAT placement and the $2,500 grant it is the artifact for stay ATTESTED — placements are not derivable from a repository. Re-pinned 2026-08-13, one commit on from b0e62033 (compare API: status ahead, behind_by 0, merge_base == the old pin). That one commit is 'fix(ci): the accessibility job could not fail, on an accessibility product' — the same check-that-cannot-fail shape this page keeps finding, in the repository §VII is about. All three visualassist rows were re-derived at 04fbcade before the pin moved and reproduced unchanged."
+      "note": "New in round 21, at the client's choice. Swift/ARKit/LiDAR; no deployment exists, and the page says why instead of faking a link. The MUCAT placement and the $2,500 grant stay ATTESTED — placements are not derivable from a repository. Corrected 2026-11-10: the finalist placement and the grant went to the proposal before this app, from a team of four, not to the app, which Ayush built alone; section VII now says so, and awards.mucat_team_size pins the four. Re-pinned 2026-08-13, one commit on from b0e62033 (compare API: status ahead, behind_by 0, merge_base == the old pin). That one commit is 'fix(ci): the accessibility job could not fail, on an accessibility product' — the same check-that-cannot-fail shape this page keeps finding, in the repository §VII is about. All three visualassist rows were re-derived at 04fbcade before the pin moved and reproduced unchanged."
     }
   },
   "claims": [
@@ -241,7 +241,7 @@
     },
     {
       "id": "applied.macro_f1",
-      "value": "0.979",
+      "value": "0.990",
       "drawn_on": [
         "plate-6-applied.svg",
         "m-6-applied.svg",
@@ -249,7 +249,8 @@
       ],
       "repo": "applied",
       "path": "backend/data/evaluation/baseline_rules_v3.json",
-      "extractor": "jq -r '(.overall.macro_f1*1000|round)/1000' \"$BLOB\""
+      "extractor": "jq -r '.overall.macro_f1' \"$BLOB\" | awk '{printf \"%.3f\", $1}'",
+      "note": "printf, not jq's round: at ee606aee the value is 0.98957, and jq prints 990/1000 as 0.99, which is not the three places the plate draws."
     },
     {
       "id": "applied.eval_set_size",
@@ -277,17 +278,17 @@
       "note": "This is the row that keeps the hero honest: the artifact itself says the score was produced with the rules layer alone, which is what the plate labels it."
     },
     {
-      "id": "applied.hybrid_f1_prose",
-      "value": "0.9583",
+      "id": "applied.cascade_macro_f1",
+      "value": "0.9686",
       "drawn_on": [
         "plate-6-applied.svg",
         "m-6-applied.svg",
         "README.md"
       ],
       "repo": "applied",
-      "path": "docs/ML_EXECUTION_TRACKER.md",
-      "extractor": "sed -n '378p' \"$BLOB\" | grep -oE 'macro_f1=0\\.[0-9]+' | cut -d= -f2",
-      "note": "The full three-layer cascade's score, cited to the line of the execution tracker that records it. THIS NOTE USED TO ASSERT the run had no evaluation artifact because it was overwritten. That is no longer true: an evaluation artifact for the cascade was committed to applied on 2026-08-11, and every trace of the absence claim is off the page as of 2026-08-13. Re-pinning this row to cite that artifact needs a new pin, and the repository is frozen while it is being worked in, so the row keeps citing the tracker line until it can move -- that is the one piece of work section VI still owes. The cascade is still drawn dashed with an open lead, but for the reason that is true: it is not what ships. The page no longer says 'exactly one line of prose' — the number has since been restated in the repo's own README, and counting restatements was never the claim. That sentence used to end 'the missing artifact is', which is the assertion this note has just retired. What this row proves is narrower and still true: the cited tracker line still carries the number."
+      "path": "backend/data/evaluation/baseline_cascade_v3.json",
+      "extractor": "jq -r 'select(.meta.mode==\"hybrid\" and .meta.hybrid_profile==\"full\") | .overall.macro_f1' \"$BLOB\" | awk '{printf \"%.4f\", $1}'",
+      "note": "The full three-layer cascade's macro F1, read from its own evaluation artifact. Replaces applied.hybrid_f1_prose (2026-11-10), which cited 0.9583 from line 378 of docs/ML_EXECUTION_TRACKER.md at the old pin; see the applied repo note for why that number was stale and, by the tracker's own account, an accuracy. The select() is the row's positive control: an artifact that is not the full-profile hybrid run prints nothing and fails, rather than licensing a rules-only score as the cascade's. The cascade is still drawn dashed with an open lead because it is not what ships."
     },
     {
       "id": "cadence.tenant_tables",
@@ -350,7 +351,7 @@
     },
     {
       "id": "applied.eval_misclassified",
-      "value": "2",
+      "value": "1",
       "drawn_on": [
         "plate-6-applied.svg",
         "m-6-applied.svg",
@@ -359,7 +360,7 @@
       "repo": "applied",
       "path": "backend/data/evaluation/baseline_rules_v3.json",
       "extractor": "jq -r '.overall.misclassified' \"$BLOB\"",
-      "note": "0.979 with no uncertainty beside it was the page's one remaining asymmetry: jetpack's numbers all carry an interval and Applied's did not. The honest statement of a 96-row result is the error count. Round 21: the rebuilt plate prints it too — '2 MISTAKES' beside the hero."
+      "note": "0.979 with no uncertainty beside it was the page's one remaining asymmetry: jetpack's numbers all carry an interval and Applied's did not. The honest statement of a 96-row result is the error count. Round 21: the rebuilt plate prints it too — '2 MISTAKES' beside the hero. 2026-11-10: 1 at ee606aee, where the rules baseline was re-recorded (0.979 and 2 became 0.990 and 1)."
     },
     {
       "id": "automl.license",
@@ -373,51 +374,40 @@
       "note": "The page asserted PolyForm Noncommercial because a relicence PR had been opened. A proposed licence is not a licence: PR #5 is still open, so the pinned commit is GPL-3.0 and that is what the page now says. Re-pin and change this row when it merges."
     },
     {
-      "id": "automl.tools",
-      "value": "44",
-      "drawn_on": [
-        "plate-4-automl.svg",
-        "m-4-automl.svg",
-        "README.md"
-      ],
-      "repo": "automl",
-      "paths": [
-        "backend/src/services/llm/tools/dataTools.ts",
-        "backend/src/services/llm/tools/cellTools.ts",
-        "backend/src/services/llm/tools/packageTools.ts",
-        "backend/src/services/llm/tools/featureTools.ts",
-        "backend/src/services/llm/tools/preprocessingTools.ts",
-        "backend/src/services/llm/tools/trainingTools.ts",
-        "backend/src/services/llm/tools/uiTools.ts"
-      ],
-      "extractor": "cat $BLOBS | grep -cE \"^\\s+name: '\"",
-      "note": "Counted two ways and they agree: the seven files sum 4+8+3+6+14+6+3, and a single grep across all seven returns 44."
-    },
-    {
-      "id": "automl.tools_phase",
-      "value": "29",
-      "drawn_on": [],
-      "repo": "automl",
-      "paths": [
-        "backend/src/services/llm/tools/featureTools.ts",
-        "backend/src/services/llm/tools/preprocessingTools.ts",
-        "backend/src/services/llm/tools/trainingTools.ts",
-        "backend/src/services/llm/tools/uiTools.ts"
-      ],
-      "extractor": "cat $BLOBS | grep -cE \"^\\s+name: '\"",
-      "note": "The tools NOT in the base set: the four phase files, counted by the same extractor [automl.tools] and [automl.tools_general] use, on the four paths the general row leaves out. 6 feature + 14 preprocessing + 6 training + 3 ui = 29. Counted DIRECTLY at the pinned commit rather than taken as 44 minus 15 — the arithmetic agrees, but a row whose evidence is two other rows re-derives nothing and would go on agreeing with itself after the source moved. drawn_on emptied in round 28: the plate now draws these 29 as 29 hollow marks in the registry strip, not as a numeral, and no other surface prints the count. The row stays so the set difference is still re-derived on every push and a future numeral has a row waiting."
-    },
-    {
-      "id": "automl.tool_sets",
-      "value": "7",
+      "id": "automl.preprocessing_stages",
+      "value": "8",
       "drawn_on": [
         "plate-4-automl.svg",
         "m-4-automl.svg"
       ],
       "repo": "automl",
-      "path": "backend/src/services/llm/tools/index.ts",
-      "extractor": "grep -E '^export const LLM_[A-Z_]+_TOOLS' \"$BLOB\" | grep -vc LLM_ALL_TOOLS",
-      "note": "Seven exported phase sets: onboarding, preprocessing, feature proposal, feature continue, feature engineering, feature lifecycle, training lifecycle. LLM_ALL_TOOLS is excluded because it is the union, not a phase. WARNING — this extractor counts EXPORTS, not ROUTES, and the two are not the same number. A source audit at this pin found LLM_PREPROCESSING_TOOLS (index.ts:124) and LLM_FEATURE_ENGINEERING_TOOLS (index.ts:61) are exported and never imported: their only other occurrence in the tree is the barrel re-export at toolRegistry.ts:18,23, there is no phase->set lookup table (BY_PHASE|PHASE_TOOLS|TOOL_SETS|toolsForPhase all return nothing repo-wide), and no `export *` or namespace import can be hiding a consumer. The preprocessing phase does receive its tools, assembled ad hoc from PREPROCESSING_ORCHESTRATION_TOOLS + CELL_TOOL_DEFINITIONS at phases/preprocessing/stageConfig.ts:21. So five of the seven names are live routes. The README said 'the other 29 arrive with the phase that needs them, through seven exported sets' — a true count describing a false mechanism, the same shape as the count-noun trap that produced AutoML's 44-vs-12 error. The prose now names the two dead exports; this row keeps gating the export count, which is all a grep of one file can honestly gate. Round 27 dropped a second anchor, 'Of the seven declared per-phase sets', because it pinned a sentence that lived in a plate's <img alt> rather than in the body: the plate was recomposed, the alt text was rewritten with it, and the anchor went orphaned. The gate failed closed, which is right — but an anchor into alt text pins generated prose, so pin the body text instead. ROUND 28: re-pointed to plate-4-automl and m-4-automl ('SEVEN TOOL SETS — NO PHASE IS HANDED ALL 44'); the anchored README sentence was cut. Deliberately NOT registered on plate-5-cadence, which draws its own 7 for tenant tables — the count-noun trap, in the one file that documents it."
+      "path": "backend/src/services/llm/langgraph/preprocessingRuntime.ts",
+      "extractor": "grep -cE \"\\.addNode\\('[a-z_]+', createStageNode\\(\" \"$BLOB\"",
+      "note": "Added 2026-11-10 with the plate IV rewrite. The eight stage nodes of the preprocessing StateGraph (context_ready through completed), counted at the addNode call that builds each one; the supervisor node is excluded because it is not built by createStageNode. Drawn as the word EIGHT and as eight nodes emitted by loop. This is a count of stages the graph defines, not a claim that the stage nodes do the work: they record the stage, and the planning and execution live in the phase coordinators."
+    },
+    {
+      "id": "automl.estimator_classes",
+      "value": "21",
+      "drawn_on": [
+        "plate-4-automl.svg",
+        "m-4-automl.svg"
+      ],
+      "repo": "automl",
+      "path": "backend/src/services/workflows/phases/training.ts",
+      "extractor": "awk '/^function getSpecificTrainingEstimatorRule/,/^}/' \"$BLOB\" | grep -oE \"description: '[^']+'\" | sort -u | grep -c .",
+      "note": "Added 2026-11-10. Distinct estimator descriptions the training guard can demand of generated code, read from getSpecificTrainingEstimatorRule. Counting case labels instead gives 26, because the bare family names (random_forest, mlp, knn...) alias the classifier and regressor cases; the distinct descriptions are the classes. Self-controlling: a renamed function or a broken pattern prints 0, not 21."
+    },
+    {
+      "id": "automl.transformer_archs",
+      "value": "3",
+      "drawn_on": [
+        "plate-4-automl.svg",
+        "m-4-automl.svg"
+      ],
+      "repo": "automl",
+      "path": "backend/src/services/workflows/phases/training.ts",
+      "extractor": "grep -oE \"\\[('[a-z]+', )*'[a-z]+'\\]\\.includes\\(canonical\\)\" \"$BLOB\" | grep -oE \"'[a-z]+'\" | grep -c .",
+      "note": "Added 2026-11-10. The architectures (tabtransformer, fttransformer, tabnet) for which the guard rejects generated code that substitutes a plain sklearn MLP, counted from the list that guard checks. Deliberately not on README.md: the prose draws no 3 of its own here, and adding 3 to README's pool would let this row license every other 3 in the prose."
     },
     {
       "id": "glyph.dot256_speedup",
@@ -577,7 +567,7 @@
     "m-colophon.svg:31": "SELF-REFERENTIAL — the mobile colophon draws the same count; see the plate-colophon key above for the mechanism. Cited by name rather than by key, because the key carries a number that moves whenever a row is added or deleted.",
     "README.md:2025": "'June 2025 to May 2026' — the dates of the role",
     "README.md:2026": "'May 2026' as the graduation date and the end of the role, and 'DataFest 2026' — dates, not measurements",
-    "README.md:3": "'Three layers read it locally, cheapest first' — the count of tiers named in the same sentence. The other three in the prose, 'team lead of three at DataFest', is pinned by datafest.team_size's anchor and masked out before this exemption is consulted.",
+    "README.md:3": "'Three layers read it locally, cheapest first' — the count of tiers named in the same sentence. The other three in the prose, 'one of a three person team at DataFest', is pinned by datafest.team_size's anchor and masked out before this exemption is consulted.",
     "README.md:3.0": "the version field of the licence identifier GPL-3.0 (see automl.license)",
     "README.md:4": "'Four of them ship a system card' — enumerated on the page (Glyph, jetpack, Cadence, Applied)",
     "README.md:5": "'[PR #5]' — the number of the open relicence pull request on the AutoML repository, an address rather than a measurement",
@@ -613,7 +603,7 @@
     {
       "id": "work.field_usage_rows",
       "value": "57.8",
-      "unit": "M-row field-usage table",
+      "unit": "M field usage rows, one per column a query named",
       "drawn_on": [
         "plate-1-work.svg",
         "m-1-work.svg",
@@ -640,11 +630,25 @@
       ],
       "anchors": {
         "README.md": [
-          "team lead of three at DataFest"
+          "one of a three person team at DataFest"
         ]
       },
       "source": "Ayush Yadav CV, July 2026",
-      "why": "Team size at DataFest 2026. Attested like the rest of §I, and anchored to its own sentence so the number cannot be changed under cover of another row's 3."
+      "why": "Team size at DataFest 2026. Attested like the rest of §I, and anchored to its own sentence so the number cannot be changed under cover of another row's 3. Reworded 2026-11-10 from 'team lead of three': he was one of the three, not the lead."
+    },
+    {
+      "id": "awards.mucat_team_size",
+      "value": "4",
+      "drawn_on": [
+        "README.md"
+      ],
+      "anchors": {
+        "README.md": [
+          "from a team of four"
+        ]
+      },
+      "source": "Ayush Yadav, correction of 2026-11-10",
+      "why": "The MUCAT Design Innovation finalist placement and its grant went to a proposal from a team of four, before the VisualAssist app, which he built alone. Anchored to its own phrase so README.md:4, the exemption for 'Four of them ship a system card', cannot license it."
     }
   ],
   "$rewire_note_2026_08_12": [
